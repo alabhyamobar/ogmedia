@@ -1,0 +1,193 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+
+  :root {
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-heading: 'Space Grotesk', sans-serif;
+    --font-title: 'Bebas Neue', sans-serif;
+    --font-kr: 'Black Han Sans', 'Noto Sans KR', sans-serif;
+    --font-jp: 'Dela Gothic One', 'Noto Sans JP', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+}
+
+body {
+  background-color: #ebebe5;
+  color: #111111;
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark body {
+  background-color: #09090b;
+  color: #f4f4f5;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+}
+
+/* Authentic Manga Halftone / Screentone Dot Pattern */
+.manga-halftone {
+  background-image: radial-gradient(circle, #000000 1.2px, transparent 1.2px);
+  background-size: 6px 6px;
+}
+
+.dark .manga-halftone {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.3) 1.2px, transparent 1.2px);
+}
+
+.manga-halftone-light {
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.25) 1px, transparent 1px);
+  background-size: 5px 5px;
+}
+
+.dark .manga-halftone-light {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+}
+
+/* Comic diagonal hatching lines */
+.manga-hatch {
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 4px,
+    rgba(0, 0, 0, 0.08) 4px,
+    rgba(0, 0, 0, 0.08) 6px
+  );
+}
+
+.dark .manga-hatch {
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 4px,
+    rgba(255, 255, 255, 0.08) 4px,
+    rgba(255, 255, 255, 0.08) 6px
+  );
+}
+
+/* Technical Drafting Board perspective grid */
+.draft-board-grid {
+  background-color: #f7f7f4;
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.dark .draft-board-grid {
+  background-color: #111114;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+}
+
+/* Heavy Manga Drop Shadows */
+.manga-shadow-sm {
+  box-shadow: 3px 3px 0px #000000;
+}
+
+.manga-shadow {
+  box-shadow: 5px 5px 0px #000000;
+}
+
+.manga-shadow-lg {
+  box-shadow: 8px 8px 0px #000000;
+}
+
+.dark .manga-shadow-sm {
+  box-shadow: 3px 3px 0px #000000, 0 0 8px rgba(0, 0, 0, 0.6);
+}
+
+.dark .manga-shadow {
+  box-shadow: 5px 5px 0px #000000, 0 0 12px rgba(0, 0, 0, 0.7);
+}
+
+.dark .manga-shadow-lg {
+  box-shadow: 8px 8px 0px #000000, 0 0 18px rgba(0, 0, 0, 0.85);
+}
+
+.manga-shadow-lime {
+  box-shadow: 5px 5px 0px #a3e635;
+}
+
+.manga-shadow-red {
+  box-shadow: 5px 5px 0px #ef4444;
+}
+
+/* Text Strokes for Ink Outline Effect */
+.text-stroke-black {
+  -webkit-text-stroke: 1.5px #000000;
+}
+
+.text-stroke-thick {
+  -webkit-text-stroke: 2.5px #000000;
+}
+
+.text-stroke-white {
+  -webkit-text-stroke: 1.5px #ffffff;
+}
+
+.text-stroke-lime {
+  -webkit-text-stroke: 1.5px #bbf451;
+}
+
+.text-stroke-red {
+  -webkit-text-stroke: 1.5px #ef4444;
+}
+
+/* Font helpers */
+.font-mono-tech {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.font-comic-title {
+  font-family: 'Bebas Neue', sans-serif;
+}
+
+.font-kr-impact {
+  font-family: 'Black Han Sans', 'Noto Sans KR', sans-serif;
+}
+
+.font-jp-impact {
+  font-family: 'Dela Gothic One', 'Noto Sans JP', sans-serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ebebe5;
+  border-left: 1px solid #111;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #09090b;
+  border-left: 1px solid #27272a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #111;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a3e635;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #bef264;
+}
