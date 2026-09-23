@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useTheme } from '../../context/ThemeContext';
@@ -44,6 +45,8 @@ export default function HeroSection() {
   const [videoProgress, setVideoProgress] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [videoEnded, setVideoEnded] = useState(false);
+  const [isVideoMounted, setIsVideoMounted] = useState(true);
+  const stRef = useRef(null);
 
   // 1. Scroll-Driven 4th-Wall Breaking Camera Zoom & Reverse (Desktop)
   useEffect(() => {
@@ -82,6 +85,26 @@ export default function HeroSection() {
         0
       );
 
+      // Initialize GSAP 3D transforms so GSAP retains depth across animations
+      if (boomStickerRef.current) {
+        gsap.set(boomStickerRef.current, { z: 85, rotation: -6, transformStyle: 'preserve-3d' });
+      }
+      if (titleCardRef.current) {
+        gsap.set(titleCardRef.current, { z: 95, transformStyle: 'preserve-3d' });
+      }
+      if (prologueRef.current) {
+        gsap.set(prologueRef.current, { z: 45, rotation: -1, transformStyle: 'preserve-3d' });
+      }
+      if (limeBoxRef.current) {
+        gsap.set(limeBoxRef.current, { z: 45, rotation: 1, transformStyle: 'preserve-3d' });
+      }
+      if (swooshRef.current) {
+        gsap.set(swooshRef.current, { z: 60, transformStyle: 'preserve-3d' });
+      }
+      if (ctaRef.current) {
+        gsap.set(ctaRef.current, { z: 60, transformStyle: 'preserve-3d' });
+      }
+
       // Surrounding UI elements disperse outward and fade as camera flies through (Breaking the 4th Wall)
       if (prologueRef.current) {
         cameraTl.to(prologueRef.current, { x: -480, y: -320, opacity: 0, scale: 1.8, duration: 0.8, ease: 'power1.in' }, 0);
@@ -90,10 +113,10 @@ export default function HeroSection() {
         cameraTl.to(limeBoxRef.current, { x: 480, y: -320, opacity: 0, scale: 1.8, duration: 0.8, ease: 'power1.in' }, 0);
       }
       if (boomStickerRef.current) {
-        cameraTl.to(boomStickerRef.current, { x: 550, y: -260, opacity: 0, scale: 2.5, duration: 0.8, ease: 'power1.in' }, 0);
+        cameraTl.to(boomStickerRef.current, { x: 550, y: -260, z: 85, rotation: -6, opacity: 0, scale: 2.5, duration: 0.8, ease: 'power1.in' }, 0);
       }
       if (titleCardRef.current) {
-        cameraTl.to(titleCardRef.current, { y: 480, opacity: 0, scale: 2.4, duration: 0.8, ease: 'power1.in' }, 0);
+        cameraTl.to(titleCardRef.current, { y: 480, z: 95, opacity: 0, scale: 2.4, duration: 0.8, ease: 'power1.in' }, 0);
       }
       if (swooshRef.current) {
         cameraTl.to(swooshRef.current, { x: -480, y: 380, opacity: 0, scale: 1.8, duration: 0.8, ease: 'power1.in' }, 0);
@@ -198,10 +221,11 @@ export default function HeroSection() {
           }
         }
       });
+      stRef.current = st;
 
       // Reset when user scrolls all the way back to top of page
       const handleScrollReset = () => {
-        if (window.scrollY <= 10) {
+        if (window.scrollY <= 10 && !isReversedRef.current) {
           isReversedRef.current = false;
           isVideoActiveRef.current = false;
           setIsVideoPlaying(false);
@@ -215,6 +239,7 @@ export default function HeroSection() {
       return () => {
         window.removeEventListener('scroll', handleScrollReset);
         st.kill();
+        stRef.current = null;
       };
     });
 
@@ -236,7 +261,7 @@ export default function HeroSection() {
     }
   }, [isVideoPlaying]);
 
-  // Execute the exact OPPOSITE of the zooming camera animation in-place (WITHOUT resetting scroll position)
+  // Execute the reverse animation, then remove video from DOM and reset Hero section to original state
   const runReverseCameraAnimation = () => {
     if (videoRef.current) {
       videoRef.current.pause();
@@ -249,14 +274,105 @@ export default function HeroSection() {
     // This executes the EXACT opposite camera pull-back in-place!
     if (cameraTlRef.current) {
       cameraTlRef.current.tweenTo(0, {
-        duration: 1.5,
+        duration: 1.2,
         ease: 'power2.inOut',
         onComplete: () => {
+          // 1. Remove the video completely from the DOM
+          setIsVideoMounted(false);
           setVideoEnded(true);
-          // Camera is fully back at the comic desk!
-          // Re-enable 3D perspective tilt & idle floating animation!
           setIsZooming(false);
           setScrollProgress(0);
+
+          // 2. Reset all Hero section elements to their exact original state
+          const elementsToReset = [
+            cameraRigRef.current,
+            boardRef.current,
+            panelFrameRef.current,
+            comicImageRef.current,
+            prologueRef.current,
+            limeBoxRef.current,
+            boomStickerRef.current,
+            titleCardRef.current,
+            swooshRef.current,
+            ctaRef.current,
+            bgRaysRef.current,
+            cornerMarksRef.current,
+            telemetryRef.current,
+            frameBadgesRef.current
+          ].filter(Boolean);
+
+          // Clear animated transform offsets without stripping essential 3D depth and styling
+          gsap.set(elementsToReset, { clearProps: 'x,y,scale,opacity' });
+          if (cameraRigRef.current) {
+            gsap.set(cameraRigRef.current, { scale: 1, x: 0, y: 0, yPercent: 0, transformOrigin: '50% 44%' });
+          }
+          if (comicImageRef.current) {
+            gsap.set(comicImageRef.current, { opacity: 1, scale: 1 });
+          }
+
+          // Explicitly restore original 3D translateZ positions, z-indexes, and transforms
+          if (boomStickerRef.current) {
+            boomStickerRef.current.style.transform = 'translateZ(85px) rotate(-6deg)';
+            boomStickerRef.current.style.transformStyle = 'preserve-3d';
+            boomStickerRef.current.style.zIndex = '40';
+            boomStickerRef.current.style.opacity = '1';
+          }
+          if (titleCardRef.current) {
+            titleCardRef.current.style.transform = 'translateZ(95px)';
+            titleCardRef.current.style.transformStyle = 'preserve-3d';
+            titleCardRef.current.style.zIndex = '50';
+            titleCardRef.current.style.opacity = '1';
+          }
+          if (prologueRef.current) {
+            prologueRef.current.style.transform = 'translateZ(45px) rotate(-1deg)';
+            prologueRef.current.style.transformStyle = 'preserve-3d';
+            prologueRef.current.style.opacity = '1';
+          }
+          if (limeBoxRef.current) {
+            limeBoxRef.current.style.transform = 'translateZ(45px) rotate(1deg)';
+            limeBoxRef.current.style.transformStyle = 'preserve-3d';
+            limeBoxRef.current.style.opacity = '1';
+          }
+          if (swooshRef.current) {
+            swooshRef.current.style.transform = 'translateZ(60px)';
+            swooshRef.current.style.transformStyle = 'preserve-3d';
+            swooshRef.current.style.opacity = '1';
+          }
+          if (ctaRef.current) {
+            ctaRef.current.style.transform = 'translateZ(60px)';
+            ctaRef.current.style.transformStyle = 'preserve-3d';
+            ctaRef.current.style.opacity = '1';
+          }
+          if (panelFrameRef.current) {
+            panelFrameRef.current.style.borderWidth = '3px';
+            panelFrameRef.current.style.boxShadow = isDark
+              ? '8px 8px 0px #000000, 16px 16px 0px rgba(0,0,0,0.4)'
+              : '8px 8px 0px #000000, 16px 16px 0px rgba(0,0,0,0.14)';
+          }
+          if (frameBadgesRef.current) {
+            frameBadgesRef.current.style.opacity = '1';
+          }
+          if (telemetryRef.current) {
+            telemetryRef.current.style.opacity = '1';
+          }
+          if (bgRaysRef.current) {
+            bgRaysRef.current.style.opacity = '1';
+          }
+          if (cornerMarksRef.current) {
+            cornerMarksRef.current.style.opacity = '1';
+          }
+
+          // 3. Cleanly kill the ScrollTrigger pin outside the GSAP tick and reset scroll to top
+          setTimeout(() => {
+            if (stRef.current) {
+              try {
+                stRef.current.kill(true);
+              } catch (e) {}
+              stRef.current = null;
+            }
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            ScrollTrigger.refresh();
+          }, 80);
         }
       });
     }
@@ -338,10 +454,10 @@ export default function HeroSection() {
             gsap.to(limeBoxRef.current, { x: x * 16, y: y * 12, rotateZ: 1 + x * 3, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
           }
           if (boomStickerRef.current) {
-            gsap.to(boomStickerRef.current, { x: x * 28, y: y * 20, rotateZ: -6 + x * 6, duration: 0.45, ease: 'power2.out', overwrite: 'auto' });
+            gsap.to(boomStickerRef.current, { x: x * 28, y: y * 20, z: 85, rotateZ: -6 + x * 6, duration: 0.45, ease: 'power2.out', overwrite: 'auto' });
           }
           if (titleCardRef.current) {
-            gsap.to(titleCardRef.current, { x: x * 20, y: y * 14, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
+            gsap.to(titleCardRef.current, { x: x * 20, y: y * 14, z: 95, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
             const shadowX = 8 - x * 20;
             const shadowY = 12 - y * 16;
             titleCardRef.current.style.boxShadow = isDark
@@ -380,9 +496,9 @@ export default function HeroSection() {
       if (bgRaysRef.current) gsap.to(bgRaysRef.current, { x: 0, y: 0, duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
       if (prologueRef.current) gsap.to(prologueRef.current, { x: 0, y: 0, rotateZ: -1, duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
       if (limeBoxRef.current) gsap.to(limeBoxRef.current, { x: 0, y: 0, rotateZ: 1, duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
-      if (boomStickerRef.current) gsap.to(boomStickerRef.current, { x: 0, y: 0, rotateZ: -6, duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
+      if (boomStickerRef.current) gsap.to(boomStickerRef.current, { x: 0, y: 0, z: 85, rotateZ: -6, duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
       if (titleCardRef.current) {
-        gsap.to(titleCardRef.current, { x: 0, y: 0, duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
+        gsap.to(titleCardRef.current, { x: 0, y: 0, z: 95, duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
         titleCardRef.current.style.boxShadow = isDark
           ? '8px 12px 0px #000000, 16px 20px 16px rgba(168,85,247,0.3)'
           : '8px 12px 0px #000000, 16px 20px 10px rgba(56,189,248,0.2)';
@@ -402,69 +518,76 @@ export default function HeroSection() {
   }, [isDark, isZooming]);
 
   return (
-    <div ref={pinWrapperRef} className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
-      {/* 4th-Wall Breaking Cinematic Fullscreen Video Layer (100vw x 100vh Portal) */}
-      <div
-        ref={videoContainerRef}
-        className="fixed inset-0 z-50 opacity-0 pointer-events-none bg-black flex items-center justify-center"
-      >
-        <video
-          ref={videoRef}
-          src="/herovid1.mp4"
-          playsInline
-          preload="metadata"
-          muted={isMuted}
-          className="w-full h-full object-cover"
-          onTimeUpdate={handleTimeUpdate}
-          onEnded={handleVideoEnded}
-        />
+    <>
+      {/* 4th-Wall Breaking Cinematic Fullscreen Video Layer (100vw x 100vh Portal) - Rendered into body via createPortal to decouple from GSAP pinWrapper */}
+      {isVideoMounted && typeof document !== 'undefined' && createPortal(
+        <div
+          ref={videoContainerRef}
+          className="fixed inset-0 z-50 opacity-0 pointer-events-none bg-black flex items-center justify-center"
+        >
+          <video
+            ref={videoRef}
+            src="/herovid1.mp4"
+            playsInline
+            preload="metadata"
+            muted={isMuted}
+            className="w-full h-full object-cover"
+            onTimeUpdate={handleTimeUpdate}
+            onEnded={handleVideoEnded}
+          />
 
-        {/* Video Scanlines Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 pointer-events-none" />
+          {/* Video Scanlines Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 pointer-events-none" />
 
-        {/* Cinematic HUD Overlay on Video */}
-        <div className="absolute top-0 left-0 right-0 p-4 sm:p-6 flex items-center justify-between z-40 bg-gradient-to-b from-black/80 to-transparent">
-          <div className="flex items-center gap-2 font-mono-tech text-xs text-[#bef264]">
-            <span className="w-2 h-2 rounded-full bg-[#ef4444] animate-ping" />
-            <span className="font-bold">LIVE FEED // HEROVID1.MP4</span>
-            <span className="text-stone-400 hidden sm:inline">| 4K ARCHIVE TRANSMISSION</span>
+          {/* Cinematic HUD Overlay on Video */}
+          <div className="absolute top-0 left-0 right-0 p-4 sm:p-6 flex items-center justify-between z-40 bg-gradient-to-b from-black/80 to-transparent">
+            <div className="flex items-center gap-2 font-mono-tech text-xs text-[#bef264]">
+              <span className="w-2 h-2 rounded-full bg-[#ef4444] animate-ping" />
+              <span className="font-bold">LIVE FEED // HEROVID1.MP4</span>
+              <span className="text-stone-400 hidden sm:inline">| 4K ARCHIVE TRANSMISSION</span>
+            </div>
+
+            {/* Video Controls: Mute & Reverse Camera */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              <button
+                onClick={() => setIsMuted(!isMuted)}
+                className="bg-black/80 hover:bg-black text-[#bef264] border border-[#bef264] px-3 py-1 font-mono-tech text-xs font-bold transition-colors cursor-pointer flex items-center gap-1.5"
+              >
+                <span>{isMuted ? '🔇' : '🔊'}</span>
+                <span>{isMuted ? 'UNMUTE' : 'MUTED'}</span>
+              </button>
+
+              <button
+                onClick={triggerReverseCamera}
+                title="Reverse camera back to comic desk"
+                className="bg-[#ef4444] hover:bg-red-600 text-white border border-white px-3 py-1 font-mono-tech text-xs font-bold transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-1.5 shadow-lg"
+              >
+                <span>↺</span>
+                <span>REVERSE CAMERA</span>
+              </button>
+            </div>
           </div>
 
-          {/* Video Controls: Mute & Reverse Camera */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            <button
-              onClick={() => setIsMuted(!isMuted)}
-              className="bg-black/80 hover:bg-black text-[#bef264] border border-[#bef264] px-3 py-1 font-mono-tech text-xs font-bold transition-colors cursor-pointer flex items-center gap-1.5"
-            >
-              <span>{isMuted ? '🔇' : '🔊'}</span>
-              <span>{isMuted ? 'UNMUTE' : 'MUTED'}</span>
-            </button>
+          {/* Bottom Video Progress Bar */}
+          <div className="absolute bottom-0 left-0 right-0 z-40 bg-gradient-to-t from-black/80 to-transparent p-4 sm:p-6">
+            <div className="max-w-3xl mx-auto flex items-center gap-3">
+              <span className="font-mono-tech text-xs text-white/80">LIVE</span>
+              <div className="flex-1 h-1.5 bg-white/20 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-[#ef4444] transition-all duration-100"
+                  style={{ width: `${videoProgress}%` }}
+                />
+              </div>
+              <span className="font-mono-tech text-xs text-[#bef264] font-bold">
+                {Math.round(videoProgress)}%
+              </span>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
 
-            <button
-              onClick={triggerReverseCamera}
-              title="Reverse camera back to comic desk"
-              className="bg-[#ef4444] hover:bg-red-600 text-white border border-white px-3 py-1 font-mono-tech text-xs font-bold transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-1.5 shadow-lg"
-            >
-              <span>↺</span>
-              <span>REVERSE CAMERA</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Bottom Video Progress Bar */}
-        <div className="absolute bottom-0 left-0 right-0 z-40 bg-gradient-to-t from-black/80 to-transparent p-4 sm:p-6">
-          <div className="flex items-center justify-between font-mono-tech text-[11px] text-stone-300 mb-1.5">
-            <span className="text-[#bef264] font-bold">[ TRANSMISSION IN PROGRESS ]</span>
-            <span className="text-stone-400">AT END: AUTO-REVERSE CAMERA</span>
-          </div>
-          <div className="w-full h-1.5 bg-stone-800 border border-stone-600 overflow-hidden">
-            <div
-              className="h-full bg-[#bef264] transition-all duration-100 ease-linear"
-              style={{ width: `${videoProgress}%` }}
-            />
-          </div>
-        </div>
-      </div>
+      <div ref={pinWrapperRef} className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
 
       {/* Camera Rig that scales up towards the middle window on scroll */}
       <div
@@ -604,37 +727,9 @@ export default function HeroSection() {
               className="relative z-10 max-w-4xl mx-auto w-full my-6 sm:my-8 px-2"
               style={{ transformStyle: 'preserve-3d' }}
             >
-              {/* Top-Right Red Sound Effect Sticker (BOOM! + INTRO) - Layer Z: 85px */}
+              {/* Central comic panel frame - Layer Z: 25px (The Portal Window) - Base layer z-10 */}
               <div
-                ref={boomStickerRef}
-                className="absolute -top-10 sm:-top-14 right-2 sm:right-6 z-40 flex flex-col items-center select-none group cursor-help"
-                style={{
-                  transform: 'translateZ(85px) rotate(-6deg)',
-                  transformStyle: 'preserve-3d'
-                }}
-              >
-                <span className="font-heading text-5xl sm:text-7xl text-[#ef4444] font-black tracking-tighter drop-shadow-[4px_4px_0px_#000] drop-shadow-[8px_8px_0px_rgba(0,0,0,0.4)]">
-                  BOOM!
-                </span>
-                <div
-                  className="bg-black text-white font-mono-tech font-extrabold text-[10px] sm:text-xs px-3 py-0.5 border border-black transform rotate-3 -mt-2.5 sm:-mt-3"
-                  style={{
-                    boxShadow: '3px 3px 0px #ef4444'
-                  }}
-                >
-                  INTRO
-                </div>
-
-                {/* SFX Tooltip */}
-                <div className="absolute right-0 top-full mt-1 w-44 bg-black text-white text-[10px] font-mono-tech p-2 border border-stone-600 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 shadow-2xl">
-                  <div className="text-[#bef264] font-bold">SFX: BOOM!</div>
-                  <div className="text-stone-300">Explosive cinematic prologue intro</div>
-                </div>
-              </div>
-
-              {/* Central comic panel frame - Layer Z: 25px (The Portal Window) */}
-              <div
-                className="relative"
+                className="relative z-10"
                 style={{
                   transform: 'translateZ(25px)',
                   transformStyle: 'preserve-3d'
@@ -685,10 +780,38 @@ export default function HeroSection() {
                 </UnfoldPanel>
               </div>
 
-              {/* Overlapping Title Box - Layer Z: 95px with Dynamic 3D Shadow Cast */}
+              {/* Top-Right Red Sound Effect Sticker (BOOM! + INTRO) - Sits ON TOP of comic panel: Layer Z: 85px, z-40 */}
+              <div
+                ref={boomStickerRef}
+                className="absolute -top-10 sm:-top-14 right-2 sm:right-6 z-40 flex flex-col items-center select-none group cursor-help"
+                style={{
+                  transform: 'translateZ(85px) rotate(-6deg)',
+                  transformStyle: 'preserve-3d'
+                }}
+              >
+                <span className="font-heading text-5xl sm:text-7xl text-[#ef4444] font-black tracking-tighter drop-shadow-[4px_4px_0px_#000] drop-shadow-[8px_8px_0px_rgba(0,0,0,0.4)]">
+                  BOOM!
+                </span>
+                <div
+                  className="bg-black text-white font-mono-tech font-extrabold text-[10px] sm:text-xs px-3 py-0.5 border border-black transform rotate-3 -mt-2.5 sm:-mt-3"
+                  style={{
+                    boxShadow: '3px 3px 0px #ef4444'
+                  }}
+                >
+                  INTRO
+                </div>
+
+                {/* SFX Tooltip */}
+                <div className="absolute right-0 top-full mt-1 w-44 bg-black text-white text-[10px] font-mono-tech p-2 border border-stone-600 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 shadow-2xl">
+                  <div className="text-[#bef264] font-bold">SFX: BOOM!</div>
+                  <div className="text-stone-300">Explosive cinematic prologue intro</div>
+                </div>
+              </div>
+
+              {/* Overlapping Title Box - Sits ON TOP of comic panel: Layer Z: 95px, z-50 with Dynamic 3D Shadow Cast */}
               <div
                 ref={titleCardRef}
-                className="relative z-30 text-center -mt-10 sm:-mt-14"
+                className="relative z-50 text-center -mt-10 sm:-mt-14"
                 style={{
                   transform: 'translateZ(95px)',
                   transformStyle: 'preserve-3d'
@@ -742,7 +865,7 @@ export default function HeroSection() {
                 <TypewriterText
                   delay={750}
                   speed={12}
-                  className="max-w-2xl mx-auto text-stone-800 dark:text-stone-300 font-medium text-xs sm:text-sm md:text-base leading-relaxed text-center mt-5 mb-8 px-4"
+                  className="max-w-2xl mx-auto text-stone-800 dark:text-stone-300 font-medium text-xs sm:text-sm md:text-base leading-relaxed text-center mt-10 mb-8 px-4"
                   text="We forge brand worldbuilding, dynamic digital experiences, and high-impact intellectual properties with the relentless momentum and visual intensity of premier webtoons."
                 />
               </div>
@@ -835,7 +958,8 @@ export default function HeroSection() {
         </section>
       </div>
     </div>
-  );
+  </>
+);
 }
 
 

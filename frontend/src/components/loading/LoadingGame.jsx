@@ -7,9 +7,11 @@ class SoundFx {
   constructor() {
     this.ctx = null;
     this.muted = false;
+    this.hasUserInteracted = false;
   }
 
   init() {
+    if (!this.hasUserInteracted) return;
     if (!this.ctx) {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       if (AudioContext) {
@@ -17,8 +19,13 @@ class SoundFx {
       }
     }
     if (this.ctx && this.ctx.state === 'suspended') {
-      this.ctx.resume();
+      this.ctx.resume().catch(() => {});
     }
+  }
+
+  markUserInteraction() {
+    this.hasUserInteracted = true;
+    this.init();
   }
 
   playFlap() {
@@ -153,12 +160,14 @@ export default function LoadingGame({ onComplete }) {
 
   // Toggle SFX
   const toggleSfx = () => {
+    sfx.markUserInteraction();
     sfx.muted = sfxEnabled;
     setSfxEnabled(!sfxEnabled);
   };
 
   // Skip / Auto-sync directly to 100%
   const handleAutoSync = useCallback(() => {
+    sfx.markUserInteraction();
     setSyncProgress(100);
     setIsUnlocked(true);
     setShowAwakeningModal(true);
@@ -175,6 +184,7 @@ export default function LoadingGame({ onComplete }) {
 
   // Jump / Flap Action
   const jump = useCallback(() => {
+    sfx.markUserInteraction();
     const gs = gameStateRef.current;
     if (gs.isGameOver) {
       // Restart game
@@ -217,7 +227,6 @@ export default function LoadingGame({ onComplete }) {
         if (next >= 100) {
           setIsUnlocked(true);
           setShowAwakeningModal(true);
-          sfx.playVictory();
         }
         return next;
       });

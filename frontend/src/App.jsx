@@ -25,7 +25,7 @@ export default function App() {
 
       <div className="min-h-screen bg-[#ebebe5] dark:bg-[#09090b] text-stone-900 dark:text-stone-100 font-sans selection:bg-[#bef264] selection:text-black transition-colors duration-300">
         {/* Top Technical Protocol Status Bar */}
-        <TopTechnicalBar onOpenGame={() => setIsLoading(true)} />
+        {/* <TopTechnicalBar onOpenGame={() => setIsLoading(true)} /> */}
 
         {/* Chronicle Edition Header & Theme Bar */}
         <Navbar />
