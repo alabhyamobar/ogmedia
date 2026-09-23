@@ -47,7 +47,7 @@ export default function TrajectorySection() {
             {/* Panel Image Container */}
             <div className="relative border-2 border-black dark:border-stone-800 overflow-hidden bg-stone-950 aspect-[16/10] sm:aspect-[16/9]">
               <img
-                src="/assets/story_warrior.jpg"
+                src="/ogmedia/assets/story_warrior.jpg"
                 alt="Warrior overlooking futuristic metropolis"
                 loading="lazy"
                 decoding="async"
@@ -142,7 +142,7 @@ export default function TrajectorySection() {
             {/* Panel Image Container */}
             <div className="relative border-2 border-black dark:border-stone-800 overflow-hidden bg-stone-950 aspect-[4/5]">
               <img
-                src="/assets/story_hunter.jpg"
+                src="/ogmedia/assets/story_hunter.jpg"
                 alt="Manhwa hunter hero with green glowing aura"
                 loading="lazy"
                 decoding="async"

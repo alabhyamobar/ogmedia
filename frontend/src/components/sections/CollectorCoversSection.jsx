@@ -12,7 +12,7 @@ export default function CollectorCoversSection() {
       badgeColor: 'bg-black text-white',
       spine: 'NEO-SEOUL',
       sfx: '*CLACK!*',
-      img: '/assets/cover_seoul.jpg',
+      img: '/ogmedia/assets/cover_seoul.jpg',
       subTag: 'TARGET: GEN-Z DIGITAL',
       title: 'NEO-SEOUL CHRONICLES',
       subtitle: 'BRAND LAUNCH // 3D WEB PORTAL & DIGITAL COMIC',
@@ -28,7 +28,7 @@ export default function CollectorCoversSection() {
       badgeColor: 'bg-[#ef4444] text-white',
       spine: 'WARP TUNNEL',
       sfx: '*FLASH!*',
-      img: '/assets/cover_tunnel.jpg',
+      img: '/ogmedia/assets/cover_tunnel.jpg',
       subTag: 'FRAME RATE: 120',
       title: 'CYBER HYPER-TUNNEL',
       subtitle: 'HYPER SPEED PERFORMANCE RACING EXPERIENCE',
@@ -44,7 +44,7 @@ export default function CollectorCoversSection() {
       badgeColor: 'bg-[#bef264] text-black',
       spine: 'PROTOCOL',
       sfx: '*DOOM!*',
-      img: '/assets/cover_protocol.jpg',
+      img: '/ogmedia/assets/cover_protocol.jpg',
       subTag: 'STATUS: DEPLOYED',
       title: 'GHOST PROTOCOL',
       subtitle: 'SECRET CLASSIFIED IP & DIGITAL COMIC SERIES',
@@ -128,7 +128,7 @@ export default function CollectorCoversSection() {
                     decoding="async"
                     className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
                   />
-                  
+
                   {/* Halftone Screentone overlay */}
                   <div className="absolute inset-0 manga-halftone-light opacity-20 pointer-events-none" />
 
