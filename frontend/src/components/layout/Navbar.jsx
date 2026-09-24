@@ -1,19 +1,15 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
-import { useAuth } from '../../context/AuthContext';
 
 export default function Navbar() {
   const { toggleTheme, isDark } = useTheme();
-  const { user, isAuthenticated, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
-  const isAuthPage = location.pathname.includes('login') || location.pathname.includes('signup');
-
   const handleAnchorClick = (e, targetHash) => {
     e.preventDefault();
-    if (location.pathname === '/') {
+    if (location.pathname === '/' || location.pathname === '') {
       const targetId = targetHash.replace('#', '');
       const el = document.getElementById(targetId);
       if (el) {
@@ -45,9 +41,8 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Right Side: Auth Status, Theme Toggle Button & Nav links */}
+        {/* Right Side: Theme Toggle Button & Nav chapter anchors */}
         <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-          
           {/* Nav chapter anchors with vibrant color-coded states */}
           <div className="hidden lg:flex items-center gap-1.5 font-mono-tech text-xs font-bold">
             <a
@@ -91,34 +86,6 @@ export default function Navbar() {
               {isDark ? 'NOIR' : 'DRAFT'}
             </span>
           </button>
-
-          {/* Operative Authentication Button / Badge */}
-          {isAuthenticated && user ? (
-            <div className="flex items-center gap-1.5 bg-black text-white border-2 border-black px-2 py-1 manga-shadow-sm font-mono-tech text-xs">
-              <span className="text-[#bef264] animate-pulse">{user.avatar || '⚡'}</span>
-              <span className="font-bold text-[#bef264] hidden sm:inline">{user.codename}</span>
-              <button
-                onClick={logout}
-                title="Disconnect terminal session"
-                className="bg-[#ef4444] hover:bg-red-600 text-white text-[10px] font-bold px-1.5 py-0.5 ml-1 border border-black cursor-pointer transition-colors"
-              >
-                LOGOUT
-              </button>
-            </div>
-          ) : (
-            <Link
-              to="/login"
-              className={`font-mono-tech font-bold text-xs px-2.5 sm:px-3 py-1 border-2 border-black manga-shadow-sm transition-all hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-1.5 ${
-                isAuthPage
-                  ? 'bg-black text-[#bef264]'
-                  : 'bg-white dark:bg-[#1a1a22] text-black dark:text-white hover:bg-[#bef264] hover:text-black dark:hover:bg-[#bef264] dark:hover:text-black'
-              }`}
-            >
-              <span className="text-[#ef4444] animate-pulse">●</span>
-              <span>[ ⚡ OPERATIVE LOGIN ]</span>
-            </Link>
-          )}
-
         </div>
       </div>
     </nav>
