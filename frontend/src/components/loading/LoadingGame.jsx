@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useVideoPreload } from '../../context/VideoPreloadContext';
 
 /**
- * Web Audio Sound Effects Synthesizer (Zero external dependencies, instant low-latency)
+ * Web Audio Sound Effects Synthesizer
+ * Zero external audio dependencies, zero latency, custom procedural audio
  */
 class SoundFx {
   constructor() {
@@ -13,9 +15,9 @@ class SoundFx {
   init() {
     if (!this.hasUserInteracted) return;
     if (!this.ctx) {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      if (AudioContext) {
-        this.ctx = new AudioContext();
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) {
+        this.ctx = new AudioCtx();
       }
     }
     if (this.ctx && this.ctx.state === 'suspended') {
@@ -32,87 +34,169 @@ class SoundFx {
     if (this.muted) return;
     this.init();
     if (!this.ctx) return;
+    const now = this.ctx.currentTime;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
+
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(320, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(640, this.ctx.currentTime + 0.08);
-    gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+    osc.frequency.setValueAtTime(260, now);
+    osc.frequency.exponentialRampToValueAtTime(580, now + 0.08);
+
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+
     osc.connect(gain);
     gain.connect(this.ctx.destination);
-    osc.start();
-    osc.stop(this.ctx.currentTime + 0.09);
+    osc.start(now);
+    osc.stop(now + 0.09);
   }
 
   playScore() {
     if (this.muted) return;
     this.init();
     if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(523.25, now); // C5
+    osc.frequency.setValueAtTime(783.99, now + 0.07); // G5
+    osc.frequency.setValueAtTime(1046.5, now + 0.14); // C6
+
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.28);
+
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.3);
+  }
+
+  playMana(combo = 0) {
+    if (this.muted) return;
+    this.init();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    const baseFreq = 700 + Math.min(600, combo * 80);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(baseFreq, now);
+    osc.frequency.exponentialRampToValueAtTime(baseFreq * 1.6, now + 0.14);
+
+    gain.gain.setValueAtTime(0.22, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.14);
+
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.15);
+  }
+
+  playShieldPickup() {
+    if (this.muted) return;
+    this.init();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(350, now);
+    osc.frequency.exponentialRampToValueAtTime(950, now + 0.22);
+
+    gain.gain.setValueAtTime(0.18, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.24);
+
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.25);
+  }
+
+  playShieldBreak() {
+    if (this.muted) return;
+    this.init();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+
+    // Resonant crash sound
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
     osc.type = 'triangle';
-    osc.frequency.setValueAtTime(587.33, this.ctx.currentTime); // D5
-    osc.frequency.setValueAtTime(880, this.ctx.currentTime + 0.08); // A5
-    gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.22);
+    osc.frequency.setValueAtTime(420, now);
+    osc.frequency.exponentialRampToValueAtTime(120, now + 0.25);
+
+    gain.gain.setValueAtTime(0.35, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+
     osc.connect(gain);
     gain.connect(this.ctx.destination);
-    osc.start();
-    osc.stop(this.ctx.currentTime + 0.23);
+    osc.start(now);
+    osc.stop(now + 0.26);
   }
 
-  playMana() {
+  playNearMiss() {
     if (this.muted) return;
     this.init();
     if (!this.ctx) return;
+    const now = this.ctx.currentTime;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
+
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(800, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(1400, this.ctx.currentTime + 0.15);
-    gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.15);
+    osc.frequency.setValueAtTime(900, now);
+    osc.frequency.linearRampToValueAtTime(1400, now + 0.08);
+
+    gain.gain.setValueAtTime(0.12, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+
     osc.connect(gain);
     gain.connect(this.ctx.destination);
-    osc.start();
-    osc.stop(this.ctx.currentTime + 0.16);
-  }
-
-  playVictory() {
-    if (this.muted) return;
-    this.init();
-    if (!this.ctx) return;
-    const notes = [523.25, 659.25, 783.99, 1046.5]; // C5, E5, G5, C6
-    notes.forEach((freq, i) => {
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(freq, this.ctx.currentTime + i * 0.09);
-      gain.gain.setValueAtTime(0.25, this.ctx.currentTime + i * 0.09);
-      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + i * 0.09 + 0.25);
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-      osc.start(this.ctx.currentTime + i * 0.09);
-      osc.stop(this.ctx.currentTime + i * 0.09 + 0.26);
-    });
+    osc.start(now);
+    osc.stop(now + 0.09);
   }
 
   playCrash() {
     if (this.muted) return;
     this.init();
     if (!this.ctx) return;
+    const now = this.ctx.currentTime;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
+
     osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(180, this.ctx.currentTime);
-    osc.frequency.linearRampToValueAtTime(60, this.ctx.currentTime + 0.15);
-    gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.15);
+    osc.frequency.setValueAtTime(160, now);
+    osc.frequency.linearRampToValueAtTime(45, now + 0.22);
+
+    gain.gain.setValueAtTime(0.35, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.22);
+
     osc.connect(gain);
     gain.connect(this.ctx.destination);
-    osc.start();
-    osc.stop(this.ctx.currentTime + 0.16);
+    osc.start(now);
+    osc.stop(now + 0.23);
+  }
+
+  playVictory() {
+    if (this.muted) return;
+    this.init();
+    if (!this.ctx) return;
+    const notes = [523.25, 659.25, 783.99, 1046.5];
+    notes.forEach((freq, i) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, this.ctx.currentTime + i * 0.08);
+      gain.gain.setValueAtTime(0.2, this.ctx.currentTime + i * 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + i * 0.08 + 0.22);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(this.ctx.currentTime + i * 0.08);
+      osc.stop(this.ctx.currentTime + i * 0.08 + 0.24);
+    });
   }
 }
 
@@ -120,43 +204,72 @@ const sfx = new SoundFx();
 
 export default function LoadingGame({ onComplete }) {
   const canvasRef = useRef(null);
+  const { progress: videoProgress, isLoaded: isVideoLoaded, loadedBytes, totalBytes, speed } = useVideoPreload();
+
   const [sfxEnabled, setSfxEnabled] = useState(true);
   const [gatesPassed, setGatesPassed] = useState(0);
   const [manaOrbs, setManaOrbs] = useState(0);
-  const [syncProgress, setSyncProgress] = useState(15);
-  const [velocityDisplay, setVelocityDisplay] = useState(-41);
+  const [combo, setCombo] = useState(0);
+  const [hasShield, setHasShield] = useState(false);
+  const [gameStateStatus, setGameStateStatus] = useState('READY'); // 'READY' | 'PLAYING' | 'GAMEOVER'
+  const [velocityDisplay, setVelocityDisplay] = useState(0);
   const [bestScore, setBestScore] = useState(() => {
     try {
-      return parseInt(localStorage.getItem('og_flappy_best') || '2', 10);
+      return parseInt(localStorage.getItem('og_flappy_best') || '0', 10);
     } catch {
-      return 2;
+      return 0;
     }
   });
+
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [showAwakeningModal, setShowAwakeningModal] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
 
-  // References for game loop
+  // References for 60fps game loop
   const gameStateRef = useRef({
+    status: 'READY', // 'READY' | 'PLAYING' | 'GAMEOVER'
     bird: {
-      x: 70,
-      y: 160,
+      x: 80,
+      y: 190,
       vy: 0,
-      radius: 14,
+      radius: 11, // Fair hitbox
+      visualRadius: 15,
       rotation: 0,
-      wingState: 0
+      wingState: 0,
+      trail: [],
+      hasShield: false,
+      shieldTime: 0
     },
     monoliths: [],
     orbs: [],
     particles: [],
+    popups: [],
     score: 0,
     orbsCollected: 0,
-    isGameOver: false,
+    combo: 0,
+    shake: 0,
     frameCount: 0,
     lastSpawn: 0,
-    lastOrbSpawn: 0,
-    sync: 15
+    hoverPhase: 0,
+    bgOffset: 0
   });
+
+  // Calculate Hunter Rank based on score
+  const getRankFromScore = (s) => {
+    if (s >= 20) return 'S-RANK';
+    if (s >= 12) return 'A-RANK';
+    if (s >= 6) return 'B-RANK';
+    if (s >= 3) return 'C-RANK';
+    return 'D-RANK';
+  };
+
+  // Sync unlock condition with video preloader
+  useEffect(() => {
+    if (isVideoLoaded && !isUnlocked) {
+      setIsUnlocked(true);
+      sfx.playVictory();
+    }
+  }, [isVideoLoaded, isUnlocked]);
 
   // Toggle SFX
   const toggleSfx = () => {
@@ -165,16 +278,15 @@ export default function LoadingGame({ onComplete }) {
     setSfxEnabled(!sfxEnabled);
   };
 
-  // Skip / Auto-sync directly to 100%
+  // Auto-sync / Skip
   const handleAutoSync = useCallback(() => {
     sfx.markUserInteraction();
-    setSyncProgress(100);
     setIsUnlocked(true);
     setShowAwakeningModal(true);
     sfx.playVictory();
   }, []);
 
-  // Complete and enter webtoon
+  // Enter webtoon
   const handleEnterWebtoon = useCallback(() => {
     setIsExiting(true);
     setTimeout(() => {
@@ -186,59 +298,62 @@ export default function LoadingGame({ onComplete }) {
   const jump = useCallback(() => {
     sfx.markUserInteraction();
     const gs = gameStateRef.current;
-    if (gs.isGameOver) {
-      // Restart game
-      gs.bird.y = 160;
-      gs.bird.vy = -6.5;
+
+    if (gs.status === 'READY') {
+      gs.status = 'PLAYING';
+      setGameStateStatus('PLAYING');
+      gs.bird.vy = -5.8;
+      gs.bird.rotation = -0.45;
+      sfx.playFlap();
+      return;
+    }
+
+    if (gs.status === 'GAMEOVER') {
+      // Restart
+      gs.status = 'PLAYING';
+      setGameStateStatus('PLAYING');
+      gs.bird.y = 190;
+      gs.bird.vy = -5.8;
+      gs.bird.rotation = -0.45;
+      gs.bird.trail = [];
+      gs.bird.hasShield = false;
+      setHasShield(false);
       gs.monoliths = [];
       gs.orbs = [];
-      gs.isGameOver = false;
+      gs.particles = [];
+      gs.popups = [];
       gs.score = 0;
+      gs.combo = 0;
+      gs.lastSpawn = gs.frameCount;
       setGatesPassed(0);
-    } else {
-      gs.bird.vy = -6.2;
+      setCombo(0);
+      sfx.playFlap();
+      return;
     }
+
+    // Active playing flap
+    gs.bird.vy = -5.8;
+    gs.bird.rotation = -0.42; // Snappy upward pitch
     sfx.playFlap();
-    // Add flap puff particles
-    for (let i = 0; i < 4; i++) {
+
+    // Spawn aerodynamic feather/spark particles
+    for (let i = 0; i < 5; i++) {
       gs.particles.push({
-        x: gs.bird.x - 10,
-        y: gs.bird.y + Math.random() * 8 - 4,
-        vx: -Math.random() * 2 - 1,
-        vy: Math.random() * 2 - 1,
+        x: gs.bird.x - 12,
+        y: gs.bird.y + (Math.random() * 10 - 5),
+        vx: -Math.random() * 3 - 1.5,
+        vy: (Math.random() - 0.5) * 2.5,
         size: Math.random() * 4 + 2,
         life: 1,
-        color: '#bef264'
+        color: Math.random() > 0.4 ? '#bef264' : '#18181b'
       });
     }
-  }, []);
-
-  // Background auto-sync progress ticker (reaches 100% in ~4 seconds automatically)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSyncProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setIsUnlocked(true);
-          setShowAwakeningModal(true);
-          return 100;
-        }
-        const next = Math.min(100, prev + 3);
-        if (next >= 100) {
-          setIsUnlocked(true);
-          setShowAwakeningModal(true);
-        }
-        return next;
-      });
-    }, 120);
-
-    return () => clearInterval(interval);
   }, []);
 
   // Keyboard controls
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.code === 'Space' || e.code === 'ArrowUp') {
+      if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') {
         e.preventDefault();
         jump();
       } else if (e.code === 'Enter' && isUnlocked) {
@@ -256,23 +371,45 @@ export default function LoadingGame({ onComplete }) {
     const ctx = canvas.getContext('2d');
     let animationFrameId;
 
-    const gravity = 0.32;
-    const speed = 2.2;
-    const gap = 100;
+    const gravity = 0.28;
+    const speed = 2.4;
+    const gap = 112; // Balanced fair gap
 
     const render = () => {
       const gs = gameStateRef.current;
       gs.frameCount++;
-
       const width = canvas.width;
       const height = canvas.height;
 
-      // 1. Clear & Background Grid
-      ctx.fillStyle = '#0f0f12';
+      // Camera Shake dampening
+      let shakeX = 0;
+      let shakeY = 0;
+      if (gs.shake > 0) {
+        shakeX = (Math.random() - 0.5) * gs.shake;
+        shakeY = (Math.random() - 0.5) * gs.shake;
+        gs.shake *= 0.86;
+        if (gs.shake < 0.2) gs.shake = 0;
+      }
+
+      ctx.save();
+      ctx.translate(shakeX, shakeY);
+
+      // 1. Clear & Dynamic Cyber Background
+      ctx.fillStyle = '#0a0a0d';
       ctx.fillRect(0, 0, width, height);
 
-      // Subtle drafting coordinates grid inside game
-      ctx.strokeStyle = '#1e1e24';
+      // Parallax Layer 1: Distant Gothic Skyline Silhouettes
+      gs.bgOffset = (gs.bgOffset + (gs.status === 'PLAYING' ? 0.6 : 0.2)) % 320;
+      ctx.fillStyle = '#121217';
+      const skylineX = -gs.bgOffset;
+      for (let sx = skylineX; sx < width + 100; sx += 80) {
+        ctx.fillRect(sx, height - 90, 50, 90);
+        ctx.fillRect(sx + 30, height - 130, 35, 130);
+        ctx.fillRect(sx + 15, height - 160, 15, 160);
+      }
+
+      // Parallax Layer 2: Drafting Grid & Runes
+      ctx.strokeStyle = '#181820';
       ctx.lineWidth = 1;
       for (let x = 0; x < width; x += 32) {
         ctx.beginPath();
@@ -287,157 +424,315 @@ export default function LoadingGame({ onComplete }) {
         ctx.stroke();
       }
 
-      // 2. Spawn Ink Monoliths
-      if (gs.frameCount - gs.lastSpawn > 115) {
-        const topH = Math.floor(Math.random() * (height - gap - 70)) + 35;
-        gs.monoliths.push({
-          x: width,
-          topH,
-          bottomY: topH + gap,
-          passed: false,
-          coordText: `TR_${(Math.random() * 90).toFixed(2)}°`,
-          regMark: `+${(Math.random() * 40).toFixed(3)}°`
-        });
-        gs.lastSpawn = gs.frameCount;
-
-        // Spawn mana orb in the gap occasionally
-        if (Math.random() > 0.4) {
-          gs.orbs.push({
-            x: width + 25,
-            y: topH + gap / 2 + (Math.random() * 30 - 15),
-            collected: false,
-            pulse: 0
+      // 2. Spawn Monoliths & Collectibles
+      if (gs.status === 'PLAYING') {
+        if (gs.frameCount - gs.lastSpawn > 115) {
+          const topH = Math.floor(Math.random() * (height - gap - 80)) + 40;
+          const gateNumber = gs.score + gs.monoliths.length + 1;
+          gs.monoliths.push({
+            x: width,
+            topH,
+            bottomY: topH + gap,
+            passed: false,
+            gateText: `GATE // ${String(gateNumber).padStart(2, '0')}`,
+            koreanWarning: gateNumber % 2 === 0 ? '[마나 격벽]' : '[차원 장벽]',
+            nearMissChecked: false
           });
+          gs.lastSpawn = gs.frameCount;
+
+          // Spawn collectible in the gate
+          const rand = Math.random();
+          if (rand > 0.35) {
+            // Normal Mana Orb (Cyan)
+            gs.orbs.push({
+              x: width + 28,
+              y: topH + gap / 2 + (Math.random() * 30 - 15),
+              type: 'mana',
+              pulse: 0,
+              collected: false
+            });
+          } else if (rand > 0.18) {
+            // Rare Hunter Core (Lime)
+            gs.orbs.push({
+              x: width + 28,
+              y: topH + gap / 2 + (Math.random() * 20 - 10),
+              type: 'core',
+              pulse: 0,
+              collected: false
+            });
+          } else if (!gs.bird.hasShield && rand < 0.1) {
+            // Occasional Shadow Shield (Purple)
+            gs.orbs.push({
+              x: width + 28,
+              y: topH + gap / 2,
+              type: 'shield',
+              pulse: 0,
+              collected: false
+            });
+          }
         }
       }
 
-      // 3. Update & Draw Monoliths
+      // 3. Update & Draw Monoliths (Pillars)
       for (let i = gs.monoliths.length - 1; i >= 0; i--) {
         const m = gs.monoliths[i];
-        m.x -= speed;
-
-        // Draw Top Monolith (Pillar)
-        ctx.fillStyle = '#0a0a0c';
-        ctx.fillRect(m.x, 0, 48, m.topH);
-        ctx.strokeStyle = '#38383e';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(m.x, 0, 48, m.topH);
-
-        // Monolith hatched texture
-        ctx.strokeStyle = 'rgba(190, 242, 100, 0.2)';
-        ctx.lineWidth = 1;
-        for (let hy = 10; hy < m.topH - 10; hy += 12) {
-          ctx.beginPath();
-          ctx.moveTo(m.x + 6, hy);
-          ctx.lineTo(m.x + 42, hy + 6);
-          ctx.stroke();
+        if (gs.status === 'PLAYING') {
+          m.x -= speed;
         }
 
-        // Monolith coordinate badge
+        const pillarWidth = 52;
+
+        // TOP PILLAR
+        ctx.fillStyle = '#0f0f14';
+        ctx.fillRect(m.x, 0, pillarWidth, m.topH);
+        ctx.strokeStyle = '#27272a';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(m.x, 0, pillarWidth, m.topH);
+
+        // Top Pillar Neon Conduit
+        ctx.strokeStyle = '#bef264';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(m.x + 8, 0);
+        ctx.lineTo(m.x + 8, m.topH - 8);
+        ctx.stroke();
+
+        // Top Pillar Lip Hazard Pattern
+        ctx.fillStyle = '#18181b';
+        ctx.fillRect(m.x - 2, m.topH - 12, pillarWidth + 4, 12);
+        ctx.strokeStyle = '#bef264';
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(m.x - 2, m.topH - 12, pillarWidth + 4, 12);
+
+        // Technical Korean Gate Code
         ctx.fillStyle = '#bef264';
-        ctx.font = '8px "JetBrains Mono", monospace';
-        ctx.fillText(m.coordText, m.x + 4, 18);
+        ctx.font = 'bold 8px "JetBrains Mono", monospace';
+        ctx.fillText(m.gateText, m.x + 4, 16);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+        ctx.fillText(m.koreanWarning, m.x + 4, 28);
 
-        // Draw Bottom Monolith
+        // BOTTOM PILLAR
         const botH = height - m.bottomY;
-        ctx.fillStyle = '#0a0a0c';
-        ctx.fillRect(m.x, m.bottomY, 48, botH);
-        ctx.strokeStyle = '#38383e';
+        ctx.fillStyle = '#0f0f14';
+        ctx.fillRect(m.x, m.bottomY, pillarWidth, botH);
+        ctx.strokeStyle = '#27272a';
         ctx.lineWidth = 2;
-        ctx.strokeRect(m.x, m.bottomY, 48, botH);
+        ctx.strokeRect(m.x, m.bottomY, pillarWidth, botH);
 
-        // Bottom hatching
-        for (let hy = m.bottomY + 12; hy < height - 10; hy += 12) {
-          ctx.beginPath();
-          ctx.moveTo(m.x + 6, hy);
-          ctx.lineTo(m.x + 42, hy + 6);
-          ctx.stroke();
-        }
+        // Bottom Pillar Neon Conduit
+        ctx.strokeStyle = '#ef4444';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(m.x + pillarWidth - 8, m.bottomY + 8);
+        ctx.lineTo(m.x + pillarWidth - 8, height);
+        ctx.stroke();
 
-        // Bottom technical coordinate
+        // Bottom Pillar Lip Hazard Pattern
+        ctx.fillStyle = '#18181b';
+        ctx.fillRect(m.x - 2, m.bottomY, pillarWidth + 4, 12);
+        ctx.strokeStyle = '#ef4444';
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(m.x - 2, m.bottomY, pillarWidth + 4, 12);
+
+        // Bottom Hazard Glyph
         ctx.fillStyle = '#ef4444';
-        ctx.font = '8px "JetBrains Mono", monospace';
-        ctx.fillText(m.regMark, m.x + 4, m.bottomY + 18);
+        ctx.font = 'bold 8px "JetBrains Mono", monospace';
+        ctx.fillText('WARN: CLAMP', m.x + 4, m.bottomY + 24);
 
-        // Score check
-        if (!m.passed && m.x + 48 < gs.bird.x) {
+        // Shimmering Mana Barrier between pillars
+        ctx.strokeStyle = 'rgba(190, 242, 100, 0.15)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(m.x + pillarWidth / 2, m.topH);
+        ctx.lineTo(m.x + pillarWidth / 2, m.bottomY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Score Check & Gate Passage
+        if (!m.passed && m.x + pillarWidth < gs.bird.x) {
           m.passed = true;
           gs.score++;
+          gs.combo++;
           setGatesPassed(gs.score);
+          setCombo(gs.combo);
           sfx.playScore();
 
-          // Accelerate sync
-          setSyncProgress((p) => {
-            const next = Math.min(100, p + 12);
-            if (next >= 100) {
-              setIsUnlocked(true);
-              setShowAwakeningModal(true);
-            }
-            return next;
+          // Gate clear popup
+          gs.popups.push({
+            x: gs.bird.x + 20,
+            y: gs.bird.y - 15,
+            text: gs.combo > 1 ? `GATE +1 (x${gs.combo})` : '+1 GATE',
+            color: '#bef264',
+            life: 1
           });
 
-          // Update best score
+          // Update High Score
           if (gs.score > bestScore) {
             setBestScore(gs.score);
             try {
               localStorage.setItem('og_flappy_best', gs.score.toString());
             } catch {}
           }
+
+          // Barrier shatter particles
+          for (let p = 0; p < 8; p++) {
+            gs.particles.push({
+              x: m.x + pillarWidth / 2,
+              y: m.topH + (p * gap) / 8,
+              vx: Math.random() * 2 + 1,
+              vy: (Math.random() - 0.5) * 2,
+              size: 2.5,
+              life: 1,
+              color: '#bef264'
+            });
+          }
         }
 
-        // Collision Check
+        // Near-Miss Bonus check (rewarding close calls)
+        if (!m.nearMissChecked && gs.status === 'PLAYING') {
+          if (gs.bird.x > m.x && gs.bird.x < m.x + pillarWidth) {
+            const distTop = gs.bird.y - m.topH;
+            const distBottom = m.bottomY - gs.bird.y;
+            if ((distTop > 0 && distTop < 18) || (distBottom > 0 && distBottom < 18)) {
+              m.nearMissChecked = true;
+              sfx.playNearMiss();
+              gs.popups.push({
+                x: gs.bird.x,
+                y: gs.bird.y - 28,
+                text: 'CLOSE CALL! +50',
+                color: '#38bdf8',
+                life: 1
+              });
+            }
+          }
+        }
+
+        // Collision Check (Fair Inner Hitbox)
         if (
           gs.bird.x + gs.bird.radius > m.x &&
-          gs.bird.x - gs.bird.radius < m.x + 48
+          gs.bird.x - gs.bird.radius < m.x + pillarWidth
         ) {
           if (
             gs.bird.y - gs.bird.radius < m.topH ||
             gs.bird.y + gs.bird.radius > m.bottomY
           ) {
-            if (!gs.isGameOver) {
-              gs.isGameOver = true;
+            if (gs.bird.hasShield) {
+              // Shield breaks and saves player!
+              gs.bird.hasShield = false;
+              setHasShield(false);
+              gs.shake = 14;
+              sfx.playShieldBreak();
+              gs.popups.push({
+                x: gs.bird.x,
+                y: gs.bird.y,
+                text: 'SHIELD SHATTERED!',
+                color: '#c084fc',
+                life: 1.2
+              });
+              // Push bird to safety in middle of gap
+              gs.bird.y = m.topH + gap / 2;
+              gs.bird.vy = 0;
+            } else if (gs.status === 'PLAYING') {
+              // Game Over
+              gs.status = 'GAMEOVER';
+              setGameStateStatus('GAMEOVER');
+              gs.shake = 18;
               sfx.playCrash();
+              setHunterRank(getRankFromScore(gs.score));
             }
           }
         }
 
-        // Clean up offscreen
+        // Clean offscreen
         if (m.x < -60) {
           gs.monoliths.splice(i, 1);
         }
       }
 
-      // 4. Update & Draw Mana Orbs
+      // 4. Update & Draw Collectibles
       for (let i = gs.orbs.length - 1; i >= 0; i--) {
         const orb = gs.orbs[i];
-        orb.x -= speed;
+        if (gs.status === 'PLAYING') {
+          orb.x -= speed;
+        }
         orb.pulse += 0.08;
 
         if (!orb.collected) {
-          const r = 7 + Math.sin(orb.pulse) * 2;
-          ctx.beginPath();
-          ctx.arc(orb.x, orb.y, r, 0, Math.PI * 2);
-          ctx.fillStyle = '#38bdf8';
-          ctx.fill();
-          ctx.strokeStyle = '#ffffff';
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
+          const r = 8 + Math.sin(orb.pulse) * 1.5;
 
-          // Mana orb glow
-          ctx.beginPath();
-          ctx.arc(orb.x, orb.y, r * 1.8, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(56, 189, 248, 0.25)';
-          ctx.fill();
+          if (orb.type === 'mana') {
+            // Cyan Mana Orb
+            ctx.beginPath();
+            ctx.arc(orb.x, orb.y, r, 0, Math.PI * 2);
+            ctx.fillStyle = '#38bdf8';
+            ctx.fill();
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
 
-          // Collision with bird
+            // Outer pulse glow
+            ctx.beginPath();
+            ctx.arc(orb.x, orb.y, r * 1.8, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(56, 189, 248, 0.2)';
+            ctx.fill();
+          } else if (orb.type === 'core') {
+            // Golden Hunter Core
+            ctx.save();
+            ctx.translate(orb.x, orb.y);
+            ctx.rotate(orb.pulse);
+            ctx.fillStyle = '#bef264';
+            ctx.fillRect(-r, -r, r * 2, r * 2);
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(-r, -r, r * 2, r * 2);
+            ctx.restore();
+          } else if (orb.type === 'shield') {
+            // Purple Shield Rune
+            ctx.beginPath();
+            ctx.arc(orb.x, orb.y, r + 2, 0, Math.PI * 2);
+            ctx.fillStyle = '#c084fc';
+            ctx.fill();
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            // Shield icon
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 9px monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText('🛡', orb.x, orb.y + 3);
+          }
+
+          // Collision with Bird
           const dist = Math.hypot(gs.bird.x - orb.x, gs.bird.y - orb.y);
-          if (dist < gs.bird.radius + r) {
+          if (dist < gs.bird.radius + r + 4) {
             orb.collected = true;
-            gs.orbsCollected++;
-            setManaOrbs(gs.orbsCollected);
-            sfx.playMana();
 
-            // Mana burst particles
+            if (orb.type === 'shield') {
+              gs.bird.hasShield = true;
+              setHasShield(true);
+              sfx.playShieldPickup();
+              gs.popups.push({
+                x: orb.x,
+                y: orb.y - 15,
+                text: 'SHIELD ACQUIRED!',
+                color: '#c084fc',
+                life: 1
+              });
+            } else {
+              gs.orbsCollected += orb.type === 'core' ? 3 : 1;
+              setManaOrbs(gs.orbsCollected);
+              sfx.playMana(gs.combo);
+              gs.popups.push({
+                x: orb.x,
+                y: orb.y - 15,
+                text: orb.type === 'core' ? '+300 CORE MANA' : '+100 MANA',
+                color: orb.type === 'core' ? '#bef264' : '#38bdf8',
+                life: 1
+              });
+            }
+
+            // Burst particles
             for (let p = 0; p < 8; p++) {
               gs.particles.push({
                 x: orb.x,
@@ -446,48 +741,84 @@ export default function LoadingGame({ onComplete }) {
                 vy: Math.sin((p * Math.PI) / 4) * 3,
                 size: 3,
                 life: 1,
-                color: '#38bdf8'
+                color: orb.type === 'shield' ? '#c084fc' : orb.type === 'core' ? '#bef264' : '#38bdf8'
               });
             }
           }
         }
 
-        if (orb.x < -20 || orb.collected) {
+        if (orb.x < -30 || orb.collected) {
           gs.orbs.splice(i, 1);
         }
       }
 
       // 5. Update Bird (Shadow Crow 까마귀)
-      if (!gs.isGameOver) {
+      if (gs.status === 'READY') {
+        // Floating hover sine wave
+        gs.hoverPhase += 0.06;
+        gs.bird.y = 190 + Math.sin(gs.hoverPhase) * 6;
+        gs.bird.rotation = Math.sin(gs.hoverPhase) * 0.08;
+        gs.bird.wingState += 0.15;
+      } else if (gs.status === 'PLAYING') {
         gs.bird.vy += gravity;
         gs.bird.y += gs.bird.vy;
 
-        // Rotation tilts based on velocity
-        gs.bird.rotation = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, gs.bird.vy * 0.08));
-
-        // Wing flap flutter
-        gs.bird.wingState += 0.25;
-
-        // Ground / Ceiling clamp
-        if (gs.bird.y + gs.bird.radius > height) {
-          gs.bird.y = height - gs.bird.radius;
-          gs.isGameOver = true;
-          sfx.playCrash();
+        // Smooth aerodynamic pitch rotation:
+        // Snappy lift, gradual dive
+        if (gs.bird.vy < 0) {
+          gs.bird.rotation = Math.max(-0.45, gs.bird.rotation - 0.04);
+        } else {
+          gs.bird.rotation = Math.min(1.1, gs.bird.rotation + 0.04);
         }
+
+        gs.bird.wingState += 0.28;
+
+        // Store trail positions for sleek shadow ghosting
+        if (gs.frameCount % 2 === 0) {
+          gs.bird.trail.unshift({ x: gs.bird.x, y: gs.bird.y, rot: gs.bird.rotation, alpha: 0.45 });
+          if (gs.bird.trail.length > 6) gs.bird.trail.pop();
+        }
+
+        // Ceiling & Floor Collision
         if (gs.bird.y - gs.bird.radius < 0) {
           gs.bird.y = gs.bird.radius;
           gs.bird.vy = 0;
         }
+        if (gs.bird.y + gs.bird.radius > height) {
+          gs.bird.y = height - gs.bird.radius;
+          gs.status = 'GAMEOVER';
+          setGameStateStatus('GAMEOVER');
+          gs.shake = 16;
+          sfx.playCrash();
+          setHunterRank(getRankFromScore(gs.score));
+        }
 
         setVelocityDisplay(Math.round(gs.bird.vy * 10));
-      } else {
-        // Falling when game over
-        gs.bird.vy += gravity * 1.2;
-        gs.bird.y += gs.bird.vy;
-        gs.bird.rotation = Math.min(Math.PI / 2, gs.bird.rotation + 0.1);
+      } else if (gs.status === 'GAMEOVER') {
+        // Falling down on death
+        if (gs.bird.y + gs.bird.radius < height) {
+          gs.bird.vy += gravity * 1.5;
+          gs.bird.y += gs.bird.vy;
+          gs.bird.rotation = Math.min(Math.PI / 2, gs.bird.rotation + 0.15);
+        }
       }
 
-      // 6. Draw Shadow Crow
+      // 6. Draw Shadow Crow Ghost Trail (Anime Hunter Aesthetic)
+      for (let t = 0; t < gs.bird.trail.length; t++) {
+        const tr = gs.bird.trail[t];
+        tr.alpha *= 0.85;
+        tr.x -= speed * 0.5;
+        ctx.save();
+        ctx.translate(tr.x, tr.y);
+        ctx.rotate(tr.rot);
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 14, 9, 0, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(190, 242, 100, ${tr.alpha * 0.3})`;
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // 7. Draw Shadow Crow
       ctx.save();
       ctx.translate(gs.bird.x, gs.bird.y);
       ctx.rotate(gs.bird.rotation);
@@ -495,23 +826,45 @@ export default function LoadingGame({ onComplete }) {
       // Crow Shadow Aura
       ctx.beginPath();
       ctx.arc(0, 0, 18, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(190, 242, 100, 0.2)';
+      ctx.fillStyle = 'rgba(190, 242, 100, 0.22)';
       ctx.fill();
 
-      // Crow Body (Sleek aerodynamic ink black)
+      // Shadow Shield (if active)
+      if (gs.bird.hasShield) {
+        gs.bird.shieldTime += 0.08;
+        ctx.save();
+        ctx.rotate(gs.bird.shieldTime);
+        ctx.strokeStyle = '#c084fc';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        for (let a = 0; a < 6; a++) {
+          const angle = (a * Math.PI) / 3;
+          const sx = Math.cos(angle) * 22;
+          const sy = Math.sin(angle) * 22;
+          if (a === 0) ctx.moveTo(sx, sy);
+          else ctx.lineTo(sx, sy);
+        }
+        ctx.closePath();
+        ctx.stroke();
+        ctx.fillStyle = 'rgba(192, 132, 252, 0.15)';
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // Crow Body (Aerodynamic ink black)
       ctx.beginPath();
-      ctx.ellipse(0, 0, 14, 10, 0, 0, Math.PI * 2);
+      ctx.ellipse(0, 0, 15, 10, 0, 0, Math.PI * 2);
       ctx.fillStyle = '#09090b';
       ctx.fill();
       ctx.strokeStyle = '#bef264';
       ctx.lineWidth = 2;
       ctx.stroke();
 
-      // Wing (Flapping)
-      const wingY = Math.sin(gs.bird.wingState) * 6;
+      // Flapping Wing
+      const wingY = Math.sin(gs.bird.wingState) * 7;
       ctx.beginPath();
-      ctx.moveTo(-4, 0);
-      ctx.lineTo(2, wingY - 8);
+      ctx.moveTo(-5, 0);
+      ctx.lineTo(2, wingY - 9);
       ctx.lineTo(8, 0);
       ctx.fillStyle = '#27272a';
       ctx.fill();
@@ -521,32 +874,32 @@ export default function LoadingGame({ onComplete }) {
 
       // Beak (Sharp hunter beak)
       ctx.beginPath();
-      ctx.moveTo(11, -2);
-      ctx.lineTo(19, 1);
-      ctx.lineTo(11, 4);
+      ctx.moveTo(12, -2);
+      ctx.lineTo(20, 1);
+      ctx.lineTo(12, 4);
       ctx.closePath();
       ctx.fillStyle = '#ef4444';
       ctx.fill();
 
-      // Glowing Eye (Hunter Mana Red / Lime)
+      // Hunter Mana Eye with Glow
       ctx.beginPath();
-      ctx.arc(7, -3, 2.5, 0, Math.PI * 2);
+      ctx.arc(8, -3, 2.8, 0, Math.PI * 2);
       ctx.fillStyle = '#bef264';
       ctx.fill();
 
       ctx.restore();
 
-      // 7. Update & Draw Particles
+      // 8. Update & Draw Particles
       for (let i = gs.particles.length - 1; i >= 0; i--) {
         const p = gs.particles[i];
         p.x += p.vx;
         p.y += p.vy;
-        p.life -= 0.04;
+        p.life -= 0.035;
 
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, Math.max(0.5, p.size * p.life), 0, Math.PI * 2);
         ctx.fillStyle = p.color;
-        ctx.globalAlpha = p.life;
+        ctx.globalAlpha = Math.max(0, p.life);
         ctx.fill();
         ctx.globalAlpha = 1.0;
 
@@ -555,47 +908,96 @@ export default function LoadingGame({ onComplete }) {
         }
       }
 
-      // 8. Game Over Overlay inside canvas
-      if (gs.isGameOver) {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+      // 9. Floating Combat Popups
+      for (let i = gs.popups.length - 1; i >= 0; i--) {
+        const pop = gs.popups[i];
+        pop.y -= 0.8;
+        pop.life -= 0.025;
+
+        ctx.font = 'bold 11px "Space Grotesk", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = pop.color;
+        ctx.globalAlpha = Math.max(0, pop.life);
+        ctx.fillText(pop.text, pop.x, pop.y);
+        ctx.globalAlpha = 1.0;
+
+        if (pop.life <= 0) {
+          gs.popups.splice(i, 1);
+        }
+      }
+
+      // 10. Start Screen Prompt
+      if (gs.status === 'READY') {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+        ctx.fillRect(0, 0, width, height);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 22px "Bebas Neue", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('SHADOW GLIDE // CHIBI HUNTER', width / 2, height / 2 - 20);
+
+        ctx.fillStyle = '#bef264';
+        ctx.font = 'bold 12px "JetBrains Mono", monospace';
+        ctx.fillText('[ CLICK OR PRESS SPACE TO LAUNCH ]', width / 2, height / 2 + 15);
+      }
+
+      // 11. Game Over Overlay
+      if (gs.status === 'GAMEOVER') {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.78)';
         ctx.fillRect(0, 0, width, height);
 
         ctx.fillStyle = '#ef4444';
-        ctx.font = 'bold 20px "Bebas Neue", sans-serif';
+        ctx.font = 'bold 24px "Bebas Neue", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('INWARD CRASH // BARRIER ENGAGED', width / 2, height / 2 - 14);
+        ctx.fillText('BARRIER BREACH CRASH // 결계 충돌', width / 2, height / 2 - 40);
+
+        // Score summary
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 14px "Space Grotesk", sans-serif';
+        ctx.fillText(`SCORE: ${gs.score} GATES  |  BEST: ${bestScore}`, width / 2, height / 2 - 12);
 
         ctx.fillStyle = '#bef264';
-        ctx.font = '11px "JetBrains Mono", monospace';
-        ctx.fillText('[ CLICK OR PRESS SPACE TO RE-ENGAGE ]', width / 2, height / 2 + 16);
+        ctx.font = 'bold 12px "JetBrains Mono", monospace';
+        ctx.fillText(`HUNTER EVALUATION: [ ${getRankFromScore(gs.score)} ]`, width / 2, height / 2 + 12);
+
+        if (isUnlocked) {
+          ctx.fillStyle = '#bef264';
+          ctx.font = 'bold 11px "JetBrains Mono", monospace';
+          ctx.fillText('[ SPACE: RETRY  |  ENTER: WEBTOON NOW ]', width / 2, height / 2 + 40);
+        } else {
+          ctx.fillStyle = '#38bdf8';
+          ctx.font = '11px "JetBrains Mono", monospace';
+          ctx.fillText('[ PRESS SPACE OR CLICK TO RETRY ]', width / 2, height / 2 + 40);
+        }
       }
 
+      ctx.restore();
       animationFrameId = requestAnimationFrame(render);
     };
 
     animationFrameId = requestAnimationFrame(render);
     return () => cancelAnimationFrame(animationFrameId);
-  }, [bestScore]);
+  }, [bestScore, isUnlocked]);
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex flex-col justify-between bg-[#ebebe5] text-stone-900 overflow-y-auto select-none transition-opacity duration-500 ${
+      className={`fixed inset-0 z-[60] flex flex-col justify-between bg-[#ebebe5] text-stone-900 overflow-y-auto select-none transition-opacity duration-500 ${
         isExiting ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'
       }`}
       style={{
         backgroundImage: `
-          radial-gradient(circle at 75% 50%, rgba(190, 242, 100, 0.12) 0%, transparent 60%),
+          radial-gradient(circle at 75% 50%, rgba(190, 242, 100, 0.14) 0%, transparent 60%),
           linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
           linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px)
         `,
         backgroundSize: '100% 100%, 24px 24px, 24px 24px'
       }}
     >
-      {/* Manga Speedlines overlay radiating from center */}
+      {/* Manga Speedlines overlay */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-25"
+        className="absolute inset-0 pointer-events-none opacity-20"
         style={{
-          backgroundImage: 'radial-gradient(circle, transparent 40%, rgba(0,0,0,0.4) 100%)',
+          backgroundImage: 'radial-gradient(circle, transparent 40%, rgba(0,0,0,0.35) 100%)',
           backgroundRepeat: 'no-repeat'
         }}
       />
@@ -607,15 +1009,16 @@ export default function LoadingGame({ onComplete }) {
         <div className="bg-white border-2 border-black p-2 sm:p-2.5 manga-shadow-sm flex flex-wrap items-center justify-between gap-2.5">
           {/* Left Title & Game Mode */}
           <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-            <div className="bg-black text-[#bef264] font-mono-tech font-bold text-xs sm:text-sm px-2.5 py-1 tracking-wider border border-black">
-              FLAPPY PROTOCOL // SHADOW GLIDE
+            <div className="bg-black text-[#bef264] font-mono-tech font-bold text-xs sm:text-sm px-2.5 py-1 tracking-wider border border-black flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#bef264] animate-pulse" />
+              <span>FLAPPY PROTOCOL // SHADOW GLIDE</span>
             </div>
             <span className="font-mono-tech text-[10px] sm:text-xs text-stone-600 font-semibold hidden md:inline">
-              REG.MARK: +35.289° // GAME MODE: FLAPPY INK BIRD
+              4K HERO VIDEO PRELOAD ENGINE // 까마귀
             </span>
           </div>
 
-          {/* Right Controls: SFX, Skip, Avatar, Gates */}
+          {/* Right Controls: SFX, Skip, Shield, Gates */}
           <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
             {/* SFX Toggle */}
             <button
@@ -626,24 +1029,27 @@ export default function LoadingGame({ onComplete }) {
               <span>SFX: {sfxEnabled ? 'ON' : 'OFF'}</span>
             </button>
 
-            {/* Auto-Sync / Skip Button */}
+            {/* Shield Indicator */}
+            {hasShield && (
+              <div className="bg-[#c084fc] text-black font-mono-tech font-bold text-[10px] sm:text-[11px] px-2 py-0.5 border border-black animate-pulse flex items-center gap-1">
+                <span>🛡</span>
+                <span>SHIELD ACTIVE</span>
+              </div>
+            )}
+
+            {/* Skip / Auto-Sync */}
             <button
               onClick={handleAutoSync}
               className="bg-white hover:bg-[#bef264] text-black border border-black px-2.5 py-0.5 font-mono-tech text-[11px] font-bold transition-colors cursor-pointer flex items-center gap-1 shadow-sm"
             >
               <span>⚡</span>
-              <span>AUTO-SYNC // SKIP</span>
+              <span>{isUnlocked ? 'READY // ENTER' : 'AUTO-SYNC // SKIP'}</span>
             </button>
-
-            {/* Avatar Badge */}
-            <div className="bg-[#bef264] text-black font-mono-tech font-bold text-[10px] sm:text-[11px] px-2.5 py-0.5 border border-black">
-              AVATAR: SHADOW CROW // 까마귀
-            </div>
 
             {/* Gates Cleared Status Badge */}
             <div className="bg-stone-900 text-white font-mono-tech font-bold text-[10px] sm:text-[11px] px-2.5 py-0.5 border border-black flex items-center gap-1">
-              <span className="w-1.5 h-1.5 bg-[#ef4444] rounded-full animate-ping" />
-              <span>• GATES: [{String(gatesPassed).padStart(2, '0')}/08]</span>
+              <span className="w-1.5 h-1.5 bg-[#bef264] rounded-full animate-ping" />
+              <span>GATES: [{String(gatesPassed).padStart(2, '0')}]</span>
             </div>
           </div>
         </div>
@@ -656,16 +1062,15 @@ export default function LoadingGame({ onComplete }) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-8 items-center">
           
           {/* --------------------------------------------------------------------- */}
-          {/* LEFT COLUMN: CHIBI HUNTER CARD & DUAL METRICS                         */}
+          {/* LEFT COLUMN: HERO PRELOAD TELEMETRY & CHIBI HUNTER DIALOGUE           */}
           {/* --------------------------------------------------------------------- */}
           <div className="lg:col-span-5 space-y-4">
             
             {/* Primary Dialogue Box */}
             <div className="relative bg-white border-3 border-black p-5 sm:p-6 manga-shadow-lg">
-              {/* Header */}
               <div className="flex items-center justify-between pb-3 mb-4 border-b border-black font-mono-tech text-xs">
                 <span className="text-[#ef4444] font-bold flex items-center gap-1">
-                  <span>■</span> CHIBI HUNTER // FLIGHT FLAP
+                  <span>■</span> CHIBI HUNTER // SHADOW FLAP
                 </span>
                 <span className="bg-black text-white px-2 py-0.5 font-bold text-[10px]">
                   BEST: {String(bestScore).padStart(2, '0')}
@@ -678,103 +1083,140 @@ export default function LoadingGame({ onComplete }) {
               </h2>
               <div className="inline-block bg-[#bef264] border-2 border-black px-2.5 py-1 mb-4 transform -rotate-1 shadow-sm">
                 <span className="font-heading text-xl sm:text-2xl font-black uppercase tracking-tight text-black">
-                  SHADOW CROW UNSEALED!
+                  {isUnlocked ? 'HERO ARCHIVE UNSEALED!' : 'PRELOADING 4K HERO PORTAL...'}
                 </span>
               </div>
 
-              <p className="font-sans text-xs sm:text-sm text-stone-600 leading-relaxed">
+              <p className="font-sans text-xs sm:text-sm text-stone-600 leading-relaxed mb-4">
                 {isUnlocked
-                  ? 'The gate has fully unlocked. The comic canvas is primed and ready to read.'
-                  : 'Navigate through the architectural ink pillars or flap to harvest mana charge.'}
+                  ? 'The 15.7MB Hero video archive is 100% buffered in RAM memory for instant 4th-wall zoom. Enter whenever you are ready, or keep playing for high score!'
+                  : 'Buffering the cinematic hero sequence. Dodge obsidian ink pillars or collect mana orbs to test your reflexes while it loads!'}
               </p>
+
+              {/* Real-Time Video Download Telemetry Box */}
+              <div className="bg-stone-50 border-2 border-black p-3 space-y-2">
+                <div className="flex items-center justify-between font-mono-tech text-[11px] font-bold text-black">
+                  <span className="flex items-center gap-1.5">
+                    <span className={`w-2 h-2 rounded-full ${isUnlocked ? 'bg-[#16a34a]' : 'bg-[#ef4444] animate-ping'}`} />
+                    <span>HEROVID1.MP4 // BUFFER:</span>
+                  </span>
+                  <span className="text-black font-black">
+                    {isVideoLoaded ? '100% CACHED' : `${videoProgress}%`}
+                  </span>
+                </div>
+
+                {/* Progress bar inside telemetry */}
+                <div className="w-full h-2.5 bg-stone-200 border border-black overflow-hidden">
+                  <div
+                    className="h-full bg-[#ef4444] transition-all duration-200"
+                    style={{ width: `${videoProgress}%` }}
+                  />
+                </div>
+
+                <div className="flex items-center justify-between font-mono-tech text-[10px] text-stone-600 pt-0.5">
+                  <span>
+                    {(loadedBytes / (1024 * 1024)).toFixed(1)} MB / {(totalBytes / (1024 * 1024)).toFixed(1)} MB
+                  </span>
+                  <span className="text-[#16a34a] font-bold">
+                    {speed}
+                  </span>
+                </div>
+              </div>
             </div>
 
             {/* Dual Stats Display */}
             <div className="grid grid-cols-2 gap-3">
-              {/* Stat 1: Gates Navigated */}
+              {/* Stat 1: Gates Cleared & Combo */}
               <div className="bg-white border-2 border-black p-3 manga-shadow-sm">
-                <div className="font-mono-tech text-[9px] text-stone-500 uppercase tracking-wider mb-1">
-                  01 // GATES_NAVIGATED
+                <div className="font-mono-tech text-[9px] text-stone-500 uppercase tracking-wider mb-1 flex items-center justify-between">
+                  <span>01 // GATES_NAVIGATED</span>
+                  {combo > 1 && (
+                    <span className="text-[#ef4444] font-bold animate-pulse">
+                      x{combo} COMBO!
+                    </span>
+                  )}
                 </div>
                 <div className="flex items-baseline justify-between">
                   <span className="font-heading text-xl sm:text-2xl font-black text-black">
                     {gatesPassed} GATES
                   </span>
                   <span className="font-mono-tech text-[10px] font-bold text-[#16a34a]">
-                    RANK B // GLIDER
+                    RANK: {getRankFromScore(gatesPassed)}
                   </span>
                 </div>
-                {/* Mini Progress Bar */}
                 <div className="w-full h-1.5 bg-stone-200 border border-black mt-2 overflow-hidden">
                   <div
                     className="h-full bg-[#bef264] transition-all duration-300"
-                    style={{ width: `${Math.min(100, (gatesPassed / 8) * 100)}%` }}
+                    style={{ width: `${Math.min(100, (gatesPassed / 12) * 100)}%` }}
                   />
                 </div>
               </div>
 
-              {/* Stat 2: Mana Orbs Eaten */}
+              {/* Stat 2: Mana Orbs & Velocity */}
               <div className="bg-white border-2 border-black p-3 manga-shadow-sm">
                 <div className="font-mono-tech text-[9px] text-stone-500 uppercase tracking-wider mb-1">
-                  02 // MANA_ORBS_EATEN
+                  02 // MANA_HARVESTED
                 </div>
                 <div className="flex items-baseline justify-between">
                   <span className="font-heading text-xl sm:text-2xl font-black text-black">
-                    {manaOrbs} ORBS
+                    {manaOrbs * 100} MANA
                   </span>
                   <span className="font-mono-tech text-[10px] font-bold text-[#ea580c]">
                     VEL: {velocityDisplay}
                   </span>
                 </div>
-                {/* Mini Progress Bar */}
                 <div className="w-full h-1.5 bg-stone-200 border border-black mt-2 overflow-hidden">
                   <div
                     className="h-full bg-[#f97316] transition-all duration-300"
-                    style={{ width: `${Math.min(100, (manaOrbs / 5) * 100)}%` }}
+                    style={{ width: `${Math.min(100, (manaOrbs / 6) * 100)}%` }}
                   />
                 </div>
               </div>
             </div>
 
-            {/* Korean Status Ribbon */}
+            {/* Korean Status Ribbon / Quick Action */}
             <div
               onClick={isUnlocked ? handleEnterWebtoon : undefined}
               className={`p-3 border-2 border-black font-mono-tech text-xs font-bold tracking-wider flex items-center justify-between transition-all ${
                 isUnlocked
-                  ? 'bg-black text-[#bef264] cursor-pointer hover:bg-stone-900 manga-shadow-sm'
+                  ? 'bg-black text-[#bef264] cursor-pointer hover:bg-stone-900 manga-shadow-sm hover:scale-[1.01]'
                   : 'bg-stone-900 text-stone-300'
               }`}
             >
               <div className="flex items-center gap-2">
                 <span className="font-kr font-black text-sm text-[#bef264]">
-                  {isUnlocked ? '통과—!' : '동기화중—'}
+                  {isUnlocked ? '각성 완료—!' : '동기화중—'}
                 </span>
                 <span>
                   {isUnlocked
-                    ? 'WEBTOON GATE UNSEALED // ENTER NOW'
-                    : 'AWAITING FULL AWAKENING'}
+                    ? '4K VIDEO PRIMED // CLICK TO ENTER'
+                    : `BUFFERING HERO VIDEO (${videoProgress}%)`}
                 </span>
               </div>
               <span
                 className={`text-[10px] px-2 py-0.5 border ${
                   isUnlocked
-                    ? 'bg-[#bef264] text-black border-black animate-pulse'
+                    ? 'bg-[#bef264] text-black border-black animate-pulse font-bold'
                     : 'bg-stone-800 text-stone-400 border-stone-700'
                 }`}
               >
-                {isUnlocked ? '• UNLOCKED' : 'LOCKED'}
+                {isUnlocked ? '• READY' : 'LOADING'}
               </span>
             </div>
           </div>
 
           {/* --------------------------------------------------------------------- */}
-          {/* RIGHT COLUMN: INTERACTIVE CANVAS MINI-GAME + AWAKENING MODAL         */}
+          {/* RIGHT COLUMN: INTERACTIVE CANVAS MINI-GAME + AWAKENING OVERLAY        */}
           {/* --------------------------------------------------------------------- */}
           <div className="lg:col-span-7 flex flex-col items-center">
             {/* Game Screen Outer Frame */}
             <div
               className="relative w-full max-w-[560px] aspect-[4/3] bg-black border-4 border-black manga-shadow-lg overflow-hidden cursor-pointer group"
               onClick={jump}
+              onTouchStart={(e) => {
+                e.preventDefault();
+                jump();
+              }}
             >
               {/* Canvas 60fps Game */}
               <canvas
@@ -784,76 +1226,91 @@ export default function LoadingGame({ onComplete }) {
                 className="w-full h-full block"
               />
 
-              {/* Click / Tap Prompt Hint (fades out once playing) */}
-              {gatesPassed === 0 && (
+              {/* Game Ready / Controls Hint Overlay */}
+              {gameStateStatus === 'READY' && (
                 <div className="absolute top-4 left-0 right-0 text-center pointer-events-none z-20">
-                  <span className="bg-black/90 text-[#bef264] border border-[#bef264] px-3 py-1 font-mono-tech text-xs font-bold tracking-widest shadow-md">
+                  <span className="bg-black/90 text-[#bef264] border border-[#bef264] px-3.5 py-1.5 font-mono-tech text-xs font-bold tracking-widest shadow-md">
                     [ CLICK / TAP / SPACE TO FLAP ]
                   </span>
                 </div>
               )}
 
-              {/* AWAKENING MODAL OVERLAY (When 100% or 8 gates reached) */}
+              {/* AWAKENING NOTIFICATION BANNER (Non-intrusive when user is playing) */}
+              {isUnlocked && !showAwakeningModal && gameStateStatus === 'PLAYING' && (
+                <div className="absolute top-3 left-4 right-4 z-30 pointer-events-none flex justify-center">
+                  <div className="bg-black/90 border border-[#bef264] px-3 py-1 font-mono-tech text-xs text-[#bef264] font-bold shadow-lg flex items-center gap-2 animate-bounce">
+                    <span className="w-2 h-2 rounded-full bg-[#bef264] animate-ping" />
+                    <span>VIDEO ARCHIVE BUFFERED // ENTER ANY TIME OR BEAT HIGH SCORE</span>
+                  </div>
+                </div>
+              )}
+
+              {/* FULL AWAKENING MODAL (When unlocked & user isn't in active flight) */}
               {showAwakeningModal && (
-                <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] flex items-center justify-center p-4 z-40 animate-fade-in">
+                <div className="absolute inset-0 bg-black/65 backdrop-blur-[2px] flex items-center justify-center p-4 z-40 animate-fade-in">
                   <div
                     onClick={(e) => e.stopPropagation()}
-                    className="bg-white border-3 border-black p-6 max-w-sm w-full text-center manga-shadow-lg transform transition-transform animate-scale-up"
+                    className="bg-white border-3 border-black p-6 max-w-sm w-full text-center manga-shadow-lg transform transition-transform"
                   >
-                    {/* Korean Heading */}
-                    <h3 className="font-kr font-black text-3xl sm:text-4xl text-black tracking-tight mb-2">
+                    <h3 className="font-kr font-black text-3xl sm:text-4xl text-black tracking-tight mb-1">
                       각성 완료—!
                     </h3>
 
-                    {/* Badge */}
                     <div className="inline-block bg-[#bef264] border border-black text-black font-mono-tech font-bold text-xs px-2.5 py-0.5 mb-3">
-                      MANA SYNCHRONIZED: 100%
+                      4K HERO ARCHIVE 100% BUFFERED
                     </div>
 
-                    {/* Subtitle */}
                     <h4 className="font-heading text-lg font-black uppercase text-black mb-1">
-                      THE ARCHIVE IS UNSEALED
+                      ZERO-LAG PORTAL PRIMED
                     </h4>
                     <p className="font-sans text-xs text-stone-600 mb-5 leading-normal">
-                      Hunter Crow passed through the ink barrier. Proceed to reading!
+                      The full 15.7MB video is stored in memory. You can enter the webtoon now, or close this to continue playing the flight mini-game!
                     </p>
 
-                    {/* Big Call To Action Button */}
-                    <button
-                      onClick={handleEnterWebtoon}
-                      className="w-full bg-black hover:bg-[#bef264] text-white hover:text-black border-2 border-black py-3 font-mono-tech font-black text-sm tracking-wider uppercase transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 manga-shadow-sm hover:translate-x-0.5 hover:-translate-y-0.5"
-                    >
-                      <span>ENTER WEBTOON NOW</span>
-                      <span>→</span>
-                    </button>
+                    <div className="space-y-2">
+                      <button
+                        onClick={handleEnterWebtoon}
+                        className="w-full bg-black hover:bg-[#bef264] text-white hover:text-black border-2 border-black py-3 font-mono-tech font-black text-sm tracking-wider uppercase transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 manga-shadow-sm hover:translate-x-0.5 hover:-translate-y-0.5"
+                      >
+                        <span>ENTER WEBTOON NOW</span>
+                        <span>→</span>
+                      </button>
+
+                      <button
+                        onClick={() => setShowAwakeningModal(false)}
+                        className="w-full bg-stone-100 hover:bg-stone-200 text-stone-800 border border-black py-2 font-mono-tech font-bold text-xs tracking-wider uppercase transition-colors cursor-pointer"
+                      >
+                        KEEP PLAYING FLAPPY GAME
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Progress Bar & Sync Charge below game */}
+            {/* Video Preload Sync Bar below game */}
             <div className="w-full max-w-[560px] mt-4 space-y-1.5">
               <div className="flex items-center justify-between font-mono-tech text-xs font-bold text-stone-800">
                 <div className="flex items-center gap-1.5">
                   <span className="text-[#ef4444]">▶</span>
-                  <span>SYNC CHARGE // AWAKENING:</span>
+                  <span>VIDEO SYNC CHARGE:</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="bg-[#ef4444] text-white text-[10px] font-bold px-1.5 py-0.2">
-                    {syncProgress >= 100
-                      ? 'AWAKENING COMPLETE // 입장 준비 완료'
-                      : 'HARVESTING INK MANA'}
+                  <span className={`text-[10px] font-bold px-1.5 py-0.2 ${isUnlocked ? 'bg-[#16a34a] text-white' : 'bg-[#ef4444] text-white'}`}>
+                    {isUnlocked
+                      ? 'AWAKENING COMPLETE // 100% BUFFERED'
+                      : `DOWNLOADING HERO ARCHIVE (${speed})`}
                   </span>
-                  <span className="text-sm font-black">{syncProgress}%</span>
+                  <span className="text-sm font-black">{videoProgress}%</span>
                 </div>
               </div>
 
               {/* Glowing Striped Progress Bar */}
               <div className="w-full h-4 bg-black border-2 border-black p-0.5 overflow-hidden">
                 <div
-                  className="h-full bg-[#bef264] transition-all duration-300 relative overflow-hidden"
+                  className="h-full bg-[#bef264] transition-all duration-200 relative overflow-hidden"
                   style={{
-                    width: `${syncProgress}%`,
+                    width: `${videoProgress}%`,
                     backgroundImage: `
                       repeating-linear-gradient(
                         -45deg,
@@ -869,8 +1326,10 @@ export default function LoadingGame({ onComplete }) {
 
               {/* Sub-strip telemetry */}
               <div className="flex items-center justify-between font-mono-tech text-[9px] text-stone-500 pt-0.5">
-                <span>[SYSTEM READY: ALL BARRIERS BREACHED]</span>
-                <span className="text-[#ef4444] font-bold">CHAPTER 00 // FLIGHT STAGE</span>
+                <span>[FILE: HEROVID1.MP4 • 15.68 MB]</span>
+                <span className="text-[#ef4444] font-bold">
+                  {isUnlocked ? 'STATUS: ZERO-LAG READY' : 'PRE-FETCHING 4K VIDEO'}
+                </span>
               </div>
             </div>
 
@@ -886,25 +1345,26 @@ export default function LoadingGame({ onComplete }) {
         <div className="bg-white border-2 border-black px-3 py-2 flex flex-wrap items-center justify-between gap-2 text-[10px] sm:text-xs font-mono-tech">
           {/* Tech Specs */}
           <div className="text-stone-700 flex items-center gap-2 flex-wrap">
-            <span className="font-bold text-black">COLOR: K100 INK</span>
+            <span className="font-bold text-black">OGMEDIA STUDIO</span>
             <span>//</span>
-            <span>TRIM_BLEED: +3.0mm</span>
+            <span>CINEMATIC SCROLL PORTAL</span>
             <span>//</span>
-            <span>300 DPI EMULATION</span>
-            <span>//</span>
-            <span className="font-bold text-black">SEOUL • TOKYO • NEW YORK</span>
+            <span className="text-[#16a34a] font-bold">
+              {isUnlocked ? 'HERO VIDEO PRELOADED' : 'BUFFERING VIDEO STREAM'}
+            </span>
           </div>
 
           {/* Right Action Button */}
           <div className="flex items-center gap-3">
-            <span className="text-stone-500 hidden sm:inline">
-              [CLEAR 8 GATES OR FLAP TO SYNC 100%]
-            </span>
             <button
               onClick={handleEnterWebtoon}
-              className="bg-[#bef264] hover:bg-lime-400 text-black border-2 border-black px-4 py-1.5 font-bold font-mono-tech text-xs tracking-wider transition-all duration-150 cursor-pointer flex items-center gap-1.5 shadow-sm hover:translate-x-0.5 hover:-translate-y-0.5"
+              className={`border-2 border-black px-4 py-1.5 font-bold font-mono-tech text-xs tracking-wider transition-all duration-150 cursor-pointer flex items-center gap-1.5 shadow-sm hover:translate-x-0.5 hover:-translate-y-0.5 ${
+                isUnlocked
+                  ? 'bg-[#bef264] hover:bg-lime-400 text-black animate-pulse'
+                  : 'bg-white hover:bg-stone-100 text-stone-800'
+              }`}
             >
-              <span>ENTER WEBTOON</span>
+              <span>{isUnlocked ? 'ENTER WEBTOON (READY)' : 'ENTER NOW // STREAMING'}</span>
               <span>→</span>
             </button>
           </div>

@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useTheme } from '../../context/ThemeContext';
+import { useVideoPreload } from '../../context/VideoPreloadContext';
 import InkText from '../ui/InkText';
 import TypewriterText from '../ui/TypewriterText';
 import UnfoldPanel from '../ui/UnfoldPanel';
@@ -11,6 +12,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function HeroSection() {
   const { isDark } = useTheme();
+  const { videoSrc, isLoaded: isHeroVideoLoaded } = useVideoPreload();
 
   // Multi-plane 3D parallax & camera zoom references
   const pinWrapperRef = useRef(null);
@@ -527,9 +529,9 @@ export default function HeroSection() {
         >
           <video
             ref={videoRef}
-            src="/ogmedia/herovid1.mp4"
+            src={videoSrc}
             playsInline
-            preload="metadata"
+            preload="auto"
             muted={isMuted}
             className="w-full h-full object-cover"
             onTimeUpdate={handleTimeUpdate}
@@ -544,7 +546,9 @@ export default function HeroSection() {
             <div className="flex items-center gap-2 font-mono-tech text-xs text-[#bef264]">
               <span className="w-2 h-2 rounded-full bg-[#ef4444] animate-ping" />
               <span className="font-bold">LIVE FEED // HEROVID1.MP4</span>
-              <span className="text-stone-400 hidden sm:inline">| 4K ARCHIVE TRANSMISSION</span>
+              <span className="text-stone-400 hidden sm:inline">
+                | {isHeroVideoLoaded ? 'MEMORY BUFFERED // ZERO LAG' : '4K ARCHIVE TRANSMISSION'}
+              </span>
             </div>
 
             {/* Video Controls: Mute & Reverse Camera */}

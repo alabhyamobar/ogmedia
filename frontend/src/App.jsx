@@ -1,6 +1,7 @@
 import React, { useState, Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
+import { VideoPreloadProvider } from './context/VideoPreloadContext';
 import LoadingGame from './components/loading/LoadingGame';
 import Navbar from './components/layout/Navbar';
 import HomePage from './pages/HomePage';
@@ -14,25 +15,27 @@ export default function App() {
 
   return (
     <ThemeProvider>
-      <BrowserRouter basename="/ogmedia">
-        {isLoading && (
-          <LoadingGame onComplete={() => setIsLoading(false)} />
-        )}
+      <VideoPreloadProvider>
+        <BrowserRouter basename="/ogmedia">
+          {isLoading && (
+            <LoadingGame onComplete={() => setIsLoading(false)} />
+          )}
 
-        <div className="min-h-screen bg-[#ebebe5] dark:bg-[#09090b] text-stone-900 dark:text-stone-100 font-sans selection:bg-[#bef264] selection:text-black transition-colors duration-300 flex flex-col justify-between">
-          <div>
-            <Navbar />
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
+          <div className="min-h-screen bg-[#ebebe5] dark:bg-[#09090b] text-stone-900 dark:text-stone-100 font-sans selection:bg-[#bef264] selection:text-black transition-colors duration-300 flex flex-col justify-between">
+            <div>
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </div>
+            <Suspense fallback={null}>
+              <FooterChapter />
+              {!isLoading && <FloatingThemeWidget />}
+            </Suspense>
           </div>
-          <Suspense fallback={null}>
-            <FooterChapter />
-            <FloatingThemeWidget />
-          </Suspense>
-        </div>
-      </BrowserRouter>
+        </BrowserRouter>
+      </VideoPreloadProvider>
     </ThemeProvider>
   );
 }
