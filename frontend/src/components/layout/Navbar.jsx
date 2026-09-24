@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
+import OgLogo from '../ui/OgLogo';
 
 export default function Navbar() {
   const { toggleTheme, isDark } = useTheme();
@@ -24,15 +25,13 @@ export default function Navbar() {
     <nav className="w-full bg-[#e5e5dc] dark:bg-[#121215] border-b-2 border-black dark:border-[#27272a] sticky top-0 z-40 px-3 sm:px-6 py-2 transition-colors duration-300">
       <div className="max-w-[1300px] mx-auto flex flex-wrap items-center justify-between gap-3">
         {/* Left Side: Edition Badges & Brand link */}
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-2.5 flex-wrap">
           <Link
             to="/"
             title="Return to Main Archive"
-            className="bg-black text-[#38bdf8] font-mono-tech font-bold text-xs sm:text-sm px-2.5 py-1 tracking-wider border-2 border-[#38bdf8]/60 shadow-[0_0_12px_rgba(56,189,248,0.25)] hover:scale-105 transition-transform flex items-center gap-1.5"
+            className="flex items-center gap-2 hover:scale-[1.02] transition-transform"
           >
-            <span>OG MEDIA</span>
-            <span className="text-[#bef264]">//</span>
-            <span className="text-white">ARCHIVE 01</span>
+            <OgLogo size="sm" withText={true} subtitle="DIGITAL MEDIA AGENCY" />
           </Link>
 
           <div className="hidden sm:flex bg-gradient-to-r from-[#ef4444] to-[#f43f5e] text-white font-mono-tech text-[10px] sm:text-xs font-bold px-2 py-1 tracking-tight uppercase border-2 border-black dark:border-stone-800 items-center gap-1.5 shadow-sm">

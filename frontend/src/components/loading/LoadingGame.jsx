@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useVideoPreload } from '../../context/VideoPreloadContext';
+import OgLogo from '../ui/OgLogo';
 
 /**
  * Web Audio Sound Effects Synthesizer
- * Zero external audio dependencies, zero latency, custom procedural audio
+ * Zero external audio dependencies, low-latency procedural agency sound design
  */
 class SoundFx {
   constructor() {
@@ -39,10 +40,10 @@ class SoundFx {
     const gain = this.ctx.createGain();
 
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(260, now);
-    osc.frequency.exponentialRampToValueAtTime(580, now + 0.08);
+    osc.frequency.setValueAtTime(280, now);
+    osc.frequency.exponentialRampToValueAtTime(620, now + 0.08);
 
-    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.setValueAtTime(0.18, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
 
     osc.connect(gain);
@@ -81,18 +82,18 @@ class SoundFx {
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
 
-    const baseFreq = 700 + Math.min(600, combo * 80);
+    const baseFreq = 720 + Math.min(500, combo * 70);
     osc.type = 'sine';
     osc.frequency.setValueAtTime(baseFreq, now);
-    osc.frequency.exponentialRampToValueAtTime(baseFreq * 1.6, now + 0.14);
+    osc.frequency.exponentialRampToValueAtTime(baseFreq * 1.5, now + 0.13);
 
-    gain.gain.setValueAtTime(0.22, now);
-    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.14);
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.13);
 
     osc.connect(gain);
     gain.connect(this.ctx.destination);
     osc.start(now);
-    osc.stop(now + 0.15);
+    osc.stop(now + 0.14);
   }
 
   playShieldPickup() {
@@ -104,16 +105,16 @@ class SoundFx {
     const gain = this.ctx.createGain();
 
     osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(350, now);
-    osc.frequency.exponentialRampToValueAtTime(950, now + 0.22);
+    osc.frequency.setValueAtTime(340, now);
+    osc.frequency.exponentialRampToValueAtTime(980, now + 0.2);
 
     gain.gain.setValueAtTime(0.18, now);
-    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.24);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.22);
 
     osc.connect(gain);
     gain.connect(this.ctx.destination);
     osc.start(now);
-    osc.stop(now + 0.25);
+    osc.stop(now + 0.23);
   }
 
   playShieldBreak() {
@@ -121,13 +122,12 @@ class SoundFx {
     this.init();
     if (!this.ctx) return;
     const now = this.ctx.currentTime;
-
-    // Resonant crash sound
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
+
     osc.type = 'triangle';
-    osc.frequency.setValueAtTime(420, now);
-    osc.frequency.exponentialRampToValueAtTime(120, now + 0.25);
+    osc.frequency.setValueAtTime(440, now);
+    osc.frequency.exponentialRampToValueAtTime(110, now + 0.25);
 
     gain.gain.setValueAtTime(0.35, now);
     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
@@ -147,8 +147,8 @@ class SoundFx {
     const gain = this.ctx.createGain();
 
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(900, now);
-    osc.frequency.linearRampToValueAtTime(1400, now + 0.08);
+    osc.frequency.setValueAtTime(880, now);
+    osc.frequency.linearRampToValueAtTime(1320, now + 0.08);
 
     gain.gain.setValueAtTime(0.12, now);
     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
@@ -168,8 +168,8 @@ class SoundFx {
     const gain = this.ctx.createGain();
 
     osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(160, now);
-    osc.frequency.linearRampToValueAtTime(45, now + 0.22);
+    osc.frequency.setValueAtTime(150, now);
+    osc.frequency.linearRampToValueAtTime(40, now + 0.22);
 
     gain.gain.setValueAtTime(0.35, now);
     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.22);
@@ -190,7 +190,7 @@ class SoundFx {
       const gain = this.ctx.createGain();
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(freq, this.ctx.currentTime + i * 0.08);
-      gain.gain.setValueAtTime(0.2, this.ctx.currentTime + i * 0.08);
+      gain.gain.setValueAtTime(0.18, this.ctx.currentTime + i * 0.08);
       gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + i * 0.08 + 0.22);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
@@ -215,7 +215,7 @@ export default function LoadingGame({ onComplete }) {
   const [velocityDisplay, setVelocityDisplay] = useState(0);
   const [bestScore, setBestScore] = useState(() => {
     try {
-      return parseInt(localStorage.getItem('og_flappy_best') || '0', 10);
+      return parseInt(localStorage.getItem('og_campaign_best') || '0', 10);
     } catch {
       return 0;
     }
@@ -227,13 +227,12 @@ export default function LoadingGame({ onComplete }) {
 
   // References for 60fps game loop
   const gameStateRef = useRef({
-    status: 'READY', // 'READY' | 'PLAYING' | 'GAMEOVER'
+    status: 'READY',
     bird: {
-      x: 80,
+      x: 85,
       y: 190,
       vy: 0,
       radius: 11, // Fair hitbox
-      visualRadius: 15,
       rotation: 0,
       wingState: 0,
       trail: [],
@@ -254,16 +253,16 @@ export default function LoadingGame({ onComplete }) {
     bgOffset: 0
   });
 
-  // Calculate Hunter Rank based on score
+  // Calculate Digital Marketing Agency Rank / Title
   const getRankFromScore = (s) => {
-    if (s >= 20) return 'S-RANK';
-    if (s >= 12) return 'A-RANK';
-    if (s >= 6) return 'B-RANK';
-    if (s >= 3) return 'C-RANK';
-    return 'D-RANK';
+    if (s >= 20) return 'CHIEF MARKETING OFFICER // S-TIER';
+    if (s >= 12) return 'CREATIVE DIRECTOR // A-TIER';
+    if (s >= 6) return 'VIRAL STRATEGIST // B-TIER';
+    if (s >= 3) return 'GROWTH SPECIALIST // C-TIER';
+    return 'MEDIA JUNIOR // D-TIER';
   };
 
-  // Sync unlock condition with video preloader
+  // Sync unlock condition with real video preloader
   useEffect(() => {
     if (isVideoLoaded && !isUnlocked) {
       setIsUnlocked(true);
@@ -309,7 +308,7 @@ export default function LoadingGame({ onComplete }) {
     }
 
     if (gs.status === 'GAMEOVER') {
-      // Restart
+      // Re-launch campaign
       gs.status = 'PLAYING';
       setGameStateStatus('PLAYING');
       gs.bird.y = 190;
@@ -331,21 +330,21 @@ export default function LoadingGame({ onComplete }) {
       return;
     }
 
-    // Active playing flap
+    // Active flight flap
     gs.bird.vy = -5.8;
-    gs.bird.rotation = -0.42; // Snappy upward pitch
+    gs.bird.rotation = -0.42;
     sfx.playFlap();
 
-    // Spawn aerodynamic feather/spark particles
+    // Spawn aerodynamic lime brand particles
     for (let i = 0; i < 5; i++) {
       gs.particles.push({
-        x: gs.bird.x - 12,
+        x: gs.bird.x - 14,
         y: gs.bird.y + (Math.random() * 10 - 5),
         vx: -Math.random() * 3 - 1.5,
         vy: (Math.random() - 0.5) * 2.5,
         size: Math.random() * 4 + 2,
         life: 1,
-        color: Math.random() > 0.4 ? '#bef264' : '#18181b'
+        color: Math.random() > 0.4 ? '#bef264' : '#38bdf8'
       });
     }
   }, []);
@@ -373,7 +372,16 @@ export default function LoadingGame({ onComplete }) {
 
     const gravity = 0.28;
     const speed = 2.4;
-    const gap = 112; // Balanced fair gap
+    const gap = 114;
+
+    const bottleneckLabels = [
+      'ALGORITHM BOTTLENECK',
+      'AD FATIGUE // CPI SPIKE',
+      'CREATIVE BLOCK',
+      'CONVERSION DROP',
+      'AUDIENCE CHURN',
+      'PLATFORM BANNER FATIGUE'
+    ];
 
     const render = () => {
       const gs = gameStateRef.current;
@@ -381,7 +389,7 @@ export default function LoadingGame({ onComplete }) {
       const width = canvas.width;
       const height = canvas.height;
 
-      // Camera Shake dampening
+      // Camera Shake
       let shakeX = 0;
       let shakeY = 0;
       if (gs.shake > 0) {
@@ -394,13 +402,13 @@ export default function LoadingGame({ onComplete }) {
       ctx.save();
       ctx.translate(shakeX, shakeY);
 
-      // 1. Clear & Dynamic Cyber Background
-      ctx.fillStyle = '#0a0a0d';
+      // 1. Digital Creative Grid Background
+      ctx.fillStyle = '#08080b';
       ctx.fillRect(0, 0, width, height);
 
-      // Parallax Layer 1: Distant Gothic Skyline Silhouettes
+      // Parallax City & Media Towers
       gs.bgOffset = (gs.bgOffset + (gs.status === 'PLAYING' ? 0.6 : 0.2)) % 320;
-      ctx.fillStyle = '#121217';
+      ctx.fillStyle = '#111116';
       const skylineX = -gs.bgOffset;
       for (let sx = skylineX; sx < width + 100; sx += 80) {
         ctx.fillRect(sx, height - 90, 50, 90);
@@ -408,7 +416,7 @@ export default function LoadingGame({ onComplete }) {
         ctx.fillRect(sx + 15, height - 160, 15, 160);
       }
 
-      // Parallax Layer 2: Drafting Grid & Runes
+      // Drafting Coordinates Grid
       ctx.strokeStyle = '#181820';
       ctx.lineWidth = 1;
       for (let x = 0; x < width; x += 32) {
@@ -424,18 +432,20 @@ export default function LoadingGame({ onComplete }) {
         ctx.stroke();
       }
 
-      // 2. Spawn Monoliths & Collectibles
+      // 2. Spawn Algorithm Bottlenecks & Viral Tokens
       if (gs.status === 'PLAYING') {
         if (gs.frameCount - gs.lastSpawn > 115) {
           const topH = Math.floor(Math.random() * (height - gap - 80)) + 40;
-          const gateNumber = gs.score + gs.monoliths.length + 1;
+          const touchpointIndex = gs.score + gs.monoliths.length + 1;
+          const labelIndex = (touchpointIndex - 1) % bottleneckLabels.length;
+
           gs.monoliths.push({
             x: width,
             topH,
             bottomY: topH + gap,
             passed: false,
-            gateText: `GATE // ${String(gateNumber).padStart(2, '0')}`,
-            koreanWarning: gateNumber % 2 === 0 ? '[마나 격벽]' : '[차원 장벽]',
+            gateText: `TOUCHPOINT // ${String(touchpointIndex).padStart(2, '0')}`,
+            subLabel: bottleneckLabels[labelIndex],
             nearMissChecked: false
           });
           gs.lastSpawn = gs.frameCount;
@@ -443,25 +453,25 @@ export default function LoadingGame({ onComplete }) {
           // Spawn collectible in the gate
           const rand = Math.random();
           if (rand > 0.35) {
-            // Normal Mana Orb (Cyan)
+            // Engagement Token (Cyan)
             gs.orbs.push({
               x: width + 28,
               y: topH + gap / 2 + (Math.random() * 30 - 15),
-              type: 'mana',
+              type: 'engagement',
               pulse: 0,
               collected: false
             });
           } else if (rand > 0.18) {
-            // Rare Hunter Core (Lime)
+            // Viral Asset (Lime Core)
             gs.orbs.push({
               x: width + 28,
               y: topH + gap / 2 + (Math.random() * 20 - 10),
-              type: 'core',
+              type: 'viral',
               pulse: 0,
               collected: false
             });
           } else if (!gs.bird.hasShield && rand < 0.1) {
-            // Occasional Shadow Shield (Purple)
+            // Brand Safety Shield (Purple)
             gs.orbs.push({
               x: width + 28,
               y: topH + gap / 2,
@@ -473,7 +483,7 @@ export default function LoadingGame({ onComplete }) {
         }
       }
 
-      // 3. Update & Draw Monoliths (Pillars)
+      // 3. Update & Draw Bottlenecks (Pillars)
       for (let i = gs.monoliths.length - 1; i >= 0; i--) {
         const m = gs.monoliths[i];
         if (gs.status === 'PLAYING') {
@@ -482,14 +492,14 @@ export default function LoadingGame({ onComplete }) {
 
         const pillarWidth = 52;
 
-        // TOP PILLAR
-        ctx.fillStyle = '#0f0f14';
+        // TOP PILLAR (Algorithm Barrier)
+        ctx.fillStyle = '#0e0e13';
         ctx.fillRect(m.x, 0, pillarWidth, m.topH);
         ctx.strokeStyle = '#27272a';
         ctx.lineWidth = 2;
         ctx.strokeRect(m.x, 0, pillarWidth, m.topH);
 
-        // Top Pillar Neon Conduit
+        // Neon Conduit Accent
         ctx.strokeStyle = '#bef264';
         ctx.lineWidth = 1.5;
         ctx.beginPath();
@@ -497,29 +507,29 @@ export default function LoadingGame({ onComplete }) {
         ctx.lineTo(m.x + 8, m.topH - 8);
         ctx.stroke();
 
-        // Top Pillar Lip Hazard Pattern
+        // Lip Barrier Cap
         ctx.fillStyle = '#18181b';
         ctx.fillRect(m.x - 2, m.topH - 12, pillarWidth + 4, 12);
         ctx.strokeStyle = '#bef264';
         ctx.lineWidth = 1.5;
         ctx.strokeRect(m.x - 2, m.topH - 12, pillarWidth + 4, 12);
 
-        // Technical Korean Gate Code
+        // Technical Marketing Label
         ctx.fillStyle = '#bef264';
         ctx.font = 'bold 8px "JetBrains Mono", monospace';
         ctx.fillText(m.gateText, m.x + 4, 16);
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-        ctx.fillText(m.koreanWarning, m.x + 4, 28);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+        ctx.fillText(m.subLabel.substring(0, 10), m.x + 4, 28);
 
         // BOTTOM PILLAR
         const botH = height - m.bottomY;
-        ctx.fillStyle = '#0f0f14';
+        ctx.fillStyle = '#0e0e13';
         ctx.fillRect(m.x, m.bottomY, pillarWidth, botH);
         ctx.strokeStyle = '#27272a';
         ctx.lineWidth = 2;
         ctx.strokeRect(m.x, m.bottomY, pillarWidth, botH);
 
-        // Bottom Pillar Neon Conduit
+        // Bottom Conduit Accent
         ctx.strokeStyle = '#ef4444';
         ctx.lineWidth = 1.5;
         ctx.beginPath();
@@ -527,20 +537,19 @@ export default function LoadingGame({ onComplete }) {
         ctx.lineTo(m.x + pillarWidth - 8, height);
         ctx.stroke();
 
-        // Bottom Pillar Lip Hazard Pattern
+        // Bottom Cap
         ctx.fillStyle = '#18181b';
         ctx.fillRect(m.x - 2, m.bottomY, pillarWidth + 4, 12);
         ctx.strokeStyle = '#ef4444';
         ctx.lineWidth = 1.5;
         ctx.strokeRect(m.x - 2, m.bottomY, pillarWidth + 4, 12);
 
-        // Bottom Hazard Glyph
         ctx.fillStyle = '#ef4444';
         ctx.font = 'bold 8px "JetBrains Mono", monospace';
-        ctx.fillText('WARN: CLAMP', m.x + 4, m.bottomY + 24);
+        ctx.fillText('CPM CLAMP', m.x + 4, m.bottomY + 24);
 
-        // Shimmering Mana Barrier between pillars
-        ctx.strokeStyle = 'rgba(190, 242, 100, 0.15)';
+        // Shimmering Media Conduit
+        ctx.strokeStyle = 'rgba(190, 242, 100, 0.16)';
         ctx.lineWidth = 1;
         ctx.setLineDash([4, 4]);
         ctx.beginPath();
@@ -558,24 +567,24 @@ export default function LoadingGame({ onComplete }) {
           setCombo(gs.combo);
           sfx.playScore();
 
-          // Gate clear popup
+          // Campaign clear popup
           gs.popups.push({
             x: gs.bird.x + 20,
             y: gs.bird.y - 15,
-            text: gs.combo > 1 ? `GATE +1 (x${gs.combo})` : '+1 GATE',
+            text: gs.combo > 1 ? `CAMPAIGN +1 (x${gs.combo})` : '+1 CAMPAIGN',
             color: '#bef264',
             life: 1
           });
 
-          // Update High Score
+          // High Score
           if (gs.score > bestScore) {
             setBestScore(gs.score);
             try {
-              localStorage.setItem('og_flappy_best', gs.score.toString());
+              localStorage.setItem('og_campaign_best', gs.score.toString());
             } catch {}
           }
 
-          // Barrier shatter particles
+          // Shimmer burst
           for (let p = 0; p < 8; p++) {
             gs.particles.push({
               x: m.x + pillarWidth / 2,
@@ -589,7 +598,7 @@ export default function LoadingGame({ onComplete }) {
           }
         }
 
-        // Near-Miss Bonus check (rewarding close calls)
+        // Near-Miss Bonus (High CTR reaction)
         if (!m.nearMissChecked && gs.status === 'PLAYING') {
           if (gs.bird.x > m.x && gs.bird.x < m.x + pillarWidth) {
             const distTop = gs.bird.y - m.topH;
@@ -600,7 +609,7 @@ export default function LoadingGame({ onComplete }) {
               gs.popups.push({
                 x: gs.bird.x,
                 y: gs.bird.y - 28,
-                text: 'CLOSE CALL! +50',
+                text: 'HIGH CTR! +50',
                 color: '#38bdf8',
                 life: 1
               });
@@ -618,7 +627,6 @@ export default function LoadingGame({ onComplete }) {
             gs.bird.y + gs.bird.radius > m.bottomY
           ) {
             if (gs.bird.hasShield) {
-              // Shield breaks and saves player!
               gs.bird.hasShield = false;
               setHasShield(false);
               gs.shake = 14;
@@ -626,25 +634,21 @@ export default function LoadingGame({ onComplete }) {
               gs.popups.push({
                 x: gs.bird.x,
                 y: gs.bird.y,
-                text: 'SHIELD SHATTERED!',
+                text: 'BRAND SAFETY SHIELD SHATTERED!',
                 color: '#c084fc',
                 life: 1.2
               });
-              // Push bird to safety in middle of gap
               gs.bird.y = m.topH + gap / 2;
               gs.bird.vy = 0;
             } else if (gs.status === 'PLAYING') {
-              // Game Over
               gs.status = 'GAMEOVER';
               setGameStateStatus('GAMEOVER');
               gs.shake = 18;
               sfx.playCrash();
-              setHunterRank(getRankFromScore(gs.score));
             }
           }
         }
 
-        // Clean offscreen
         if (m.x < -60) {
           gs.monoliths.splice(i, 1);
         }
@@ -661,8 +665,8 @@ export default function LoadingGame({ onComplete }) {
         if (!orb.collected) {
           const r = 8 + Math.sin(orb.pulse) * 1.5;
 
-          if (orb.type === 'mana') {
-            // Cyan Mana Orb
+          if (orb.type === 'engagement') {
+            // Cyan Engagement Token
             ctx.beginPath();
             ctx.arc(orb.x, orb.y, r, 0, Math.PI * 2);
             ctx.fillStyle = '#38bdf8';
@@ -671,13 +675,13 @@ export default function LoadingGame({ onComplete }) {
             ctx.lineWidth = 1.5;
             ctx.stroke();
 
-            // Outer pulse glow
+            // Glow
             ctx.beginPath();
             ctx.arc(orb.x, orb.y, r * 1.8, 0, Math.PI * 2);
             ctx.fillStyle = 'rgba(56, 189, 248, 0.2)';
             ctx.fill();
-          } else if (orb.type === 'core') {
-            // Golden Hunter Core
+          } else if (orb.type === 'viral') {
+            // Lime Viral Asset
             ctx.save();
             ctx.translate(orb.x, orb.y);
             ctx.rotate(orb.pulse);
@@ -688,7 +692,7 @@ export default function LoadingGame({ onComplete }) {
             ctx.strokeRect(-r, -r, r * 2, r * 2);
             ctx.restore();
           } else if (orb.type === 'shield') {
-            // Purple Shield Rune
+            // Brand Safety Shield
             ctx.beginPath();
             ctx.arc(orb.x, orb.y, r + 2, 0, Math.PI * 2);
             ctx.fillStyle = '#c084fc';
@@ -696,14 +700,13 @@ export default function LoadingGame({ onComplete }) {
             ctx.strokeStyle = '#ffffff';
             ctx.lineWidth = 2;
             ctx.stroke();
-            // Shield icon
             ctx.fillStyle = '#ffffff';
             ctx.font = 'bold 9px monospace';
             ctx.textAlign = 'center';
             ctx.fillText('🛡', orb.x, orb.y + 3);
           }
 
-          // Collision with Bird
+          // Collision with Glider
           const dist = Math.hypot(gs.bird.x - orb.x, gs.bird.y - orb.y);
           if (dist < gs.bird.radius + r + 4) {
             orb.collected = true;
@@ -715,24 +718,23 @@ export default function LoadingGame({ onComplete }) {
               gs.popups.push({
                 x: orb.x,
                 y: orb.y - 15,
-                text: 'SHIELD ACQUIRED!',
+                text: 'BRAND SAFETY SHIELD!',
                 color: '#c084fc',
                 life: 1
               });
             } else {
-              gs.orbsCollected += orb.type === 'core' ? 3 : 1;
+              gs.orbsCollected += orb.type === 'viral' ? 3 : 1;
               setManaOrbs(gs.orbsCollected);
               sfx.playMana(gs.combo);
               gs.popups.push({
                 x: orb.x,
                 y: orb.y - 15,
-                text: orb.type === 'core' ? '+300 CORE MANA' : '+100 MANA',
-                color: orb.type === 'core' ? '#bef264' : '#38bdf8',
+                text: orb.type === 'viral' ? '+300 VIRAL SURGE' : '+100 REACH',
+                color: orb.type === 'viral' ? '#bef264' : '#38bdf8',
                 life: 1
               });
             }
 
-            // Burst particles
             for (let p = 0; p < 8; p++) {
               gs.particles.push({
                 x: orb.x,
@@ -741,7 +743,7 @@ export default function LoadingGame({ onComplete }) {
                 vy: Math.sin((p * Math.PI) / 4) * 3,
                 size: 3,
                 life: 1,
-                color: orb.type === 'shield' ? '#c084fc' : orb.type === 'core' ? '#bef264' : '#38bdf8'
+                color: orb.type === 'shield' ? '#c084fc' : orb.type === 'viral' ? '#bef264' : '#38bdf8'
               });
             }
           }
@@ -752,9 +754,8 @@ export default function LoadingGame({ onComplete }) {
         }
       }
 
-      // 5. Update Bird (Shadow Crow 까마귀)
+      // 5. Update OG Creative Glider Drone
       if (gs.status === 'READY') {
-        // Floating hover sine wave
         gs.hoverPhase += 0.06;
         gs.bird.y = 190 + Math.sin(gs.hoverPhase) * 6;
         gs.bird.rotation = Math.sin(gs.hoverPhase) * 0.08;
@@ -763,8 +764,6 @@ export default function LoadingGame({ onComplete }) {
         gs.bird.vy += gravity;
         gs.bird.y += gs.bird.vy;
 
-        // Smooth aerodynamic pitch rotation:
-        // Snappy lift, gradual dive
         if (gs.bird.vy < 0) {
           gs.bird.rotation = Math.max(-0.45, gs.bird.rotation - 0.04);
         } else {
@@ -773,13 +772,13 @@ export default function LoadingGame({ onComplete }) {
 
         gs.bird.wingState += 0.28;
 
-        // Store trail positions for sleek shadow ghosting
+        // Trail positions
         if (gs.frameCount % 2 === 0) {
           gs.bird.trail.unshift({ x: gs.bird.x, y: gs.bird.y, rot: gs.bird.rotation, alpha: 0.45 });
           if (gs.bird.trail.length > 6) gs.bird.trail.pop();
         }
 
-        // Ceiling & Floor Collision
+        // Boundaries
         if (gs.bird.y - gs.bird.radius < 0) {
           gs.bird.y = gs.bird.radius;
           gs.bird.vy = 0;
@@ -790,12 +789,10 @@ export default function LoadingGame({ onComplete }) {
           setGameStateStatus('GAMEOVER');
           gs.shake = 16;
           sfx.playCrash();
-          setHunterRank(getRankFromScore(gs.score));
         }
 
         setVelocityDisplay(Math.round(gs.bird.vy * 10));
       } else if (gs.status === 'GAMEOVER') {
-        // Falling down on death
         if (gs.bird.y + gs.bird.radius < height) {
           gs.bird.vy += gravity * 1.5;
           gs.bird.y += gs.bird.vy;
@@ -803,7 +800,7 @@ export default function LoadingGame({ onComplete }) {
         }
       }
 
-      // 6. Draw Shadow Crow Ghost Trail (Anime Hunter Aesthetic)
+      // 6. Draw OG Drone Ghost Trail
       for (let t = 0; t < gs.bird.trail.length; t++) {
         const tr = gs.bird.trail[t];
         tr.alpha *= 0.85;
@@ -812,24 +809,24 @@ export default function LoadingGame({ onComplete }) {
         ctx.translate(tr.x, tr.y);
         ctx.rotate(tr.rot);
         ctx.beginPath();
-        ctx.ellipse(0, 0, 14, 9, 0, 0, Math.PI * 2);
+        ctx.ellipse(0, 0, 15, 8, 0, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(190, 242, 100, ${tr.alpha * 0.3})`;
         ctx.fill();
         ctx.restore();
       }
 
-      // 7. Draw Shadow Crow
+      // 7. Draw OG Creative Drone Glider
       ctx.save();
       ctx.translate(gs.bird.x, gs.bird.y);
       ctx.rotate(gs.bird.rotation);
 
-      // Crow Shadow Aura
+      // Glider Plasma Aura
       ctx.beginPath();
       ctx.arc(0, 0, 18, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(190, 242, 100, 0.22)';
+      ctx.fillStyle = 'rgba(190, 242, 100, 0.2)';
       ctx.fill();
 
-      // Shadow Shield (if active)
+      // Brand Safety Shield Hexagon
       if (gs.bird.hasShield) {
         gs.bird.shieldTime += 0.08;
         ctx.save();
@@ -851,20 +848,26 @@ export default function LoadingGame({ onComplete }) {
         ctx.restore();
       }
 
-      // Crow Body (Aerodynamic ink black)
+      // Glider Main Fuselage (High-Tech Jet/Drone)
       ctx.beginPath();
-      ctx.ellipse(0, 0, 15, 10, 0, 0, Math.PI * 2);
+      ctx.moveTo(18, 0);
+      ctx.lineTo(-6, -9);
+      ctx.lineTo(-14, -6);
+      ctx.lineTo(-10, 0);
+      ctx.lineTo(-14, 6);
+      ctx.lineTo(-6, 9);
+      ctx.closePath();
       ctx.fillStyle = '#09090b';
       ctx.fill();
       ctx.strokeStyle = '#bef264';
       ctx.lineWidth = 2;
       ctx.stroke();
 
-      // Flapping Wing
-      const wingY = Math.sin(gs.bird.wingState) * 7;
+      // Swept Aerodynamic Wings
+      const wingY = Math.sin(gs.bird.wingState) * 6;
       ctx.beginPath();
-      ctx.moveTo(-5, 0);
-      ctx.lineTo(2, wingY - 9);
+      ctx.moveTo(-4, 0);
+      ctx.lineTo(2, wingY - 11);
       ctx.lineTo(8, 0);
       ctx.fillStyle = '#27272a';
       ctx.fill();
@@ -872,24 +875,20 @@ export default function LoadingGame({ onComplete }) {
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      // Beak (Sharp hunter beak)
-      ctx.beginPath();
-      ctx.moveTo(12, -2);
-      ctx.lineTo(20, 1);
-      ctx.lineTo(12, 4);
-      ctx.closePath();
-      ctx.fillStyle = '#ef4444';
-      ctx.fill();
-
-      // Hunter Mana Eye with Glow
-      ctx.beginPath();
-      ctx.arc(8, -3, 2.8, 0, Math.PI * 2);
+      // "OG" Monogram on Fuselage
       ctx.fillStyle = '#bef264';
+      ctx.font = 'bold 7px "JetBrains Mono", monospace';
+      ctx.fillText('OG', -5, 2.5);
+
+      // Media Forward Sensor / Laser Beak
+      ctx.beginPath();
+      ctx.arc(12, 0, 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = '#ef4444';
       ctx.fill();
 
       ctx.restore();
 
-      // 8. Update & Draw Particles
+      // 8. Particles
       for (let i = gs.particles.length - 1; i >= 0; i--) {
         const p = gs.particles[i];
         p.x += p.vx;
@@ -928,46 +927,45 @@ export default function LoadingGame({ onComplete }) {
 
       // 10. Start Screen Prompt
       if (gs.status === 'READY') {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
         ctx.fillRect(0, 0, width, height);
 
         ctx.fillStyle = '#ffffff';
         ctx.font = 'bold 22px "Bebas Neue", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('SHADOW GLIDE // CHIBI HUNTER', width / 2, height / 2 - 20);
+        ctx.fillText('OG MEDIA // CAMPAIGN RUNNER', width / 2, height / 2 - 20);
 
         ctx.fillStyle = '#bef264';
         ctx.font = 'bold 12px "JetBrains Mono", monospace';
-        ctx.fillText('[ CLICK OR PRESS SPACE TO LAUNCH ]', width / 2, height / 2 + 15);
+        ctx.fillText('[ CLICK OR PRESS SPACE TO LAUNCH FLIGHT ]', width / 2, height / 2 + 15);
       }
 
       // 11. Game Over Overlay
       if (gs.status === 'GAMEOVER') {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.78)';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
         ctx.fillRect(0, 0, width, height);
 
         ctx.fillStyle = '#ef4444';
         ctx.font = 'bold 24px "Bebas Neue", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('BARRIER BREACH CRASH // 결계 충돌', width / 2, height / 2 - 40);
+        ctx.fillText('CAMPAIGN BOTTLENECK // ALGORITHM CLAMP', width / 2, height / 2 - 40);
 
-        // Score summary
         ctx.fillStyle = '#ffffff';
         ctx.font = 'bold 14px "Space Grotesk", sans-serif';
-        ctx.fillText(`SCORE: ${gs.score} GATES  |  BEST: ${bestScore}`, width / 2, height / 2 - 12);
+        ctx.fillText(`CAMPAIGNS: ${gs.score} TOUCHPOINTS  |  BEST: ${bestScore}`, width / 2, height / 2 - 12);
 
         ctx.fillStyle = '#bef264';
-        ctx.font = 'bold 12px "JetBrains Mono", monospace';
-        ctx.fillText(`HUNTER EVALUATION: [ ${getRankFromScore(gs.score)} ]`, width / 2, height / 2 + 12);
+        ctx.font = 'bold 11px "JetBrains Mono", monospace';
+        ctx.fillText(`AGENCY EVALUATION: [ ${getRankFromScore(gs.score)} ]`, width / 2, height / 2 + 12);
 
         if (isUnlocked) {
           ctx.fillStyle = '#bef264';
           ctx.font = 'bold 11px "JetBrains Mono", monospace';
-          ctx.fillText('[ SPACE: RETRY  |  ENTER: WEBTOON NOW ]', width / 2, height / 2 + 40);
+          ctx.fillText('[ SPACE: RE-LAUNCH  |  ENTER: VIEW AGENCY SHOWCASE ]', width / 2, height / 2 + 40);
         } else {
           ctx.fillStyle = '#38bdf8';
           ctx.font = '11px "JetBrains Mono", monospace';
-          ctx.fillText('[ PRESS SPACE OR CLICK TO RETRY ]', width / 2, height / 2 + 40);
+          ctx.fillText('[ PRESS SPACE OR CLICK TO RE-LAUNCH CAMPAIGN ]', width / 2, height / 2 + 40);
         }
       }
 
@@ -1007,14 +1005,11 @@ export default function LoadingGame({ onComplete }) {
       {/* ========================================================================= */}
       <header className="relative z-10 w-full max-w-[1300px] mx-auto px-3 sm:px-6 pt-3 sm:pt-4">
         <div className="bg-white border-2 border-black p-2 sm:p-2.5 manga-shadow-sm flex flex-wrap items-center justify-between gap-2.5">
-          {/* Left Title & Game Mode */}
+          {/* Left Title with Brand Logo */}
           <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-            <div className="bg-black text-[#bef264] font-mono-tech font-bold text-xs sm:text-sm px-2.5 py-1 tracking-wider border border-black flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#bef264] animate-pulse" />
-              <span>FLAPPY PROTOCOL // SHADOW GLIDE</span>
-            </div>
-            <span className="font-mono-tech text-[10px] sm:text-xs text-stone-600 font-semibold hidden md:inline">
-              4K HERO VIDEO PRELOAD ENGINE // 까마귀
+            <OgLogo size="sm" withText={true} subtitle="DIGITAL MEDIA & PERFORMANCE LAB" />
+            <span className="hidden md:inline font-mono-tech text-[10px] text-stone-500 font-bold border-l-2 border-black pl-3">
+              4K SHOWREEL PRELOAD ENGINE // HIGH-CONVERTING ASSETS
             </span>
           </div>
 
@@ -1029,11 +1024,11 @@ export default function LoadingGame({ onComplete }) {
               <span>SFX: {sfxEnabled ? 'ON' : 'OFF'}</span>
             </button>
 
-            {/* Shield Indicator */}
+            {/* Brand Safety Shield Indicator */}
             {hasShield && (
               <div className="bg-[#c084fc] text-black font-mono-tech font-bold text-[10px] sm:text-[11px] px-2 py-0.5 border border-black animate-pulse flex items-center gap-1">
                 <span>🛡</span>
-                <span>SHIELD ACTIVE</span>
+                <span>BRAND SAFETY ACTIVE</span>
               </div>
             )}
 
@@ -1046,10 +1041,10 @@ export default function LoadingGame({ onComplete }) {
               <span>{isUnlocked ? 'READY // ENTER' : 'AUTO-SYNC // SKIP'}</span>
             </button>
 
-            {/* Gates Cleared Status Badge */}
+            {/* Campaigns Completed Badge */}
             <div className="bg-stone-900 text-white font-mono-tech font-bold text-[10px] sm:text-[11px] px-2.5 py-0.5 border border-black flex items-center gap-1">
               <span className="w-1.5 h-1.5 bg-[#bef264] rounded-full animate-ping" />
-              <span>GATES: [{String(gatesPassed).padStart(2, '0')}]</span>
+              <span>CAMPAIGNS: [{String(gatesPassed).padStart(2, '0')}]</span>
             </div>
           </div>
         </div>
@@ -1062,35 +1057,36 @@ export default function LoadingGame({ onComplete }) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-8 items-center">
           
           {/* --------------------------------------------------------------------- */}
-          {/* LEFT COLUMN: HERO PRELOAD TELEMETRY & CHIBI HUNTER DIALOGUE           */}
+          {/* LEFT COLUMN: HERO PRELOAD TELEMETRY & DIGITAL MARKETING BRAND CARD    */}
           {/* --------------------------------------------------------------------- */}
           <div className="lg:col-span-5 space-y-4">
             
             {/* Primary Dialogue Box */}
             <div className="relative bg-white border-3 border-black p-5 sm:p-6 manga-shadow-lg">
               <div className="flex items-center justify-between pb-3 mb-4 border-b border-black font-mono-tech text-xs">
-                <span className="text-[#ef4444] font-bold flex items-center gap-1">
-                  <span>■</span> CHIBI HUNTER // SHADOW FLAP
+                <span className="text-[#ef4444] font-bold flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#ef4444] animate-ping" />
+                  <span>OG MEDIA // DIGITAL CREATIVE LAB</span>
                 </span>
-                <span className="bg-black text-white px-2 py-0.5 font-bold text-[10px]">
-                  BEST: {String(bestScore).padStart(2, '0')}
+                <span className="bg-black text-[#bef264] px-2 py-0.5 font-bold text-[10px]">
+                  BEST: {String(bestScore).padStart(2, '0')} CAMPAIGNS
                 </span>
               </div>
 
-              {/* Bold Comic Quotes */}
+              {/* Bold Digital Marketing Headline */}
               <h2 className="font-heading text-2xl sm:text-3xl font-black uppercase tracking-tight text-black leading-tight mb-2">
-                "DODGE INK MONOLITHS.
+                "ENGINEERING HIGH-VELOCITY DIGITAL EXPERIENCES."
               </h2>
               <div className="inline-block bg-[#bef264] border-2 border-black px-2.5 py-1 mb-4 transform -rotate-1 shadow-sm">
                 <span className="font-heading text-xl sm:text-2xl font-black uppercase tracking-tight text-black">
-                  {isUnlocked ? 'HERO ARCHIVE UNSEALED!' : 'PRELOADING 4K HERO PORTAL...'}
+                  {isUnlocked ? '4K SHOWREEL PRIMED IN RAM!' : 'PRELOADING 4K AGENCY SHOWCASE...'}
                 </span>
               </div>
 
               <p className="font-sans text-xs sm:text-sm text-stone-600 leading-relaxed mb-4">
                 {isUnlocked
-                  ? 'The 15.7MB Hero video archive is 100% buffered in RAM memory for instant 4th-wall zoom. Enter whenever you are ready, or keep playing for high score!'
-                  : 'Buffering the cinematic hero sequence. Dodge obsidian ink pillars or collect mana orbs to test your reflexes while it loads!'}
+                  ? 'The 15.7MB 4K Agency Showreel is 100% pre-buffered in memory for zero-lag playback. Step inside to explore our viral campaigns, interactive platforms, and brand worldbuilding!'
+                  : 'OG Media forges high-impact digital campaigns, viral media distribution, and brand intellectual properties. While our 4K showreel stream buffers, dodge algorithm bottlenecks to test your agency reflexes!'}
               </p>
 
               {/* Real-Time Video Download Telemetry Box */}
@@ -1098,10 +1094,10 @@ export default function LoadingGame({ onComplete }) {
                 <div className="flex items-center justify-between font-mono-tech text-[11px] font-bold text-black">
                   <span className="flex items-center gap-1.5">
                     <span className={`w-2 h-2 rounded-full ${isUnlocked ? 'bg-[#16a34a]' : 'bg-[#ef4444] animate-ping'}`} />
-                    <span>HEROVID1.MP4 // BUFFER:</span>
+                    <span>SHOWREEL_FEED // 4K STREAM:</span>
                   </span>
                   <span className="text-black font-black">
-                    {isVideoLoaded ? '100% CACHED' : `${videoProgress}%`}
+                    {isVideoLoaded ? '100% BUFFERED' : `${videoProgress}%`}
                   </span>
                 </div>
 
@@ -1115,10 +1111,10 @@ export default function LoadingGame({ onComplete }) {
 
                 <div className="flex items-center justify-between font-mono-tech text-[10px] text-stone-600 pt-0.5">
                   <span>
-                    {(loadedBytes / (1024 * 1024)).toFixed(1)} MB / {(totalBytes / (1024 * 1024)).toFixed(1)} MB
+                    {(loadedBytes / (1024 * 1024)).toFixed(1)} MB / {(totalBytes / (1024 * 1024)).toFixed(1)} MB CACHED
                   </span>
                   <span className="text-[#16a34a] font-bold">
-                    {speed}
+                    DATA RATE: {speed}
                   </span>
                 </div>
               </div>
@@ -1126,22 +1122,22 @@ export default function LoadingGame({ onComplete }) {
 
             {/* Dual Stats Display */}
             <div className="grid grid-cols-2 gap-3">
-              {/* Stat 1: Gates Cleared & Combo */}
+              {/* Stat 1: Campaigns Cleared & Title */}
               <div className="bg-white border-2 border-black p-3 manga-shadow-sm">
                 <div className="font-mono-tech text-[9px] text-stone-500 uppercase tracking-wider mb-1 flex items-center justify-between">
-                  <span>01 // GATES_NAVIGATED</span>
+                  <span>01 // CAMPAIGNS_LAUNCHED</span>
                   {combo > 1 && (
                     <span className="text-[#ef4444] font-bold animate-pulse">
-                      x{combo} COMBO!
+                      x{combo} STREAK!
                     </span>
                   )}
                 </div>
                 <div className="flex items-baseline justify-between">
                   <span className="font-heading text-xl sm:text-2xl font-black text-black">
-                    {gatesPassed} GATES
+                    {gatesPassed} REACHED
                   </span>
-                  <span className="font-mono-tech text-[10px] font-bold text-[#16a34a]">
-                    RANK: {getRankFromScore(gatesPassed)}
+                  <span className="font-mono-tech text-[9px] font-bold text-[#16a34a]">
+                    {getRankFromScore(gatesPassed).split('//')[0]}
                   </span>
                 </div>
                 <div className="w-full h-1.5 bg-stone-200 border border-black mt-2 overflow-hidden">
@@ -1152,14 +1148,14 @@ export default function LoadingGame({ onComplete }) {
                 </div>
               </div>
 
-              {/* Stat 2: Mana Orbs & Velocity */}
+              {/* Stat 2: Viral Impressions Harvested */}
               <div className="bg-white border-2 border-black p-3 manga-shadow-sm">
                 <div className="font-mono-tech text-[9px] text-stone-500 uppercase tracking-wider mb-1">
-                  02 // MANA_HARVESTED
+                  02 // VIRAL_IMPRESSIONS
                 </div>
                 <div className="flex items-baseline justify-between">
                   <span className="font-heading text-xl sm:text-2xl font-black text-black">
-                    {manaOrbs * 100} MANA
+                    {manaOrbs * 250}K REACH
                   </span>
                   <span className="font-mono-tech text-[10px] font-bold text-[#ea580c]">
                     VEL: {velocityDisplay}
@@ -1174,7 +1170,7 @@ export default function LoadingGame({ onComplete }) {
               </div>
             </div>
 
-            {/* Korean Status Ribbon / Quick Action */}
+            {/* Brand Status Ribbon / Quick Action */}
             <div
               onClick={isUnlocked ? handleEnterWebtoon : undefined}
               className={`p-3 border-2 border-black font-mono-tech text-xs font-bold tracking-wider flex items-center justify-between transition-all ${
@@ -1184,13 +1180,13 @@ export default function LoadingGame({ onComplete }) {
               }`}
             >
               <div className="flex items-center gap-2">
-                <span className="font-kr font-black text-sm text-[#bef264]">
-                  {isUnlocked ? '각성 완료—!' : '동기화중—'}
+                <span className="font-heading font-black text-sm text-[#bef264] uppercase tracking-wider">
+                  {isUnlocked ? 'OG MEDIA // READY' : 'PRE-FETCHING'}
                 </span>
                 <span>
                   {isUnlocked
-                    ? '4K VIDEO PRIMED // CLICK TO ENTER'
-                    : `BUFFERING HERO VIDEO (${videoProgress}%)`}
+                    ? '4K SHOWCASE PRIMED // LAUNCH NOW'
+                    : `STREAMING SHOWCASE (${videoProgress}%)`}
                 </span>
               </div>
               <span
@@ -1200,13 +1196,13 @@ export default function LoadingGame({ onComplete }) {
                     : 'bg-stone-800 text-stone-400 border-stone-700'
                 }`}
               >
-                {isUnlocked ? '• READY' : 'LOADING'}
+                {isUnlocked ? '• READY' : 'BUFFERING'}
               </span>
             </div>
           </div>
 
           {/* --------------------------------------------------------------------- */}
-          {/* RIGHT COLUMN: INTERACTIVE CANVAS MINI-GAME + AWAKENING OVERLAY        */}
+          {/* RIGHT COLUMN: INTERACTIVE DIGITAL MARKETING CAMPAIGN RUNNER GAME      */}
           {/* --------------------------------------------------------------------- */}
           <div className="lg:col-span-7 flex flex-col items-center">
             {/* Game Screen Outer Frame */}
@@ -1230,7 +1226,7 @@ export default function LoadingGame({ onComplete }) {
               {gameStateStatus === 'READY' && (
                 <div className="absolute top-4 left-0 right-0 text-center pointer-events-none z-20">
                   <span className="bg-black/90 text-[#bef264] border border-[#bef264] px-3.5 py-1.5 font-mono-tech text-xs font-bold tracking-widest shadow-md">
-                    [ CLICK / TAP / SPACE TO FLAP ]
+                    [ CLICK / TAP / SPACE TO LAUNCH CAMPAIGN ]
                   </span>
                 </div>
               )}
@@ -1240,31 +1236,31 @@ export default function LoadingGame({ onComplete }) {
                 <div className="absolute top-3 left-4 right-4 z-30 pointer-events-none flex justify-center">
                   <div className="bg-black/90 border border-[#bef264] px-3 py-1 font-mono-tech text-xs text-[#bef264] font-bold shadow-lg flex items-center gap-2 animate-bounce">
                     <span className="w-2 h-2 rounded-full bg-[#bef264] animate-ping" />
-                    <span>VIDEO ARCHIVE BUFFERED // ENTER ANY TIME OR BEAT HIGH SCORE</span>
+                    <span>4K SHOWCASE 100% BUFFERED // ENTER ANY TIME OR EXTEND REACH</span>
                   </div>
                 </div>
               )}
 
-              {/* FULL AWAKENING MODAL (When unlocked & user isn't in active flight) */}
+              {/* FULL AWAKENING MODAL (When unlocked & user clicks to view) */}
               {showAwakeningModal && (
                 <div className="absolute inset-0 bg-black/65 backdrop-blur-[2px] flex items-center justify-center p-4 z-40 animate-fade-in">
                   <div
                     onClick={(e) => e.stopPropagation()}
                     className="bg-white border-3 border-black p-6 max-w-sm w-full text-center manga-shadow-lg transform transition-transform"
                   >
-                    <h3 className="font-kr font-black text-3xl sm:text-4xl text-black tracking-tight mb-1">
-                      각성 완료—!
-                    </h3>
+                    <div className="flex justify-center mb-3">
+                      <OgLogo size="lg" withText={false} />
+                    </div>
 
-                    <div className="inline-block bg-[#bef264] border border-black text-black font-mono-tech font-bold text-xs px-2.5 py-0.5 mb-3">
-                      4K HERO ARCHIVE 100% BUFFERED
+                    <div className="inline-block bg-[#bef264] border border-black text-black font-mono-tech font-bold text-xs px-2.5 py-0.5 mb-2">
+                      4K AGENCY SHOWCASE 100% BUFFERED
                     </div>
 
                     <h4 className="font-heading text-lg font-black uppercase text-black mb-1">
-                      ZERO-LAG PORTAL PRIMED
+                      PORTFOLIO PORTAL ONLINE
                     </h4>
                     <p className="font-sans text-xs text-stone-600 mb-5 leading-normal">
-                      The full 15.7MB video is stored in memory. You can enter the webtoon now, or close this to continue playing the flight mini-game!
+                      The full 15.7MB showreel is cached in RAM. Step inside our brand universe and explore our digital capabilities, or continue playing the campaign runner!
                     </p>
 
                     <div className="space-y-2">
@@ -1272,7 +1268,7 @@ export default function LoadingGame({ onComplete }) {
                         onClick={handleEnterWebtoon}
                         className="w-full bg-black hover:bg-[#bef264] text-white hover:text-black border-2 border-black py-3 font-mono-tech font-black text-sm tracking-wider uppercase transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 manga-shadow-sm hover:translate-x-0.5 hover:-translate-y-0.5"
                       >
-                        <span>ENTER WEBTOON NOW</span>
+                        <span>LAUNCH AGENCY SHOWCASE</span>
                         <span>→</span>
                       </button>
 
@@ -1280,7 +1276,7 @@ export default function LoadingGame({ onComplete }) {
                         onClick={() => setShowAwakeningModal(false)}
                         className="w-full bg-stone-100 hover:bg-stone-200 text-stone-800 border border-black py-2 font-mono-tech font-bold text-xs tracking-wider uppercase transition-colors cursor-pointer"
                       >
-                        KEEP PLAYING FLAPPY GAME
+                        KEEP PLAYING CAMPAIGN RUNNER
                       </button>
                     </div>
                   </div>
@@ -1293,13 +1289,13 @@ export default function LoadingGame({ onComplete }) {
               <div className="flex items-center justify-between font-mono-tech text-xs font-bold text-stone-800">
                 <div className="flex items-center gap-1.5">
                   <span className="text-[#ef4444]">▶</span>
-                  <span>VIDEO SYNC CHARGE:</span>
+                  <span>4K SHOWREEL BUFFER STATUS:</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className={`text-[10px] font-bold px-1.5 py-0.2 ${isUnlocked ? 'bg-[#16a34a] text-white' : 'bg-[#ef4444] text-white'}`}>
                     {isUnlocked
-                      ? 'AWAKENING COMPLETE // 100% BUFFERED'
-                      : `DOWNLOADING HERO ARCHIVE (${speed})`}
+                      ? 'SHOWREEL PRIMED // 100% IN CACHE'
+                      : `BUFFERING 4K VIDEO (${speed})`}
                   </span>
                   <span className="text-sm font-black">{videoProgress}%</span>
                 </div>
@@ -1326,9 +1322,9 @@ export default function LoadingGame({ onComplete }) {
 
               {/* Sub-strip telemetry */}
               <div className="flex items-center justify-between font-mono-tech text-[9px] text-stone-500 pt-0.5">
-                <span>[FILE: HEROVID1.MP4 • 15.68 MB]</span>
+                <span>[ASSET: HEROVID1.MP4 • 15.68 MB • 4K ULTRA-HD]</span>
                 <span className="text-[#ef4444] font-bold">
-                  {isUnlocked ? 'STATUS: ZERO-LAG READY' : 'PRE-FETCHING 4K VIDEO'}
+                  {isUnlocked ? 'STATUS: ZERO-LAG READY' : 'PRE-FETCHING AGENCY SHOWREEL'}
                 </span>
               </div>
             </div>
@@ -1343,15 +1339,16 @@ export default function LoadingGame({ onComplete }) {
       {/* ========================================================================= */}
       <footer className="relative z-10 w-full max-w-[1300px] mx-auto px-3 sm:px-6 pb-3 sm:pb-4">
         <div className="bg-white border-2 border-black px-3 py-2 flex flex-wrap items-center justify-between gap-2 text-[10px] sm:text-xs font-mono-tech">
-          {/* Tech Specs */}
+          {/* Tech Specs with OG Branding */}
           <div className="text-stone-700 flex items-center gap-2 flex-wrap">
-            <span className="font-bold text-black">OGMEDIA STUDIO</span>
-            <span>//</span>
-            <span>CINEMATIC SCROLL PORTAL</span>
-            <span>//</span>
-            <span className="text-[#16a34a] font-bold">
-              {isUnlocked ? 'HERO VIDEO PRELOADED' : 'BUFFERING VIDEO STREAM'}
+            <span className="font-bold text-black flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 bg-[#bef264] rounded-full inline-block" />
+              OG MEDIA STUDIO
             </span>
+            <span>//</span>
+            <span>DIGITAL BRANDING & PERFORMANCE MARKETING</span>
+            <span>//</span>
+            <span>SEOUL • TOKYO • NEW YORK • LONDON</span>
           </div>
 
           {/* Right Action Button */}
@@ -1364,7 +1361,7 @@ export default function LoadingGame({ onComplete }) {
                   : 'bg-white hover:bg-stone-100 text-stone-800'
               }`}
             >
-              <span>{isUnlocked ? 'ENTER WEBTOON (READY)' : 'ENTER NOW // STREAMING'}</span>
+              <span>{isUnlocked ? 'LAUNCH AGENCY SHOWCASE (READY)' : 'ENTER NOW // STREAMING'}</span>
               <span>→</span>
             </button>
           </div>
