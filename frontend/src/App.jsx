@@ -7,6 +7,7 @@ import Navbar from './components/layout/Navbar';
 import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
 
+const ServiceDetailPage = lazy(() => import('./pages/ServiceDetailPage'));
 const FooterChapter = lazy(() => import('./components/layout/FooterChapter'));
 const FloatingThemeWidget = lazy(() => import('./components/layout/FloatingThemeWidget'));
 
@@ -26,6 +27,30 @@ export default function App() {
               <Navbar />
               <Routes>
                 <Route path="/" element={<HomePage />} />
+                <Route
+                  path="/service/:slug"
+                  element={
+                    <Suspense fallback={
+                      <div className="min-h-screen flex items-center justify-center font-mono-tech text-xs text-stone-500">
+                        [ LOADING PROTOCOL SPECIFICATION... ]
+                      </div>
+                    }>
+                      <ServiceDetailPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="/services/:slug"
+                  element={
+                    <Suspense fallback={
+                      <div className="min-h-screen flex items-center justify-center font-mono-tech text-xs text-stone-500">
+                        [ LOADING PROTOCOL SPECIFICATION... ]
+                      </div>
+                    }>
+                      <ServiceDetailPage />
+                    </Suspense>
+                  }
+                />
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </div>
