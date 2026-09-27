@@ -83,9 +83,29 @@ export function VideoPreloadProvider({ children }) {
           const url = URL.createObjectURL(blob);
           blobUrlRef.current = url;
           setVideoBlobUrl(url);
-          setProgress(100);
-          setIsLoaded(true);
-          setStatus('ready');
+
+          // Verify video decoding readiness via test video element
+          const testVid = document.createElement('video');
+          testVid.preload = 'auto';
+          testVid.muted = true;
+          testVid.src = url;
+
+          const onReady = () => {
+            setProgress(100);
+            setIsLoaded(true);
+            setStatus('ready');
+            testVid.removeEventListener('canplay', onReady);
+          };
+
+          testVid.addEventListener('canplay', onReady);
+          testVid.load();
+
+          // Fallback if canplay doesn't fire immediately
+          setTimeout(() => {
+            setProgress(100);
+            setIsLoaded(true);
+            setStatus('ready');
+          }, 350);
         } catch {
           // Fallback if Blob URL creation fails
           setProgress(100);
@@ -93,7 +113,7 @@ export function VideoPreloadProvider({ children }) {
           setStatus('fallback');
         }
       } else {
-        // If HTTP status is error or range issue, fallback gracefully
+        // Fallback to direct video URL
         setProgress(100);
         setIsLoaded(true);
         setStatus('fallback');
@@ -113,8 +133,8 @@ export function VideoPreloadProvider({ children }) {
       setStatus('fallback');
     };
 
-    // Safety timeout: 45 seconds maximum for slow connections
-    xhr.timeout = 45000;
+    // Timeout: 30 seconds maximum
+    xhr.timeout = 30000;
 
     xhr.send();
   };

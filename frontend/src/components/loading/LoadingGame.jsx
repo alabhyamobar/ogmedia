@@ -141,17 +141,22 @@ const sfx = new SoundFx();
 
 export default function LoadingGame({ onComplete }) {
   const canvasRef = useRef(null);
-  const { progress: videoProgress, isLoaded: isVideoLoaded } = useVideoPreload();
+  const { progress: videoProgress, isLoaded: isVideoLoaded, loadedBytes, totalBytes, speed } = useVideoPreload();
 
   const [displayProgress, setDisplayProgress] = useState(0);
   const [sfxEnabled, setSfxEnabled] = useState(true);
   const [score, setScore] = useState(0);
-  const [stars, setStars] = useState(0);
   const [hasShield, setHasShield] = useState(false);
   const [gameStateStatus, setGameStateStatus] = useState('READY'); // 'READY' | 'PLAYING' | 'GAMEOVER'
   const [isReady, setIsReady] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
+  
   const hasFinishedRef = useRef(false);
+  const exitTimeoutRef = useRef(null);
+  const onCompleteRef = useRef(onComplete);
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
 
   const [bestScore, setBestScore] = useState(() => {
     try {
@@ -170,70 +175,81 @@ export default function LoadingGame({ onComplete }) {
     return 'Hello';
   }, []);
 
-  // Friendly status message (no technical jargon)
+  // Friendly status message reflecting real video stream
   const friendlyStatus = useMemo(() => {
-    if (isReady || displayProgress >= 100) return 'All set! Welcome in ✨';
-    if (displayProgress >= 75) return 'Almost ready, polishing the visuals...';
-    if (displayProgress >= 40) return 'Setting up our creative showcase...';
-    return 'Getting things ready for you...';
-  }, [displayProgress, isReady]);
+    if (isReady || isVideoLoaded || displayProgress >= 100) return 'Hero Video Ready! Welcome in ✨';
+    if (displayProgress >= 75) return 'Finalizing 4K hero video stream...';
+    if (displayProgress >= 40) return 'Buffering cinematic hero video...';
+    if (displayProgress > 0) return 'Connecting to hero video stream...';
+    return 'Initializing creative showcase...';
+  }, [displayProgress, isReady, isVideoLoaded]);
 
-  // Smooth progress ramp towards real video preload progress
-  useEffect(() => {
-    let current = 0;
-    const interval = setInterval(() => {
-      const target = isVideoLoaded ? 100 : Math.max(videoProgress, current + 3);
-      current = Math.min(100, Math.round(current + (target - current) * 0.22 + 1));
+  // Guaranteed, un-cancellable transition into the website
+  const triggerEnterSite = useCallback(() => {
+    if (hasFinishedRef.current) return;
+    hasFinishedRef.current = true;
+    setIsReady(true);
+    setIsExiting(true);
 
-      if (current >= 100) {
-        current = 100;
-        setDisplayProgress(100);
-        clearInterval(interval);
-      } else {
-        setDisplayProgress(current);
+    setTimeout(() => {
+      if (onCompleteRef.current) {
+        onCompleteRef.current();
       }
-    }, 45);
+    }, 450);
+  }, []);
+
+  // Synchronize loading progress DIRECTLY with real hero video download
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const target = isVideoLoaded ? 100 : videoProgress;
+
+      setDisplayProgress((prev) => {
+        if (prev < target) {
+          const diff = target - prev;
+          const step = Math.max(1, Math.ceil(diff * 0.22));
+          return Math.min(target, prev + step);
+        } else if (target >= 100 && prev < 100) {
+          return 100;
+        }
+        return prev;
+      });
+    }, 40);
 
     return () => clearInterval(interval);
   }, [videoProgress, isVideoLoaded]);
 
-  // AUTOMATIC ENTRY: Once loading is done (100% progress), enter the site with NO button required!
+  // AUTOMATIC ENTRY: When hero video is ready or progress hits 100%, enter the site!
   useEffect(() => {
-    if (displayProgress >= 100 && !hasFinishedRef.current) {
-      hasFinishedRef.current = true;
+    if ((displayProgress >= 100 || isVideoLoaded) && !hasFinishedRef.current) {
       setIsReady(true);
 
-      // Brief pleasant delay to show "All set! Welcome in ✨" then smoothly enter the website
-      const timer = setTimeout(() => {
-        setIsExiting(true);
-        setTimeout(() => {
-          if (onComplete) onComplete();
-        }, 450);
-      }, 650);
-
-      return () => clearTimeout(timer);
-    }
-  }, [displayProgress, onComplete]);
-
-  // Safety fallback: auto-complete if connection takes longer than 4.5s
-  useEffect(() => {
-    const fallbackTimer = setTimeout(() => {
-      if (!hasFinishedRef.current) {
-        setDisplayProgress(100);
+      // Schedule entry transition without cancelling on re-renders
+      if (!exitTimeoutRef.current) {
+        exitTimeoutRef.current = setTimeout(() => {
+          triggerEnterSite();
+        }, 600);
       }
-    }, 4500);
+    }
+  }, [displayProgress, isVideoLoaded, triggerEnterSite]);
 
-    return () => clearTimeout(fallbackTimer);
-  }, []);
+  // Safety ceiling: never make any user wait longer than 5.5s
+  useEffect(() => {
+    const safetyTimer = setTimeout(() => {
+      if (!hasFinishedRef.current) {
+        setIsReady(true);
+        triggerEnterSite();
+      }
+    }, 5500);
+
+    return () => clearTimeout(safetyTimer);
+  }, [triggerEnterSite]);
 
   // Quick skip option
   const handleQuickSkip = () => {
-    if (hasFinishedRef.current) return;
-    hasFinishedRef.current = true;
-    setIsExiting(true);
-    setTimeout(() => {
-      if (onComplete) onComplete();
-    }, 350);
+    if (exitTimeoutRef.current) {
+      clearTimeout(exitTimeoutRef.current);
+    }
+    triggerEnterSite();
   };
 
   // Toggle sound
@@ -904,13 +920,33 @@ export default function LoadingGame({ onComplete }) {
                   />
                 </div>
 
-                {/* Automatic Entry Status Note */}
-                <div className="text-[11px] font-mono-tech text-stone-500 dark:text-stone-400 pt-0.5 flex items-center justify-between">
-                  <span>
-                    {isReady ? '✓ Entering automatically...' : '• Auto-entering once loaded'}
+                {/* Hero Video Live Preload Telemetry & Auto-Entry Status */}
+                <div className="text-[10px] sm:text-[11px] font-mono-tech text-stone-500 dark:text-stone-400 pt-0.5 flex items-center justify-between">
+                  <span className="flex items-center gap-1.5">
+                    <span className={`w-1.5 h-1.5 rounded-full ${isReady ? 'bg-[#16a34a]' : 'bg-[#bef264] animate-pulse'}`} />
+                    <span>
+                      {loadedBytes > 0
+                        ? `${(loadedBytes / (1024 * 1024)).toFixed(1)} MB / ${(totalBytes / (1024 * 1024)).toFixed(1)} MB`
+                        : '4K HERO STREAM'}
+                    </span>
+                    {speed && speed !== '0.0 MB/s' && (
+                      <span className="text-stone-400 hidden sm:inline">({speed})</span>
+                    )}
                   </span>
-                  <span className="text-stone-400">No click needed</span>
+                  <span>
+                    {isReady ? '✓ Entering automatically...' : 'Auto-entering once buffered'}
+                  </span>
                 </div>
+
+                {/* Instant Entry Action Button if Ready */}
+                {isReady && (
+                  <button
+                    onClick={triggerEnterSite}
+                    className="w-full mt-2 bg-[#bef264] hover:bg-[#a3e635] text-black font-mono-tech font-extrabold text-xs py-2.5 px-4 border-2 border-black rounded shadow-[2px_2px_0px_#000] cursor-pointer flex items-center justify-center gap-2 transition-transform hover:-translate-y-0.5"
+                  >
+                    <span>ENTER WEBSITE NOW →</span>
+                  </button>
+                )}
               </div>
 
               {/* Simple Stats Highlights */}
