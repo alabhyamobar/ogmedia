@@ -62,12 +62,12 @@ export default function HeroSection() {
 
     if (!pinWrapper || !cameraRig || !board || !panelFrame || !comicImg || !videoContainer) return;
 
-    // Only enable heavy scroll pinning on desktop (>= 1024px)
+    // Enable responsive scroll-driven camera zoom on BOTH Desktop (>= 1024px) and Mobile (< 1024px)
     const mm = gsap.matchMedia();
 
-    mm.add('(min-width: 1024px)', () => {
+    const setupCameraTimeline = (isMobile) => {
       // Set initial transform origin for camera zoom to focus directly on middle comic window
-      gsap.set(cameraRig, { transformOrigin: '50% 44%' });
+      gsap.set(cameraRig, { transformOrigin: isMobile ? '50% 46%' : '50% 44%' });
 
       // Create independent master camera zoom timeline
       const cameraTl = gsap.timeline({ paused: true });
@@ -75,12 +75,15 @@ export default function HeroSection() {
       isVideoActiveRef.current = false;
       isReversedRef.current = false;
 
+      const targetScale = isMobile ? 5.4 : 4.2;
+      const targetYPercent = isMobile ? -2 : -4;
+
       // --- PHASE 1: Camera moves forward towards the middle comic image ---
       cameraTl.to(
         cameraRig,
         {
-          scale: 4.2,
-          yPercent: -4,
+          scale: targetScale,
+          yPercent: targetYPercent,
           ease: 'power1.inOut',
           duration: 1
         },
@@ -107,33 +110,41 @@ export default function HeroSection() {
         gsap.set(ctaRef.current, { z: 60, transformStyle: 'preserve-3d' });
       }
 
-      // Surrounding UI elements disperse outward and fade as camera flies through (Breaking the 4th Wall)
+      // Responsive dispersal distances
+      const dispX = isMobile ? 260 : 480;
+      const dispY = isMobile ? 220 : 320;
+      const boomX = isMobile ? 280 : 550;
+      const boomY = isMobile ? 180 : 260;
+      const titleY = isMobile ? 340 : 480;
+      const swooshY = isMobile ? 260 : 380;
+
+      // Surrounding UI elements disperse outward and fade as camera flies through
       if (prologueRef.current) {
-        cameraTl.to(prologueRef.current, { x: -480, y: -320, opacity: 0, scale: 1.8, duration: 0.8, ease: 'power1.in' }, 0);
+        cameraTl.to(prologueRef.current, { x: -dispX, y: -dispY, opacity: 0, scale: isMobile ? 1.4 : 1.8, duration: 0.8, ease: 'power1.in' }, 0);
       }
       if (limeBoxRef.current) {
-        cameraTl.to(limeBoxRef.current, { x: 480, y: -320, opacity: 0, scale: 1.8, duration: 0.8, ease: 'power1.in' }, 0);
+        cameraTl.to(limeBoxRef.current, { x: dispX, y: -dispY, opacity: 0, scale: isMobile ? 1.4 : 1.8, duration: 0.8, ease: 'power1.in' }, 0);
       }
       if (boomStickerRef.current) {
-        cameraTl.to(boomStickerRef.current, { x: 550, y: -260, z: 85, rotation: -6, opacity: 0, scale: 2.5, duration: 0.8, ease: 'power1.in' }, 0);
+        cameraTl.to(boomStickerRef.current, { x: boomX, y: -boomY, z: 85, rotation: -6, opacity: 0, scale: isMobile ? 1.8 : 2.5, duration: 0.8, ease: 'power1.in' }, 0);
       }
       if (titleCardRef.current) {
-        cameraTl.to(titleCardRef.current, { y: 480, z: 95, opacity: 0, scale: 2.4, duration: 0.8, ease: 'power1.in' }, 0);
+        cameraTl.to(titleCardRef.current, { y: titleY, z: 95, opacity: 0, scale: isMobile ? 1.8 : 2.4, duration: 0.8, ease: 'power1.in' }, 0);
       }
       if (swooshRef.current) {
-        cameraTl.to(swooshRef.current, { x: -480, y: 380, opacity: 0, scale: 1.8, duration: 0.8, ease: 'power1.in' }, 0);
+        cameraTl.to(swooshRef.current, { x: -dispX, y: swooshY, opacity: 0, scale: isMobile ? 1.4 : 1.8, duration: 0.8, ease: 'power1.in' }, 0);
       }
       if (ctaRef.current) {
-        cameraTl.to(ctaRef.current, { x: 480, y: 380, opacity: 0, scale: 1.8, duration: 0.8, ease: 'power1.in' }, 0);
+        cameraTl.to(ctaRef.current, { x: dispX, y: swooshY, opacity: 0, scale: isMobile ? 1.4 : 1.8, duration: 0.8, ease: 'power1.in' }, 0);
       }
       if (bgRaysRef.current) {
-        cameraTl.to(bgRaysRef.current, { scale: 4, opacity: 0, duration: 0.8, ease: 'power1.in' }, 0);
+        cameraTl.to(bgRaysRef.current, { scale: isMobile ? 3 : 4, opacity: 0, duration: 0.8, ease: 'power1.in' }, 0);
       }
       if (cornerMarksRef.current) {
         cameraTl.to(cornerMarksRef.current, { scale: 2, opacity: 0, duration: 0.8, ease: 'power1.in' }, 0);
       }
       if (telemetryRef.current) {
-        cameraTl.to(telemetryRef.current, { opacity: 0, y: 180, duration: 0.8, ease: 'power1.in' }, 0);
+        cameraTl.to(telemetryRef.current, { opacity: 0, y: isMobile ? 120 : 180, duration: 0.8, ease: 'power1.in' }, 0);
       }
       if (frameBadgesRef.current) {
         cameraTl.to(frameBadgesRef.current, { opacity: 0, duration: 0.6, ease: 'power1.in' }, 0);
@@ -175,16 +186,18 @@ export default function HeroSection() {
         0.65
       );
 
+      const scrollDistance = isMobile ? '+=1250' : '+=2000';
+      const triggerThreshold = isMobile ? 0.68 : 0.75;
+
       // ScrollTrigger pins the display and drives the camera zoom with buttery smooth easing
       const st = ScrollTrigger.create({
         trigger: pinWrapper,
         start: 'top top',
-        end: '+=2000',
+        end: scrollDistance,
         pin: true,
-        scrub: 0.5,
+        scrub: isMobile ? 0.35 : 0.5,
         anticipatePin: 1,
         onUpdate: (self) => {
-          // If the reverse animation has already run, do not re-zoom forward when scrolling down to next section
           if (isReversedRef.current) return;
 
           const p = self.progress;
@@ -197,21 +210,21 @@ export default function HeroSection() {
             setIsZooming(false);
           }
 
-          // Smoothly glide camera zoom forward with fluid easing (eliminates any jerks)
+          // Smoothly glide camera zoom forward with fluid easing
           if (!isVideoActiveRef.current) {
             gsap.to(cameraTl, {
               progress: p,
-              duration: 0.8,
+              duration: isMobile ? 0.45 : 0.8,
               ease: 'power2.out',
               overwrite: 'auto'
             });
 
-            // When camera zoom reaches full screen (p >= 0.75):
-            if (p >= 0.75) {
+            // When camera zoom reaches full screen:
+            if (p >= triggerThreshold) {
               isVideoActiveRef.current = true;
               gsap.to(cameraTl, {
                 progress: 1,
-                duration: 0.5,
+                duration: 0.45,
                 ease: 'power2.out',
                 overwrite: 'auto'
               });
@@ -243,7 +256,11 @@ export default function HeroSection() {
         st.kill();
         stRef.current = null;
       };
-    });
+    };
+
+    // Register both desktop and mobile layouts in GSAP matchMedia
+    mm.add('(min-width: 1024px)', () => setupCameraTimeline(false));
+    mm.add('(max-width: 1023px)', () => setupCameraTimeline(true));
 
     return () => mm.revert();
   }, [isDark]);
@@ -398,6 +415,32 @@ export default function HeroSection() {
     runReverseCameraAnimation();
   };
 
+  // Direct Tap / Click to Dive Camera into Fullscreen Video
+  const handleDiveIntoWindow = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    if (isVideoActiveRef.current) return;
+
+    if (stRef.current) {
+      const targetScroll = stRef.current.start + (stRef.current.end - stRef.current.start) * 0.78;
+      window.scrollTo({
+        top: targetScroll,
+        behavior: 'smooth'
+      });
+    } else if (cameraTlRef.current) {
+      gsap.to(cameraTlRef.current, {
+        progress: 1,
+        duration: 1.1,
+        ease: 'power2.inOut',
+        onComplete: () => {
+          setIsVideoPlaying(true);
+          if (videoRef.current && videoRef.current.paused) {
+            videoRef.current.play().catch(() => {});
+          }
+        }
+      });
+    }
+  };
+
   // 4. Interactive 3D Perspective Tilt on Mouse Move (Active when at initial rest OR after reverse)
   useEffect(() => {
     const hero = heroRef.current;
@@ -542,20 +585,20 @@ export default function HeroSection() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 pointer-events-none" />
 
           {/* Cinematic HUD Overlay on Video */}
-          <div className="absolute top-0 left-0 right-0 p-4 sm:p-6 flex items-center justify-between z-40 bg-gradient-to-b from-black/80 to-transparent">
-            <div className="flex items-center gap-2 font-mono-tech text-xs text-[#bef264]">
+          <div className="absolute top-0 left-0 right-0 p-3 sm:p-6 flex items-center justify-between z-40 bg-gradient-to-b from-black/85 via-black/40 to-transparent">
+            <div className="flex items-center gap-1.5 sm:gap-2 font-mono-tech text-[10px] sm:text-xs text-[#bef264]">
               <span className="w-2 h-2 rounded-full bg-[#ef4444] animate-ping" />
               <span className="font-bold">LIVE FEED // HEROVID1.MP4</span>
-              <span className="text-stone-400 hidden sm:inline">
+              <span className="text-stone-400 hidden md:inline">
                 | {isHeroVideoLoaded ? 'MEMORY BUFFERED // ZERO LAG' : '4K ARCHIVE TRANSMISSION'}
               </span>
             </div>
 
             {/* Video Controls: Mute & Reverse Camera */}
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-1.5 sm:gap-3">
               <button
                 onClick={() => setIsMuted(!isMuted)}
-                className="bg-black/80 hover:bg-black text-[#bef264] border border-[#bef264] px-3 py-1 font-mono-tech text-xs font-bold transition-colors cursor-pointer flex items-center gap-1.5"
+                className="bg-black/80 hover:bg-black text-[#bef264] border border-[#bef264] px-2.5 sm:px-3 py-1 font-mono-tech text-[10px] sm:text-xs font-bold transition-colors cursor-pointer flex items-center gap-1"
               >
                 <span>{isMuted ? '🔇' : '🔊'}</span>
                 <span>{isMuted ? 'UNMUTE' : 'MUTED'}</span>
@@ -564,10 +607,11 @@ export default function HeroSection() {
               <button
                 onClick={triggerReverseCamera}
                 title="Reverse camera back to comic desk"
-                className="bg-[#ef4444] hover:bg-red-600 text-white border border-white px-3 py-1 font-mono-tech text-xs font-bold transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-1.5 shadow-lg"
+                className="bg-[#ef4444] hover:bg-red-600 text-white border border-white px-2.5 sm:px-3 py-1 font-mono-tech text-[10px] sm:text-xs font-bold transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-1 shadow-lg"
               >
                 <span>↺</span>
-                <span>REVERSE CAMERA</span>
+                <span className="hidden sm:inline">REVERSE CAMERA</span>
+                <span className="sm:hidden">EXIT</span>
               </button>
             </div>
           </div>
@@ -743,7 +787,11 @@ export default function HeroSection() {
                     {/* The Landscape Comic Panel Frame with Window Portal to Video */}
                     <div
                       ref={panelFrameRef}
-                      className="relative border-3 border-black dark:border-[#38383e] overflow-hidden bg-black aspect-[21/9] sm:aspect-[2.35/1] w-full transition-shadow duration-300"
+                      onClick={handleDiveIntoWindow}
+                      role="button"
+                      tabIndex={0}
+                      title="Tap or scroll down to dive into window"
+                      className="relative border-3 border-black dark:border-[#38383e] overflow-hidden bg-black aspect-[21/9] sm:aspect-[2.35/1] w-full transition-shadow duration-300 cursor-pointer group"
                       style={{
                         boxShadow: isDark
                           ? '8px 8px 0px #000000, 16px 16px 0px rgba(0,0,0,0.4)'
@@ -758,7 +806,7 @@ export default function HeroSection() {
                         loading="eager"
                         fetchPriority="high"
                         decoding="async"
-                        className="w-full h-full object-cover object-center scale-100 transition-transform duration-700"
+                        className="w-full h-full object-cover object-center scale-100 transition-transform duration-700 group-hover:scale-105"
                       />
 
                       {/* Halftone / Screentone Texture */}
@@ -771,6 +819,15 @@ export default function HeroSection() {
                           <div className="bg-white/95 dark:bg-black/90 text-black dark:text-white border border-black dark:border-stone-700 px-2.5 py-0.5 font-mono-tech font-bold text-[9px] sm:text-[11px] shadow-sm">
                             FRAME: ARCHIVE_001_A // OVERVIEW PERSPECTIVE
                           </div>
+                        </div>
+
+                        {/* Top-Right Tap to Dive Indicator */}
+                        <div className="absolute top-2.5 right-2.5 z-20">
+                          <span className="bg-[#bef264] text-black font-mono-tech font-bold text-[9px] sm:text-[10px] px-2 py-0.5 border border-black shadow-sm flex items-center gap-1 group-hover:scale-105 transition-transform">
+                            <span>▶</span>
+                            <span className="hidden sm:inline">WATCH 4K STREAM</span>
+                            <span className="sm:hidden">PLAY</span>
+                          </span>
                         </div>
 
                         {/* Bottom-Right Sector Tag */}
@@ -923,16 +980,17 @@ export default function HeroSection() {
                       transformStyle: 'preserve-3d'
                     }}
                   >
-                    <a
-                      href="#story"
+                    <button
+                      type="button"
+                      onClick={handleDiveIntoWindow}
                       className="bg-black dark:bg-[#18181c] hover:bg-stone-900 dark:hover:bg-black text-white font-mono-tech font-bold text-xs sm:text-sm px-5 py-2.5 border-2 border-black dark:border-stone-700 flex items-center gap-2 transition-all duration-200 active:translate-x-1 active:translate-y-1 cursor-pointer"
                       style={{
                         boxShadow: '5px 5px 0px #000000, 10px 10px 0px rgba(0,0,0,0.25)'
                       }}
                     >
-                      <span>SCROLL DOWN TO DIVE INTO WINDOW</span>
+                      <span>SCROLL OR TAP TO DIVE INTO WINDOW</span>
                       <span className="text-[#bef264]">↓</span>
-                    </a>
+                    </button>
                     <div
                       className="bg-white dark:bg-[#18181c] text-stone-600 dark:text-stone-400 font-mono-tech text-xs px-3 py-2.5 border border-stone-300 dark:border-stone-700 hidden sm:block"
                       style={{

@@ -10,6 +10,7 @@ import NotFoundPage from './pages/NotFoundPage';
 const ServiceDetailPage = lazy(() => import('./pages/ServiceDetailPage'));
 const FooterChapter = lazy(() => import('./components/layout/FooterChapter'));
 const FloatingThemeWidget = lazy(() => import('./components/layout/FloatingThemeWidget'));
+const DevPaletteConsole = lazy(() => import('./components/dev/DevPaletteConsole'));
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -56,7 +57,12 @@ export default function App() {
             </div>
             <Suspense fallback={null}>
               <FooterChapter />
-              {!isLoading && <FloatingThemeWidget />}
+              {!isLoading && (
+                <>
+                  <FloatingThemeWidget />
+                  <DevPaletteConsole />
+                </>
+              )}
             </Suspense>
           </div>
         </BrowserRouter>
