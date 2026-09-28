@@ -20,7 +20,7 @@ body {
   color: #111111;
   font-family: var(--font-body);
   overflow-x: hidden;
-  background-image: 
+  background-image:
     linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
   background-size: 32px 32px;
@@ -30,7 +30,7 @@ body {
 .dark body {
   background-color: #09090b;
   color: #f4f4f5;
-  background-image: 
+  background-image:
     linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
 }
@@ -56,29 +56,25 @@ body {
 
 /* Comic diagonal hatching lines */
 .manga-hatch {
-  background: repeating-linear-gradient(
-    45deg,
-    transparent,
-    transparent 4px,
-    rgba(0, 0, 0, 0.08) 4px,
-    rgba(0, 0, 0, 0.08) 6px
-  );
+  background: repeating-linear-gradient(45deg,
+      transparent,
+      transparent 4px,
+      rgba(0, 0, 0, 0.08) 4px,
+      rgba(0, 0, 0, 0.08) 6px);
 }
 
 .dark .manga-hatch {
-  background: repeating-linear-gradient(
-    45deg,
-    transparent,
-    transparent 4px,
-    rgba(255, 255, 255, 0.08) 4px,
-    rgba(255, 255, 255, 0.08) 6px
-  );
+  background: repeating-linear-gradient(45deg,
+      transparent,
+      transparent 4px,
+      rgba(255, 255, 255, 0.08) 4px,
+      rgba(255, 255, 255, 0.08) 6px);
 }
 
 /* Technical Drafting Board perspective grid */
 .draft-board-grid {
   background-color: #f7f7f4;
-  background-image: 
+  background-image:
     linear-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
   background-size: 20px 20px;
@@ -86,7 +82,7 @@ body {
 
 .dark .draft-board-grid {
   background-color: #111114;
-  background-image: 
+  background-image:
     linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
 }
