@@ -66,8 +66,8 @@ export default function HeroSection() {
     const mm = gsap.matchMedia();
 
     const setupCameraTimeline = (isMobile) => {
-      // Set initial transform origin for camera zoom to focus directly on middle comic window
-      gsap.set(cameraRig, { transformOrigin: isMobile ? '50% 46%' : '50% 44%' });
+      // Set transform origin for camera zoom to be exactly around the center of the page
+      gsap.set(cameraRig, { transformOrigin: 'center center' });
 
       // Create independent master camera zoom timeline
       const cameraTl = gsap.timeline({ paused: true });
@@ -76,14 +76,17 @@ export default function HeroSection() {
       isReversedRef.current = false;
 
       const targetScale = isMobile ? 5.4 : 4.2;
-      const targetYPercent = isMobile ? -2 : -4;
 
-      // --- PHASE 1: Camera moves forward towards the middle comic image ---
+      // --- PHASE 1: Camera moves forward centered around the center of the page ---
       cameraTl.to(
         cameraRig,
         {
           scale: targetScale,
-          yPercent: targetYPercent,
+          x: 0,
+          y: 0,
+          xPercent: 0,
+          yPercent: 0,
+          transformOrigin: 'center center',
           ease: 'power1.inOut',
           duration: 1
         },
@@ -323,7 +326,7 @@ export default function HeroSection() {
           // Clear animated transform offsets without stripping essential 3D depth and styling
           gsap.set(elementsToReset, { clearProps: 'x,y,scale,opacity' });
           if (cameraRigRef.current) {
-            gsap.set(cameraRigRef.current, { scale: 1, x: 0, y: 0, yPercent: 0, transformOrigin: '50% 44%' });
+            gsap.set(cameraRigRef.current, { scale: 1, x: 0, y: 0, xPercent: 0, yPercent: 0, transformOrigin: 'center center' });
           }
           if (comicImageRef.current) {
             gsap.set(comicImageRef.current, { opacity: 1, scale: 1 });
@@ -641,11 +644,11 @@ export default function HeroSection() {
         <div
           ref={cameraRigRef}
           className="w-full h-full flex items-center justify-center"
-          style={{ transformStyle: 'preserve-3d' }}
+          style={{ transformStyle: 'preserve-3d', transformOrigin: 'center center' }}
         >
           <section
             ref={heroRef}
-            className="relative w-full px-3 sm:px-6 pt-4 pb-8 max-w-[1300px] mx-auto"
+            className="relative w-full px-3 sm:px-6 py-4 sm:py-6 max-w-[1300px] mx-auto"
             style={{ perspective: '1400px' }}
           >
             {/* Outer Technical Frame with 3D Perspective Depth */}
