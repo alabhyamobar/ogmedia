@@ -154,7 +154,7 @@ export default function ArsenalSection() {
 
           {/* Subtitle with Pink Energetic Brush Underline */}
           <div className="mt-4 inline-block">
-            <div className="font-mono-tech text-xs sm:text-sm font-bold text-stone-800 dark:text-stone-200 uppercase tracking-wider space-y-0.5">
+            <div className="font-mono-tech text-xs sm:text-sm font-medium text-stone-800 dark:text-stone-200 uppercase tracking-wider space-y-0.5">
               <div>06 Protocol Modules Deployed.</div>
               <div>High-Impact Creative Production.</div>
               <div>Click Any Card To Inspect Dossier.</div>

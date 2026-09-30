@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import InkText from '../ui/InkText';
 import UnfoldPanel from '../ui/UnfoldPanel';
+import { api } from '../../services/api';
 
 const SERVICE_OPTIONS = [
   'Creators & Influencers',
@@ -13,12 +14,18 @@ const SERVICE_OPTIONS = [
 
 export default function ContactTransmissionSection() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitResult, setSubmitResult] = useState(null);
+  const [submitError, setSubmitError] = useState(null);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [selectedServices, setSelectedServices] = useState(['Creators & Influencers']);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: ''
+    phone: '',
+    company: '',
+    message: '',
+    honeypot: ''
   });
 
   const toggleService = (srv) => {
@@ -39,13 +46,31 @@ export default function ContactTransmissionSection() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ name: '', email: '', message: '' });
-    }, 6000);
+    setSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const payload = {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        company: formData.company.trim(),
+        service: selectedServices[0] || 'Creators & Influencers',
+        message: formData.message.trim(),
+        honeypot: formData.honeypot
+      };
+
+      const res = await api.submitPublicLead(payload);
+      setSubmitResult(res);
+      setSubmitted(true);
+      setFormData({ name: '', email: '', phone: '', company: '', message: '', honeypot: '' });
+    } catch (err) {
+      setSubmitError(err.message || 'Unable to transmit query. Ingestion service temporarily busy.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -111,7 +136,7 @@ export default function ContactTransmissionSection() {
 
           {/* Subtitle with Pink Energetic Brush Underline */}
           <div className="mt-4 inline-block">
-            <div className="font-mono-tech text-xs sm:text-sm font-bold text-stone-800 dark:text-stone-200 uppercase tracking-wider space-y-0.5">
+            <div className="font-mono-tech text-xs sm:text-sm font-medium text-stone-800 dark:text-stone-200 uppercase tracking-wider space-y-0.5">
               <div>Tokyo • Seoul • San Francisco.</div>
               <div>Have a project in mind? We'd love to hear from you.</div>
               <div>Let's create something unforgettable together.</div>
@@ -379,27 +404,54 @@ export default function ContactTransmissionSection() {
                   </p>
                 </div>
 
+                {/* Error Banner */}
+                {submitError && (
+                  <div className="mb-4 p-3 bg-[#ef4444]/15 border-2 border-[#ef4444] rounded-xl text-[#ef4444] font-mono-tech text-xs font-bold animate-shake">
+                    [ TRANSMISSION DELAY ] {submitError}
+                  </div>
+                )}
+
                 {/* Form or Submitted State */}
                 {submitted ? (
                   <div className="p-6 sm:p-8 bg-[#bef264] border-2 border-black text-black font-mono-tech text-center my-6 rounded-xl shadow-[4px_4px_0px_#000] animate-fade-in space-y-3">
                     <div className="inline-block border-2 border-black bg-white px-3 py-1 text-xs font-black uppercase shadow-sm">
-                      [ MESSAGE RECEIVED ]
+                      [ MESSAGE ENQUEUED // BUFFERED ]
                     </div>
                     <div className="font-heading font-black text-xl sm:text-2xl tracking-tight">
-                      THANK YOU FOR REACHING OUT!
+                      TRANSMISSION RECEIVED!
                     </div>
                     <div className="text-xs sm:text-sm font-medium max-w-md mx-auto">
-                      We have received your message. Our creative team will review your inquiry and get back to you within 24 hours.
+                      {submitResult?.message || 'We have received your message. Our creative team will review your inquiry and get back to you within 24 hours.'}
                     </div>
+                    {submitResult?.requestId && (
+                      <div className="text-[10px] text-stone-800 bg-white/80 px-3 py-1 border border-black rounded inline-block font-mono-tech font-bold">
+                        REFERENCE: {submitResult.requestId.substring(0, 16)}...
+                      </div>
+                    )}
                     <div className="pt-2">
-                      <span className="bg-black text-white text-[11px] font-bold px-3 py-1 rounded">
-                        TALK SOON!
-                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setSubmitted(false)}
+                        className="bg-black text-white text-[11px] font-bold px-4 py-1.5 rounded cursor-pointer hover:bg-stone-800 transition-colors"
+                      >
+                        SEND ANOTHER TRANSMISSION →
+                      </button>
                     </div>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
                     
+                    {/* Bot Honeypot Input (Invisible to real users) */}
+                    <input
+                      type="text"
+                      name="hp_contact_check"
+                      value={formData.honeypot}
+                      onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
+                      style={{ display: 'none' }}
+                      tabIndex={-1}
+                      autoComplete="off"
+                    />
+
                     {/* Services Selector */}
                     <div>
                       <label className="block font-mono-tech text-[10px] sm:text-xs font-bold text-stone-700 dark:text-stone-300 uppercase mb-2">
@@ -460,10 +512,39 @@ export default function ContactTransmissionSection() {
                       </div>
                     </div>
 
-                    {/* Message Textarea (Budget Field Removed) */}
+                    {/* Phone & Company Inputs */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block font-mono-tech text-[10px] sm:text-xs font-bold text-stone-700 dark:text-stone-300 uppercase mb-1">
+                          4. Phone Number (Optional)
+                        </label>
+                        <input
+                          type="tel"
+                          value={formData.phone}
+                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                          placeholder="+1 (555) 000-0000"
+                          className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 dark:placeholder-stone-500 outline-none focus:ring-2 focus:ring-[#bef264] transition-all"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block font-mono-tech text-[10px] sm:text-xs font-bold text-stone-700 dark:text-stone-300 uppercase mb-1">
+                          5. Organization / Brand (Optional)
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.company}
+                          onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                          placeholder="e.g. Acme Corp"
+                          className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 dark:placeholder-stone-500 outline-none focus:ring-2 focus:ring-[#bef264] transition-all"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Message Textarea */}
                     <div>
                       <label className="block font-mono-tech text-[10px] sm:text-xs font-bold text-stone-700 dark:text-stone-300 uppercase mb-1">
-                        4. Your Message
+                        6. Your Message
                       </label>
                       <textarea
                         rows="4"
@@ -478,12 +559,13 @@ export default function ContactTransmissionSection() {
                     {/* Submit Button */}
                     <button
                       type="submit"
-                      className="w-full bg-[#bef264] hover:bg-[#a3e635] text-black font-mono-tech font-black text-xs sm:text-sm py-4 px-6 border-2 border-black rounded-xl shadow-[4px_4px_0px_#000000] hover:shadow-[6px_6px_0px_#000000] transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center justify-center gap-3 uppercase tracking-wider"
+                      disabled={submitting}
+                      className="w-full bg-[#bef264] hover:bg-[#a3e635] text-black font-mono-tech font-black text-xs sm:text-sm py-4 px-6 border-2 border-black rounded-xl shadow-[4px_4px_0px_#000000] hover:shadow-[6px_6px_0px_#000000] transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center justify-center gap-3 uppercase tracking-wider disabled:opacity-50"
                     >
                       <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
                         <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                       </svg>
-                      <span>SEND MESSAGE →</span>
+                      <span>{submitting ? 'BUFFERING TRANSMISSION...' : 'SEND TRANSMISSION →'}</span>
                     </button>
                   </form>
                 )}

@@ -1,0 +1,85 @@
+import http from 'http';
+import dotenv from 'dotenv';
+import { createApp } from './app.js';
+import { connectDB, disconnectDB } from './config/db.js';
+import { getRedisClient, closeRedis } from './config/redis.js';
+import { initLeadQueue } from './queues/lead.queue.js';
+import { startLeadWorker, stopLeadWorker } from './workers/lead.worker.js';
+import { logger } from './utils/logger.js';
+
+dotenv.config();
+
+const PORT = parseInt(process.env.PORT || '4000', 10);
+
+async function startServer() {
+  try {
+    // 1. Connect to MongoDB
+    await connectDB();
+
+    // 2. Initialize Redis and Stream Queue
+    getRedisClient();
+    await initLeadQueue();
+
+    // 3. Create Express app and HTTP server
+    const app = createApp();
+    const server = http.createServer(app);
+
+    server.listen(PORT, () => {
+      logger.info({
+        msg: `OG Media CRM Backend Server listening on port ${PORT}`,
+        environment: process.env.NODE_ENV || 'development',
+        port: PORT
+      });
+    });
+
+    // 4. In development / single-instance deployments, start the worker in-process
+    // In distributed production setups, workers can also run as independent processes via `npm run worker`
+    const shouldStartInProcessWorker = process.env.START_IN_PROCESS_WORKER !== 'false';
+    if (shouldStartInProcessWorker) {
+      logger.info({ msg: 'Starting background lead worker in-process' });
+      startLeadWorker({ workerId: `in-process-${process.pid}` });
+    }
+
+    // 5. Graceful Shutdown Handlers
+    const gracefulShutdown = async (signal) => {
+      logger.info({ msg: `Received ${signal}, initiating graceful shutdown...` });
+
+      // Stop worker polling loop
+      if (shouldStartInProcessWorker) {
+        stopLeadWorker();
+      }
+
+      // Close HTTP server
+      server.close(async () => {
+        logger.info({ msg: 'HTTP server closed' });
+
+        try {
+          // Disconnect DB & Redis
+          await disconnectDB();
+          await closeRedis();
+          logger.info({ msg: 'All connections closed cleanly. Exiting process.' });
+          process.exit(0);
+        } catch (err) {
+          logger.error({ msg: 'Error during graceful shutdown', error: err.message });
+          process.exit(1);
+        }
+      });
+
+      // Force exit if not closed within 10 seconds
+      setTimeout(() => {
+        logger.error({ msg: 'Forced shutdown after timeout' });
+        process.exit(1);
+      }, 10000);
+    };
+
+    process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+    process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+
+    return { server, app };
+  } catch (error) {
+    logger.fatal({ msg: 'Failed to start server', error: error.message, stack: error.stack });
+    process.exit(1);
+  }
+}
+
+startServer();

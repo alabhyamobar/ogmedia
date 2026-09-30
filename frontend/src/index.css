@@ -142,12 +142,13 @@ body {
 }
 
 /* Font helpers */
-.font-mono-tech {
-  font-family: 'JetBrains Mono', monospace;
+.font-mono-tech,
+.font-mono-tech * {
+  font-family: 'JetBrains Mono', monospace !important;
 }
 
 .font-comic-title {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: 'Bebas Neue', sans-serif !important;
 }
 
 .font-kr-impact {
@@ -163,21 +164,17 @@ body {
 }
 
 .font-handwriting {
-  font-family: 'Caveat', cursive;
+  font-family: 'Caveat', cursive !important;
 }
 
-/* All bold text across the website uses Permanent Marker */
-.font-bold,
-.font-black,
-.font-extrabold,
-b,
-strong,
+/* Bold Headings keep the manga Permanent Marker style */
 h1,
 h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+.font-heading {
   font-family: 'Permanent Marker', 'Dela Gothic One', 'Noto Sans JP', cursive, sans-serif !important;
 }
 

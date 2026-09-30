@@ -254,7 +254,7 @@ export default function CollectorCoversSection() {
 
           {/* Subtitle with Pink Energetic Brush Underline */}
           <div className="mt-4 inline-block">
-            <div className="font-mono-tech text-xs sm:text-sm font-bold text-stone-800 dark:text-stone-200 uppercase tracking-wider space-y-0.5">
+            <div className="font-mono-tech text-xs sm:text-sm font-medium text-stone-800 dark:text-stone-200 uppercase tracking-wider space-y-0.5">
               <div>Real projects.</div>
               <div>Real demos.</div>
               <div>Real impact.</div>
