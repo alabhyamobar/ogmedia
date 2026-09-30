@@ -23,7 +23,6 @@ import SettingsPage from './pages/crm/SettingsPage';
 
 const ServiceDetailPage = lazy(() => import('./pages/ServiceDetailPage'));
 const FooterChapter = lazy(() => import('./components/layout/FooterChapter'));
-const FloatingThemeWidget = lazy(() => import('./components/layout/FloatingThemeWidget'));
 const DevPaletteConsole = lazy(() => import('./components/dev/DevPaletteConsole'));
 
 const queryClient = new QueryClient({
@@ -131,10 +130,7 @@ function AppRoutes({ isLoading }) {
         <Suspense fallback={null}>
           <FooterChapter />
           {!isLoading && (
-            <>
-              <FloatingThemeWidget />
-              <DevPaletteConsole />
-            </>
+            <DevPaletteConsole />
           )}
         </Suspense>
       )}
