@@ -9,9 +9,10 @@ export default defineConfig({
     tailwindcss(),
   ],
   build: {
+    target: 'es2022',
     cssCodeSplit: true,
     sourcemap: false,
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 800,
     rollupOptions: {
       output: {
         manualChunks(id) {
@@ -22,6 +23,12 @@ export default defineConfig({
             if (id.includes('gsap')) {
               return 'vendor-gsap';
             }
+            if (id.includes('lucide-react')) {
+              return 'vendor-icons';
+            }
+            if (id.includes('@tanstack/react-query')) {
+              return 'vendor-query';
+            }
             return 'vendor-libs';
           }
         }
@@ -29,4 +36,3 @@ export default defineConfig({
     }
   }
 })
-

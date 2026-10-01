@@ -187,13 +187,13 @@ export default function ContactTransmissionSection() {
 
                 <div className="relative aspect-[16/10] overflow-hidden border-b-2 border-black dark:border-stone-700 bg-stone-900 group">
                   <img
-                    src="/ogmedia/assets/cover_protocol.jpg"
+                    src="/ogmedia/assets/cover_protocol.webp"
                     alt="Direct Contact Office"
                     loading="lazy"
                     decoding="async"
                     onError={(e) => {
-                      if (e.target.src !== '/ogmedia/assets/hero_city.jpg') {
-                        e.target.src = '/ogmedia/assets/hero_city.jpg';
+                      if (e.target.src !== '/ogmedia/assets/hero_city.webp') {
+                        e.target.src = '/ogmedia/assets/hero_city.webp';
                       }
                     }}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"

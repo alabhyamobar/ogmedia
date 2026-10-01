@@ -12,7 +12,7 @@ const PROJECTS_DATA = [
     subtitle: 'Real-Time Collaborative Workspace',
     desc: 'A modern workspace with real-time documents, canvas, team collaboration and role based access control.',
     tags: ['React', 'Node.js', 'MongoDB', 'Socket.IO'],
-    img: '/ogmedia/assets/card_syncboard.jpg',
+    img: '/ogmedia/assets/card_syncboard.webp',
     video: '/ogmedia/videos/service_web_app_design.mp4',
     codeUrl: 'https://github.com',
     liveUrl: 'https://syncboard.example.com'
@@ -26,7 +26,7 @@ const PROJECTS_DATA = [
     subtitle: 'Solar Solutions for a Cleaner Tomorrow',
     desc: 'A cinematic landing site for a solar brand with 3D visuals, parallax animations and a modern UI/UX.',
     tags: ['React', 'Three.js', 'GSAP', 'Tailwind'],
-    img: '/ogmedia/assets/card_skysolar.jpg',
+    img: '/ogmedia/assets/card_skysolar.webp',
     video: '/ogmedia/videos/service_scale_stage.mp4',
     codeUrl: 'https://github.com',
     liveUrl: 'https://skysolar.example.com'
@@ -40,7 +40,7 @@ const PROJECTS_DATA = [
     subtitle: 'AI-Powered Placement Automation',
     desc: 'Resume parsing, job-role mapping and intelligent recommendations using NLP, ML and GenAI.',
     tags: ['Python', 'MERN', 'OpenAI', 'NLP'],
-    img: '/ogmedia/assets/card_placify.jpg',
+    img: '/ogmedia/assets/card_placify.webp',
     video: '/ogmedia/herovid1.mp4',
     codeUrl: 'https://github.com',
     liveUrl: 'https://placify.example.com'
@@ -54,7 +54,7 @@ const PROJECTS_DATA = [
     subtitle: 'Smart Insurance, Simplified',
     desc: 'Full-stack insurance platform with seamless user experience and secure authentication.',
     tags: ['React', 'Node.js', 'MongoDB', 'JWT'],
-    img: '/ogmedia/assets/service_web_app_design.jpg',
+    img: '/ogmedia/assets/service_web_app_design.webp',
     video: '/ogmedia/videos/service_influencer.mp4',
     codeUrl: 'https://github.com',
     liveUrl: 'https://apricoat.example.com'
@@ -68,7 +68,7 @@ const PROJECTS_DATA = [
     subtitle: 'Document Processing with GenAI',
     desc: 'Intelligent document parsing pipeline using Google GenAI for real-world problem solving.',
     tags: ['Python', 'GenAI', 'RAG', 'PDF'],
-    img: '/ogmedia/assets/cover_protocol.jpg',
+    img: '/ogmedia/assets/cover_protocol.webp',
     video: '/ogmedia/videos/service_meta_ads.mp4',
     codeUrl: 'https://github.com',
     liveUrl: 'https://industrialbrain.example.com'

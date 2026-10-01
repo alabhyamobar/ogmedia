@@ -751,7 +751,7 @@ export default function HeroSection() {
                     >
                       <img
                         ref={comicImageRef}
-                        src="/ogmedia/assets/hero_city.jpg"
+                        src="/ogmedia/assets/hero_city.webp"
                         alt="Neo-Seoul Manga Overview"
                         loading="eager"
                         fetchPriority="high"

@@ -11,7 +11,7 @@ const STORY_PILLARS = [
     subtitle: 'HIGH-AFFINITY CREATOR ALLIANCES',
     description: 'We orchestrate high-affinity creator networks, bespoke talent integrations, and viral ambassador campaigns that build authentic audience trust and explosive conversion velocity.',
     videoSrc: '/ogmedia/videos/service_influencer.mp4',
-    poster: '/ogmedia/assets/service_influencer.jpg',
+    poster: '/ogmedia/assets/service_influencer.webp',
     sfxBadge: 'VIRAL IMPACT',
     dialogueTag: 'DIRECTOR // TALENT STRATEGY',
     dialogueQuote: '"CREATORS DON’T JUST ENDORSE — THEY IGNITE CULTURAL CONVERSATION."',
@@ -27,7 +27,7 @@ const STORY_PILLARS = [
     subtitle: 'CULTURE-FIRST SOCIAL DOMINANCE',
     description: 'Rapid-response trend engineering, high-share format iteration, and relatable humor designed to hack social algorithms and spark organic repost cascades across millions of feeds.',
     videoSrc: '/ogmedia/videos/service_meme.mp4',
-    poster: '/ogmedia/assets/service_meme.jpg',
+    poster: '/ogmedia/assets/service_meme.webp',
     sfxBadge: 'ALGORITHM BREAK',
     dialogueTag: 'CULTURE LEAD // TREND LAB',
     dialogueQuote: '"IF A CAMPAIGN CAN BE MEMED, IT DOMINATES THE INTERNET."',
@@ -43,7 +43,7 @@ const STORY_PILLARS = [
     subtitle: 'PRECISION ROAS ARCHITECTURE',
     description: 'Data-driven paid media frameworks, AI-assisted creative testing, and high-converting performance funnels across Instagram, Facebook, and TikTok engineered for sustainable customer acquisition.',
     videoSrc: '/ogmedia/videos/service_meta_ads.mp4',
-    poster: '/ogmedia/assets/service_meta_ads.jpg',
+    poster: '/ogmedia/assets/service_meta_ads.webp',
     sfxBadge: 'MAX ROAS',
     dialogueTag: 'HEAD OF GROWTH // MEDIA BUYING',
     dialogueQuote: '"HIGH-VELOCITY CREATIVE ITERATION MEETS MATHEMATICAL ROAS PRECISION."',
@@ -59,7 +59,7 @@ const STORY_PILLARS = [
     subtitle: 'ELEVATED BRAND IMMERSION',
     description: 'High-end visual identity, bespoke 3D brand worldbuilding, and cinematic art direction that elevates market positioning to tier-one global prestige.',
     videoSrc: '/ogmedia/videos/service_premium_brands.mp4',
-    poster: '/ogmedia/assets/service_premium_brands.jpg',
+    poster: '/ogmedia/assets/service_premium_brands.webp',
     sfxBadge: 'TIER-1 LUXURY',
     dialogueTag: 'EXECUTIVE CREATIVE DIRECTOR',
     dialogueQuote: '"BUILDING WORLDS SO IMMERSIVE THAT YOUR BRAND BECOMES UNFORGETTABLE."',
@@ -75,7 +75,7 @@ const STORY_PILLARS = [
     subtitle: 'ENTERPRISE DISTRIBUTION ENGINE',
     description: 'Enterprise-grade omnichannel amplification, global audience expansion, and automated growth flywheels that transform breakout brands into category leaders.',
     videoSrc: '/ogmedia/videos/service_scale_stage.mp4',
-    poster: '/ogmedia/assets/service_scale_stage.jpg',
+    poster: '/ogmedia/assets/service_scale_stage.webp',
     sfxBadge: 'HYPER SCALE',
     dialogueTag: 'CHIEF STRATEGY OFFICER',
     dialogueQuote: '"FROM INITIAL PRODUCT TRACTION TO WORLDWIDE MARKET DOMINATION."',
@@ -400,7 +400,7 @@ export default function TrajectorySection() {
 
               <div className="relative border-2 border-black dark:border-stone-800 rounded-2xl overflow-hidden bg-stone-950 aspect-[4/5] shadow-inner">
                 <img
-                  src="/ogmedia/assets/akashhero.jpg"
+                  src="/ogmedia/assets/akashhero.webp"
                   alt="Akash hero illustration"
                   loading="lazy"
                   decoding="async"

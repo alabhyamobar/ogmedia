@@ -11,8 +11,8 @@ const ARSENAL_CARDS = [
     tag: 'CREATORS',
     title: 'Influencer Marketing',
     desc: 'Creator partnerships built on audience fit and performance, not follower count alone.',
-    img: '/ogmedia/service_influencer.jpg',
-    fallbackImg: '/ogmedia/assets/service_influencer.jpg',
+    img: '/ogmedia/assets/service_influencer.webp',
+    fallbackImg: '/ogmedia/assets/service_influencer.webp',
     colSpan: 'col-span-12 lg:col-span-7',
     minHeight: 'min-h-[380px] sm:min-h-[420px]',
     icon: (
@@ -28,7 +28,7 @@ const ARSENAL_CARDS = [
     tag: 'PAID MEDIA',
     title: 'Meta Ads Management',
     desc: 'Full-funnel paid media on Facebook and Instagram, optimized against real business metrics, not vanity clicks.',
-    img: '/ogmedia/assets/service_meta_ads.jpg',
+    img: '/ogmedia/assets/service_meta_ads.webp',
     colSpan: 'col-span-12 lg:col-span-5',
     minHeight: 'min-h-[380px] sm:min-h-[420px]',
     hasRadar: true,
@@ -45,7 +45,7 @@ const ARSENAL_CARDS = [
     tag: 'CULTURE',
     title: 'Meme Marketing',
     desc: 'Culturally fluent, fast-moving content that earns attention organically and travels on its own.',
-    img: '/ogmedia/assets/service_meme.jpg',
+    img: '/ogmedia/assets/service_meme.webp',
     colSpan: 'col-span-12 md:col-span-4',
     minHeight: 'min-h-[370px] sm:min-h-[400px]',
     icon: (
@@ -61,7 +61,7 @@ const ARSENAL_CARDS = [
     tag: 'BRAND',
     title: 'Premium Brand Positioning',
     desc: 'Sharpening how a brand looks, sounds, and is perceived at the top of its category.',
-    img: '/ogmedia/assets/service_premium_brands.jpg',
+    img: '/ogmedia/assets/service_premium_brands.webp',
     colSpan: 'col-span-12 md:col-span-4',
     minHeight: 'min-h-[370px] sm:min-h-[400px]',
     icon: (
@@ -77,7 +77,7 @@ const ARSENAL_CARDS = [
     tag: 'SYSTEMS',
     title: 'End-to-End Growth Systems',
     desc: 'A connected system of creators, paid media, and conversion assets built to scale a business, not just a campaign.',
-    img: '/ogmedia/assets/service_scale_stage.jpg',
+    img: '/ogmedia/assets/service_scale_stage.webp',
     colSpan: 'col-span-12 md:col-span-4',
     minHeight: 'min-h-[370px] sm:min-h-[400px]',
     icon: (
@@ -93,7 +93,7 @@ const ARSENAL_CARDS = [
     tag: 'DESIGN & TECH',
     title: 'Website & App Design',
     desc: 'Immersive digital experiences, 3D web portals, and conversion-optimized architectures built to captivate modern audiences.',
-    img: '/ogmedia/assets/service_web_app_design.jpg',
+    img: '/ogmedia/assets/service_web_app_design.webp',
     colSpan: 'col-span-12 lg:col-span-7',
     minHeight: 'min-h-[380px] sm:min-h-[420px]',
     icon: (

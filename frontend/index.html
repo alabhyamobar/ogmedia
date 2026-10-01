@@ -13,16 +13,29 @@
   <meta property="og:type" content="website" />
   <meta property="og:title" content="OG MEDIA // CINEMATIC IP & KOREAN MANHWA ARCHIVE" />
   <meta property="og:description" content="Cinematic IP, Manga & Korean Manhwa Digital Archive." />
-  <meta property="og:image" content="/ogmedia/assets/hero_city.jpg" />
+  <meta property="og:image" content="/ogmedia/assets/hero_city.webp" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <link rel="preload" as="image" href="/ogmedia/assets/hero_city.jpg" fetchpriority="high" />
+  <!-- LCP Priority Preload -->
+  <link rel="preload" as="image" href="/ogmedia/assets/hero_city.webp" type="image/webp" fetchpriority="high" />
 
-  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+  <!-- Preconnect to Google Font CDN servers -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Permanent+Marker&family=Bebas+Neue&family=Black+Han+Sans&family=Dela+Gothic+One&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&family=Noto+Sans+JP:wght@400;700;900&family=Noto+Sans+KR:wght@400;700;900&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+
+  <!-- Non-blocking asynchronous Google Fonts with display=swap (Prevents FOIT & render-blocking delays) -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Permanent+Marker&family=Bebas+Neue&family=Black+Han+Sans&family=Dela+Gothic+One&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+JP:wght@400;700&family=Noto+Sans+KR:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Permanent+Marker&family=Bebas+Neue&family=Black+Han+Sans&family=Dela+Gothic+One&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+JP:wght@400;700&family=Noto+Sans+KR:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap" media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Permanent+Marker&family=Bebas+Neue&family=Black+Han+Sans&family=Dela+Gothic+One&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+JP:wght@400;700&family=Noto+Sans+KR:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap" />
+  </noscript>
+
+  <style>
+    /* Baseline layout stabilization */
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+  </style>
 </head>
 
 <body class="bg-[#ebebe5] dark:bg-[#09090b] text-stone-900 antialiased selection:bg-[#bef264] selection:text-black">

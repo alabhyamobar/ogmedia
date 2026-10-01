@@ -1,6 +1,43 @@
+# HTML and SPA Root: Always validate so updates propagate instantly without stale caches
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# Vite Hashed JS and CSS Bundles: Permanent 1-year immutable caching
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
-/*.mp4
-  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+# Web Fonts: Permanent 1-year immutable caching
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+
+# Optimized Images and Icons: Cache for 7 days with stale-while-revalidate
+/*.webp
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
 /*.jpg
-  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/*.jpeg
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/*.png
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/*.svg
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/*.ico
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+# Public Asset Subdirectories
+/ogmedia/assets/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+# Video Streaming Media: 7-day cache with byte range support for smooth video streaming
+/*.mp4
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+  Accept-Ranges: bytes
+/videos/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+  Accept-Ranges: bytes

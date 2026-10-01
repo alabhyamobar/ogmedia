@@ -138,7 +138,7 @@ const sfx = new SoundFx();
 
 export default function LoadingGame({ onComplete }) {
   const canvasRef = useRef(null);
-  const { progress: videoProgress, isLoaded: isVideoLoaded, loadedBytes, totalBytes, speed } = useVideoPreload();
+  const { loadedBytes, totalBytes, speed } = useVideoPreload();
 
   const [displayProgress, setDisplayProgress] = useState(0);
   const [sfxEnabled, setSfxEnabled] = useState(true);
@@ -171,13 +171,12 @@ export default function LoadingGame({ onComplete }) {
     return 'Hello';
   }, []);
 
-  const friendlyStatus = useMemo(() => {
-    if (isReady || isVideoLoaded || displayProgress >= 100) return 'Hero Video Ready! Welcome in ✨';
-    if (displayProgress >= 75) return 'Finalizing 4K hero video stream...';
-    if (displayProgress >= 40) return 'Buffering cinematic hero video...';
-    if (displayProgress > 0) return 'Connecting to hero video stream...';
-    return 'Initializing creative showcase...';
-  }, [displayProgress, isReady, isVideoLoaded]);
+    const friendlyStatus = useMemo(() => {
+    if (isReady || displayProgress >= 100) return 'System Online // Archive Ready!';
+    if (displayProgress >= 70) return 'Calibrating digital archive...';
+    if (displayProgress >= 30) return 'Loading visual protocols...';
+    return 'Initializing creative engine...';
+  }, [displayProgress, isReady]);
 
   const triggerEnterSite = useCallback(() => {
     if (hasFinishedRef.current) return;
@@ -185,53 +184,59 @@ export default function LoadingGame({ onComplete }) {
     setIsReady(true);
     setIsExiting(true);
 
+    try {
+      sessionStorage.setItem('og_has_entered', 'true');
+    } catch {
+      // ignore
+    }
+
     setTimeout(() => {
       if (onCompleteRef.current) {
         onCompleteRef.current();
       }
-    }, 450);
+    }, 200);
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const target = isVideoLoaded ? 100 : videoProgress;
-
-      setDisplayProgress((prev) => {
-        if (prev < target) {
-          const diff = target - prev;
-          const step = Math.max(1, Math.ceil(diff * 0.22));
-          return Math.min(target, prev + step);
-        } else if (target >= 100 && prev < 100) {
-          return 100;
-        }
-        return prev;
-      });
-    }, 40);
-
-    return () => clearInterval(interval);
-  }, [videoProgress, isVideoLoaded]);
-
-  useEffect(() => {
-    if ((displayProgress >= 100 || isVideoLoaded) && !hasFinishedRef.current) {
-      setIsReady(true);
-
-      if (!exitTimeoutRef.current) {
-        exitTimeoutRef.current = setTimeout(() => {
-          triggerEnterSite();
-        }, 600);
+    try {
+      if (sessionStorage.getItem('og_has_entered') === 'true') {
+        triggerEnterSite();
+        return;
       }
+    } catch {
+      // ignore
     }
-  }, [displayProgress, isVideoLoaded, triggerEnterSite]);
 
-  useEffect(() => {
+    const duration = 400;
+    const start = performance.now();
+
+    const interval = setInterval(() => {
+      const elapsed = performance.now() - start;
+      const pct = Math.min(100, Math.round((elapsed / duration) * 100));
+      setDisplayProgress(pct);
+
+      if (pct >= 100) {
+        clearInterval(interval);
+        setIsReady(true);
+        if (!exitTimeoutRef.current) {
+          exitTimeoutRef.current = setTimeout(() => {
+            triggerEnterSite();
+          }, 250);
+        }
+      }
+    }, 25);
+
     const safetyTimer = setTimeout(() => {
       if (!hasFinishedRef.current) {
-        setIsReady(true);
         triggerEnterSite();
       }
-    }, 5500);
+    }, 800);
 
-    return () => clearTimeout(safetyTimer);
+    return () => {
+      clearInterval(interval);
+      clearTimeout(safetyTimer);
+      if (exitTimeoutRef.current) clearTimeout(exitTimeoutRef.current);
+    };
   }, [triggerEnterSite]);
 
   const handleQuickSkip = () => {
@@ -871,18 +876,15 @@ export default function LoadingGame({ onComplete }) {
                     )}
                   </span>
                   <span>
-                    {isReady ? '✓ Entering automatically...' : 'Auto-entering once buffered'}
+                    {isReady ? 'Ready! Entering automatically...' : 'Auto-entering...'}
                   </span>
                 </div>
 
-                {isReady && (
-                  <button
-                    onClick={triggerEnterSite}
+                <button onClick={triggerEnterSite}
                     className="w-full mt-2 bg-[#bef264] hover:bg-[#a3e635] text-black font-mono-tech font-extrabold text-xs py-2.5 px-4 border-2 border-black rounded shadow-[2px_2px_0px_#000] cursor-pointer flex items-center justify-center gap-2 transition-transform hover:-translate-y-0.5"
                   >
-                    <span>ENTER WEBSITE NOW →</span>
+                    <span>ENTER WEBSITE NOW &rarr;</span>
                   </button>
-                )}
               </div>
 
               <div className="grid grid-cols-2 gap-3 pt-1">
@@ -927,7 +929,7 @@ export default function LoadingGame({ onComplete }) {
                 <div className="absolute top-3 left-4 right-4 z-30 pointer-events-none flex justify-center">
                   <div className="bg-black/90 border border-[#bef264] px-4 py-1.5 font-mono-tech text-xs text-[#bef264] font-bold shadow-lg flex items-center gap-2 animate-bounce">
                     <span className="w-2 h-2 rounded-full bg-[#bef264] animate-ping" />
-                    <span>Loaded! Opening website now ✨</span>
+                    <span>Loaded! Opening website now &rarr;</span>
                   </div>
                 </div>
               )}
