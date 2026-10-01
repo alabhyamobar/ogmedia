@@ -21,11 +21,5 @@ dist-ssr
 *.sln
 *.sw?
 
-README.md
-src/components/crm/
-src/layouts/CrmLayout.jsx
-src/pages/crm/
-src/context/AuthContext.jsx
-src/services/api.js
-backend/
+
 

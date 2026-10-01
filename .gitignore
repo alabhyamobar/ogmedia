@@ -3,6 +3,14 @@ node_modules/
 dump.rdb
 *.log
 dist/
-backend/
+
 MEDIA_OPTIMIZATION_GUID.md
 mongo.md
+
+README.md
+src/components/crm/
+src/layouts/CrmLayout.jsx
+src/pages/crm/
+src/context/AuthContext.jsx
+src/services/api.js
+backend/
