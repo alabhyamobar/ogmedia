@@ -7,7 +7,6 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check auth session on startup
   useEffect(() => {
     async function initAuth() {
       try {
@@ -57,7 +56,10 @@ export function AuthProvider({ children }) {
     isLoading,
     isAuthenticated: !!user,
     isAdmin: user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN',
-    isSuperAdmin: user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN', // Single entity: Admin has full authority
+    isSuperAdmin: user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN',
+    isDeveloper: user?.role === 'DEVELOPER',
+    hasFullAccess: user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN' || user?.role === 'DEVELOPER',
+    canManage: user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN' || user?.role === 'DEVELOPER',
     isEmployee: user?.role === 'EMPLOYEE',
     login,
     logout,

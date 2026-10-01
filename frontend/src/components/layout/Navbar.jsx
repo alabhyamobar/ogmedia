@@ -10,12 +10,10 @@ export default function Navbar() {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Close mobile drawer when route changes
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
-  // Close on Escape key press
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
@@ -26,7 +24,6 @@ export default function Navbar() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Prevent background scroll when mobile drawer is open
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = 'hidden';
@@ -90,7 +87,6 @@ export default function Navbar() {
   return (
     <nav className="w-full bg-[#e5e5dc] dark:bg-[#121215] border-b-2 border-black dark:border-[#27272a] sticky top-0 z-40 px-3 sm:px-6 py-2 transition-colors duration-300">
       <div className="max-w-[1300px] mx-auto flex items-center justify-between gap-3">
-        {/* Left Side: Edition Badges & Brand link */}
         <div className="flex items-center gap-2.5">
           <Link
             to="/"
@@ -107,9 +103,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Right Side: Desktop Links, Theme Toggle & Mobile Hamburger Toggle */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* Desktop Nav chapter anchors */}
           <div className="hidden lg:flex items-center gap-1.5 font-mono-tech text-xs font-bold">
             {navLinks.map((link) => (
               <a
@@ -129,7 +123,6 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
             title="Toggle between Dark Noir and Light Draft modes"
@@ -141,7 +134,6 @@ export default function Navbar() {
             </span>
           </button>
 
-          {/* Mobile Menu Hamburger Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="lg:hidden flex items-center justify-center p-1.5 bg-white dark:bg-[#18181c] text-black dark:text-white border-2 border-black dark:border-[#38383e] manga-shadow-sm hover:bg-[#bef264] hover:text-black dark:hover:bg-[#bef264] dark:hover:text-black transition-all active:translate-y-0.5 cursor-pointer"
@@ -153,8 +145,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Slide-In Navigation Drawer & Overlay */}
-      {/* Backdrop */}
       <div
         className={`lg:hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs transition-opacity duration-300 ${
           mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
@@ -163,7 +153,6 @@ export default function Navbar() {
         aria-hidden="true"
       />
 
-      {/* Drawer Panel */}
       <div
         className={`lg:hidden fixed top-0 right-0 h-full w-[85%] max-w-[340px] bg-[#faf8f5] dark:bg-[#121216] border-l-[3px] border-black dark:border-[#38383e] z-50 flex flex-col justify-between p-5 shadow-[-8px_0px_0px_#000000] dark:shadow-[-8px_0px_0px_rgba(0,0,0,0.8)] transition-transform duration-300 ease-in-out ${
           mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
@@ -172,7 +161,6 @@ export default function Navbar() {
         aria-modal="true"
         aria-label="Mobile Navigation Drawer"
       >
-        {/* Top Header of Drawer */}
         <div className="space-y-4">
           <div className="flex items-center justify-between pb-3 border-b-2 border-black dark:border-[#27272a]">
             <div className="flex items-center gap-2">
@@ -193,7 +181,6 @@ export default function Navbar() {
             </button>
           </div>
 
-          {/* First Edition Badge inside drawer */}
           <div className="bg-gradient-to-r from-[#ef4444] to-[#f43f5e] text-white font-mono-tech text-[10px] font-bold px-2.5 py-1.5 tracking-tight uppercase border-2 border-black dark:border-stone-800 flex items-center justify-between shadow-sm">
             <span className="flex items-center gap-1.5">
               <span className="w-2 h-2 bg-white rounded-full animate-ping"></span>
@@ -202,7 +189,6 @@ export default function Navbar() {
             <span className="font-black bg-black/40 px-1 rounded">01 / 100</span>
           </div>
 
-          {/* Nav Tabs List */}
           <nav className="flex flex-col gap-2.5 pt-1 font-mono-tech text-xs font-bold">
             {navLinks.map((link) => (
               <a
@@ -250,7 +236,6 @@ export default function Navbar() {
           </nav>
         </div>
 
-        {/* Bottom Drawer Controls & Info */}
         <div className="pt-4 border-t-2 border-black/20 dark:border-stone-800 space-y-3 font-mono-tech">
           <div className="flex items-center justify-between">
             <span className="text-[10px] text-stone-500 font-bold uppercase tracking-wider">

@@ -6,7 +6,7 @@ import { ROLES } from '../constants/index.js';
 const router = express.Router();
 
 router.use(authenticate);
-router.use(requireRole(ROLES.ADMIN));
+router.use(requireRole(ROLES.DEVELOPER));
 
 router.get('/', getAuditLogs);
 

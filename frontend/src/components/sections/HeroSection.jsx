@@ -14,7 +14,6 @@ export default function HeroSection() {
   const { isDark } = useTheme();
   const { videoSrc, isLoaded: isHeroVideoLoaded } = useVideoPreload();
 
-  // Multi-plane 3D parallax & camera zoom references
   const pinWrapperRef = useRef(null);
   const cameraRigRef = useRef(null);
   const heroRef = useRef(null);
@@ -29,7 +28,6 @@ export default function HeroSection() {
   const cornerMarksRef = useRef(null);
   const telemetryRef = useRef(null);
 
-  // Comic window & Video player references
   const windowWrapperRef = useRef(null);
   const panelFrameRef = useRef(null);
   const comicImageRef = useRef(null);
@@ -40,7 +38,6 @@ export default function HeroSection() {
   const isVideoActiveRef = useRef(false);
   const isReversedRef = useRef(false);
 
-  // Video & camera interaction states
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isZooming, setIsZooming] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
@@ -50,7 +47,6 @@ export default function HeroSection() {
   const [isVideoMounted, setIsVideoMounted] = useState(true);
   const stRef = useRef(null);
 
-  // 1. Scroll-Driven 4th-Wall Breaking Camera Zoom & Reverse (Desktop)
   useEffect(() => {
     const pinWrapper = pinWrapperRef.current;
     const cameraRig = cameraRigRef.current;
@@ -62,14 +58,11 @@ export default function HeroSection() {
 
     if (!pinWrapper || !cameraRig || !board || !panelFrame || !comicImg || !videoContainer) return;
 
-    // Enable responsive scroll-driven camera zoom on BOTH Desktop (>= 1024px) and Mobile (< 1024px)
     const mm = gsap.matchMedia();
 
     const setupCameraTimeline = (isMobile) => {
-      // Set transform origin for camera zoom to be exactly around the center of the page
       gsap.set(cameraRig, { transformOrigin: 'center center' });
 
-      // Create independent master camera zoom timeline
       const cameraTl = gsap.timeline({ paused: true });
       cameraTlRef.current = cameraTl;
       isVideoActiveRef.current = false;
@@ -77,7 +70,6 @@ export default function HeroSection() {
 
       const targetScale = isMobile ? 5.4 : 4.2;
 
-      // --- PHASE 1: Camera moves forward centered around the center of the page ---
       cameraTl.to(
         cameraRig,
         {
@@ -93,7 +85,6 @@ export default function HeroSection() {
         0
       );
 
-      // Initialize GSAP 3D transforms so GSAP retains depth across animations
       if (boomStickerRef.current) {
         gsap.set(boomStickerRef.current, { z: 85, rotation: -6, transformStyle: 'preserve-3d' });
       }
@@ -113,7 +104,6 @@ export default function HeroSection() {
         gsap.set(ctaRef.current, { z: 60, transformStyle: 'preserve-3d' });
       }
 
-      // Responsive dispersal distances
       const dispX = isMobile ? 260 : 480;
       const dispY = isMobile ? 220 : 320;
       const boomX = isMobile ? 280 : 550;
@@ -121,7 +111,6 @@ export default function HeroSection() {
       const titleY = isMobile ? 340 : 480;
       const swooshY = isMobile ? 260 : 380;
 
-      // Surrounding UI elements disperse outward and fade as camera flies through
       if (prologueRef.current) {
         cameraTl.to(prologueRef.current, { x: -dispX, y: -dispY, opacity: 0, scale: isMobile ? 1.4 : 1.8, duration: 0.8, ease: 'power1.in' }, 0);
       }
@@ -153,7 +142,6 @@ export default function HeroSection() {
         cameraTl.to(frameBadgesRef.current, { opacity: 0, duration: 0.6, ease: 'power1.in' }, 0);
       }
 
-      // Middle comic window sheds borders and shadows
       cameraTl.to(
         panelFrame,
         {
@@ -165,7 +153,6 @@ export default function HeroSection() {
         0
       );
 
-      // --- PHASE 2: Comic image fades away and herovid1.mp4 takes over (0.58 -> 0.75) ---
       cameraTl.to(
         comicImg,
         {
@@ -177,7 +164,6 @@ export default function HeroSection() {
         0.58
       );
 
-      // Fullscreen video portal fades in and takes over 100% of the screen
       cameraTl.to(
         videoContainer,
         {
@@ -192,7 +178,6 @@ export default function HeroSection() {
       const scrollDistance = isMobile ? '+=1250' : '+=2000';
       const triggerThreshold = isMobile ? 0.68 : 0.75;
 
-      // ScrollTrigger pins the display and drives the camera zoom with buttery smooth easing
       const st = ScrollTrigger.create({
         trigger: pinWrapper,
         start: 'top top',
@@ -206,14 +191,12 @@ export default function HeroSection() {
           const p = self.progress;
           setScrollProgress(p);
 
-          // Track zooming state for 3D perspective
           if (p > 0.05) {
             setIsZooming(true);
           } else {
             setIsZooming(false);
           }
 
-          // Smoothly glide camera zoom forward with fluid easing
           if (!isVideoActiveRef.current) {
             gsap.to(cameraTl, {
               progress: p,
@@ -222,7 +205,6 @@ export default function HeroSection() {
               overwrite: 'auto'
             });
 
-            // When camera zoom reaches full screen:
             if (p >= triggerThreshold) {
               isVideoActiveRef.current = true;
               gsap.to(cameraTl, {
@@ -241,7 +223,6 @@ export default function HeroSection() {
       });
       stRef.current = st;
 
-      // Reset when user scrolls all the way back to top of page
       const handleScrollReset = () => {
         if (window.scrollY <= 10 && !isReversedRef.current) {
           isReversedRef.current = false;
@@ -261,14 +242,12 @@ export default function HeroSection() {
       };
     };
 
-    // Register both desktop and mobile layouts in GSAP matchMedia
     mm.add('(min-width: 1024px)', () => setupCameraTimeline(false));
     mm.add('(max-width: 1023px)', () => setupCameraTimeline(true));
 
     return () => mm.revert();
   }, [isDark]);
 
-  // Pin display & prevent page scrolling while video is playing
   useEffect(() => {
     if (isVideoPlaying) {
       const preventScroll = (e) => {
@@ -283,7 +262,6 @@ export default function HeroSection() {
     }
   }, [isVideoPlaying]);
 
-  // Execute the reverse animation, then remove video from DOM and reset Hero section to original state
   const runReverseCameraAnimation = () => {
     if (videoRef.current) {
       videoRef.current.pause();
@@ -292,20 +270,16 @@ export default function HeroSection() {
     isReversedRef.current = true;
     isVideoActiveRef.current = false;
 
-    // Use GSAP tweenTo to smoothly animate the timeline playhead from 1 back to 0:
-    // This executes the EXACT opposite camera pull-back in-place!
     if (cameraTlRef.current) {
       cameraTlRef.current.tweenTo(0, {
         duration: 1.2,
         ease: 'power2.inOut',
         onComplete: () => {
-          // 1. Remove the video completely from the DOM
           setIsVideoMounted(false);
           setVideoEnded(true);
           setIsZooming(false);
           setScrollProgress(0);
 
-          // 2. Reset all Hero section elements to their exact original state
           const elementsToReset = [
             cameraRigRef.current,
             boardRef.current,
@@ -323,7 +297,6 @@ export default function HeroSection() {
             frameBadgesRef.current
           ].filter(Boolean);
 
-          // Clear animated transform offsets without stripping essential 3D depth and styling
           gsap.set(elementsToReset, { clearProps: 'x,y,scale,opacity' });
           if (cameraRigRef.current) {
             gsap.set(cameraRigRef.current, { scale: 1, x: 0, y: 0, xPercent: 0, yPercent: 0, transformOrigin: 'center center' });
@@ -332,7 +305,6 @@ export default function HeroSection() {
             gsap.set(comicImageRef.current, { opacity: 1, scale: 1 });
           }
 
-          // Explicitly restore original 3D translateZ positions, z-indexes, and transforms
           if (boomStickerRef.current) {
             boomStickerRef.current.style.transform = 'translateZ(85px) rotate(-6deg)';
             boomStickerRef.current.style.transformStyle = 'preserve-3d';
@@ -384,7 +356,6 @@ export default function HeroSection() {
             cornerMarksRef.current.style.opacity = '1';
           }
 
-          // 3. Cleanly kill the ScrollTrigger pin outside the GSAP tick and reset scroll to top
           setTimeout(() => {
             if (stRef.current) {
               try {
@@ -400,7 +371,6 @@ export default function HeroSection() {
     }
   };
 
-  // Video Time Updates
   const handleTimeUpdate = () => {
     if (!videoRef.current) return;
     const current = videoRef.current.currentTime;
@@ -408,17 +378,14 @@ export default function HeroSection() {
     setVideoProgress((current / duration) * 100);
   };
 
-  // 3. Exact Reverse Camera Movement at the End of the Video
   const handleVideoEnded = () => {
     runReverseCameraAnimation();
   };
 
-  // Manual Trigger to Reverse Camera Back to Hero Desk
   const triggerReverseCamera = () => {
     runReverseCameraAnimation();
   };
 
-  // Direct Tap / Click to Dive Camera into Fullscreen Video
   const handleDiveIntoWindow = (e) => {
     if (e && e.preventDefault) e.preventDefault();
     if (isVideoActiveRef.current) return;
@@ -444,13 +411,11 @@ export default function HeroSection() {
     }
   };
 
-  // 4. Interactive 3D Perspective Tilt on Mouse Move (Active when at initial rest OR after reverse)
   useEffect(() => {
     const hero = heroRef.current;
     const board = boardRef.current;
     if (!hero || !board) return;
 
-    // When actively zooming into the window, flatten board and pause idle animation
     if (isZooming) {
       gsap.to(board, { rotateX: 0, rotateY: 0, duration: 0.3, overwrite: 'auto' });
       return;
@@ -458,7 +423,6 @@ export default function HeroSection() {
 
     let isHovered = false;
 
-    // Gentle idle breathing floating animation when mouse is still
     const idleTween = gsap.to(board, {
       rotateX: 1.5,
       rotateY: -1.5,
@@ -470,7 +434,6 @@ export default function HeroSection() {
     });
 
     const handleMouseMove = (e) => {
-      // Only disable mouse tilt during active camera zoom
       if (isZooming) return;
 
       isHovered = true;
@@ -567,7 +530,6 @@ export default function HeroSection() {
 
   return (
     <>
-      {/* 4th-Wall Breaking Cinematic Fullscreen Video Layer (100vw x 100vh Portal) - Rendered into body via createPortal to decouple from GSAP pinWrapper */}
       {isVideoMounted && typeof document !== 'undefined' && createPortal(
         <div
           ref={videoContainerRef}
@@ -584,10 +546,8 @@ export default function HeroSection() {
             onEnded={handleVideoEnded}
           />
 
-          {/* Video Scanlines Overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 pointer-events-none" />
 
-          {/* Cinematic HUD Overlay on Video */}
           <div className="absolute top-0 left-0 right-0 p-3 sm:p-6 flex items-center justify-between z-40 bg-gradient-to-b from-black/85 via-black/40 to-transparent">
             <div className="flex items-center gap-1.5 sm:gap-2 font-mono-tech text-[10px] sm:text-xs text-[#bef264]">
               <span className="w-2 h-2 rounded-full bg-[#ef4444] animate-ping" />
@@ -597,7 +557,6 @@ export default function HeroSection() {
               </span>
             </div>
 
-            {/* Video Controls: Mute & Reverse Camera */}
             <div className="flex items-center gap-1.5 sm:gap-3">
               <button
                 onClick={() => setIsMuted(!isMuted)}
@@ -619,7 +578,6 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Bottom Video Progress Bar */}
           <div className="absolute bottom-0 left-0 right-0 z-40 bg-gradient-to-t from-black/80 to-transparent p-4 sm:p-6">
             <div className="max-w-3xl mx-auto flex items-center gap-3">
               <span className="font-mono-tech text-xs text-white/80">LIVE</span>
@@ -640,7 +598,6 @@ export default function HeroSection() {
 
       <div ref={pinWrapperRef} className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
 
-        {/* Camera Rig that scales up towards the middle window on scroll */}
         <div
           ref={cameraRigRef}
           className="w-full h-full flex items-center justify-center"
@@ -651,7 +608,6 @@ export default function HeroSection() {
             className="relative w-full px-3 sm:px-6 py-4 sm:py-6 max-w-[1300px] mx-auto"
             style={{ perspective: '1400px' }}
           >
-            {/* Outer Technical Frame with 3D Perspective Depth */}
             <div
               ref={boardRef}
               className="relative border-2 border-black dark:border-[#38383e] p-4 sm:p-8 min-h-[680px] flex flex-col justify-between transition-colors duration-300"
@@ -663,7 +619,6 @@ export default function HeroSection() {
                   : '10px 10px 0px #000000, 20px 20px 0px rgba(0,0,0,0.08)'
               }}
             >
-              {/* Corner registration coordinate marks - Layer Z: 15px */}
               <div ref={cornerMarksRef} className="contents">
                 <div
                   className="absolute top-2 left-3 font-mono-tech text-xs font-bold text-stone-600 dark:text-stone-400 select-none z-20 pointer-events-none"
@@ -691,7 +646,6 @@ export default function HeroSection() {
                 </div>
               </div>
 
-              {/* Clipped background layer for SVG perspective guidelines - Layer Z: -15px */}
               <div
                 ref={bgRaysRef}
                 className="absolute inset-0 overflow-hidden pointer-events-none z-0"
@@ -712,12 +666,10 @@ export default function HeroSection() {
                 </svg>
               </div>
 
-              {/* --- Top Row: Narrative Prologue Card (Left) & Lime Dialogue Ribbon (Right) --- */}
               <div
                 className="relative z-10 flex items-start justify-between flex-wrap gap-4 pt-4 px-1 sm:px-4"
                 style={{ transformStyle: 'preserve-3d' }}
               >
-                {/* Left: Narrative Prologue Card - Layer Z: 45px with 3D Parallax */}
                 <div
                   ref={prologueRef}
                   className="border-2 border-black dark:border-[#38383e] p-3 sm:p-4 max-w-xs sm:max-w-sm transition-colors duration-300 cursor-default"
@@ -746,7 +698,6 @@ export default function HeroSection() {
                   />
                 </div>
 
-                {/* Right: Lime Green Dialogue Box - Layer Z: 45px with 3D Parallax */}
                 <div
                   ref={limeBoxRef}
                   className="bg-[#bef264] border-2 border-black px-4 py-2 font-mono-tech font-bold text-xs sm:text-sm text-black flex items-center gap-1.5 flex-wrap cursor-default"
@@ -772,13 +723,11 @@ export default function HeroSection() {
                 </div>
               </div>
 
-              {/* --- Middle Section: The Window into Neo-Seoul (Breaks the 4th Wall on Scroll) --- */}
               <div
                 ref={windowWrapperRef}
                 className="relative z-10 max-w-4xl mx-auto w-full my-6 sm:my-8 px-2"
                 style={{ transformStyle: 'preserve-3d' }}
               >
-                {/* Central comic panel frame - Layer Z: 25px (The Portal Window) - Base layer z-10 */}
                 <div
                   className="relative z-10"
                   style={{
@@ -787,7 +736,6 @@ export default function HeroSection() {
                   }}
                 >
                   <UnfoldPanel direction="right" duration={1.2} delay={0.15}>
-                    {/* The Landscape Comic Panel Frame with Window Portal to Video */}
                     <div
                       ref={panelFrameRef}
                       onClick={handleDiveIntoWindow}
@@ -801,7 +749,6 @@ export default function HeroSection() {
                           : '8px 8px 0px #000000, 16px 16px 0px rgba(0,0,0,0.14)'
                       }}
                     >
-                      {/* 1. Black & White Comic Window Image with high fetch priority */}
                       <img
                         ref={comicImageRef}
                         src="/ogmedia/assets/hero_city.jpg"
@@ -812,19 +759,15 @@ export default function HeroSection() {
                         className="w-full h-full object-cover object-center scale-100 transition-transform duration-700 group-hover:scale-105"
                       />
 
-                      {/* Halftone / Screentone Texture */}
                       <div className="absolute inset-0 manga-halftone-light opacity-20 pointer-events-none" />
 
-                      {/* Frame Badges */}
                       <div ref={frameBadgesRef} className="contents">
-                        {/* Top-Left Internal Frame Badge */}
                         <div className="absolute top-2.5 left-2.5 z-20">
                           <div className="bg-white/95 dark:bg-black/90 text-black dark:text-white border border-black dark:border-stone-700 px-2.5 py-0.5 font-mono-tech font-bold text-[9px] sm:text-[11px] shadow-sm">
                             FRAME: ARCHIVE_001_A // OVERVIEW PERSPECTIVE
                           </div>
                         </div>
 
-                        {/* Top-Right Tap to Dive Indicator */}
                         <div className="absolute top-2.5 right-2.5 z-20">
                           <span className="bg-[#bef264] text-black font-mono-tech font-bold text-[9px] sm:text-[10px] px-2 py-0.5 border border-black shadow-sm flex items-center gap-1 group-hover:scale-105 transition-transform">
                             <span>▶</span>
@@ -833,7 +776,6 @@ export default function HeroSection() {
                           </span>
                         </div>
 
-                        {/* Bottom-Right Sector Tag */}
                         <div className="absolute bottom-2.5 right-3 z-20">
                           <span className="bg-black/85 px-2 py-0.5 text-[#bef264] font-mono-tech font-bold text-[10px] sm:text-xs tracking-wider border border-black/40">
                             SEOUL GRID: SECTOR 07
@@ -844,7 +786,6 @@ export default function HeroSection() {
                   </UnfoldPanel>
                 </div>
 
-                {/* Top-Right Red Sound Effect Sticker (BOOM! + INTRO) - Sits ON TOP of comic panel: Layer Z: 85px, z-40 */}
                 <div
                   ref={boomStickerRef}
                   className="absolute -top-10 sm:-top-14 right-2 sm:right-6 z-40 flex flex-col items-center select-none group cursor-help"
@@ -865,14 +806,12 @@ export default function HeroSection() {
                     INTRO
                   </div>
 
-                  {/* SFX Tooltip */}
                   <div className="absolute right-0 top-full mt-1 w-44 bg-black text-white text-[10px] font-mono-tech p-2 border border-stone-600 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 shadow-2xl">
                     <div className="text-[#bef264] font-bold">SFX: BOOM!</div>
                     <div className="text-stone-300">Explosive cinematic prologue intro</div>
                   </div>
                 </div>
 
-                {/* Overlapping Title Box - Sits ON TOP of comic panel: Layer Z: 95px, z-50 with Dynamic 3D Shadow Cast */}
                 <div
                   ref={titleCardRef}
                   className="relative z-50 text-center -mt-10 sm:-mt-14"
@@ -881,7 +820,6 @@ export default function HeroSection() {
                     transformStyle: 'preserve-3d'
                   }}
                 >
-                  {/* OG MEDIA Card */}
                   <div
                     className="inline-block border-3 border-black dark:border-[#38383e] px-8 sm:px-14 py-2 sm:py-3.5 transition-colors duration-300 cursor-default"
                     style={{
@@ -903,7 +841,6 @@ export default function HeroSection() {
                     />
                   </div>
 
-                  {/* CINEMATIC IP // KOREAN MANHWA ARCHIVE Black Banner */}
                   <div className="block -mt-1.5 sm:-mt-2">
                     <div
                       className="inline-block bg-black text-[#bef264] px-4 sm:px-6 py-1.5 font-mono-tech font-extrabold text-xs sm:text-sm md:text-base tracking-widest uppercase border border-stone-800 dark:border-stone-700 cursor-default"
@@ -924,7 +861,6 @@ export default function HeroSection() {
                   </div>
                 </div>
 
-                {/* Subtitle Paragraph - Layer Z: 30px */}
                 <div style={{ transform: 'translateZ(30px)' }}>
                   <TypewriterText
                     delay={750}
@@ -934,12 +870,10 @@ export default function HeroSection() {
                   />
                 </div>
 
-                {/* --- Bottom Controls Row: English Sound Effect (Left) & Actions (Right) --- */}
                 <div
                   className="flex flex-wrap items-center justify-between gap-6 pt-2 px-2 sm:px-4"
                   style={{ transformStyle: 'preserve-3d' }}
                 >
-                  {/* Left: English Onomatopoeia Sticker (SWOO-OOSH! + [SWOOSH: SPEED VECTOR]) - Layer Z: 60px */}
                   <div
                     ref={swooshRef}
                     className="flex flex-col items-start select-none group cursor-help"
@@ -967,14 +901,12 @@ export default function HeroSection() {
                       [SWOOSH: SPEED VECTOR]
                     </div>
 
-                    {/* SFX Tooltip */}
                     <div className="absolute left-0 bottom-full mb-1 w-44 bg-black text-white text-[10px] font-mono-tech p-2 border border-stone-600 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 shadow-2xl">
                       <div className="text-[#bef264] font-bold">SFX: SWOO-OOSH!</div>
                       <div className="text-stone-300">High velocity motion vector</div>
                     </div>
                   </div>
 
-                  {/* Right: Scroll Action Button & Sys Prompt Badge - Layer Z: 50px */}
                   <div
                     ref={ctaRef}
                     className="flex items-center gap-3 flex-wrap"
@@ -1006,7 +938,6 @@ export default function HeroSection() {
                 </div>
               </div>
 
-              {/* --- Bottom Telemetry Strip - Layer Z: 15px --- */}
               <div
                 ref={telemetryRef}
                 className="relative z-10 border-t border-black dark:border-stone-800 pt-2.5 mt-4 flex items-center justify-between font-mono-tech text-[10px] sm:text-xs text-stone-600 dark:text-stone-400 px-1"
@@ -1026,5 +957,4 @@ export default function HeroSection() {
     </>
   );
 }
-
 

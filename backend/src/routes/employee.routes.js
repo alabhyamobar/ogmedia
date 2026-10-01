@@ -13,7 +13,7 @@ import { ROLES } from '../constants/index.js';
 const router = express.Router();
 
 router.use(authenticate);
-router.use(requireRole(ROLES.ADMIN));
+router.use(requireRole(ROLES.ADMIN, ROLES.DEVELOPER));
 
 router.get('/', getEmployees);
 router.get('/suggest-username', suggestUsername);

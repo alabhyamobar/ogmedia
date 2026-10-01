@@ -76,7 +76,7 @@ const PROJECTS_DATA = [
 ];
 
 export default function CollectorCoversSection() {
-  const [activeIndex, setActiveIndex] = useState(2); // Card 03 (PLACIFY) active by default
+  const [activeIndex, setActiveIndex] = useState(2); 
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [activeVideoModal, setActiveVideoModal] = useState(null);
   const containerRef = useRef(null);
@@ -89,7 +89,6 @@ export default function CollectorCoversSection() {
     setActiveIndex((prev) => (prev === PROJECTS_DATA.length - 1 ? 0 : prev + 1));
   };
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (activeVideoModal) {
@@ -103,7 +102,6 @@ export default function CollectorCoversSection() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [activeVideoModal]);
 
-  // Render Badge Icon
   const renderBadgeIcon = (type) => {
     switch (type) {
       case 'sun':
@@ -151,18 +149,16 @@ export default function CollectorCoversSection() {
     }
   };
 
-  // Base fanning parameters matching the provided reference image
   const getCardStyle = (idx) => {
     const isHovered = hoveredIndex === idx;
     const isActive = activeIndex === idx;
 
-    // Fanned rotations and vertical offsets for the 5 cards
     const fanConfig = [
-      { rotate: -3.5, y: 14, z: 10 },  // 01: tilted left, lowered
-      { rotate: -1.8, y: 6, z: 20 },   // 02: slight left tilt
-      { rotate: 0, y: -16, z: 35 },     // 03: CENTER HERO, elevated
-      { rotate: 1.8, y: 6, z: 20 },    // 04: slight right tilt
-      { rotate: 3.5, y: 14, z: 10 }    // 05: tilted right, lowered
+      { rotate: -3.5, y: 14, z: 10 },  
+      { rotate: -1.8, y: 6, z: 20 },   
+      { rotate: 0, y: -16, z: 35 },     
+      { rotate: 1.8, y: 6, z: 20 },    
+      { rotate: 3.5, y: 14, z: 10 }    
     ];
 
     const currentFan = fanConfig[idx] || { rotate: 0, y: 0, z: 15 };
@@ -193,18 +189,16 @@ export default function CollectorCoversSection() {
       ref={containerRef}
       className="relative px-3 sm:px-6 py-16 sm:py-24 max-w-[1480px] mx-auto overflow-hidden select-none"
     >
-      {/* Anime Sky & Atmospheric Backdrop with Floating Sakura Petals */}
+
       <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-[#e0f2fe]/45 via-[#fce7f3]/25 to-transparent dark:from-[#0c1829]/50 dark:via-[#1e1029]/30 dark:to-transparent" />
         
-        {/* Floating Sakura Blossom Petals */}
         <div className="absolute top-8 left-[18%] w-3 h-3 bg-pink-300/80 rounded-full blur-[0.4px] transform rotate-45" />
         <div className="absolute top-20 right-[28%] w-4 h-2 bg-pink-400/70 rounded-full blur-[0.4px] transform rotate-12" />
         <div className="absolute top-1/2 left-[8%] w-3 h-2 bg-pink-300/80 rounded-full transform -rotate-45" />
         <div className="absolute bottom-20 right-[12%] w-3.5 h-2 bg-pink-300/80 rounded-full transform rotate-30" />
       </div>
 
-      {/* Manga Left Sign: 継続は力なり (Perseverance is Power) */}
       <div className="hidden 2xl:flex absolute left-4 top-28 flex-col items-center pointer-events-none z-10">
         <div className="w-8 py-4 bg-[#7f1d1d]/90 text-pink-200 border-2 border-black dark:border-stone-700 shadow-[4px_4px_0px_#000] flex flex-col items-center justify-center font-jp-impact text-xs font-black tracking-widest leading-loose">
           <span>継</span>
@@ -217,7 +211,6 @@ export default function CollectorCoversSection() {
         <div className="w-0.5 h-16 bg-black dark:bg-stone-600 mt-0.5" />
       </div>
 
-      {/* Japanese Vertical Text on Right Edge: コードから 現実のプロダクトへ */}
       <div className="hidden 2xl:block absolute right-4 top-20 pointer-events-none z-10 text-stone-500 dark:text-stone-400 select-none">
         <div
           className="font-jp-impact text-xs sm:text-sm tracking-widest font-black leading-loose opacity-70"
@@ -227,10 +220,9 @@ export default function CollectorCoversSection() {
         </div>
       </div>
 
-      {/* Section Header Block: Proof of Work with InkText */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 sm:mb-12 relative px-2 sm:px-4">
         <div>
-          {/* Tag: /// 02 作品集. */}
+
           <div className="flex items-center gap-2 mb-1.5 font-mono-tech text-xs sm:text-sm font-bold text-stone-700 dark:text-stone-300">
             <span className="text-stone-500">/// 02</span>
             <span className="font-jp-impact text-black dark:text-white tracking-wider text-sm sm:text-base">
@@ -238,7 +230,6 @@ export default function CollectorCoversSection() {
             </span>
           </div>
 
-          {/* Main Title: Proof of Work with InkText brushed font & green highlighter sweep */}
           <div className="relative inline-block">
             <InkText
               as="h2"
@@ -248,23 +239,21 @@ export default function CollectorCoversSection() {
               duration={2000}
               className="font-brush text-5xl sm:text-6xl md:text-7xl lg:text-8xl italic tracking-tight text-black dark:text-white uppercase leading-none drop-shadow-sm"
             />
-            {/* Vivid Lime Neon Brushed Highlighter Underlay */}
+
             <span className="absolute -left-2 -right-4 bottom-1 sm:bottom-2 md:bottom-3 h-[45%] bg-[#bef264] -z-10 -rotate-1 skew-x-[-14deg] rounded-sm shadow-sm pointer-events-none" />
           </div>
 
-          {/* Subtitle with Pink Energetic Brush Underline */}
           <div className="mt-4 inline-block">
             <div className="font-mono-tech text-xs sm:text-sm font-medium text-stone-800 dark:text-stone-200 uppercase tracking-wider space-y-0.5">
               <div>Real projects.</div>
               <div>Real demos.</div>
               <div>Real impact.</div>
             </div>
-            {/* Pink brush slash */}
+
             <div className="w-20 h-1.5 bg-gradient-to-r from-[#f43f5e] via-[#ec4899] to-transparent rounded-full mt-1.5 transform -rotate-1" />
           </div>
         </div>
 
-        {/* Hand-Drawn Annotation: "Click to watch real demos" with curved pointing arrow */}
         <div className="self-end md:mr-12 lg:mr-24 flex flex-col items-center select-none transform rotate-[-3deg]">
           <div className="font-handwriting text-2xl sm:text-3xl text-stone-800 dark:text-stone-200 font-bold tracking-wide flex items-center gap-2">
             <span>Click to watch</span>
@@ -272,7 +261,7 @@ export default function CollectorCoversSection() {
           <div className="font-handwriting text-xl sm:text-2xl text-stone-600 dark:text-stone-300 -mt-1 font-bold">
             real demos
           </div>
-          {/* Curved Arrow SVG pointing towards the cards */}
+
           <svg
             className="w-12 h-10 text-stone-800 dark:text-stone-200 transform translate-x-3 -rotate-12 mt-1 stroke-current"
             viewBox="0 0 60 40"
@@ -287,9 +276,8 @@ export default function CollectorCoversSection() {
         </div>
       </div>
 
-      {/* OVERLAPPING FANNED CARDS DECK with UnfoldPanel */}
       <div className="relative pt-6 pb-4">
-        {/* Desktop Fanned Staggered Deck (Visible on md and above) */}
+
         <div className="hidden md:flex items-center justify-center relative w-full min-h-[580px] overflow-visible">
           {PROJECTS_DATA.map((project, idx) => {
             const isCenter = idx === 2;
@@ -321,7 +309,7 @@ export default function CollectorCoversSection() {
                         : 'shadow-[5px_5px_0px_#000000] hover:shadow-[8px_8px_0px_#000000]'
                     }`}
                   >
-                    {/* Top Card Header Strip: Badge + Category + Barcode */}
+
                     <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black dark:border-stone-700 bg-white dark:bg-[#1e1e24]">
                       <div className="flex items-center gap-2">
                         <span className="bg-black text-white font-mono-tech font-bold text-xs px-2 py-0.5 rounded-sm">
@@ -332,7 +320,6 @@ export default function CollectorCoversSection() {
                         </span>
                       </div>
 
-                      {/* Barcode Graphic SVG */}
                       <div className="flex items-center gap-[2px] opacity-75">
                         <span className="w-[1.5px] h-4 bg-black dark:bg-white" />
                         <span className="w-[3px] h-4 bg-black dark:bg-white" />
@@ -344,7 +331,6 @@ export default function CollectorCoversSection() {
                       </div>
                     </div>
 
-                    {/* Artwork Thumbnail Box with Center Circular Play Button */}
                     <div className="relative aspect-[16/10] overflow-hidden border-b-2 border-black dark:border-stone-700 bg-stone-900 group">
                       <img
                         src={project.img}
@@ -354,7 +340,6 @@ export default function CollectorCoversSection() {
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
 
-                      {/* Play Button Overlay */}
                       <div
                         onClick={(e) => {
                           e.stopPropagation();
@@ -373,10 +358,9 @@ export default function CollectorCoversSection() {
                       </div>
                     </div>
 
-                    {/* Card Content Information */}
                     <div className="p-3.5 sm:p-4 flex flex-col justify-between h-[235px]">
                       <div>
-                        {/* Title with InkText & Badge Icon Sticker */}
+
                         <div className="flex items-center justify-between gap-1 mb-1">
                           <InkText
                             as="h3"
@@ -389,18 +373,15 @@ export default function CollectorCoversSection() {
                           {renderBadgeIcon(project.badgeType)}
                         </div>
 
-                        {/* Subtitle / Tagline */}
                         <div className="text-[11px] font-mono-tech font-bold text-stone-600 dark:text-stone-400 mb-2 leading-tight">
                           {project.subtitle}
                         </div>
 
-                        {/* Description */}
                         <p className="text-xs text-stone-700 dark:text-stone-300 leading-relaxed line-clamp-3 mb-3">
                           {project.desc}
                         </p>
                       </div>
 
-                      {/* Tech Stack Pills & Buttons */}
                       <div>
                         <div className="flex flex-wrap gap-1.5 mb-3">
                           {project.tags.map((tag) => (
@@ -413,7 +394,6 @@ export default function CollectorCoversSection() {
                           ))}
                         </div>
 
-                        {/* Action Footer: [▶ WATCH DEMO] + [VIEW CODE] + [↗] */}
                         <div className="flex items-center justify-between gap-1.5 pt-2 border-t border-stone-200 dark:border-stone-800">
                           <button
                             onClick={(e) => {
@@ -463,7 +443,6 @@ export default function CollectorCoversSection() {
           })}
         </div>
 
-        {/* Mobile / Tablet Horizontal Scroll Layout (< md) */}
         <div className="flex md:hidden items-center gap-4 overflow-x-auto pb-6 pt-2 px-2 no-scrollbar scroll-smooth snap-x snap-mandatory">
           {PROJECTS_DATA.map((project, idx) => (
             <UnfoldPanel
@@ -477,7 +456,7 @@ export default function CollectorCoversSection() {
                 onClick={() => setActiveIndex(idx)}
                 className="w-full bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-xl overflow-hidden shadow-[5px_5px_0px_#000]"
               >
-                {/* Header */}
+
                 <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black dark:border-stone-700 bg-white dark:bg-[#1e1e24]">
                   <div className="flex items-center gap-2">
                     <span className="bg-black text-white font-mono-tech font-bold text-xs px-2 py-0.5 rounded-sm">
@@ -489,7 +468,6 @@ export default function CollectorCoversSection() {
                   </div>
                 </div>
 
-                {/* Artwork Box */}
                 <div className="relative aspect-[16/10] overflow-hidden border-b-2 border-black dark:border-stone-700 bg-stone-900">
                   <img
                     src={project.img}
@@ -513,7 +491,6 @@ export default function CollectorCoversSection() {
                   </div>
                 </div>
 
-                {/* Body */}
                 <div className="p-3.5">
                   <div className="flex items-center justify-between gap-1 mb-1">
                     <InkText
@@ -567,7 +544,6 @@ export default function CollectorCoversSection() {
           ))}
         </div>
 
-        {/* Carousel Pagination Controls: < ● ● ● ● ● > */}
         <div className="flex items-center justify-center gap-3 mt-6 sm:mt-8">
           <button
             onClick={prevCard}
@@ -602,7 +578,6 @@ export default function CollectorCoversSection() {
         </div>
       </div>
 
-      {/* Bottom Right Handwritten Tag: "From Ideas to Impact." */}
       <div className="flex justify-end mt-2 pr-4 sm:pr-12 lg:pr-24 select-none">
         <div className="font-handwriting text-2xl sm:text-3xl text-stone-800 dark:text-stone-200 font-bold tracking-wide transform rotate-[-4deg] text-right">
           <div>From Ideas</div>
@@ -610,7 +585,6 @@ export default function CollectorCoversSection() {
         </div>
       </div>
 
-      {/* Interactive Video Modal for Demo Playback */}
       {activeVideoModal && (
         <div
           className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fade-in"
@@ -620,7 +594,7 @@ export default function CollectorCoversSection() {
             className="bg-[#faf8f5] dark:bg-[#16161a] border-2 border-black dark:border-stone-700 w-full max-w-4xl rounded-xl overflow-hidden shadow-[10px_10px_0px_#000] relative"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Modal Header Bar */}
+
             <div className="flex items-center justify-between px-4 py-2.5 bg-black text-white font-mono-tech text-xs sm:text-sm font-bold">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#bef264] animate-ping" />
@@ -636,7 +610,6 @@ export default function CollectorCoversSection() {
               </button>
             </div>
 
-            {/* Video Player */}
             <div className="relative aspect-video bg-black flex items-center justify-center overflow-hidden">
               <video
                 src={activeVideoModal.video}
@@ -647,7 +620,6 @@ export default function CollectorCoversSection() {
               />
             </div>
 
-            {/* Modal Info Footer */}
             <div className="p-4 sm:p-5 flex flex-wrap items-center justify-between gap-3 border-t-2 border-black dark:border-stone-700">
               <div>
                 <h4 className="font-bold font-heading text-lg text-black dark:text-white">

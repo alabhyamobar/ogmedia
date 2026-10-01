@@ -1,10 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 
-/**
- * InkText: Starts with a clean, readable outline, then smoothly fills with ink like a sumi-e paint brush animation.
- * Optimized for high legibility with refined stroke width, graceful animation speed, and dark mode adaptability.
- */
 export default function InkText({
   children,
   text,
@@ -22,7 +18,6 @@ export default function InkText({
   const ref = useRef(null);
   const [isFilled, setIsFilled] = useState(false);
 
-  // Resolve colors based on theme: default black in light mode, white in dark mode
   const resolvedStroke = strokeColor || (isDark ? '#ffffff' : '#000000');
   const resolvedFill = fillColor || (isDark ? '#ffffff' : '#000000');
 

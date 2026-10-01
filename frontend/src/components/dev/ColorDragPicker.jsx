@@ -23,7 +23,6 @@ export default function ColorDragPicker({ value = '#bef264', onChange, label }) 
   const isDraggingPadRef = useRef(false);
   const isDraggingHueRef = useRef(false);
 
-  // Sync internal HSV when external value changes from presets or resets
   if (value !== prevValue) {
     setPrevValue(value);
     setHsv(hexToHsv(value));
@@ -37,7 +36,6 @@ export default function ColorDragPicker({ value = '#bef264', onChange, label }) 
     }
   }, [onChange]);
 
-  // Handle 2D Drag Pad (Saturation & Value)
   const handlePadPointer = useCallback((e) => {
     if (!padRef.current) return;
     const rect = padRef.current.getBoundingClientRect();
@@ -70,7 +68,6 @@ export default function ColorDragPicker({ value = '#bef264', onChange, label }) 
     window.addEventListener('pointerup', onPointerUp);
   };
 
-  // Handle 1D Hue Rainbow Slider Drag
   const handleHuePointer = useCallback((e) => {
     if (!hueSliderRef.current) return;
     const rect = hueSliderRef.current.getBoundingClientRect();
@@ -119,7 +116,6 @@ export default function ColorDragPicker({ value = '#bef264', onChange, label }) 
         </div>
       )}
 
-      {/* 2D Drag Canvas (Saturation on X, Value/Brightness on Y) */}
       <div
         ref={padRef}
         onPointerDown={onPadPointerDown}
@@ -129,14 +125,12 @@ export default function ColorDragPicker({ value = '#bef264', onChange, label }) 
         }}
         title="Click and drag to adjust Saturation & Brightness"
       >
-        {/* Horizontal white saturation gradient */}
         <div
           className="absolute inset-0"
           style={{
             background: 'linear-gradient(to right, #ffffff, transparent)'
           }}
         />
-        {/* Vertical black value/darkness gradient */}
         <div
           className="absolute inset-0"
           style={{
@@ -144,7 +138,6 @@ export default function ColorDragPicker({ value = '#bef264', onChange, label }) 
           }}
         />
 
-        {/* Draggable Reticle / Thumb Pointer */}
         <div
           className="absolute w-4 h-4 rounded-full border-2 border-white shadow-[0_0_4px_rgba(0,0,0,0.8)] pointer-events-none -translate-x-1/2 -translate-y-1/2"
           style={{
@@ -157,7 +150,6 @@ export default function ColorDragPicker({ value = '#bef264', onChange, label }) 
         </div>
       </div>
 
-      {/* Interactive Rainbow Hue Drag Slider */}
       <div className="mt-2.5">
         <div className="flex justify-between text-[10px] font-mono-tech text-stone-400 mb-1">
           <span>HUE DRAGGER</span>
@@ -172,7 +164,6 @@ export default function ColorDragPicker({ value = '#bef264', onChange, label }) 
           }}
           title="Drag horizontally to change hue"
         >
-          {/* Thumb marker */}
           <div
             className="absolute top-0 bottom-0 w-3 -ml-1.5 bg-white border-2 border-black rounded-sm shadow-md pointer-events-none"
             style={{
@@ -182,7 +173,6 @@ export default function ColorDragPicker({ value = '#bef264', onChange, label }) 
         </div>
       </div>
 
-      {/* Lightness Slider Quick Adjustment */}
       <div className="mt-2">
         <div className="flex justify-between text-[10px] font-mono-tech text-stone-400 mb-1">
           <span>BRIGHTNESS</span>
@@ -198,10 +188,8 @@ export default function ColorDragPicker({ value = '#bef264', onChange, label }) 
         />
       </div>
 
-      {/* Live Color Info & Copy Bar */}
       <div className="mt-3 flex items-center justify-between gap-2 p-1.5 bg-stone-900 border border-stone-800 rounded text-xs font-mono-tech">
         <div className="flex items-center gap-2">
-          {/* Color Preview Swatch */}
           <div
             className="w-6 h-6 rounded border border-white/40 shadow-sm"
             style={{ backgroundColor: currentHex }}
@@ -215,7 +203,6 @@ export default function ColorDragPicker({ value = '#bef264', onChange, label }) 
         </div>
 
         <div className="flex items-center gap-1.5">
-          {/* Native HTML Eyedropper Fallback */}
           <label
             title="System Eyedropper / Color Picker"
             className="w-6 h-6 flex items-center justify-center bg-stone-800 hover:bg-stone-700 text-stone-300 rounded border border-stone-700 cursor-pointer text-[11px]"
@@ -233,7 +220,6 @@ export default function ColorDragPicker({ value = '#bef264', onChange, label }) 
             />
           </label>
 
-          {/* Copy Button */}
           <button
             type="button"
             onClick={copyHex}
@@ -244,7 +230,6 @@ export default function ColorDragPicker({ value = '#bef264', onChange, label }) 
         </div>
       </div>
 
-      {/* Preset Swatches Palette */}
       <div className="mt-2.5">
         <div className="text-[10px] font-mono-tech text-stone-400 mb-1">PRESET SWATCHES</div>
         <div className="flex flex-wrap gap-1.5">

@@ -1,6 +1,7 @@
 export const ROLES = {
   ADMIN: 'ADMIN',
   SUPER_ADMIN: 'ADMIN', // Unified single entity: Admin and Super Admin are one
+  DEVELOPER: 'DEVELOPER',
   EMPLOYEE: 'EMPLOYEE'
 };
 

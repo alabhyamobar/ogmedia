@@ -9,7 +9,6 @@ import Navbar from './components/layout/Navbar';
 import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
 
-// CRM Components & Pages
 import ProtectedRoute from './components/crm/ProtectedRoute';
 import CrmLayout from './layouts/CrmLayout';
 import LoginPage from './pages/crm/LoginPage';
@@ -28,7 +27,7 @@ const DevPaletteConsole = lazy(() => import('./components/dev/DevPaletteConsole'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 30, // 30 seconds
+      staleTime: 1000 * 30,
       refetchOnWindowFocus: false,
       retry: 1
     }
@@ -45,7 +44,6 @@ function AppRoutes({ isLoading }) {
         {!isCrmRoute && <Navbar />}
 
         <Routes>
-          {/* Public Agency Website Routes */}
           <Route path="/" element={<HomePage />} />
           <Route
             path="/service/:slug"
@@ -76,11 +74,9 @@ function AppRoutes({ isLoading }) {
             }
           />
 
-          {/* CRM Authentication Routes */}
           <Route path="/crm/login" element={<LoginPage />} />
           <Route path="/login" element={<LoginPage />} />
 
-          {/* Protected CRM App Routes */}
           <Route
             path="/crm"
             element={
@@ -113,15 +109,21 @@ function AppRoutes({ isLoading }) {
             <Route
               path="audit-logs"
               element={
-                <ProtectedRoute requireAdmin>
+                <ProtectedRoute requireDeveloper>
                   <AuditLogsPage />
                 </ProtectedRoute>
               }
             />
-            <Route path="settings" element={<SettingsPage />} />
+            <Route
+              path="settings"
+              element={
+                <ProtectedRoute requireDeveloper>
+                  <SettingsPage />
+                </ProtectedRoute>
+              }
+            />
           </Route>
 
-          {/* 404 Fallback */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>

@@ -1,14 +1,21 @@
 import { ZodError } from 'zod';
 import { logger } from '../utils/logger.js';
+import { recordError } from '../utils/errorTracker.js';
 
 export function errorHandler(err, req, res, next) {
   const isProduction = process.env.NODE_ENV === 'production';
   const requestId = req.id || 'unknown';
 
+  // Record error in developer debug buffer
+  try {
+    recordError(err, req);
+  } catch {}
+
   // Handle Zod validation errors
-  if (err instanceof ZodError) {
-    const formattedErrors = err.errors.map((e) => ({
-      field: e.path.join('.'),
+  if (err instanceof ZodError || err.name === 'ZodError' || Array.isArray(err.errors) || Array.isArray(err.issues)) {
+    const rawIssues = Array.isArray(err.errors) ? err.errors : (Array.isArray(err.issues) ? err.issues : []);
+    const formattedErrors = rawIssues.map((e) => ({
+      field: Array.isArray(e.path) ? e.path.join('.') : String(e.path || ''),
       message: e.message
     }));
 

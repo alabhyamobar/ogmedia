@@ -7,14 +7,43 @@ import { initLeadQueue } from './queues/lead.queue.js';
 import { startLeadWorker, stopLeadWorker } from './workers/lead.worker.js';
 import { logger } from './utils/logger.js';
 
+import { User } from './models/User.js';
+import { ROLES, SERVICES } from './constants/index.js';
+
 dotenv.config();
 
 const PORT = parseInt(process.env.PORT || '4000', 10);
+
+async function ensureDeveloperAccount() {
+  try {
+    const existingDev = await User.findOne({ username: 'developer' });
+    if (!existingDev) {
+      const passwordHash = await User.hashPassword('DevPass2026!@');
+      await User.create({
+        name: 'Lead System Developer',
+        username: 'developer',
+        email: 'developer@ogmedia.agency',
+        passwordHash,
+        role: ROLES.DEVELOPER,
+        expertise: Object.values(SERVICES),
+        status: 'ACTIVE',
+        mustChangePassword: false
+      });
+      logger.info({ msg: 'Developer account auto-enrolled: @developer / DevPass2026!@' });
+    }
+
+    // Remove legacy superadmin account if present
+    await User.deleteOne({ username: 'superadmin' });
+  } catch (err) {
+    logger.warn({ msg: 'Could not verify developer account', error: err.message });
+  }
+}
 
 async function startServer() {
   try {
     // 1. Connect to MongoDB
     await connectDB();
+    await ensureDeveloperAccount();
 
     // 2. Initialize Redis and Stream Queue
     getRedisClient();

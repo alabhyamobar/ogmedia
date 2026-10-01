@@ -2,8 +2,13 @@ import React from 'react';
 import { Navigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
-export default function ProtectedRoute({ children, requireAdmin = false, requireSuperAdmin = false }) {
-  const { user, isAuthenticated, isLoading, isAdmin, isSuperAdmin } = useAuth();
+export default function ProtectedRoute({
+  children,
+  requireAdmin = false,
+  requireSuperAdmin = false,
+  requireDeveloper = false
+}) {
+  const { user, isAuthenticated, isLoading, isAdmin, isSuperAdmin, isDeveloper } = useAuth();
   const location = useLocation();
 
   if (isLoading) {
@@ -26,6 +31,30 @@ export default function ProtectedRoute({ children, requireAdmin = false, require
 
   if (!isAuthenticated) {
     return <Navigate to="/crm/login" state={{ from: location }} replace />;
+  }
+
+  if (requireDeveloper && !isDeveloper) {
+    return (
+      <div className="min-h-screen bg-[#ebebe5] dark:bg-[#09090b] flex flex-col items-center justify-center font-mono-tech p-4">
+        <div className="border-2 border-black dark:border-stone-700 bg-white dark:bg-[#16161a] p-8 rounded-2xl shadow-[6px_6px_0px_#ef4444] text-center space-y-4 max-w-md">
+          <div className="bg-[#ef4444] text-white font-extrabold text-xs px-3 py-1 border border-black inline-block">
+            RESTRICTED // PROTOCOL 403
+          </div>
+          <h2 className="font-heading text-2xl font-black text-black dark:text-white uppercase">
+            Access Restricted
+          </h2>
+          <p className="text-xs text-stone-600 dark:text-stone-400">
+            This module is restricted under enterprise security compliance policies. You do not have clearance to access this partition.
+          </p>
+          <Link
+            to="/crm/dashboard"
+            className="inline-block bg-black text-[#bef264] px-4 py-2 text-xs font-bold border border-black rounded shadow-[2px_2px_0px_#bef264] hover:-translate-y-0.5 transition-transform"
+          >
+            ← Return to Dashboard
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   if (requireSuperAdmin && !isSuperAdmin) {
@@ -52,7 +81,7 @@ export default function ProtectedRoute({ children, requireAdmin = false, require
     );
   }
 
-  if (requireAdmin && !isAdmin) {
+  if (requireAdmin && !isAdmin && !isDeveloper) {
     return (
       <div className="min-h-screen bg-[#ebebe5] dark:bg-[#09090b] flex flex-col items-center justify-center font-mono-tech p-4">
         <div className="border-2 border-black dark:border-stone-700 bg-white dark:bg-[#16161a] p-8 rounded-2xl shadow-[6px_6px_0px_#ef4444] text-center space-y-4 max-w-md">

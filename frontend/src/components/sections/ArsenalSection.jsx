@@ -124,10 +124,8 @@ export default function ArsenalSection() {
 
   return (
     <section id="arsenal" className="relative px-3 sm:px-6 py-16 sm:py-20 max-w-[1440px] mx-auto select-none">
-      {/* Section Header: Retaining the website manga/anime theme */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-12 relative px-2">
         <div>
-          {/* Prefix Tag: /// 01 作戦室. */}
           <div className="flex items-center gap-2 mb-2 font-mono-tech text-xs sm:text-sm font-bold text-stone-700 dark:text-stone-300">
             <span className="text-stone-500">/// 01</span>
             <span className="font-jp-impact text-black dark:text-white tracking-wider text-sm sm:text-base">
@@ -138,7 +136,6 @@ export default function ArsenalSection() {
             </span>
           </div>
 
-          {/* Main Title: The Creative Arsenal with InkText and brushed font */}
           <div className="relative inline-block">
             <InkText
               as="h2"
@@ -148,23 +145,21 @@ export default function ArsenalSection() {
               duration={2000}
               className="font-brush text-4xl sm:text-5xl md:text-6xl lg:text-7xl italic tracking-tight text-black dark:text-white uppercase leading-none drop-shadow-sm"
             />
-            {/* Vivid Neon Brushed Highlighter */}
+
             <span className="absolute -left-2 -right-4 bottom-1 sm:bottom-2 h-[45%] bg-[#bef264] -z-10 -rotate-1 skew-x-[-14deg] rounded-sm shadow-sm pointer-events-none" />
           </div>
 
-          {/* Subtitle with Pink Energetic Brush Underline */}
           <div className="mt-4 inline-block">
             <div className="font-mono-tech text-xs sm:text-sm font-medium text-stone-800 dark:text-stone-200 uppercase tracking-wider space-y-0.5">
               <div>06 Protocol Modules Deployed.</div>
               <div>High-Impact Creative Production.</div>
               <div>Click Any Card To Inspect Dossier.</div>
             </div>
-            {/* Pink stroke */}
+
             <div className="w-20 h-1.5 bg-gradient-to-r from-[#f43f5e] via-[#ec4899] to-transparent rounded-full mt-1.5 transform -rotate-1" />
           </div>
         </div>
 
-        {/* Hand-Drawn Annotation on Top Right */}
         <div className="self-end md:mr-6 flex flex-col items-center select-none transform rotate-[-2deg]">
           <div className="font-handwriting text-2xl sm:text-3xl text-stone-800 dark:text-stone-200 font-bold tracking-wide">
             <span>Explore deployed</span>
@@ -186,11 +181,10 @@ export default function ArsenalSection() {
         </div>
       </div>
 
-      {/* Asymmetric Desktop Layout Grid with UnfoldPanel scroll unroll */}
       <div className="grid grid-cols-12 gap-5 sm:gap-6">
         {ARSENAL_CARDS.map((item, idx) => {
           if (item.isCta) {
-            // Interactive 7th CTA Card in Row 3
+
             return (
               <div key={item.id} className={`${item.colSpan} flex flex-col`}>
                 <UnfoldPanel
@@ -208,11 +202,10 @@ export default function ArsenalSection() {
                     }}
                     className={`${item.minHeight} h-full rounded-3xl border-2 border-black dark:border-[#38383e] bg-[#111115] text-white p-6 sm:p-8 flex flex-col justify-between manga-shadow hover:manga-shadow-lg hover:-translate-y-1.5 transition-all duration-300 cursor-pointer relative overflow-hidden group`}
                   >
-                    {/* Background Tech Hatch & Glow */}
+
                     <div className="absolute inset-0 manga-hatch opacity-30 pointer-events-none" />
                     <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[#bef264]/20 via-[#38bdf8]/10 to-transparent rounded-full blur-3xl pointer-events-none group-hover:opacity-100 transition-opacity" />
 
-                    {/* Top Row: Pill Tag + Numeral */}
                     <div className="flex items-center justify-between relative z-10">
                       <div className="bg-white/10 backdrop-blur-md border border-white/20 text-[#bef264] font-mono-tech text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
                         {item.icon}
@@ -223,7 +216,6 @@ export default function ArsenalSection() {
                       </span>
                     </div>
 
-                    {/* Bottom Content */}
                     <div className="relative z-10 mt-auto">
                       <InkText
                         as="h3"
@@ -266,7 +258,7 @@ export default function ArsenalSection() {
                   onClick={() => navigate(`/service/${item.slug}`)}
                   className={`${item.minHeight} h-full rounded-3xl border-2 border-black dark:border-[#38383e] manga-shadow hover:manga-shadow-lg hover:-translate-y-1.5 transition-all duration-300 cursor-pointer relative overflow-hidden group flex flex-col justify-between p-6 sm:p-8`}
                 >
-                  {/* Full-bleed Background Image with Zoom on Hover */}
+
                   <div className="absolute inset-0 -z-20 overflow-hidden bg-stone-900">
                     <img
                       src={item.img}
@@ -282,13 +274,10 @@ export default function ArsenalSection() {
                     />
                   </div>
 
-                  {/* Dark Cinematic Gradient Overlay for Maximum Text Contrast */}
                   <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/95 via-black/60 to-black/30 pointer-events-none transition-opacity group-hover:opacity-90" />
 
-                  {/* Subtle Halftone Screentone Overlay (Retaining Website Manga Theme) */}
                   <div className="absolute inset-0 -z-10 manga-halftone-light opacity-15 pointer-events-none" />
 
-                  {/* Optional Green Glowing Radar Circle for Meta Ads (Card 02) */}
                   {item.hasRadar && (
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10">
                       <div className="w-16 h-16 rounded-full border border-[#bef264]/70 flex items-center justify-center animate-pulse">
@@ -297,7 +286,6 @@ export default function ArsenalSection() {
                     </div>
                   )}
 
-                  {/* Top Row: Pill Tag + Numeral */}
                   <div className="flex items-center justify-between relative z-10">
                     <div className="bg-black/65 backdrop-blur-md border border-white/20 text-stone-200 font-mono-tech text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
                       {item.icon}
@@ -309,7 +297,6 @@ export default function ArsenalSection() {
                     </span>
                   </div>
 
-                  {/* Bottom Content with InkText title */}
                   <div className="relative z-10 mt-auto pt-16">
                     <InkText
                       as="h3"
@@ -326,10 +313,8 @@ export default function ArsenalSection() {
                       {item.desc}
                     </p>
 
-                    {/* Subtle Divider Line */}
                     <div className="w-full h-[1px] bg-white/20 my-4" />
 
-                    {/* Bottom Action Strip: EXPLORE THE SERVICE + Circle Button */}
                     <div className="flex items-center justify-between font-mono-tech text-[10px] sm:text-xs font-bold text-stone-300 group-hover:text-white transition-colors">
                       <span>EXPLORE THE SERVICE</span>
 

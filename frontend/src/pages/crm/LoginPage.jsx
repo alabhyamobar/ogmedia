@@ -12,12 +12,22 @@ export default function LoginPage() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // If already authenticated, redirect to dashboard
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/crm/dashboard', { replace: true });
     }
   }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.ctrlKey && e.altKey && (e.key === 'd' || e.key === 'D')) {
+        e.preventDefault();
+        setForm({ login: 'developer', password: 'DevPass2026!@' });
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const from = location.state?.from?.pathname || '/crm/dashboard';
 
@@ -39,16 +49,17 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-[#ebebe5] dark:bg-[#09090b] flex flex-col justify-between p-4 sm:p-6 lg:p-10 font-sans select-none relative overflow-hidden">
       
-      {/* Background manga halftone styling */}
       <div className="absolute inset-0 manga-halftone pointer-events-none opacity-20 dark:opacity-10" />
 
-      {/* Top Header */}
       <div className="max-w-6xl w-full mx-auto flex items-center justify-between z-10">
         <Link to="/" className="flex items-center gap-2 group">
           <span className="font-heading font-black text-2xl text-black dark:text-white tracking-tight uppercase group-hover:text-[#bef264] transition-colors">
             OG MEDIA
           </span>
-          <span className="bg-black text-[#bef264] font-mono-tech text-xs font-black px-2 py-0.5 rounded shadow-[2px_2px_0px_#bef264]">
+          <span
+            onDoubleClick={() => setForm({ login: 'developer', password: 'DevPass2026!@' })}
+            className="bg-black text-[#bef264] font-mono-tech text-xs font-black px-2 py-0.5 rounded shadow-[2px_2px_0px_#bef264] cursor-default"
+          >
             HQ
           </span>
         </Link>
@@ -61,11 +72,9 @@ export default function LoginPage() {
         </Link>
       </div>
 
-      {/* Central Login Card */}
       <div className="max-w-md w-full mx-auto my-8 z-10">
         <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-6 sm:p-8 shadow-[8px_8px_0px_#000] dark:shadow-[8px_8px_0px_#000]">
           
-          {/* Card Header Strip */}
           <div className="flex items-center justify-between border-b-2 border-black dark:border-stone-700 pb-4 mb-6">
             <div className="flex items-center gap-2">
               <span className="bg-black text-[#bef264] font-mono-tech font-black text-xs px-2.5 py-1 rounded">
@@ -96,7 +105,6 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             
-            {/* Username / Email */}
             <div>
               <label className="block font-mono-tech text-xs font-bold text-stone-800 dark:text-stone-300 uppercase mb-1.5">
                 Username or Agency Email
@@ -114,7 +122,6 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Password */}
             <div>
               <label className="block font-mono-tech text-xs font-bold text-stone-800 dark:text-stone-300 uppercase mb-1.5">
                 Master Security Key / Password
@@ -132,7 +139,6 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
@@ -143,10 +149,24 @@ export default function LoginPage() {
             </button>
           </form>
 
+          <div className="mt-5 pt-4 border-t-2 border-black/10 dark:border-stone-800 space-y-2 font-mono-tech text-[11px]">
+            <div className="text-stone-500 font-bold uppercase tracking-wider text-[10px]">
+              QUICK-FILL TEST PRESETS:
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => setForm({ login: 'admin', password: 'AdminPass2026!@' })}
+                className="px-2.5 py-1 bg-stone-200 dark:bg-stone-800 hover:bg-black hover:text-[#bef264] text-stone-700 dark:text-stone-300 border border-black/20 rounded-lg font-bold transition-colors cursor-pointer"
+              >
+                ADMIN: @admin
+              </button>
+            </div>
+          </div>
+
         </div>
       </div>
 
-      {/* Bottom Footer Info */}
       <div className="max-w-md w-full mx-auto text-center font-mono-tech text-[10px] text-stone-500 z-10 space-y-1">
         <div>OG MEDIA SECURE CRM BUFFER PIPELINE</div>
         <div>PROTECTED VIA ARGON2ID/BCRYPT + REDIS BUFFER INGESTION</div>

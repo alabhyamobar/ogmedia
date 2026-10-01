@@ -25,10 +25,21 @@ export const contactLeadSchema = z.object({
   honeypot: z.string().optional().default('') // anti-bot trap
 });
 
-export const loginSchema = z.object({
-  login: z.string().trim().min(3, 'Username or email is required').max(150),
-  password: z.string().min(1, 'Password is required')
-});
+export const loginSchema = z
+  .object({
+    login: z.string().trim().max(150).optional(),
+    username: z.string().trim().max(150).optional(),
+    email: z.string().trim().max(150).optional(),
+    password: z.string().min(1, 'Password is required')
+  })
+  .transform((val) => ({
+    login: val.login || val.username || val.email || '',
+    password: val.password
+  }))
+  .refine((val) => val.login.length >= 3, {
+    message: 'Username or email must be at least 3 characters',
+    path: ['login']
+  });
 
 export const createEmployeeSchema = z.object({
   name: z.string().trim().min(2, 'Name must be at least 2 characters').max(100),
@@ -44,7 +55,7 @@ export const createEmployeeSchema = z.object({
     .default(''),
   email: z.string().trim().email('Invalid email address').max(150),
   role: z
-    .enum(['ADMIN', 'EMPLOYEE', 'SUPER_ADMIN'])
+    .enum(['ADMIN', 'EMPLOYEE', 'SUPER_ADMIN', 'DEVELOPER'])
     .transform((r) => (r === 'SUPER_ADMIN' ? ROLES.ADMIN : r))
     .default(ROLES.EMPLOYEE),
   expertise: z.array(z.enum(serviceEnumValues)).default([]),
@@ -62,7 +73,7 @@ export const updateEmployeeSchema = z.object({
   name: z.string().trim().min(2).max(100).optional(),
   email: z.string().trim().email('Invalid email address').max(150).optional(),
   role: z
-    .enum(['ADMIN', 'EMPLOYEE', 'SUPER_ADMIN'])
+    .enum(['ADMIN', 'EMPLOYEE', 'SUPER_ADMIN', 'DEVELOPER'])
     .transform((r) => (r === 'SUPER_ADMIN' ? ROLES.ADMIN : r))
     .optional(),
   expertise: z.array(z.enum(serviceEnumValues)).optional(),

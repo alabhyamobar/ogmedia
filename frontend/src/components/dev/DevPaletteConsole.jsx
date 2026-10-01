@@ -2,14 +2,11 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import ColorDragPicker from './ColorDragPicker';
 import { parseCssColorToHex } from './colorUtils';
 
-// Default initial colors matching the site's default theme
 const DEFAULT_PALETTE = {
-  // Base site colors
   baseBg: '#ebebe5',
   baseText: '#111111',
   baseAccent: '#bef264',
   
-  // Button colors
   btnBg: '#bef264',
   btnText: '#000000',
   btnBorder: '#000000',
@@ -18,17 +15,14 @@ const DEFAULT_PALETTE = {
 };
 
 export default function DevPaletteConsole() {
-  // Window open/minimize state (in-memory only)
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
-  const [activeTab, setActiveTab] = useState('base'); // 'base' | 'buttons' | 'element' | 'export'
+  const [activeTab, setActiveTab] = useState('base');
 
-  // Palette states (in-memory only, no localStorage)
   const [palette, setPalette] = useState(() => ({ ...DEFAULT_PALETTE }));
   const [hasBaseOverrides, setHasBaseOverrides] = useState(false);
   const [hasButtonOverrides, setHasButtonOverrides] = useState(false);
 
-  // Inspector & Element colorizer states
   const [isInspectMode, setIsInspectMode] = useState(false);
   const [hoveredElement, setHoveredElement] = useState(null);
   const selectedElementRef = useRef(null);
@@ -38,18 +32,15 @@ export default function DevPaletteConsole() {
     text: '#000000',
     border: '#000000'
   });
-  // Track all elements modified in this session for one-click reverts
   const modifiedElementsRef = useRef(new Map());
   const [modifiedCount, setModifiedCount] = useState(0);
 
-  // Draggable console window position state
   const [position, setPosition] = useState({ x: 24, y: 100 });
   const [isDraggingConsole, setIsDraggingConsole] = useState(false);
   const dragStartRef = useRef({ startX: 0, startY: 0, initialX: 0, initialY: 0 });
   const consoleRef = useRef(null);
   const [copyStatus, setCopyStatus] = useState(false);
 
-  // 1. Inject or update Base Site Colors override stylesheet
   useEffect(() => {
     let styleTag = document.getElementById('ogmedia-dev-palette-base');
     if (!hasBaseOverrides) {
@@ -75,13 +66,11 @@ export default function DevPaletteConsole() {
     `;
 
     return () => {
-      // Clean up on component unmount
       const tag = document.getElementById('ogmedia-dev-palette-base');
       if (tag) tag.remove();
     };
   }, [palette.baseBg, palette.baseText, palette.baseAccent, hasBaseOverrides]);
 
-  // 2. Inject or update Buttons override stylesheet
   useEffect(() => {
     let styleTag = document.getElementById('ogmedia-dev-palette-buttons');
     if (!hasButtonOverrides) {
@@ -117,7 +106,6 @@ export default function DevPaletteConsole() {
     };
   }, [palette.btnBg, palette.btnText, palette.btnBorder, palette.btnShadow, palette.btnHover, hasButtonOverrides]);
 
-  // Keyboard shortcut: Alt+P to toggle console, ESC to cancel inspect
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.altKey && (e.key === 'p' || e.key === 'P')) {
@@ -133,14 +121,12 @@ export default function DevPaletteConsole() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isInspectMode]);
 
-  // 3. Element Inspector Mode Logic
   useEffect(() => {
     if (!isInspectMode) return;
 
     const handleMouseMove = (e) => {
       const target = document.elementFromPoint(e.clientX, e.clientY);
       if (!target) return;
-      // Do not inspect the dev console itself
       if (target.closest('.dev-console-root')) {
         setHoveredElement(null);
         return;
@@ -160,7 +146,6 @@ export default function DevPaletteConsole() {
       setHoveredElement(null);
       setActiveTab('element');
 
-      // Extract current computed styles for easy starting points
       const computed = window.getComputedStyle(target);
       const initialBg = parseCssColorToHex(computed.backgroundColor, '#bef264');
       const initialText = parseCssColorToHex(computed.color, '#111111');
@@ -172,7 +157,6 @@ export default function DevPaletteConsole() {
         border: initialBorder
       });
 
-      // Save initial original styles if not already saved
       if (!modifiedElementsRef.current.has(target)) {
         modifiedElementsRef.current.set(target, {
           originalBg: target.style.backgroundColor || '',
@@ -185,7 +169,6 @@ export default function DevPaletteConsole() {
         setModifiedCount(modifiedElementsRef.current.size);
       }
 
-      // Generate descriptive label for UI
       const tag = target.tagName.toLowerCase();
       const id = target.id ? `#${target.id}` : '';
       const classes = typeof target.className === 'string'
@@ -207,7 +190,6 @@ export default function DevPaletteConsole() {
     };
   }, [isInspectMode]);
 
-  // Apply real-time color changes to the selected element
   const applyElementColor = useCallback((property, hexValue) => {
     const el = selectedElementRef.current;
     if (!el) return;
@@ -227,7 +209,6 @@ export default function DevPaletteConsole() {
     }
   }, []);
 
-  // Revert a single element back to its original inline styles
   const revertSelectedElement = () => {
     const el = selectedElementRef.current;
     if (!el) return;
@@ -244,9 +225,7 @@ export default function DevPaletteConsole() {
     setSelectedElementInfo(null);
   };
 
-  // Revert ALL modified elements and palettes back to pristine original
   const revertAllChanges = () => {
-    // 1. Reset all element overrides
     modifiedElementsRef.current.forEach((val, el) => {
       if (el && el.style) {
         el.style.backgroundColor = val.originalBg;
@@ -260,13 +239,11 @@ export default function DevPaletteConsole() {
     selectedElementRef.current = null;
     setSelectedElementInfo(null);
 
-    // 2. Remove style tags
     const baseTag = document.getElementById('ogmedia-dev-palette-base');
     if (baseTag) baseTag.remove();
     const btnTag = document.getElementById('ogmedia-dev-palette-buttons');
     if (btnTag) btnTag.remove();
 
-    // 3. Reset state
     setPalette({ ...DEFAULT_PALETTE });
     setHasBaseOverrides(false);
     setHasButtonOverrides(false);
@@ -274,9 +251,7 @@ export default function DevPaletteConsole() {
     setHoveredElement(null);
   };
 
-  // Draggable HUD window logic
   const handleDragStart = (e) => {
-    // Only drag on titlebar
     if (e.target.closest('.dev-console-header-btn')) return;
     e.preventDefault();
     setIsDraggingConsole(true);
@@ -305,7 +280,6 @@ export default function DevPaletteConsole() {
     window.addEventListener('pointerup', handlePointerUp);
   };
 
-  // Generate CSS code for developers to copy
   const generateExportCss = () => {
     let css = `/* OG Media Dev Color Palette Overrides */\n`;
     if (hasBaseOverrides) {
@@ -328,7 +302,6 @@ export default function DevPaletteConsole() {
 
   return (
     <>
-      {/* 1. Global Hover Inspector Outline Overlay when Inspecting */}
       {isInspectMode && hoveredElement && (
         <div
           className="fixed pointer-events-none z-[99999] border-2 border-dashed border-[#bef264] bg-[#bef264]/10 transition-all duration-75"
@@ -345,7 +318,6 @@ export default function DevPaletteConsole() {
         </div>
       )}
 
-      {/* 2. Top Banner during Inspect Mode */}
       {isInspectMode && (
         <div className="dev-console-root fixed top-3 left-1/2 -translate-x-1/2 z-[100000] bg-black text-white px-4 py-2 border-2 border-[#bef264] manga-shadow font-mono-tech text-xs flex items-center gap-3 animate-bounce">
           <span className="text-[#bef264] text-sm animate-pulse">🎯</span>
@@ -360,7 +332,6 @@ export default function DevPaletteConsole() {
         </div>
       )}
 
-      {/* 3. Floating Launcher Pill (Bottom-Left) */}
       {!isOpen && (
         <div className="dev-console-root fixed bottom-5 left-5 z-50 flex items-center gap-2">
           <button
@@ -380,7 +351,6 @@ export default function DevPaletteConsole() {
         </div>
       )}
 
-      {/* 4. Draggable HUD Console Window */}
       {isOpen && (
         <aside
           ref={consoleRef}
@@ -391,7 +361,6 @@ export default function DevPaletteConsole() {
             top: `${position.y}px`
           }}
         >
-          {/* Draggable Header Titlebar */}
           <div
             onPointerDown={handleDragStart}
             className={`flex items-center justify-between p-2.5 bg-black border-b-2 border-white/40 cursor-grab active:cursor-grabbing ${
@@ -414,7 +383,6 @@ export default function DevPaletteConsole() {
             </div>
 
             <div className="flex items-center gap-1.5">
-              {/* Quick Reset All Button */}
               <button
                 type="button"
                 onClick={revertAllChanges}
@@ -424,7 +392,6 @@ export default function DevPaletteConsole() {
                 ↺ RESET
               </button>
 
-              {/* Minimize Window Button */}
               <button
                 type="button"
                 onClick={() => setIsMinimized(!isMinimized)}
@@ -434,7 +401,6 @@ export default function DevPaletteConsole() {
                 {isMinimized ? '□' : '−'}
               </button>
 
-              {/* Close Button */}
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
@@ -446,7 +412,6 @@ export default function DevPaletteConsole() {
             </div>
           </div>
 
-          {/* Minimized Bar */}
           {isMinimized ? (
             <div className="p-2 bg-stone-900 text-stone-300 text-[11px] flex justify-between items-center">
               <span>Palette Active (Minimized)</span>
@@ -460,7 +425,6 @@ export default function DevPaletteConsole() {
             </div>
           ) : (
             <div className="p-3 max-h-[82vh] overflow-y-auto">
-              {/* Navigation Tabs */}
               <div className="grid grid-cols-4 gap-1 p-1 bg-stone-900/90 border border-stone-800 rounded mb-3 text-[10px] font-bold">
                 <button
                   type="button"
@@ -508,7 +472,6 @@ export default function DevPaletteConsole() {
                 </button>
               </div>
 
-              {/* TAB 1: SITE BASE COLORS */}
               {activeTab === 'base' && (
                 <div className="space-y-3.5">
                   <div className="flex items-center justify-between border-b border-stone-800 pb-2">
@@ -524,7 +487,6 @@ export default function DevPaletteConsole() {
                     </label>
                   </div>
 
-                  {/* Drag Color Picker for Base Background */}
                   <ColorDragPicker
                     label="Background Color"
                     value={palette.baseBg}
@@ -534,7 +496,6 @@ export default function DevPaletteConsole() {
                     }}
                   />
 
-                  {/* Base Text Color Slider */}
                   <div className="pt-2 border-t border-stone-800">
                     <ColorDragPicker
                       label="Site Text Color"
@@ -552,7 +513,6 @@ export default function DevPaletteConsole() {
                 </div>
               )}
 
-              {/* TAB 2: BUTTONS PALETTE */}
               {activeTab === 'buttons' && (
                 <div className="space-y-3.5">
                   <div className="flex items-center justify-between border-b border-stone-800 pb-2">
@@ -568,7 +528,6 @@ export default function DevPaletteConsole() {
                     </label>
                   </div>
 
-                  {/* Button Background Drag Picker */}
                   <ColorDragPicker
                     label="Button Background"
                     value={palette.btnBg}
@@ -576,13 +535,12 @@ export default function DevPaletteConsole() {
                       setPalette((prev) => ({
                         ...prev,
                         btnBg: hex,
-                        btnHover: hex // sync default hover
+                        btnHover: hex
                       }));
                       setHasButtonOverrides(true);
                     }}
                   />
 
-                  {/* Button Text Color Drag Picker */}
                   <div className="pt-2 border-t border-stone-800">
                     <ColorDragPicker
                       label="Button Text Color"
@@ -594,7 +552,6 @@ export default function DevPaletteConsole() {
                     />
                   </div>
 
-                  {/* Button Border / Shadow Drag Picker */}
                   <div className="pt-2 border-t border-stone-800">
                     <ColorDragPicker
                       label="Border & Shadow Color"
@@ -610,7 +567,6 @@ export default function DevPaletteConsole() {
                     />
                   </div>
 
-                  {/* Live Preview Button */}
                   <div className="p-3 bg-stone-950 border border-stone-800 rounded flex flex-col items-center gap-1.5">
                     <span className="text-[9px] text-stone-400">LIVE BUTTON PREVIEW</span>
                     <button
@@ -631,7 +587,6 @@ export default function DevPaletteConsole() {
                 </div>
               )}
 
-              {/* TAB 3: ELEMENT INSPECTOR & COLORIZER */}
               {activeTab === 'element' && (
                 <div className="space-y-3.5">
                   <div className="flex items-center justify-between border-b border-stone-800 pb-2">
@@ -647,7 +602,6 @@ export default function DevPaletteConsole() {
                     )}
                   </div>
 
-                  {/* Pick Element Button */}
                   <button
                     type="button"
                     onClick={() => setIsInspectMode(true)}
@@ -657,7 +611,6 @@ export default function DevPaletteConsole() {
                     <span>{isInspectMode ? 'SELECTING ELEMENT...' : 'PICK / INSPECT ELEMENT'}</span>
                   </button>
 
-                  {/* Selected Element Information Card */}
                   {selectedElementInfo ? (
                     <div className="p-2.5 bg-stone-900 border border-stone-700 rounded space-y-2">
                       <div className="flex justify-between items-center text-[10px]">
@@ -668,7 +621,6 @@ export default function DevPaletteConsole() {
                         {selectedElementInfo.selector}
                       </div>
 
-                      {/* Element Drag Color Controls */}
                       <div className="pt-2 border-t border-stone-800 space-y-3">
                         <ColorDragPicker
                           label="Element Background"
@@ -708,7 +660,6 @@ export default function DevPaletteConsole() {
                 </div>
               )}
 
-              {/* TAB 4: EXPORT CSS */}
               {activeTab === 'export' && (
                 <div className="space-y-3">
                   <div className="flex justify-between items-center border-b border-stone-800 pb-2">
@@ -741,7 +692,6 @@ export default function DevPaletteConsole() {
             </div>
           )}
 
-          {/* Footer Status Bar */}
           <div className="p-2 bg-black border-t border-stone-800 flex justify-between items-center text-[10px] text-stone-500">
             <div className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#bef264]" />

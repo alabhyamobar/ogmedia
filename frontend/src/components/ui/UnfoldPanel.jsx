@@ -4,11 +4,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-/**
- * UnfoldPanel: Ultra-smooth, realistic horizontal map unrolling animation.
- * Optimized for 60fps GPU compositor performance with zero layout reflows (no jerks).
- * Simulates a person unrolling a large map across a table from left to right.
- */
 export default function UnfoldPanel({
   children,
   className = '',
@@ -20,7 +15,6 @@ export default function UnfoldPanel({
   const rollerRef = useRef(null);
   const contentRef = useRef(null);
 
-  // Normalize duration and delay whether passed as seconds or milliseconds
   const animDuration = duration > 20 ? duration / 1000 : duration;
   const animDelay = delay > 20 ? delay / 1000 : delay;
 
@@ -31,12 +25,11 @@ export default function UnfoldPanel({
     if (!container || !content) return;
 
     const ctx = gsap.context(() => {
-      // 1. Initial State: Map rolled at the left edge
       gsap.set(container, {
         clipPath: 'inset(0% 100% 0% 0%)',
         transformPerspective: 1200,
         transformOrigin: 'left center',
-        rotateY: -8, // Subtle, natural paper curl without rendering distortion
+        rotateY: -8,
         x: -12,
         opacity: 0.15,
         backfaceVisibility: 'hidden',
@@ -44,7 +37,6 @@ export default function UnfoldPanel({
         willChange: 'clip-path, transform, opacity'
       });
 
-      // Content inside starts slightly compressed like paper uncurling
       gsap.set(content, {
         x: -15,
         scaleX: 0.98,
@@ -53,7 +45,6 @@ export default function UnfoldPanel({
       });
 
       if (roller) {
-        // GPU-accelerated: use xPercent/x instead of 'left' to eliminate layout reflows
         gsap.set(roller, {
           xPercent: 0,
           opacity: 0.9,
@@ -61,7 +52,6 @@ export default function UnfoldPanel({
         });
       }
 
-      // 2. Timeline triggered on scroll
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: container,
@@ -71,7 +61,6 @@ export default function UnfoldPanel({
         delay: animDelay
       });
 
-      // Smooth horizontal map unroll using power2.out for natural paper deceleration
       tl.to(
         container,
         {
@@ -85,7 +74,6 @@ export default function UnfoldPanel({
         0
       );
 
-      // Inner content gracefully settles flat
       tl.to(
         content,
         {
@@ -97,7 +85,6 @@ export default function UnfoldPanel({
         0
       );
 
-      // Traveling paper crease roller shadow (100% GPU accelerated via x/xPercent)
       if (roller) {
         tl.to(
           roller,
@@ -109,7 +96,6 @@ export default function UnfoldPanel({
           0
         );
 
-        // Soft fade out as the roller reaches the far edge
         tl.to(
           roller,
           {
@@ -133,7 +119,6 @@ export default function UnfoldPanel({
         transformStyle: 'preserve-3d'
       }}
     >
-      {/* Traveling paper roller shadow (GPU accelerated, zero reflows) */}
       <div
         ref={rollerRef}
         className="absolute top-0 bottom-0 left-0 pointer-events-none z-30 w-6 -ml-3"
@@ -142,7 +127,6 @@ export default function UnfoldPanel({
         }}
       />
 
-      {/* Inner Content Wrapper */}
       <div ref={contentRef} className="w-full h-full">
         {children}
       </div>

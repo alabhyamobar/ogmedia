@@ -29,10 +29,9 @@ class ApiClient {
       const response = await fetch(url, {
         ...options,
         headers,
-        credentials: 'include' // Sends HTTP-only refresh cookies
+        credentials: 'include'
       });
 
-      // Handle 401 Unauthorized -> try refresh token once
       if (response.status === 401 && !options._retry && endpoint !== '/api/v1/auth/login' && endpoint !== '/api/v1/auth/refresh') {
         options._retry = true;
         const refreshed = await this.refreshToken();
@@ -73,13 +72,12 @@ class ApiClient {
         }
       }
     } catch {
-      // Refresh failed
+
     }
     this.setToken(null);
     return false;
   }
 
-  // --- Auth APIs ---
   login(login, password) {
     return this.request('/api/v1/auth/login', {
       method: 'POST',
@@ -102,7 +100,6 @@ class ApiClient {
     });
   }
 
-  // --- Public APIs ---
   submitPublicLead(leadData) {
     return this.request('/api/v1/public/leads', {
       method: 'POST',
@@ -110,7 +107,6 @@ class ApiClient {
     });
   }
 
-  // --- Lead APIs ---
   getLeads(params = {}) {
     const query = new URLSearchParams();
     Object.entries(params).forEach(([k, v]) => {
@@ -153,7 +149,6 @@ class ApiClient {
     });
   }
 
-  // --- Employee APIs ---
   getEmployees(params = {}) {
     const query = new URLSearchParams();
     Object.entries(params).forEach(([k, v]) => {
@@ -193,7 +188,6 @@ class ApiClient {
     return this.request(`/api/v1/employees/suggest-username?${query.toString()}`);
   }
 
-  // --- Analytics APIs ---
   getOverviewAnalytics(params = {}) {
     const query = new URLSearchParams();
     Object.entries(params).forEach(([k, v]) => {
@@ -210,7 +204,6 @@ class ApiClient {
     return this.request('/api/v1/analytics/employees');
   }
 
-  // --- Audit Logs ---
   getAuditLogs(params = {}) {
     const query = new URLSearchParams();
     Object.entries(params).forEach(([k, v]) => {
@@ -219,9 +212,16 @@ class ApiClient {
     return this.request(`/api/v1/audit-logs?${query.toString()}`);
   }
 
-  // --- System Health ---
   getSystemHealth() {
     return this.request('/api/v1/system/health');
+  }
+
+  clearSystemErrors() {
+    return this.request('/api/v1/system/errors', { method: 'DELETE' });
+  }
+
+  triggerTestError() {
+    return this.request('/api/v1/system/test-error', { method: 'POST' });
   }
 }
 

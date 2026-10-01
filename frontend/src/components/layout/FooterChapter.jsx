@@ -57,7 +57,6 @@ const SOCIAL_CHAPTERS = [
 export default function FooterChapter() {
   return (
     <footer id="social-chapters" className="relative px-3 sm:px-6 pt-8 pb-12 max-w-[1300px] mx-auto select-none">
-      {/* Huge Bold Comic End Title Box */}
       <div className="text-center my-8">
         <div className="inline-block bg-black dark:bg-[#16161a] text-white px-8 sm:px-14 py-4 sm:py-5 border-3 border-black dark:border-[#38383e] manga-shadow-lg transform -rotate-0.5">
           <InkText
@@ -72,7 +71,6 @@ export default function FooterChapter() {
           />
         </div>
 
-        {/* Sub-Pill Badge */}
         <div className="mt-3">
           <div className="inline-block bg-[#bef264] text-black border-2 border-black px-4 py-1 font-mono-tech font-bold text-xs sm:text-sm manga-shadow-sm">
             <span>[ TO BE CONTINUED IN VOL. 02 ... // </span>
@@ -82,7 +80,6 @@ export default function FooterChapter() {
         </div>
       </div>
 
-      {/* Social Chapters: Replaces large cards with sleek official logo badges */}
       <div className="my-8 flex flex-col items-center">
         <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-5">
           {SOCIAL_CHAPTERS.map((item) => (
@@ -94,7 +91,6 @@ export default function FooterChapter() {
               title={`${item.chapter}: Follow on ${item.name}`}
               className="group flex items-center gap-3 bg-white dark:bg-[#18181c] border-2 border-black dark:border-stone-700 hover:border-black px-4 sm:px-5 py-2.5 rounded-xl manga-shadow hover:shadow-[5px_5px_0px_#000] hover:-translate-y-1 active:translate-y-0 transition-all duration-150 cursor-pointer"
             >
-              {/* Official Social SVG Logo */}
               <div
                 className="w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-sm group-hover:scale-110 transition-transform flex-shrink-0"
                 style={{ backgroundColor: item.accentColor }}
@@ -102,7 +98,6 @@ export default function FooterChapter() {
                 {item.icon}
               </div>
 
-              {/* Chapter Tag & Platform Name */}
               <div className="text-left font-mono-tech">
                 <div className="text-[10px] font-bold text-stone-500 dark:text-stone-400 group-hover:text-stone-800 dark:group-hover:text-stone-200 uppercase tracking-wider">
                   {item.chapter}
@@ -117,10 +112,8 @@ export default function FooterChapter() {
         </div>
       </div>
 
-      {/* 3-Column Studio Metadata Footer Grid with Horizontal Map Unroll Animation */}
       <UnfoldPanel direction="right" duration={1000} delay={150} className="border-2 border-black dark:border-[#38383e] bg-white dark:bg-[#131316] p-6 my-8 manga-shadow">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-mono-tech text-xs">
-          {/* Column 1: Seoul HQ */}
           <div className="border-l-3 border-[#38bdf8] pl-3.5 bg-[#38bdf8]/5 p-2">
             <InkText
               as="div"
@@ -134,7 +127,6 @@ export default function FooterChapter() {
             <div className="text-stone-500 dark:text-stone-400 font-medium">Seoul, Republic of Korea</div>
           </div>
 
-          {/* Column 2: Tokyo Lab */}
           <div className="border-l-3 border-[#ef4444] pl-3.5 bg-[#ef4444]/5 p-2">
             <InkText
               as="div"
@@ -148,7 +140,6 @@ export default function FooterChapter() {
             <div className="text-stone-500 dark:text-stone-400 font-medium">Tokyo, Japan</div>
           </div>
 
-          {/* Column 3: NY Transmission */}
           <div className="border-l-3 border-[#bef264] pl-3.5 bg-[#bef264]/5 p-2">
             <InkText
               as="div"
@@ -163,7 +154,6 @@ export default function FooterChapter() {
           </div>
         </div>
 
-        {/* Middle Copyright Registration Strip & Creator Credit */}
         <div className="mt-6 pt-4 border-t border-stone-200 dark:border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-2.5 text-center sm:text-left font-mono-tech text-[10px] text-stone-600 dark:text-stone-400">
           <div>
             OG MEDIA GROUP INC. // 2026 // GLOBAL PRODUCTION ARCHIVE #2087 // ALL RIGHTS RESERVED
@@ -182,7 +172,6 @@ export default function FooterChapter() {
         </div>
       </UnfoldPanel>
 
-      {/* Bottom Technical Status Bar */}
       <div className="border-t-2 border-black dark:border-stone-800 pt-4 flex flex-wrap items-center justify-between gap-4 font-mono-tech text-[10px] sm:text-[11px] text-stone-700 dark:text-stone-300">
         <div>
           <InkText

@@ -8,7 +8,7 @@ const VideoPreloadContext = createContext({
   totalBytes: 15686480,
   speed: '0.0 MB/s',
   isLoaded: false,
-  status: 'idle', // 'idle' | 'loading' | 'ready' | 'fallback'
+  status: 'idle',
   retryPreload: () => {}
 });
 
@@ -27,7 +27,6 @@ export function VideoPreloadProvider({ children }) {
   const blobUrlRef = useRef(null);
 
   const startPreload = () => {
-    // If already loaded or in progress
     if (xhrRef.current) {
       xhrRef.current.abort();
     }
@@ -39,7 +38,6 @@ export function VideoPreloadProvider({ children }) {
     const xhr = new XMLHttpRequest();
     xhrRef.current = xhr;
 
-    // Use full path with base
     const videoUrl = '/ogmedia/herovid1.mp4';
     xhr.open('GET', videoUrl, true);
     xhr.responseType = 'blob';
@@ -68,7 +66,6 @@ export function VideoPreloadProvider({ children }) {
         const pct = Math.min(100, Math.round((event.loaded / event.total) * 100));
         setProgress(pct);
       } else {
-        // Fallback to estimated progress against known 15.68MB
         const knownTotal = 15686480;
         setTotalBytes(knownTotal);
         const pct = Math.min(99, Math.round((event.loaded / knownTotal) * 100));
@@ -84,7 +81,6 @@ export function VideoPreloadProvider({ children }) {
           blobUrlRef.current = url;
           setVideoBlobUrl(url);
 
-          // Verify video decoding readiness via test video element
           const testVid = document.createElement('video');
           testVid.preload = 'auto';
           testVid.muted = true;
@@ -100,20 +96,17 @@ export function VideoPreloadProvider({ children }) {
           testVid.addEventListener('canplay', onReady);
           testVid.load();
 
-          // Fallback if canplay doesn't fire immediately
           setTimeout(() => {
             setProgress(100);
             setIsLoaded(true);
             setStatus('ready');
           }, 350);
         } catch {
-          // Fallback if Blob URL creation fails
           setProgress(100);
           setIsLoaded(true);
           setStatus('fallback');
         }
       } else {
-        // Fallback to direct video URL
         setProgress(100);
         setIsLoaded(true);
         setStatus('fallback');
@@ -121,7 +114,6 @@ export function VideoPreloadProvider({ children }) {
     };
 
     xhr.onerror = () => {
-      // Gracefully fallback so the user is never blocked
       setProgress(100);
       setIsLoaded(true);
       setStatus('fallback');
@@ -133,7 +125,6 @@ export function VideoPreloadProvider({ children }) {
       setStatus('fallback');
     };
 
-    // Timeout: 30 seconds maximum
     xhr.timeout = 30000;
 
     xhr.send();

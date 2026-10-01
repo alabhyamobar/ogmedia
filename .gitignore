@@ -3,3 +3,6 @@ node_modules/
 dump.rdb
 *.log
 dist/
+backend/
+MEDIA_OPTIMIZATION_GUID.md
+mongo.md

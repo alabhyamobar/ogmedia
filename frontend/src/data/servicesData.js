@@ -1,14 +1,3 @@
-/**
- * OG Media Services & Capabilities Data Repository
- * 6 Core Protocols:
- * 1. INFLUENCER MARKETING
- * 2. MEME MARKETING
- * 3. META ADS
- * 4. PREMIUM BRANDS
- * 5. SCALE STAGE
- * 6. WEBSITE & APP DESIGN
- */
-
 export const SERVICES_DATA = [
   {
     id: 'influencer-marketing',

@@ -16,27 +16,24 @@ import {
 } from 'lucide-react';
 
 export default function DashboardPage() {
-  const { user, isAdmin, isSuperAdmin, isEmployee } = useAuth();
+  const { user, isAdmin, isSuperAdmin, isDeveloper, isEmployee } = useAuth();
 
-  // Fetch overview analytics
   const { data: analyticsData, isLoading: analyticsLoading } = useQuery({
     queryKey: ['analytics-overview'],
     queryFn: () => api.getOverviewAnalytics(),
-    refetchInterval: 15000 // Real-time pulse every 15s
+    refetchInterval: 15000
   });
 
-  // Fetch recent leads
   const { data: leadsData, isLoading: leadsLoading } = useQuery({
     queryKey: ['recent-leads'],
     queryFn: () => api.getLeads({ limit: 6, page: 1 }),
     refetchInterval: 15000
   });
 
-  // Fetch system health (for admins)
   const { data: healthData } = useQuery({
     queryKey: ['system-health-dashboard'],
     queryFn: () => api.getSystemHealth(),
-    enabled: isAdmin,
+    enabled: isDeveloper,
     refetchInterval: 10000
   });
 
@@ -47,7 +44,6 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6 sm:space-y-8 select-none">
       
-      {/* Top Banner / Hero Callout */}
       <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-5 sm:p-7 shadow-[6px_6px_0px_#000] relative overflow-hidden">
         <div className="absolute right-0 top-0 bottom-0 w-1/3 manga-halftone pointer-events-none opacity-15" />
         
@@ -62,7 +58,7 @@ export default function DashboardPage() {
               Welcome Back, {user?.name}.
             </h1>
             <p className="font-mono-tech text-xs sm:text-sm text-stone-600 dark:text-stone-400 mt-1 max-w-xl">
-              {isAdmin
+              {isAdmin || isDeveloper
                 ? 'High-throughput Redis ingestion buffer is absorbing customer query transmissions. Operational database writes governed via controlled worker pool.'
                 : `You are authorized for sector(s): ${user?.expertise?.join(', ') || 'General'}. Viewing leads strictly scoped to your domain clearance.`}
             </p>
@@ -77,7 +73,7 @@ export default function DashboardPage() {
               <ArrowUpRight className="w-4 h-4" />
             </Link>
 
-            {isAdmin && (
+            {(isAdmin || isDeveloper) && (
               <Link
                 to="/crm/analytics"
                 className="bg-white dark:bg-[#1e1e24] hover:bg-stone-100 text-black dark:text-white font-mono-tech font-bold text-xs px-4 py-2.5 border-2 border-black dark:border-stone-700 rounded-xl shadow-[3px_3px_0px_#000] hover:-translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer"
@@ -89,10 +85,8 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* KPI Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 font-mono-tech">
         
-        {/* Card 1: Total Leads */}
         <div className="bg-[#faf8f5] dark:bg-[#16161a] border-2 border-black dark:border-stone-700 rounded-xl p-5 shadow-[4px_4px_0px_#000] space-y-2">
           <div className="flex items-center justify-between text-stone-500 text-xs font-bold uppercase">
             <span>{isEmployee ? 'My Sector Inquiries' : 'Total Inquiries'}</span>
@@ -107,7 +101,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Card 2: New Inquiries */}
         <div className="bg-[#faf8f5] dark:bg-[#16161a] border-2 border-black dark:border-stone-700 rounded-xl p-5 shadow-[4px_4px_0px_#000] space-y-2">
           <div className="flex items-center justify-between text-stone-500 text-xs font-bold uppercase">
             <span>New & Uncontacted</span>
@@ -121,7 +114,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Card 3: Converted Clients */}
         <div className="bg-[#faf8f5] dark:bg-[#16161a] border-2 border-black dark:border-stone-700 rounded-xl p-5 shadow-[4px_4px_0px_#000] space-y-2">
           <div className="flex items-center justify-between text-stone-500 text-xs font-bold uppercase">
             <span>Converted Deals</span>
@@ -135,7 +127,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Card 4: Conversion Rate */}
         <div className="bg-[#bef264] border-2 border-black rounded-xl p-5 shadow-[4px_4px_0px_#000] text-black space-y-2">
           <div className="flex items-center justify-between text-black/70 text-xs font-black uppercase">
             <span>Conversion Win Rate</span>
@@ -151,8 +142,7 @@ export default function DashboardPage() {
 
       </div>
 
-      {/* Admin Live Queue Monitor Callout */}
-      {isAdmin && healthData?.data?.queue && (
+      {isDeveloper && healthData?.data?.queue && (
         <div className="bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-xl p-4 sm:p-5 shadow-[4px_4px_0px_#000] flex flex-col md:flex-row md:items-center justify-between gap-4 font-mono-tech text-xs">
           <div className="flex items-center gap-3">
             <div className="p-2.5 bg-black text-[#bef264] border border-black rounded-lg">
@@ -194,7 +184,6 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* Recent Inquiries Table Container */}
       <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-5 sm:p-7 shadow-[6px_6px_0px_#000] space-y-5">
         <div className="flex items-center justify-between border-b-2 border-black dark:border-stone-700 pb-4">
           <div>
@@ -215,7 +204,6 @@ export default function DashboardPage() {
           </Link>
         </div>
 
-        {/* Table or Empty State */}
         {leadsLoading ? (
           <div className="py-12 text-center font-mono-tech text-xs text-stone-500 animate-pulse">
             [ QUERYING MONGODB DURABLE STORAGE... ]

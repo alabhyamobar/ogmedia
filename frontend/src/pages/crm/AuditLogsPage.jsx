@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../../services/api';
-import { ShieldCheck, Filter, ChevronLeft, ChevronRight, RefreshCw } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import { ShieldCheck, Filter, ChevronLeft, ChevronRight, RefreshCw, Lock } from 'lucide-react';
 
 const ACTIONS = [
   'LOGIN',
@@ -21,6 +23,7 @@ const ACTIONS = [
 export default function AuditLogsPage() {
   const [page, setPage] = useState(1);
   const [selectedAction, setSelectedAction] = useState('ALL');
+  const { isDeveloper } = useAuth();
 
   const { data, isLoading, isFetching, refetch } = useQuery({
     queryKey: ['audit-logs', page, selectedAction],
@@ -30,20 +33,55 @@ export default function AuditLogsPage() {
         limit: 20,
         action: selectedAction === 'ALL' ? undefined : selectedAction
       }),
+    enabled: isDeveloper,
     keepPreviousData: true
   });
 
   const logs = data?.data?.logs || [];
   const pagination = data?.data?.pagination || { page: 1, limit: 20, total: 0, totalPages: 1 };
 
+  if (!isDeveloper) {
+    return (
+      <div className="space-y-6 select-none font-sans py-8">
+        <div className="p-8 bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl shadow-[6px_6px_0px_#000] text-center space-y-4 max-w-xl mx-auto">
+          <div className="w-14 h-14 mx-auto rounded-2xl bg-[#ef4444]/15 border-2 border-[#ef4444] text-[#ef4444] flex items-center justify-center font-black shadow-[3px_3px_0px_#ef4444]">
+            <Lock className="w-7 h-7" />
+          </div>
+          <div className="space-y-1">
+            <div className="font-mono-tech text-xs font-bold text-[#ef4444]">
+              /// POLICY RESTRICTION // CLEARANCE 403
+            </div>
+            <h2 className="font-heading font-black text-2xl text-black dark:text-white uppercase tracking-tight">
+              Module Access Restricted
+            </h2>
+          </div>
+          <p className="font-mono-tech text-xs text-stone-600 dark:text-stone-400 leading-relaxed">
+            This partition is locked under enterprise security compliance policies. Administrative clearance does not include access to this module.
+          </p>
+          <div className="pt-3">
+            <Link
+              to="/crm/dashboard"
+              className="inline-flex items-center gap-2 bg-[#bef264] hover:bg-[#a3e635] text-black font-mono-tech font-bold text-xs px-5 py-2.5 border-2 border-black rounded-xl shadow-[3px_3px_0px_#000] transition-transform hover:scale-105 active:scale-95"
+            >
+              <span>RETURN TO CRM DASHBOARD</span>
+              <span>→</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6 select-none font-sans">
       
-      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="font-mono-tech text-xs font-bold text-stone-500">
-            /// 05 IMMUTABLE SECURITY LEDGER
+          <div className="font-mono-tech text-xs font-bold text-stone-500 flex items-center gap-2">
+            <span>/// 05 IMMUTABLE SECURITY LEDGER</span>
+            <span className="bg-[#bef264] text-black font-black text-[9px] px-1.5 py-0.5 rounded border border-black shadow-[1px_1px_0px_#000]">
+              DEVELOPER EXCLUSIVE
+            </span>
           </div>
           <h1 className="font-heading font-black text-2xl sm:text-3xl text-black dark:text-white uppercase tracking-tight">
             Audit Logs & Security Trail
@@ -62,7 +100,6 @@ export default function AuditLogsPage() {
         </button>
       </div>
 
-      {/* Filter */}
       <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-4 shadow-[5px_5px_0px_#000] flex flex-col sm:flex-row items-center justify-between gap-3 font-mono-tech text-xs">
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <Filter className="w-4 h-4 text-stone-500" />
@@ -89,7 +126,6 @@ export default function AuditLogsPage() {
         </div>
       </div>
 
-      {/* Audit Log Table Container */}
       <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl shadow-[6px_6px_0px_#000] overflow-hidden">
         
         {isLoading ? (
@@ -166,7 +202,6 @@ export default function AuditLogsPage() {
           </div>
         )}
 
-        {/* Pagination */}
         <div className="p-4 border-t-2 border-black dark:border-stone-700 bg-white dark:bg-[#121216] flex items-center justify-between font-mono-tech text-xs">
           <button
             onClick={() => setPage((p) => Math.max(1, p - 1))}

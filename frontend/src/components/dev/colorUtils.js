@@ -1,18 +1,7 @@
-/**
- * Utility functions for color conversions (HEX, RGB, HSL, HSV)
- * Pure JS, zero external dependencies.
- */
-
-/**
- * Clamp a number between min and max
- */
 export function clamp(val, min, max) {
   return Math.min(Math.max(val, min), max);
 }
 
-/**
- * Convert HEX to RGB object { r, g, b }
- */
 export function hexToRgb(hex) {
   if (!hex) return { r: 0, g: 0, b: 0 };
   let clean = hex.replace('#', '').trim();
@@ -29,9 +18,6 @@ export function hexToRgb(hex) {
   };
 }
 
-/**
- * Convert RGB to 6-char HEX string (#rrggbb)
- */
 export function rgbToHex(r, g, b) {
   const toHex = (n) => {
     const clamped = clamp(Math.round(n), 0, 255);
@@ -40,9 +26,6 @@ export function rgbToHex(r, g, b) {
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
 
-/**
- * Convert RGB (0-255) to HSV { h: 0-360, s: 0-100, v: 0-100 }
- */
 export function rgbToHsv(r, g, b) {
   const rNorm = clamp(r, 0, 255) / 255;
   const gNorm = clamp(g, 0, 255) / 255;
@@ -71,9 +54,6 @@ export function rgbToHsv(r, g, b) {
   return { h, s: Math.round(s), v: Math.round(v) };
 }
 
-/**
- * Convert HSV to RGB { r, g, b }
- */
 export function hsvToRgb(h, s, v) {
   const hNorm = (clamp(h, 0, 360) % 360) / 60;
   const sNorm = clamp(s, 0, 100) / 100;
@@ -105,25 +85,16 @@ export function hsvToRgb(h, s, v) {
   };
 }
 
-/**
- * Convert HEX to HSV
- */
 export function hexToHsv(hex) {
   const rgb = hexToRgb(hex);
   return rgbToHsv(rgb.r, rgb.g, rgb.b);
 }
 
-/**
- * Convert HSV to HEX
- */
 export function hsvToHex(h, s, v) {
   const rgb = hsvToRgb(h, s, v);
   return rgbToHex(rgb.r, rgb.g, rgb.b);
 }
 
-/**
- * Parse any CSS color string (hex, rgb, rgba) or fallback to computed style
- */
 export function parseCssColorToHex(colorStr, fallback = '#000000') {
   if (!colorStr || colorStr === 'transparent' || colorStr === 'inherit') {
     return fallback;

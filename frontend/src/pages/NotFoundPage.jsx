@@ -21,7 +21,6 @@ export default function NotFoundPage() {
           </div>
         </div>
 
-        {/* Comic Dialogue Balloon */}
         <div className="relative bg-white dark:bg-[#1e1e24] text-black dark:text-white p-4 border-2 border-black manga-shadow-sm font-sans text-sm font-semibold">
           <p>
             "Attention Operative: The archive coordinate you requested does not exist or has been redacted by high command."

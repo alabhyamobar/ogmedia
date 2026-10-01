@@ -2,9 +2,6 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { useVideoPreload } from '../../context/VideoPreloadContext';
 import OgLogo from '../ui/OgLogo';
 
-/**
- * Web Audio Procedural Sound Effects Synthesizer
- */
 class SoundFx {
   constructor() {
     this.ctx = null;
@@ -60,9 +57,9 @@ class SoundFx {
     const gain = this.ctx.createGain();
 
     osc.type = 'triangle';
-    osc.frequency.setValueAtTime(523.25, now); // C5
-    osc.frequency.setValueAtTime(783.99, now + 0.07); // G5
-    osc.frequency.setValueAtTime(1046.5, now + 0.14); // C6
+    osc.frequency.setValueAtTime(523.25, now);
+    osc.frequency.setValueAtTime(783.99, now + 0.07);
+    osc.frequency.setValueAtTime(1046.5, now + 0.14);
 
     gain.gain.setValueAtTime(0.18, now);
     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
@@ -147,7 +144,7 @@ export default function LoadingGame({ onComplete }) {
   const [sfxEnabled, setSfxEnabled] = useState(true);
   const [score, setScore] = useState(0);
   const [hasShield, setHasShield] = useState(false);
-  const [gameStateStatus, setGameStateStatus] = useState('READY'); // 'READY' | 'PLAYING' | 'GAMEOVER'
+  const [gameStateStatus, setGameStateStatus] = useState('READY');
   const [isReady, setIsReady] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   
@@ -166,7 +163,6 @@ export default function LoadingGame({ onComplete }) {
     }
   });
 
-  // Dynamic greeting based on time of day
   const greetingTime = useMemo(() => {
     const hour = new Date().getHours();
     if (hour >= 5 && hour < 12) return 'Good morning';
@@ -175,7 +171,6 @@ export default function LoadingGame({ onComplete }) {
     return 'Hello';
   }, []);
 
-  // Friendly status message reflecting real video stream
   const friendlyStatus = useMemo(() => {
     if (isReady || isVideoLoaded || displayProgress >= 100) return 'Hero Video Ready! Welcome in ✨';
     if (displayProgress >= 75) return 'Finalizing 4K hero video stream...';
@@ -184,7 +179,6 @@ export default function LoadingGame({ onComplete }) {
     return 'Initializing creative showcase...';
   }, [displayProgress, isReady, isVideoLoaded]);
 
-  // Guaranteed, un-cancellable transition into the website
   const triggerEnterSite = useCallback(() => {
     if (hasFinishedRef.current) return;
     hasFinishedRef.current = true;
@@ -198,7 +192,6 @@ export default function LoadingGame({ onComplete }) {
     }, 450);
   }, []);
 
-  // Synchronize loading progress DIRECTLY with real hero video download
   useEffect(() => {
     const interval = setInterval(() => {
       const target = isVideoLoaded ? 100 : videoProgress;
@@ -218,12 +211,10 @@ export default function LoadingGame({ onComplete }) {
     return () => clearInterval(interval);
   }, [videoProgress, isVideoLoaded]);
 
-  // AUTOMATIC ENTRY: When hero video is ready or progress hits 100%, enter the site!
   useEffect(() => {
     if ((displayProgress >= 100 || isVideoLoaded) && !hasFinishedRef.current) {
       setIsReady(true);
 
-      // Schedule entry transition without cancelling on re-renders
       if (!exitTimeoutRef.current) {
         exitTimeoutRef.current = setTimeout(() => {
           triggerEnterSite();
@@ -232,7 +223,6 @@ export default function LoadingGame({ onComplete }) {
     }
   }, [displayProgress, isVideoLoaded, triggerEnterSite]);
 
-  // Safety ceiling: never make any user wait longer than 5.5s
   useEffect(() => {
     const safetyTimer = setTimeout(() => {
       if (!hasFinishedRef.current) {
@@ -244,7 +234,6 @@ export default function LoadingGame({ onComplete }) {
     return () => clearTimeout(safetyTimer);
   }, [triggerEnterSite]);
 
-  // Quick skip option
   const handleQuickSkip = () => {
     if (exitTimeoutRef.current) {
       clearTimeout(exitTimeoutRef.current);
@@ -252,14 +241,12 @@ export default function LoadingGame({ onComplete }) {
     triggerEnterSite();
   };
 
-  // Toggle sound
   const toggleSfx = () => {
     sfx.markUserInteraction();
     sfx.muted = sfxEnabled;
     setSfxEnabled(!sfxEnabled);
   };
 
-  // 60fps Game Loop State
   const gameStateRef = useRef({
     status: 'READY',
     drone: {
@@ -286,7 +273,6 @@ export default function LoadingGame({ onComplete }) {
     bgOffset: 0
   });
 
-  // Jump / Flap Action
   const jump = useCallback(() => {
     sfx.markUserInteraction();
     const gs = gameStateRef.current;
@@ -324,7 +310,6 @@ export default function LoadingGame({ onComplete }) {
     gs.drone.rotation = -0.4;
     sfx.playFlap();
 
-    // Friendly sparkles
     for (let i = 0; i < 4; i++) {
       gs.particles.push({
         x: gs.drone.x - 12,
@@ -338,7 +323,6 @@ export default function LoadingGame({ onComplete }) {
     }
   }, []);
 
-  // Keyboard controls
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') {
@@ -350,7 +334,6 @@ export default function LoadingGame({ onComplete }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [jump]);
 
-  // Main Canvas 60fps Game Loop
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -367,7 +350,6 @@ export default function LoadingGame({ onComplete }) {
       const width = canvas.width;
       const height = canvas.height;
 
-      // Screen Shake
       let shakeX = 0;
       let shakeY = 0;
       if (gs.shake > 0) {
@@ -380,11 +362,9 @@ export default function LoadingGame({ onComplete }) {
       ctx.save();
       ctx.translate(shakeX, shakeY);
 
-      // Clean Sleek Game Canvas Background
       ctx.fillStyle = '#0a0a0e';
       ctx.fillRect(0, 0, width, height);
 
-      // Background Skyline Parallax
       gs.bgOffset = (gs.bgOffset + (gs.status === 'PLAYING' ? 0.5 : 0.2)) % 240;
       ctx.fillStyle = '#121218';
       const bgX = -gs.bgOffset;
@@ -393,7 +373,6 @@ export default function LoadingGame({ onComplete }) {
         ctx.fillRect(sx + 20, height - 100, 26, 100);
       }
 
-      // Subtle Grid Lines
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
       ctx.lineWidth = 1;
       for (let x = 0; x < width; x += 32) {
@@ -409,7 +388,6 @@ export default function LoadingGame({ onComplete }) {
         ctx.stroke();
       }
 
-      // Spawn Obstacles & Star Collectibles
       if (gs.status === 'PLAYING') {
         if (gs.frameCount - gs.lastSpawn > 110) {
           const topH = Math.floor(Math.random() * (height - gap - 70)) + 35;
@@ -421,7 +399,6 @@ export default function LoadingGame({ onComplete }) {
           });
           gs.lastSpawn = gs.frameCount;
 
-          // Spawn Star or Shield in the gap
           const rand = Math.random();
           if (rand > 0.3) {
             gs.items.push({
@@ -443,7 +420,6 @@ export default function LoadingGame({ onComplete }) {
         }
       }
 
-      // Update & Draw Obstacles
       const pillarWidth = 46;
       for (let i = gs.obstacles.length - 1; i >= 0; i--) {
         const obs = gs.obstacles[i];
@@ -451,18 +427,15 @@ export default function LoadingGame({ onComplete }) {
           obs.x -= speed;
         }
 
-        // Top Pillar
         ctx.fillStyle = '#181820';
         ctx.fillRect(obs.x, 0, pillarWidth, obs.topH);
         ctx.strokeStyle = '#27272a';
         ctx.lineWidth = 2;
         ctx.strokeRect(obs.x, 0, pillarWidth, obs.topH);
 
-        // Top Lime Accent
         ctx.fillStyle = '#bef264';
         ctx.fillRect(obs.x, obs.topH - 8, pillarWidth, 8);
 
-        // Bottom Pillar
         const botH = height - obs.bottomY;
         ctx.fillStyle = '#181820';
         ctx.fillRect(obs.x, obs.bottomY, pillarWidth, botH);
@@ -470,11 +443,9 @@ export default function LoadingGame({ onComplete }) {
         ctx.lineWidth = 2;
         ctx.strokeRect(obs.x, obs.bottomY, pillarWidth, botH);
 
-        // Bottom Lime Accent
         ctx.fillStyle = '#bef264';
         ctx.fillRect(obs.x, obs.bottomY, pillarWidth, 8);
 
-        // Score Check
         if (!obs.passed && obs.x + pillarWidth < gs.drone.x) {
           obs.passed = true;
           gs.score++;
@@ -497,7 +468,6 @@ export default function LoadingGame({ onComplete }) {
           }
         }
 
-        // Collision Check
         if (
           gs.drone.x + gs.drone.radius > obs.x &&
           gs.drone.x - gs.drone.radius < obs.x + pillarWidth
@@ -533,7 +503,6 @@ export default function LoadingGame({ onComplete }) {
         }
       }
 
-      // Update & Draw Collectibles
       for (let i = gs.items.length - 1; i >= 0; i--) {
         const item = gs.items[i];
         if (gs.status === 'PLAYING') {
@@ -545,7 +514,6 @@ export default function LoadingGame({ onComplete }) {
           const r = 7 + Math.sin(item.pulse) * 1.5;
 
           if (item.type === 'star') {
-            // Friendly Glowing Star / Orb
             ctx.beginPath();
             ctx.arc(item.x, item.y, r, 0, Math.PI * 2);
             ctx.fillStyle = '#bef264';
@@ -554,13 +522,11 @@ export default function LoadingGame({ onComplete }) {
             ctx.lineWidth = 1.5;
             ctx.stroke();
 
-            // Glow
             ctx.beginPath();
             ctx.arc(item.x, item.y, r * 1.8, 0, Math.PI * 2);
             ctx.fillStyle = 'rgba(190, 242, 100, 0.25)';
             ctx.fill();
           } else if (item.type === 'shield') {
-            // Friendly Shield Orb
             ctx.beginPath();
             ctx.arc(item.x, item.y, r + 2, 0, Math.PI * 2);
             ctx.fillStyle = '#c084fc';
@@ -574,7 +540,6 @@ export default function LoadingGame({ onComplete }) {
             ctx.fillText('🛡', item.x, item.y + 3);
           }
 
-          // Pickup collision
           const dist = Math.hypot(gs.drone.x - item.x, gs.drone.y - item.y);
           if (dist < gs.drone.radius + r + 4) {
             item.collected = true;
@@ -609,7 +574,6 @@ export default function LoadingGame({ onComplete }) {
         }
       }
 
-      // Update OG Drone Glider
       if (gs.status === 'READY') {
         gs.hoverPhase += 0.06;
         gs.drone.y = 190 + Math.sin(gs.hoverPhase) * 6;
@@ -627,13 +591,11 @@ export default function LoadingGame({ onComplete }) {
 
         gs.drone.wingState += 0.28;
 
-        // Trail
         if (gs.frameCount % 2 === 0) {
           gs.drone.trail.unshift({ x: gs.drone.x, y: gs.drone.y, rot: gs.drone.rotation, alpha: 0.4 });
           if (gs.drone.trail.length > 5) gs.drone.trail.pop();
         }
 
-        // Boundary Limits
         if (gs.drone.y - gs.drone.radius < 0) {
           gs.drone.y = gs.drone.radius;
           gs.drone.vy = 0;
@@ -653,7 +615,6 @@ export default function LoadingGame({ onComplete }) {
         }
       }
 
-      // Draw Drone Trail
       for (let t = 0; t < gs.drone.trail.length; t++) {
         const tr = gs.drone.trail[t];
         tr.alpha *= 0.85;
@@ -668,18 +629,15 @@ export default function LoadingGame({ onComplete }) {
         ctx.restore();
       }
 
-      // Draw OG Drone Glider
       ctx.save();
       ctx.translate(gs.drone.x, gs.drone.y);
       ctx.rotate(gs.drone.rotation);
 
-      // Drone Glow
       ctx.beginPath();
       ctx.arc(0, 0, 16, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(190, 242, 100, 0.2)';
       ctx.fill();
 
-      // Shield Aura
       if (gs.drone.hasShield) {
         gs.drone.shieldTime += 0.08;
         ctx.save();
@@ -699,7 +657,6 @@ export default function LoadingGame({ onComplete }) {
         ctx.restore();
       }
 
-      // Fuselage
       ctx.beginPath();
       ctx.moveTo(16, 0);
       ctx.lineTo(-6, -8);
@@ -714,7 +671,6 @@ export default function LoadingGame({ onComplete }) {
       ctx.lineWidth = 2;
       ctx.stroke();
 
-      // Wings
       const wingY = Math.sin(gs.drone.wingState) * 5;
       ctx.beginPath();
       ctx.moveTo(-3, 0);
@@ -726,14 +682,12 @@ export default function LoadingGame({ onComplete }) {
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      // OG Monogram
       ctx.fillStyle = '#bef264';
       ctx.font = 'bold 7px sans-serif';
       ctx.fillText('OG', -4, 2.5);
 
       ctx.restore();
 
-      // Particles
       for (let i = gs.particles.length - 1; i >= 0; i--) {
         const p = gs.particles[i];
         p.x += p.vx;
@@ -752,7 +706,6 @@ export default function LoadingGame({ onComplete }) {
         }
       }
 
-      // Friendly Popups
       for (let i = gs.popups.length - 1; i >= 0; i--) {
         const pop = gs.popups[i];
         pop.y -= 0.8;
@@ -770,7 +723,6 @@ export default function LoadingGame({ onComplete }) {
         }
       }
 
-      // Ready Overlay Prompt
       if (gs.status === 'READY') {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
         ctx.fillRect(0, 0, width, height);
@@ -785,7 +737,6 @@ export default function LoadingGame({ onComplete }) {
         ctx.fillText('[ Click, Tap, or Spacebar to Play ]', width / 2, height / 2 + 16);
       }
 
-      // Game Over Overlay
       if (gs.status === 'GAMEOVER') {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
         ctx.fillRect(0, 0, width, height);
@@ -826,17 +777,13 @@ export default function LoadingGame({ onComplete }) {
         backgroundSize: '100% 100%, 28px 28px, 28px 28px'
       }}
     >
-      {/* Top Header Bar */}
       <header className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 pt-3 sm:pt-4">
         <div className="bg-white dark:bg-stone-900 border-2 border-black p-2.5 manga-shadow-sm flex items-center justify-between gap-3">
-          {/* Brand Logo & Friendly Subtitle */}
           <div className="flex items-center gap-2 sm:gap-3">
             <OgLogo size="sm" withText={true} subtitle="DIGITAL CREATIVE STUDIO" />
           </div>
 
-          {/* Sound, Shield & Skip Controls */}
           <div className="flex items-center gap-2">
-            {/* Sound Toggle */}
             <button
               onClick={toggleSfx}
               className="bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 border border-black px-2.5 py-1 font-mono-tech text-[11px] font-bold transition-colors cursor-pointer flex items-center gap-1"
@@ -845,14 +792,12 @@ export default function LoadingGame({ onComplete }) {
               <span>Sound: {sfxEnabled ? 'ON' : 'OFF'}</span>
             </button>
 
-            {/* Shield Indicator */}
             {hasShield && (
               <div className="bg-[#c084fc] text-black font-mono-tech font-bold text-[11px] px-2.5 py-1 border border-black animate-pulse flex items-center gap-1">
                 <span>🛡 Shield Ready</span>
               </div>
             )}
 
-            {/* Quick Skip button */}
             <button
               onClick={handleQuickSkip}
               className="bg-white dark:bg-stone-900 hover:bg-[#bef264] hover:text-black border border-black px-3 py-1 font-mono-tech text-[11px] font-bold transition-colors cursor-pointer flex items-center gap-1 shadow-sm"
@@ -865,31 +810,25 @@ export default function LoadingGame({ onComplete }) {
         </div>
       </header>
 
-      {/* Main Content Area: Left Greeting + Right Interactive Game */}
       <main className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-6 flex-1 flex flex-col justify-center">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-7 items-center">
           
-          {/* LEFT COLUMN: Friendly Greeting & Loading Progress Card */}
           <div className="lg:col-span-5 space-y-4">
             <div className="bg-white dark:bg-stone-900 border-3 border-black p-5 sm:p-7 manga-shadow-lg space-y-4">
               
-              {/* Warm Friendly Greeting Badge */}
               <div className="inline-flex items-center gap-2 bg-[#bef264] text-black border-2 border-black font-mono-tech font-bold text-xs sm:text-sm px-3 py-1 manga-shadow-sm transform -rotate-1">
                 <span>👋</span>
                 <span>{greetingTime}, Welcome!</span>
               </div>
 
-              {/* Approachable Headline */}
               <h1 className="font-heading text-2xl sm:text-3xl font-black uppercase tracking-tight text-black dark:text-white leading-tight">
                 Creative Digital Experiences
               </h1>
 
-              {/* Simple, warm greeting paragraph */}
               <p className="font-sans text-xs sm:text-sm text-stone-600 dark:text-stone-300 leading-relaxed">
                 Welcome to OG Media. We create high-impact brand stories, viral media, and interactive digital worlds. Enjoy this quick flight mini-game while we get things ready for you!
               </p>
 
-              {/* Progress Bar Container */}
               <div className="bg-stone-50 dark:bg-stone-800/60 border-2 border-black p-3.5 space-y-2">
                 <div className="flex items-center justify-between font-mono-tech text-xs font-bold text-black dark:text-white">
                   <span className="flex items-center gap-2">
@@ -901,7 +840,6 @@ export default function LoadingGame({ onComplete }) {
                   </span>
                 </div>
 
-                {/* Progress bar */}
                 <div className="w-full h-3 bg-stone-200 dark:bg-black border border-black overflow-hidden">
                   <div
                     className="h-full bg-[#bef264] transition-all duration-150 relative overflow-hidden"
@@ -920,7 +858,6 @@ export default function LoadingGame({ onComplete }) {
                   />
                 </div>
 
-                {/* Hero Video Live Preload Telemetry & Auto-Entry Status */}
                 <div className="text-[10px] sm:text-[11px] font-mono-tech text-stone-500 dark:text-stone-400 pt-0.5 flex items-center justify-between">
                   <span className="flex items-center gap-1.5">
                     <span className={`w-1.5 h-1.5 rounded-full ${isReady ? 'bg-[#16a34a]' : 'bg-[#bef264] animate-pulse'}`} />
@@ -938,7 +875,6 @@ export default function LoadingGame({ onComplete }) {
                   </span>
                 </div>
 
-                {/* Instant Entry Action Button if Ready */}
                 {isReady && (
                   <button
                     onClick={triggerEnterSite}
@@ -949,7 +885,6 @@ export default function LoadingGame({ onComplete }) {
                 )}
               </div>
 
-              {/* Simple Stats Highlights */}
               <div className="grid grid-cols-2 gap-3 pt-1">
                 <div className="bg-stone-50 dark:bg-stone-800/50 border-2 border-black p-2.5 text-center">
                   <div className="font-mono-tech text-[10px] text-stone-500 uppercase">Score</div>
@@ -964,7 +899,6 @@ export default function LoadingGame({ onComplete }) {
             </div>
           </div>
 
-          {/* RIGHT COLUMN: Interactive Mini-Game */}
           <div className="lg:col-span-7 flex flex-col items-center">
             <div
               className="relative w-full max-w-[560px] aspect-[4/3] bg-black border-4 border-black manga-shadow-lg overflow-hidden cursor-pointer group"
@@ -974,7 +908,6 @@ export default function LoadingGame({ onComplete }) {
                 jump();
               }}
             >
-              {/* 60fps Canvas */}
               <canvas
                 ref={canvasRef}
                 width={560}
@@ -982,7 +915,6 @@ export default function LoadingGame({ onComplete }) {
                 className="w-full h-full block"
               />
 
-              {/* Controls prompt on start */}
               {gameStateStatus === 'READY' && (
                 <div className="absolute top-4 left-0 right-0 text-center pointer-events-none z-20">
                   <span className="bg-black/90 text-[#bef264] border border-[#bef264] px-3.5 py-1 font-mono-tech text-xs font-bold tracking-wider shadow-md">
@@ -991,7 +923,6 @@ export default function LoadingGame({ onComplete }) {
                 </div>
               )}
 
-              {/* Friendly notification banner when loaded */}
               {isReady && (
                 <div className="absolute top-3 left-4 right-4 z-30 pointer-events-none flex justify-center">
                   <div className="bg-black/90 border border-[#bef264] px-4 py-1.5 font-mono-tech text-xs text-[#bef264] font-bold shadow-lg flex items-center gap-2 animate-bounce">
@@ -1002,7 +933,6 @@ export default function LoadingGame({ onComplete }) {
               )}
             </div>
 
-            {/* Helper text below game */}
             <div className="w-full max-w-[560px] mt-2.5 flex items-center justify-between text-[11px] font-mono-tech text-stone-600 dark:text-stone-400 px-1">
               <span>🎮 Controls: Tap or Spacebar to fly</span>
               <span>⭐ Dodge barriers & collect stars</span>
@@ -1012,7 +942,6 @@ export default function LoadingGame({ onComplete }) {
         </div>
       </main>
 
-      {/* Clean Bottom Footer */}
       <footer className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 pb-3 sm:pb-4">
         <div className="bg-white dark:bg-stone-900 border-2 border-black px-3.5 py-2 flex flex-wrap items-center justify-between gap-2 text-[10px] sm:text-xs font-mono-tech text-stone-600 dark:text-stone-400">
           <div className="flex items-center gap-2 flex-wrap">

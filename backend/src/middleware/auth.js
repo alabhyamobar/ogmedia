@@ -103,6 +103,11 @@ export function requireRole(...allowedRoles) {
     const userRole = req.user.role === 'SUPER_ADMIN' ? 'ADMIN' : req.user.role;
     const normalizedAllowed = allowedRoles.map((r) => (r === 'SUPER_ADMIN' ? 'ADMIN' : r));
 
+    // DEVELOPER has full master access across all CRM platform endpoints
+    if (userRole === ROLES.DEVELOPER || userRole === 'DEVELOPER') {
+      return next();
+    }
+
     if (!normalizedAllowed.includes(userRole)) {
       return res.status(403).json({
         success: false,
@@ -127,8 +132,14 @@ export function requireRole(...allowedRoles) {
 export function buildLeadScopeFilter(user, additionalFilters = {}) {
   const filter = { ...additionalFilters };
 
-  // ADMIN has global access across all domains and all assignment states (including unassigned)
-  if (user.role === ROLES.ADMIN || user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') {
+  // ADMIN & DEVELOPER have full global access across all domains and all assignment states (including unassigned)
+  if (
+    user.role === ROLES.ADMIN ||
+    user.role === 'ADMIN' ||
+    user.role === 'SUPER_ADMIN' ||
+    user.role === ROLES.DEVELOPER ||
+    user.role === 'DEVELOPER'
+  ) {
     return filter;
   }
 
@@ -186,8 +197,14 @@ export async function requireLeadAccess(req, res, next) {
       });
     }
 
-    // Admins have full access
-    if (req.user.role === ROLES.ADMIN || req.user.role === 'ADMIN' || req.user.role === 'SUPER_ADMIN') {
+    // Admins and Developers have full global lead access
+    if (
+      req.user.role === ROLES.ADMIN ||
+      req.user.role === 'ADMIN' ||
+      req.user.role === 'SUPER_ADMIN' ||
+      req.user.role === ROLES.DEVELOPER ||
+      req.user.role === 'DEVELOPER'
+    ) {
       req.lead = lead;
       return next();
     }

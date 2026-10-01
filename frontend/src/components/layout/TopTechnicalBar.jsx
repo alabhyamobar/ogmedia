@@ -14,7 +14,6 @@ export default function TopTechnicalBar({ onOpenGame }) {
 
   return (
     <div className="w-full bg-[#111111] dark:bg-[#070709] text-[#bef264] text-[10px] sm:text-[11px] font-mono-tech border-b-2 border-black dark:border-stone-800 px-3 sm:px-6 py-1.5 flex flex-wrap items-center justify-between gap-2 select-none tracking-wider transition-colors duration-300">
-      {/* Left side telemetry */}
       <div className="flex items-center gap-2 sm:gap-4 flex-wrap text-white">
         <span className="text-[#bef264] font-bold flex items-center gap-1.5">
           <span className="inline-block w-1.5 h-1.5 bg-[#bef264] rounded-full animate-ping"></span>
@@ -29,7 +28,6 @@ export default function TopTechnicalBar({ onOpenGame }) {
         <span className="hidden lg:inline text-amber-400 font-medium">LAT: 37.5665 / LON: 126.9780 [SEOUL]</span>
       </div>
 
-      {/* Center Protocol Badges & Mini Game Launcher */}
       <div className="flex items-center gap-2">
         {onOpenGame && (
           <button
@@ -49,7 +47,6 @@ export default function TopTechnicalBar({ onOpenGame }) {
         </span>
       </div>
 
-      {/* Right side metrics */}
       <div className="flex items-center gap-2 sm:gap-3 text-stone-300">
         <span className="hidden xl:inline text-purple-300 font-mono">PG. 01 / 06</span>
         <span className="text-[#38bdf8] font-bold bg-[#082f49] px-1.5 py-0.2 border border-[#0284c7]/50 rounded">FPS: 60</span>

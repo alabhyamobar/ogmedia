@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 
 export default function CrmLayout() {
-  const { user, logout, isAdmin, isSuperAdmin, isEmployee } = useAuth();
+  const { user, logout, isAdmin, isSuperAdmin, isDeveloper, hasFullAccess, isEmployee } = useAuth();
   const { isDark, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -33,19 +33,17 @@ export default function CrmLayout() {
     { name: 'Dashboard', path: '/crm/dashboard', icon: LayoutDashboard },
     { name: 'Leads & Inquiries', path: '/crm/leads', icon: Users },
     { name: 'Analytics & KPIs', path: '/crm/analytics', icon: TrendingUp },
-    ...(isAdmin ? [{ name: 'Team & Roster', path: '/crm/employees', icon: UserCheck }] : []),
-    ...(isAdmin ? [{ name: 'Audit Trail', path: '/crm/audit-logs', icon: ShieldCheck }] : []),
-    { name: 'System & Config', path: '/crm/settings', icon: Settings }
+    ...(hasFullAccess ? [{ name: 'Team & Roster', path: '/crm/employees', icon: UserCheck }] : []),
+    ...(isDeveloper ? [{ name: 'Audit Trail', path: '/crm/audit-logs', icon: ShieldCheck }] : []),
+    ...(isDeveloper ? [{ name: 'System & Debug', path: '/crm/settings', icon: Settings }] : [])
   ];
 
   return (
     <div className="min-h-screen bg-[#ebebe5] dark:bg-[#09090b] text-stone-900 dark:text-stone-100 font-sans flex flex-col transition-colors duration-300">
       
-      {/* Top Navigation Bar */}
       <header className="sticky top-0 z-40 bg-[#faf8f5] dark:bg-[#121216] border-b-[2.5px] border-black dark:border-stone-700 px-4 sm:px-6 py-3 shadow-[0_4px_0_rgba(0,0,0,0.06)]">
         <div className="max-w-[1720px] mx-auto flex items-center justify-between gap-4">
           
-          {/* Left: Brand & Mobile Toggle */}
           <div className="flex items-center gap-3">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -63,16 +61,13 @@ export default function CrmLayout() {
               </span>
             </Link>
 
-            {/* Live Buffer Status Indicator */}
             <div className="hidden md:flex items-center gap-2 ml-4 px-2.5 py-1 bg-white dark:bg-[#1a1a20] border border-black dark:border-stone-700 rounded-md font-mono-tech text-[10px] font-bold shadow-sm">
               <span className="w-2 h-2 rounded-full bg-[#16a34a] animate-pulse" />
               <span className="text-stone-700 dark:text-stone-300">BUFFER INGESTION: ACTIVE</span>
             </div>
           </div>
 
-          {/* Right: Actions, Theme Toggle, Public Link & User Profile */}
           <div className="flex items-center gap-3">
-            {/* View Public Site Link */}
             <Link
               to="/"
               className="hidden sm:flex items-center gap-1.5 font-mono-tech text-[11px] font-bold px-3 py-1.5 bg-white dark:bg-[#1a1a20] hover:bg-[#bef264] hover:text-black border-2 border-black dark:border-stone-700 rounded-lg shadow-[2px_2px_0px_#000] transition-all"
@@ -81,7 +76,6 @@ export default function CrmLayout() {
               <ExternalLink className="w-3.5 h-3.5" />
             </Link>
 
-            {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
               className="p-2 border-2 border-black dark:border-stone-700 rounded-lg bg-white dark:bg-[#1a1a20] hover:bg-stone-100 dark:hover:bg-stone-800 shadow-[2px_2px_0px_#000] cursor-pointer transition-transform active:translate-y-0.5"
@@ -90,7 +84,6 @@ export default function CrmLayout() {
               {isDark ? <Sun className="w-4 h-4 text-[#bef264]" /> : <Moon className="w-4 h-4 text-black" />}
             </button>
 
-            {/* User Pill */}
             <div className="flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-xl shadow-[3px_3px_0px_#000]">
               <div className="w-6 h-6 rounded bg-[#bef264] border border-black text-black font-mono-tech font-black text-xs flex items-center justify-center">
                 {user?.name?.charAt(0) || 'U'}
@@ -104,7 +97,6 @@ export default function CrmLayout() {
                 </div>
               </div>
 
-              {/* Logout Button */}
               <button
                 onClick={handleLogout}
                 className="ml-1 p-1 hover:text-[#ef4444] transition-colors cursor-pointer"
@@ -118,14 +110,11 @@ export default function CrmLayout() {
         </div>
       </header>
 
-      {/* Main App Body */}
       <div className="flex-1 flex max-w-[1720px] w-full mx-auto">
         
-        {/* Desktop Sidebar */}
         <aside className="hidden lg:flex flex-col justify-between w-64 border-r-2 border-black dark:border-stone-700 bg-[#faf8f5] dark:bg-[#121216] p-4 select-none shrink-0">
           <div className="space-y-6">
             
-            {/* Mission Protocol Badge */}
             <div className="p-3 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-xl shadow-[3px_3px_0px_#000] space-y-1.5">
               <div className="flex items-center justify-between text-[10px] font-mono-tech font-bold text-stone-500">
                 <span>PROTOCOL</span>
@@ -139,7 +128,6 @@ export default function CrmLayout() {
               </div>
             </div>
 
-            {/* Navigation Links */}
             <nav className="space-y-1.5 font-mono-tech text-xs font-bold">
               {navItems.map((item) => {
                 const Icon = item.icon;
@@ -164,7 +152,6 @@ export default function CrmLayout() {
 
           </div>
 
-          {/* Sidebar Footer: Expertise Isolation Badges */}
           <div className="pt-4 border-t-2 border-black/20 dark:border-stone-800 space-y-2 font-mono-tech text-[10px]">
             <div className="font-bold text-stone-500 uppercase tracking-wider flex items-center justify-between">
               <span>AUTHORIZED SECTORS</span>
@@ -186,9 +173,21 @@ export default function CrmLayout() {
                   <span className="text-stone-500 italic">No sectors assigned</span>
                 )}
               </div>
+            ) : isDeveloper ? (
+              <div className="bg-[#bef264]/20 border border-[#bef264] p-2 rounded text-black dark:text-stone-200 font-bold space-y-0.5">
+                <div className="text-[#a855f7] dark:text-[#c084fc] font-black flex items-center gap-1.5">
+                  <span>⚡ DEVELOPER MASTER ROOT</span>
+                </div>
+                <div className="text-[9px] text-stone-500 font-mono-tech">
+                  FULL PLATFORM CLEARANCE
+                </div>
+              </div>
             ) : (
-              <div className="bg-[#bef264]/20 border border-[#bef264] p-2 rounded text-black dark:text-stone-200 font-bold">
-                ★ GLOBAL ACCESS CLEARANCE
+              <div className="bg-[#bef264]/20 border border-[#bef264] p-2 rounded text-black dark:text-stone-200 font-bold space-y-0.5">
+                <div className="font-black">★ AGENCY EXECUTIVE</div>
+                <div className="text-[9px] text-stone-500 font-mono-tech">
+                  GLOBAL DISPATCH CLEARANCE
+                </div>
               </div>
             )}
 
@@ -198,7 +197,6 @@ export default function CrmLayout() {
           </div>
         </aside>
 
-        {/* Mobile Slide-Out Menu */}
         {mobileMenuOpen && (
           <div className="lg:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex">
             <div className="w-72 bg-[#faf8f5] dark:bg-[#121216] border-r-2 border-black p-5 flex flex-col justify-between h-full shadow-[8px_0_0_#000]">
@@ -248,7 +246,6 @@ export default function CrmLayout() {
           </div>
         )}
 
-        {/* Content View Area */}
         <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
           <Outlet />
         </main>

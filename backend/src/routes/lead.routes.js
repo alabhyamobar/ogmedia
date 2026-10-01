@@ -19,6 +19,6 @@ router.get('/:id', requireLeadAccess, getLeadById);
 router.patch('/:id', requireLeadAccess, updateLead);
 router.patch('/:id/status', requireLeadAccess, updateLeadStatus);
 router.post('/:id/notes', requireLeadAccess, addLeadNote);
-router.patch('/:id/assignment', requireLeadAccess, requireRole(ROLES.ADMIN), assignLead);
+router.patch('/:id/assignment', requireLeadAccess, requireRole(ROLES.ADMIN, ROLES.DEVELOPER), assignLead);
 
 export default router;

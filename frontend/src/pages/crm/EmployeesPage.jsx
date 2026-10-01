@@ -40,9 +40,8 @@ function generateClientPassword(length = 12) {
 
 export default function EmployeesPage() {
   const queryClient = useQueryClient();
-  const { isAdmin, user: currentUser } = useAuth();
+  const { isAdmin, isDeveloper, canManage, user: currentUser } = useAuth();
 
-  // Modals state
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [editModal, setEditModal] = useState({ open: false, employee: null });
   const [credentialsModal, setCredentialsModal] = useState({
@@ -52,7 +51,6 @@ export default function EmployeesPage() {
     title: 'AGENT CREDENTIALS ISSUED'
   });
 
-  // UI state
   const [copiedKey, setCopiedKey] = useState(false);
   const [copiedAll, setCopiedAll] = useState(false);
   const [showPasswordInModal, setShowPasswordInModal] = useState(true);
@@ -63,7 +61,6 @@ export default function EmployeesPage() {
   const [roleFilter, setRoleFilter] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // New Employee Form State
   const [newEmployee, setNewEmployee] = useState({
     name: '',
     username: '',
@@ -73,7 +70,6 @@ export default function EmployeesPage() {
     temporaryPassword: ''
   });
 
-  // Edit Employee Form State
   const [editForm, setEditForm] = useState({
     name: '',
     email: '',
@@ -82,7 +78,6 @@ export default function EmployeesPage() {
     status: 'ACTIVE'
   });
 
-  // Fetch employees
   const { data, isLoading } = useQuery({
     queryKey: ['employees-management-list'],
     queryFn: () => api.getEmployees({ limit: 100 })
@@ -90,7 +85,6 @@ export default function EmployeesPage() {
 
   const employees = data?.data?.employees || [];
 
-  // Create mutation
   const createMutation = useMutation({
     mutationFn: (empData) => api.createEmployee(empData),
     onSuccess: (res) => {
@@ -119,7 +113,6 @@ export default function EmployeesPage() {
     }
   });
 
-  // Update employee mutation
   const updateMutation = useMutation({
     mutationFn: ({ id, data }) => api.updateEmployee(id, data),
     onSuccess: (res) => {
@@ -134,7 +127,6 @@ export default function EmployeesPage() {
     }
   });
 
-  // Toggle status mutation
   const toggleStatusMutation = useMutation({
     mutationFn: ({ id, status }) => api.updateEmployee(id, { status }),
     onSuccess: () => {
@@ -146,7 +138,6 @@ export default function EmployeesPage() {
     }
   });
 
-  // Reset password mutation
   const resetPasswordMutation = useMutation({
     mutationFn: (id) => api.resetEmployeePassword(id),
     onSuccess: (res, id) => {
@@ -168,7 +159,6 @@ export default function EmployeesPage() {
     }
   });
 
-  // Handlers for generation
   const handleGenerateUsername = async () => {
     try {
       setIsGeneratingUsername(true);
@@ -177,7 +167,6 @@ export default function EmployeesPage() {
         setNewEmployee((prev) => ({ ...prev, username: res.data.username }));
       }
     } catch {
-      // Fallback client-side generator
       const fallback = (newEmployee.name || 'agent')
         .trim()
         .toLowerCase()
@@ -262,7 +251,6 @@ export default function EmployeesPage() {
     });
   };
 
-  // Filtered employees
   const filteredEmployees = employees.filter((emp) => {
     const normalizedRole = emp.role === 'SUPER_ADMIN' ? 'ADMIN' : emp.role;
     const matchesRole = roleFilter === 'ALL' || normalizedRole === roleFilter;
@@ -283,14 +271,13 @@ export default function EmployeesPage() {
 
   return (
     <div className="space-y-6 sm:space-y-8 select-none font-sans">
-      {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="font-mono-tech text-xs font-bold text-stone-500 flex items-center gap-1.5">
             <span>/// 04 PERSONNEL PROTOCOL</span>
-            {isAdmin && (
+            {canManage && (
               <span className="bg-[#bef264] text-black font-black text-[9px] px-1.5 py-0.2 rounded border border-black">
-                ADMIN AUTHORIZED
+                {isDeveloper ? '⚡ DEVELOPER ROOT CLEARANCE' : 'ADMIN AUTHORIZED'}
               </span>
             )}
           </div>
@@ -302,8 +289,7 @@ export default function EmployeesPage() {
           </p>
         </div>
 
-        {/* Recruit Agent Button */}
-        {isAdmin ? (
+        {canManage ? (
           <button
             onClick={() => setCreateModalOpen(true)}
             className="bg-[#bef264] hover:bg-[#a3e635] text-black font-mono-tech font-black text-xs px-4 py-2.5 border-2 border-black rounded-xl shadow-[3px_3px_0px_#000] hover:-translate-y-0.5 transition-all flex items-center gap-2 cursor-pointer uppercase"
@@ -319,7 +305,6 @@ export default function EmployeesPage() {
         )}
       </div>
 
-      {/* Alerts */}
       {actionError && (
         <div className="p-3.5 bg-[#ef4444]/15 border-2 border-[#ef4444] rounded-xl flex items-start gap-2.5 text-[#ef4444] font-mono-tech text-xs animate-fade-in">
           <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
@@ -334,7 +319,6 @@ export default function EmployeesPage() {
         </div>
       )}
 
-      {/* Role Filter Tabs & Search Bar */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-1.5 font-mono-tech text-xs">
           {[
@@ -359,7 +343,6 @@ export default function EmployeesPage() {
           })}
         </div>
 
-        {/* Search */}
         <div className="relative min-w-[240px]">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
           <input
@@ -372,7 +355,6 @@ export default function EmployeesPage() {
         </div>
       </div>
 
-      {/* Employees Table Container */}
       <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl shadow-[6px_6px_0px_#000] overflow-hidden">
         {isLoading ? (
           <div className="py-20 text-center font-mono-tech text-xs text-stone-500 animate-pulse">
@@ -404,7 +386,6 @@ export default function EmployeesPage() {
                       key={emp._id}
                       className="hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
                     >
-                      {/* Name & Username */}
                       <td className="py-3.5 px-4">
                         <div className="font-black text-black dark:text-white flex items-center gap-1.5">
                           <span>{emp.name}</span>
@@ -419,7 +400,6 @@ export default function EmployeesPage() {
                         </div>
                       </td>
 
-                      {/* Security Role Badge */}
                       <td className="py-3.5 px-4">
                         {isAdminRole ? (
                           <span className="bg-[#bef264] text-black font-black text-[10px] px-2.5 py-0.5 rounded border border-black shadow-[1.5px_1.5px_0px_#000] inline-flex items-center gap-1">
@@ -432,7 +412,6 @@ export default function EmployeesPage() {
                         )}
                       </td>
 
-                      {/* Sector Clearances */}
                       <td className="py-3.5 px-4">
                         {isAdminRole ? (
                           <span className="bg-black text-[#bef264] font-extrabold text-[10px] px-2 py-0.5 rounded border border-black">
@@ -456,7 +435,6 @@ export default function EmployeesPage() {
                         )}
                       </td>
 
-                      {/* Status */}
                       <td className="py-3.5 px-4">
                         <span
                           className={`text-[10px] font-black px-2 py-0.5 rounded border ${
@@ -469,16 +447,13 @@ export default function EmployeesPage() {
                         </span>
                       </td>
 
-                      {/* Performance */}
                       <td className="py-3.5 px-4 text-stone-600 dark:text-stone-400 text-[11px]">
                         {emp.stats ? `${emp.stats.converted} won / ${emp.stats.totalAssigned} assigned` : '—'}
                       </td>
 
-                      {/* Actions */}
                       <td className="py-3.5 px-4 text-right space-x-1.5 whitespace-nowrap">
-                        {isAdmin && (
+                        {canManage && (
                           <>
-                            {/* Edit Role & Clearance */}
                             <button
                               onClick={() => openEditModal(emp)}
                               className="p-1.5 bg-white dark:bg-[#1a1a20] hover:bg-[#bef264] hover:text-black border-2 border-black dark:border-stone-700 rounded-lg shadow-[2px_2px_0px_#000] cursor-pointer transition-colors"
@@ -487,7 +462,6 @@ export default function EmployeesPage() {
                               <Shield className="w-3.5 h-3.5" />
                             </button>
 
-                            {/* Reset / Regenerate Password */}
                             <button
                               onClick={() => resetPasswordMutation.mutate(emp._id)}
                               className="p-1.5 bg-white dark:bg-[#1a1a20] hover:bg-stone-100 dark:hover:bg-stone-800 border-2 border-black dark:border-stone-700 rounded-lg shadow-[2px_2px_0px_#000] cursor-pointer"
@@ -496,7 +470,6 @@ export default function EmployeesPage() {
                               <KeyRound className="w-3.5 h-3.5 text-stone-700 dark:text-stone-300" />
                             </button>
 
-                            {/* Toggle Status */}
                             <button
                               onClick={() =>
                                 toggleStatusMutation.mutate({
@@ -524,7 +497,6 @@ export default function EmployeesPage() {
         )}
       </div>
 
-      {/* CREATE EMPLOYEE MODAL (Admin) */}
       {createModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-6 max-w-xl w-full shadow-[8px_8px_0px_#000] space-y-4 font-mono-tech animate-fade-in max-h-[92vh] overflow-y-auto">
@@ -548,7 +520,6 @@ export default function EmployeesPage() {
               }}
               className="space-y-4 text-xs"
             >
-              {/* Full Name */}
               <div>
                 <label className="block text-[10px] font-bold text-stone-600 dark:text-stone-400 uppercase mb-1">
                   Full Name *
@@ -569,7 +540,6 @@ export default function EmployeesPage() {
                 />
               </div>
 
-              {/* Username with Generate Button */}
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <label className="text-[10px] font-bold text-stone-600 dark:text-stone-400 uppercase">
@@ -599,7 +569,6 @@ export default function EmployeesPage() {
                 </div>
               </div>
 
-              {/* Email Address */}
               <div>
                 <label className="block text-[10px] font-bold text-stone-600 dark:text-stone-400 uppercase mb-1">
                   Email Address *
@@ -614,13 +583,11 @@ export default function EmployeesPage() {
                 />
               </div>
 
-              {/* Security Clearance Role Assignment Cards */}
               <div>
                 <label className="block text-[10px] font-bold text-stone-600 dark:text-stone-400 uppercase mb-2">
                   Assign Security Clearance Role *
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {/* EMPLOYEE */}
                   <div
                     onClick={() => setNewEmployee({ ...newEmployee, role: 'EMPLOYEE' })}
                     className={`p-3 border-2 rounded-xl cursor-pointer transition-all ${
@@ -638,7 +605,6 @@ export default function EmployeesPage() {
                     </div>
                   </div>
 
-                  {/* ADMIN */}
                   <div
                     onClick={() => setNewEmployee({ ...newEmployee, role: 'ADMIN' })}
                     className={`p-3 border-2 rounded-xl cursor-pointer transition-all ${
@@ -658,7 +624,6 @@ export default function EmployeesPage() {
                 </div>
               </div>
 
-              {/* Sector Expertise Multi-selector (Only relevant if role === 'EMPLOYEE') */}
               {newEmployee.role === 'EMPLOYEE' ? (
                 <div className="p-3 bg-stone-50 dark:bg-[#181820] border-2 border-black/40 dark:border-stone-700 rounded-xl space-y-2">
                   <div className="flex items-center justify-between">
@@ -697,7 +662,6 @@ export default function EmployeesPage() {
                 </div>
               )}
 
-              {/* Temporary Password with Generate Button */}
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <label className="text-[10px] font-bold text-stone-600 dark:text-stone-400 uppercase">
@@ -732,7 +696,6 @@ export default function EmployeesPage() {
                 </div>
               </div>
 
-              {/* Form Buttons */}
               <div className="flex items-center justify-end gap-2 pt-3 border-t border-stone-200 dark:border-stone-800">
                 <button
                   type="button"
@@ -754,7 +717,6 @@ export default function EmployeesPage() {
         </div>
       )}
 
-      {/* EDIT EMPLOYEE & ASSIGN ROLE MODAL (Admin) */}
       {editModal.open && editModal.employee && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-6 max-w-lg w-full shadow-[8px_8px_0px_#000] space-y-4 font-mono-tech animate-fade-in max-h-[92vh] overflow-y-auto">
@@ -781,7 +743,6 @@ export default function EmployeesPage() {
               }}
               className="space-y-4 text-xs"
             >
-              {/* Name & Email */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[10px] font-bold text-stone-600 dark:text-stone-400 uppercase mb-1">
@@ -809,7 +770,6 @@ export default function EmployeesPage() {
                 </div>
               </div>
 
-              {/* Role Assignment */}
               <div>
                 <label className="block text-[10px] font-bold text-stone-600 dark:text-stone-400 uppercase mb-1.5">
                   Security Clearance Role
@@ -835,7 +795,6 @@ export default function EmployeesPage() {
                 </div>
               </div>
 
-              {/* Sector Clearances */}
               {editForm.role === 'EMPLOYEE' ? (
                 <div className="p-3 bg-stone-50 dark:bg-[#181820] border-2 border-black/40 dark:border-stone-700 rounded-xl space-y-2">
                   <div className="flex items-center justify-between">
@@ -874,7 +833,6 @@ export default function EmployeesPage() {
                 </div>
               )}
 
-              {/* Status */}
               <div>
                 <label className="block text-[10px] font-bold text-stone-600 dark:text-stone-400 uppercase mb-1">
                   Account Status
@@ -905,7 +863,6 @@ export default function EmployeesPage() {
                 </div>
               </div>
 
-              {/* Actions */}
               <div className="flex items-center justify-end gap-2 pt-3 border-t border-stone-200 dark:border-stone-800">
                 <button
                   type="button"
@@ -927,7 +884,6 @@ export default function EmployeesPage() {
         </div>
       )}
 
-      {/* ISSUED CREDENTIALS MODAL */}
       {credentialsModal.open && (
         <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[3px] border-black dark:border-stone-700 rounded-2xl p-6 max-w-md w-full shadow-[10px_10px_0px_#bef264] space-y-4 font-mono-tech animate-fade-in text-center">
@@ -947,9 +903,7 @@ export default function EmployeesPage() {
               . Temporary key will be required to change on first login.
             </p>
 
-            {/* Credential Card */}
             <div className="bg-black text-stone-100 border-2 border-black rounded-xl p-4 text-left space-y-3 shadow-inner">
-              {/* Role badge */}
               <div className="flex items-center justify-between border-b border-stone-800 pb-2">
                 <span className="text-[10px] text-stone-400 font-bold uppercase">Assigned Clearance:</span>
                 <span className="bg-[#bef264] text-black font-black text-[10px] px-2 py-0.5 rounded">
@@ -957,7 +911,6 @@ export default function EmployeesPage() {
                 </span>
               </div>
 
-              {/* Username */}
               <div className="flex items-center justify-between border-b border-stone-800 pb-2">
                 <div>
                   <div className="text-[9px] text-stone-400 uppercase font-bold">Username</div>
@@ -977,7 +930,6 @@ export default function EmployeesPage() {
                 </button>
               </div>
 
-              {/* Temporary Password */}
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-[9px] text-stone-400 uppercase font-bold">Temporary Key</div>
@@ -1006,7 +958,6 @@ export default function EmployeesPage() {
               </div>
             </div>
 
-            {/* Handover Copy Button */}
             <div className="space-y-2 pt-1">
               <button
                 type="button"

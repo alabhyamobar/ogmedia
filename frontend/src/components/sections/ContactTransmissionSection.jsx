@@ -75,17 +75,14 @@ export default function ContactTransmissionSection() {
 
   return (
     <section id="contact" className="relative px-3 sm:px-6 py-16 sm:py-24 max-w-[1440px] mx-auto select-none">
-      {/* Soft Manga Atmospheric Backdrop with Floating Sakura Petals */}
       <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-[#e0f2fe]/45 via-[#fce7f3]/25 to-transparent dark:from-[#0c1829]/50 dark:via-[#1e1029]/30 dark:to-transparent" />
-        {/* Floating Sakura Blossom Petals */}
         <div className="absolute top-8 left-[18%] w-3 h-3 bg-pink-300/80 rounded-full blur-[0.4px] transform rotate-45" />
         <div className="absolute top-24 right-[22%] w-4 h-2 bg-pink-400/70 rounded-full blur-[0.4px] transform rotate-12" />
         <div className="absolute top-1/2 left-[6%] w-3 h-2 bg-pink-300/80 rounded-full transform -rotate-45" />
         <div className="absolute bottom-16 right-[14%] w-3.5 h-2 bg-pink-300/80 rounded-full transform rotate-30" />
       </div>
 
-      {/* Manga Left Sign: お問い合わせ (Contact) */}
       <div className="hidden 2xl:flex absolute left-4 top-28 flex-col items-center pointer-events-none z-10">
         <div className="w-8 py-4 bg-[#7f1d1d]/90 text-pink-200 border-2 border-black dark:border-stone-700 shadow-[4px_4px_0px_#000] flex flex-col items-center justify-center font-jp-impact text-xs font-black tracking-widest leading-loose">
           <span>連</span>
@@ -96,7 +93,6 @@ export default function ContactTransmissionSection() {
         <div className="w-0.5 h-16 bg-black dark:bg-stone-600 mt-0.5" />
       </div>
 
-      {/* Japanese Vertical Text on Right Edge: いつでもお気軽にどうぞ */}
       <div className="hidden 2xl:block absolute right-4 top-20 pointer-events-none z-10 text-stone-500 dark:text-stone-400 select-none">
         <div
           className="font-jp-impact text-xs sm:text-sm tracking-widest font-black leading-loose opacity-70"
@@ -106,10 +102,8 @@ export default function ContactTransmissionSection() {
         </div>
       </div>
 
-      {/* Section Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-12 relative px-2 sm:px-4">
         <div>
-          {/* Prefix Tag */}
           <div className="flex items-center gap-2 mb-2 font-mono-tech text-xs sm:text-sm font-bold text-stone-700 dark:text-stone-300">
             <span className="text-stone-500">/// 03</span>
             <span className="font-jp-impact text-black dark:text-white tracking-wider text-sm sm:text-base">
@@ -120,7 +114,6 @@ export default function ContactTransmissionSection() {
             </span>
           </div>
 
-          {/* Main Title: Let's Work Together */}
           <div className="relative inline-block">
             <InkText
               as="h2"
@@ -130,23 +123,19 @@ export default function ContactTransmissionSection() {
               duration={2000}
               className="font-brush text-4xl sm:text-5xl md:text-6xl lg:text-7xl italic tracking-tight text-black dark:text-white uppercase leading-none drop-shadow-sm"
             />
-            {/* Vivid Neon Brushed Highlighter */}
             <span className="absolute -left-2 -right-4 bottom-1 sm:bottom-2 h-[45%] bg-[#bef264] -z-10 -rotate-1 skew-x-[-14deg] rounded-sm shadow-sm pointer-events-none" />
           </div>
 
-          {/* Subtitle with Pink Energetic Brush Underline */}
           <div className="mt-4 inline-block">
             <div className="font-mono-tech text-xs sm:text-sm font-medium text-stone-800 dark:text-stone-200 uppercase tracking-wider space-y-0.5">
               <div>Tokyo • Seoul • San Francisco.</div>
               <div>Have a project in mind? We'd love to hear from you.</div>
               <div>Let's create something unforgettable together.</div>
             </div>
-            {/* Pink brush stroke */}
             <div className="w-20 h-1.5 bg-gradient-to-r from-[#f43f5e] via-[#ec4899] to-transparent rounded-full mt-1.5 transform -rotate-1" />
           </div>
         </div>
 
-        {/* Hand-Drawn Annotation on Top Right with Curved Pointing Arrow */}
         <div className="self-end md:mr-8 lg:mr-16 flex flex-col items-center select-none transform rotate-[-2.5deg]">
           <div className="font-handwriting text-2xl sm:text-3xl text-stone-800 dark:text-stone-200 font-bold tracking-wide">
             <span>Send us a</span>
@@ -168,16 +157,13 @@ export default function ContactTransmissionSection() {
         </div>
       </div>
 
-      {/* DUAL CARDS GRID: 01 DIRECT CONTACT + 02 SEND A MESSAGE */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-stretch">
         
-        {/* CARD 01: DIRECT CONTACT & OFFICES (Left Column - 5 cols) */}
         <div className="lg:col-span-5 flex flex-col">
           <UnfoldPanel direction="right" duration={1000} delay={100} className="w-full h-full rounded-2xl">
             <div className="w-full h-full bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl overflow-hidden shadow-[6px_6px_0px_#000000] hover:shadow-[10px_10px_0px_#000000] transition-all duration-300 flex flex-col justify-between">
               
               <div>
-                {/* Top Card Header Strip */}
                 <div className="flex items-center justify-between px-3.5 py-2.5 border-b-2 border-black dark:border-stone-700 bg-white dark:bg-[#1e1e24]">
                   <div className="flex items-center gap-2">
                     <span className="bg-black text-white font-mono-tech font-bold text-xs px-2 py-0.5 rounded-sm">
@@ -188,7 +174,6 @@ export default function ContactTransmissionSection() {
                     </span>
                   </div>
 
-                  {/* Barcode Graphic SVG */}
                   <div className="flex items-center gap-[2px] opacity-75">
                     <span className="w-[1.5px] h-4 bg-black dark:bg-white" />
                     <span className="w-[3px] h-4 bg-black dark:bg-white" />
@@ -200,7 +185,6 @@ export default function ContactTransmissionSection() {
                   </div>
                 </div>
 
-                {/* Artwork Thumbnail Box */}
                 <div className="relative aspect-[16/10] overflow-hidden border-b-2 border-black dark:border-stone-700 bg-stone-900 group">
                   <img
                     src="/ogmedia/assets/cover_protocol.jpg"
@@ -215,20 +199,16 @@ export default function ContactTransmissionSection() {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
 
-                  {/* Dark Gradient Overlay for Contrast */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none" />
 
-                  {/* Subtle Halftone Overlay */}
                   <div className="absolute inset-0 manga-halftone-light opacity-15 pointer-events-none" />
 
-                  {/* Top-Left Status Tag */}
                   <div className="absolute top-2.5 left-2.5">
                     <div className="bg-black/90 border border-white/30 text-white font-mono-tech text-[9px] sm:text-[10px] font-bold px-2 py-0.5">
                       GLOBAL STUDIOS // ONLINE
                     </div>
                   </div>
 
-                  {/* Bottom-Right Coordinates */}
                   <div className="absolute bottom-2.5 right-2.5">
                     <span className="bg-[#bef264] text-black font-mono-tech text-[9px] sm:text-[10px] font-bold px-2 py-0.5 border border-black shadow-sm">
                       TOKYO • SEOUL • SF
@@ -236,9 +216,7 @@ export default function ContactTransmissionSection() {
                   </div>
                 </div>
 
-                {/* Information Body */}
                 <div className="p-4 sm:p-5 space-y-4">
-                  {/* Title & Japanese Seal */}
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="font-heading font-black text-xl sm:text-2xl text-black dark:text-white uppercase tracking-tight">
@@ -249,13 +227,11 @@ export default function ContactTransmissionSection() {
                       </div>
                     </div>
 
-                    {/* Red Stamped Japanese Seal */}
                     <div className="border-2 border-[#ef4444] text-[#ef4444] font-jp-impact text-[10px] font-bold px-2 py-1 rotate-[-6deg] tracking-wider select-none shadow-sm">
                       迅速対応
                     </div>
                   </div>
 
-                  {/* Direct Email Box */}
                   <div className="bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 p-3.5 rounded-xl shadow-[2px_2px_0px_#000]">
                     <div className="flex items-center justify-between text-[10px] font-mono-tech font-bold text-stone-500 uppercase mb-1">
                       <span>[ OUR DIRECT EMAIL ]</span>
@@ -286,7 +262,6 @@ export default function ContactTransmissionSection() {
                     </div>
                   </div>
 
-                  {/* Global Hub Timezones */}
                   <div className="grid grid-cols-3 gap-2">
                     <div className="bg-white dark:bg-[#1a1a20] border border-black/30 dark:border-stone-700 p-2 text-center rounded shadow-[1px_1px_0px_#000]">
                       <div className="font-mono-tech text-[9px] text-stone-500 uppercase">TOKYO</div>
@@ -302,7 +277,6 @@ export default function ContactTransmissionSection() {
                     </div>
                   </div>
 
-                  {/* Response Guarantee SLA */}
                   <div className="bg-[#bef264]/20 border border-[#bef264] p-2.5 rounded-lg flex items-center gap-2 text-xs font-mono-tech font-bold text-stone-800 dark:text-stone-200">
                     <span className="text-[#16a34a] text-base">⚡</span>
                     <span>WE TYPICALLY REPLY WITHIN 24 HOURS</span>
@@ -310,7 +284,6 @@ export default function ContactTransmissionSection() {
                 </div>
               </div>
 
-              {/* Bottom Card Footer: Social Channels */}
               <div className="px-4 py-3 bg-white dark:bg-[#1e1e24] border-t-2 border-black dark:border-stone-700 flex flex-wrap items-center justify-between gap-2">
                 <span className="font-mono-tech text-[10px] font-bold text-stone-500 uppercase">
                   OUR CHANNELS:
@@ -355,13 +328,11 @@ export default function ContactTransmissionSection() {
           </UnfoldPanel>
         </div>
 
-        {/* CARD 02: SIMPLE CONTACT FORM (Right Column - 7 cols) */}
         <div className="lg:col-span-7 flex flex-col">
           <UnfoldPanel direction="right" duration={1000} delay={180} className="w-full h-full rounded-2xl">
             <div className="w-full h-full bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-5 sm:p-7 shadow-[6px_6px_0px_#000000] hover:shadow-[10px_10px_0px_#000000] transition-all duration-300 flex flex-col justify-between">
               
               <div>
-                {/* Top Card Header Strip */}
                 <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black dark:border-stone-700 bg-white dark:bg-[#1e1e24] rounded-lg mb-5">
                   <div className="flex items-center gap-2">
                     <span className="bg-black text-white font-mono-tech font-bold text-xs px-2 py-0.5 rounded-sm">
@@ -372,7 +343,6 @@ export default function ContactTransmissionSection() {
                     </span>
                   </div>
 
-                  {/* Barcode Graphic SVG */}
                   <div className="flex items-center gap-[2px] opacity-75">
                     <span className="w-[1.5px] h-4 bg-black dark:bg-white" />
                     <span className="w-[3px] h-4 bg-black dark:bg-white" />
@@ -384,7 +354,6 @@ export default function ContactTransmissionSection() {
                   </div>
                 </div>
 
-                {/* Form Title Callout */}
                 <div className="mb-6">
                   <div className="flex items-center justify-between gap-2 flex-wrap mb-1">
                     <InkText
@@ -404,14 +373,12 @@ export default function ContactTransmissionSection() {
                   </p>
                 </div>
 
-                {/* Error Banner */}
                 {submitError && (
                   <div className="mb-4 p-3 bg-[#ef4444]/15 border-2 border-[#ef4444] rounded-xl text-[#ef4444] font-mono-tech text-xs font-bold animate-shake">
                     [ TRANSMISSION DELAY ] {submitError}
                   </div>
                 )}
 
-                {/* Form or Submitted State */}
                 {submitted ? (
                   <div className="p-6 sm:p-8 bg-[#bef264] border-2 border-black text-black font-mono-tech text-center my-6 rounded-xl shadow-[4px_4px_0px_#000] animate-fade-in space-y-3">
                     <div className="inline-block border-2 border-black bg-white px-3 py-1 text-xs font-black uppercase shadow-sm">
@@ -441,7 +408,6 @@ export default function ContactTransmissionSection() {
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
                     
-                    {/* Bot Honeypot Input (Invisible to real users) */}
                     <input
                       type="text"
                       name="hp_contact_check"
@@ -452,7 +418,6 @@ export default function ContactTransmissionSection() {
                       autoComplete="off"
                     />
 
-                    {/* Services Selector */}
                     <div>
                       <label className="block font-mono-tech text-[10px] sm:text-xs font-bold text-stone-700 dark:text-stone-300 uppercase mb-2">
                         1. What services do you need?
@@ -479,9 +444,7 @@ export default function ContactTransmissionSection() {
                       </div>
                     </div>
 
-                    {/* Name & Email Inputs */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {/* Name */}
                       <div>
                         <label className="block font-mono-tech text-[10px] sm:text-xs font-bold text-stone-700 dark:text-stone-300 uppercase mb-1">
                           2. Your Name or Company
@@ -496,7 +459,6 @@ export default function ContactTransmissionSection() {
                         />
                       </div>
 
-                      {/* Email */}
                       <div>
                         <label className="block font-mono-tech text-[10px] sm:text-xs font-bold text-stone-700 dark:text-stone-300 uppercase mb-1">
                           3. Your Email Address
@@ -512,7 +474,6 @@ export default function ContactTransmissionSection() {
                       </div>
                     </div>
 
-                    {/* Phone & Company Inputs */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="block font-mono-tech text-[10px] sm:text-xs font-bold text-stone-700 dark:text-stone-300 uppercase mb-1">
@@ -541,7 +502,6 @@ export default function ContactTransmissionSection() {
                       </div>
                     </div>
 
-                    {/* Message Textarea */}
                     <div>
                       <label className="block font-mono-tech text-[10px] sm:text-xs font-bold text-stone-700 dark:text-stone-300 uppercase mb-1">
                         6. Your Message
@@ -556,7 +516,6 @@ export default function ContactTransmissionSection() {
                       />
                     </div>
 
-                    {/* Submit Button */}
                     <button
                       type="submit"
                       disabled={submitting}
@@ -571,7 +530,6 @@ export default function ContactTransmissionSection() {
                 )}
               </div>
 
-              {/* Status Footer */}
               <div className="flex flex-wrap items-center justify-between gap-2 mt-5 pt-3 border-t border-stone-200 dark:border-stone-800 font-mono-tech text-[10px] text-stone-600 dark:text-stone-400">
                 <span className="bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded border border-black/20">
                   🔒 SECURE & CONFIDENTIAL
@@ -590,7 +548,6 @@ export default function ContactTransmissionSection() {
 
       </div>
 
-      {/* Bottom Right Handwritten Tag */}
       <div className="flex justify-end mt-4 pr-4 sm:pr-12 lg:pr-24 select-none">
         <div className="font-handwriting text-2xl sm:text-3xl text-stone-800 dark:text-stone-200 font-bold tracking-wide transform rotate-[-4deg] text-right">
           <div>From idea</div>

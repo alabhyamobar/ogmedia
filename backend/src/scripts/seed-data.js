@@ -43,19 +43,21 @@ async function seed() {
     lastLoginAt: new Date(Date.now() - 3600 * 1000 * 2)
   });
 
-  // Secondary admin alias
+  // Dedicated Developer Account (Full Master Clearance across CRM Platform, Exclusive Audit Trail)
+  const devPasswordHash = await User.hashPassword('DevPass2026!@');
   await User.create({
-    name: 'Admin Root',
-    username: 'superadmin',
-    email: 'superadmin@ogmedia.agency',
-    passwordHash: adminPasswordHash,
-    role: ROLES.ADMIN,
+    name: 'Lead System Developer',
+    username: 'developer',
+    email: 'developer@ogmedia.agency',
+    passwordHash: devPasswordHash,
+    role: ROLES.DEVELOPER,
     expertise: Object.values(SERVICES),
     status: 'ACTIVE',
-    mustChangePassword: false
+    mustChangePassword: false,
+    lastLoginAt: new Date()
   });
-  console.log('   ✓ Administrator created: @admin / AdminPass2026!@');
-  console.log('   ✓ Alias created: @superadmin / AdminPass2026!@');
+  console.log('   ✓ Administrator created: @admin / AdminPass2026!@ [Audit Trail & System Config Revoked]');
+  console.log('   ✓ Developer created:     @developer / DevPass2026!@ [Full Master CRM Clearance, System Debug & Audit Trail]');
 
   // 3. Create Team Roster (Specialized Domain Agents)
   console.log('\n3. Enrolling Specialized Domain Agents...');
@@ -605,9 +607,13 @@ async function seed() {
   console.log('✓ DATABASE SEEDING COMPLETED SUCCESSFULLY!');
   console.log('======================================================');
   console.log('Admin Credentials:');
-  console.log('  Username: admin  (or superadmin)');
+  console.log('  Username: admin');
   console.log('  Password: AdminPass2026!@');
-  console.log('  Role:     ADMIN\n');
+  console.log('  Role:     ADMIN (Audit Trail & System Config Revoked)\n');
+  console.log('Developer Credentials (Master CRM Platform Clearance):');
+  console.log('  Username: developer');
+  console.log('  Password: DevPass2026!@');
+  console.log('  Role:     DEVELOPER (Full Master CRM Platform Clearance, Exclusive Audit Trail & Live Debugger)\n');
   console.log('Sample Staff Credentials:');
   console.log('  Username: maya.ads (Meta/Google Ads Specialist)');
   console.log('  Username: devon.code (3D Web Specialist)');

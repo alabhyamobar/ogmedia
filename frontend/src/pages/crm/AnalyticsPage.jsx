@@ -15,26 +15,23 @@ import {
 } from 'lucide-react';
 
 export default function AnalyticsPage() {
-  const { isAdmin } = useAuth();
+  const { isAdmin, isDeveloper } = useAuth();
   const [selectedService, setSelectedService] = useState('ALL');
 
-  // Fetch overview analytics
   const { data: overviewData, isLoading: overviewLoading } = useQuery({
     queryKey: ['analytics-overview-full', selectedService],
     queryFn: () => api.getOverviewAnalytics({ service: selectedService === 'ALL' ? undefined : selectedService })
   });
 
-  // Fetch service distribution
   const { data: servicesData, isLoading: servicesLoading } = useQuery({
     queryKey: ['analytics-services'],
     queryFn: () => api.getServiceAnalytics()
   });
 
-  // Fetch employee performance (admin only)
   const { data: employeesData, isLoading: employeesLoading } = useQuery({
     queryKey: ['analytics-employees'],
     queryFn: () => api.getEmployeeAnalytics(),
-    enabled: isAdmin
+    enabled: isAdmin || isDeveloper
   });
 
   const overview = overviewData?.data || {};
@@ -46,7 +43,6 @@ export default function AnalyticsPage() {
   return (
     <div className="space-y-6 sm:space-y-8 select-none font-sans">
       
-      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="font-mono-tech text-xs font-bold text-stone-500">
@@ -60,7 +56,6 @@ export default function AnalyticsPage() {
           </p>
         </div>
 
-        {/* Sector Filter */}
         <div className="font-mono-tech text-xs">
           <select
             value={selectedService}
@@ -80,10 +75,8 @@ export default function AnalyticsPage() {
         </div>
       </div>
 
-      {/* KPI Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 font-mono-tech">
         
-        {/* Card 1: Total Leads */}
         <div className="bg-[#faf8f5] dark:bg-[#16161a] border-2 border-black dark:border-stone-700 rounded-xl p-5 shadow-[4px_4px_0px_#000] space-y-2">
           <div className="flex items-center justify-between text-stone-500 text-xs font-bold uppercase">
             <span>Total Transmissions</span>
@@ -97,7 +90,6 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        {/* Card 2: Converted */}
         <div className="bg-[#faf8f5] dark:bg-[#16161a] border-2 border-black dark:border-stone-700 rounded-xl p-5 shadow-[4px_4px_0px_#000] space-y-2">
           <div className="flex items-center justify-between text-stone-500 text-xs font-bold uppercase">
             <span>Converted Retainers</span>
@@ -111,7 +103,6 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        {/* Card 3: Overall Conversion Rate */}
         <div className="bg-[#bef264] border-2 border-black rounded-xl p-5 shadow-[4px_4px_0px_#000] text-black space-y-2">
           <div className="flex items-center justify-between text-black/70 text-xs font-black uppercase">
             <span>Conversion Rate</span>
@@ -125,7 +116,6 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        {/* Card 4: Period Comparison */}
         <div className="bg-[#faf8f5] dark:bg-[#16161a] border-2 border-black dark:border-stone-700 rounded-xl p-5 shadow-[4px_4px_0px_#000] space-y-2">
           <div className="flex items-center justify-between text-stone-500 text-xs font-bold uppercase">
             <span>Month vs Previous</span>
@@ -162,10 +152,8 @@ export default function AnalyticsPage() {
 
       </div>
 
-      {/* Grid: Sector Distribution (7 cols) + Employee Performance (5 cols) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        {/* Sector Distribution Breakdown */}
         <div className="lg:col-span-7 bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-5 sm:p-6 shadow-[5px_5px_0px_#000] space-y-4 font-mono-tech">
           <div className="flex items-center justify-between border-b-2 border-black dark:border-stone-700 pb-3">
             <span className="font-black text-xs uppercase flex items-center gap-1.5">
@@ -198,7 +186,6 @@ export default function AnalyticsPage() {
                       </div>
                     </div>
 
-                    {/* Progress Bar */}
                     <div className="w-full bg-stone-200 dark:bg-stone-800 h-2.5 rounded-full overflow-hidden border border-black/20">
                       <div
                         className="bg-[#bef264] h-full rounded-full transition-all duration-500"
@@ -212,7 +199,6 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        {/* Employee Performance Leaderboard (Admin Only) */}
         <div className="lg:col-span-5 bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-5 sm:p-6 shadow-[5px_5px_0px_#000] space-y-4 font-mono-tech">
           <div className="flex items-center justify-between border-b-2 border-black dark:border-stone-700 pb-3">
             <span className="font-black text-xs uppercase flex items-center gap-1.5">
@@ -221,7 +207,7 @@ export default function AnalyticsPage() {
             </span>
           </div>
 
-          {!isAdmin ? (
+          {!isAdmin && !isDeveloper ? (
             <div className="py-8 text-center text-xs text-stone-500 italic">
               Employee leaderboard is restricted to administrative clearance.
             </div>

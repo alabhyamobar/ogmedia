@@ -13,6 +13,6 @@ router.use(authenticate);
 
 router.get('/overview', getOverviewAnalytics);
 router.get('/services', getServiceAnalytics);
-router.get('/employees', requireRole(ROLES.ADMIN), getEmployeeAnalytics);
+router.get('/employees', requireRole(ROLES.ADMIN, ROLES.DEVELOPER), getEmployeeAnalytics);
 
 export default router;

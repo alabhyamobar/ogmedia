@@ -36,7 +36,7 @@ const STATUS_LIST = [
 ];
 
 export default function LeadsPage() {
-  const { user, isAdmin, isEmployee } = useAuth();
+  const { user, isAdmin, isDeveloper, isEmployee } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const page = parseInt(searchParams.get('page') || '1', 10);
@@ -47,14 +47,12 @@ export default function LeadsPage() {
 
   const [searchInput, setSearchInput] = useState(search);
 
-  // Fetch employees for filter dropdown (if Admin)
   const { data: employeesData } = useQuery({
     queryKey: ['employees-filter-list'],
     queryFn: () => api.getEmployees({ limit: 100 }),
-    enabled: isAdmin
+    enabled: isAdmin || isDeveloper
   });
 
-  // Fetch paginated leads
   const { data, isLoading, isFetching, refetch } = useQuery({
     queryKey: ['leads-list', page, search, service, status, assignedTo],
     queryFn: () =>
@@ -91,7 +89,6 @@ export default function LeadsPage() {
   return (
     <div className="space-y-6 select-none font-sans">
       
-      {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="font-mono-tech text-xs font-bold text-stone-500">
@@ -116,12 +113,10 @@ export default function LeadsPage() {
         </button>
       </div>
 
-      {/* Filter Controls Bar */}
       <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-4 sm:p-5 shadow-[5px_5px_0px_#000] space-y-4 font-mono-tech text-xs">
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           
-          {/* Search Box */}
           <form onSubmit={handleSearchSubmit} className="relative">
             <input
               type="text"
@@ -133,7 +128,6 @@ export default function LeadsPage() {
             <Search className="w-4 h-4 text-stone-400 absolute left-3 top-2.5" />
           </form>
 
-          {/* Sector / Service Filter */}
           <div>
             <select
               value={service}
@@ -149,7 +143,6 @@ export default function LeadsPage() {
             </select>
           </div>
 
-          {/* Status Filter */}
           <div>
             <select
               value={status}
@@ -165,8 +158,7 @@ export default function LeadsPage() {
             </select>
           </div>
 
-          {/* Assigned Employee Filter (Admin only) */}
-          {isAdmin && (
+          {(isAdmin || isDeveloper) && (
             <div>
               <select
                 value={assignedTo}
@@ -188,7 +180,6 @@ export default function LeadsPage() {
 
       </div>
 
-      {/* Leads Table Container */}
       <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl shadow-[6px_6px_0px_#000] overflow-hidden">
         
         {isLoading ? (
@@ -222,7 +213,6 @@ export default function LeadsPage() {
                     key={lead._id}
                     className="hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
                   >
-                    {/* Customer */}
                     <td className="py-3 px-4">
                       <div className="font-black text-black dark:text-white">
                         {lead.name}
@@ -236,14 +226,12 @@ export default function LeadsPage() {
                       )}
                     </td>
 
-                    {/* Sector */}
                     <td className="py-3 px-4">
                       <span className="bg-black text-[#bef264] font-black text-[10px] px-2 py-0.5 rounded border border-black dark:border-stone-700 whitespace-nowrap">
                         {lead.service}
                       </span>
                     </td>
 
-                    {/* Status */}
                     <td className="py-3 px-4">
                       <span
                         className={`text-[10px] font-black px-2 py-0.5 rounded border whitespace-nowrap ${
@@ -260,7 +248,6 @@ export default function LeadsPage() {
                       </span>
                     </td>
 
-                    {/* Assigned To */}
                     <td className="py-3 px-4 text-stone-700 dark:text-stone-300">
                       {lead.assignedTo ? (
                         <div className="flex items-center gap-1 font-bold">
@@ -272,19 +259,16 @@ export default function LeadsPage() {
                       )}
                     </td>
 
-                    {/* Created */}
                     <td className="py-3 px-4 text-stone-500 text-[10px] whitespace-nowrap">
                       {new Date(lead.createdAt).toLocaleDateString()}
                     </td>
 
-                    {/* Last Contact */}
                     <td className="py-3 px-4 text-stone-500 text-[10px] whitespace-nowrap">
                       {lead.lastContactedAt
                         ? new Date(lead.lastContactedAt).toLocaleDateString()
                         : '—'}
                     </td>
 
-                    {/* Actions */}
                     <td className="py-3 px-4 text-right">
                       <Link
                         to={`/crm/leads/${lead._id}`}
@@ -300,7 +284,6 @@ export default function LeadsPage() {
           </div>
         )}
 
-        {/* Server-Side Pagination Bar */}
         <div className="p-4 border-t-2 border-black dark:border-stone-700 bg-white dark:bg-[#121216] flex flex-col sm:flex-row items-center justify-between gap-3 font-mono-tech text-xs">
           <div className="text-stone-500 text-[11px]">
             Showing <span className="font-bold text-black dark:text-white">{leads.length}</span> of{' '}

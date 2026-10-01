@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-/**
- * TypewriterText: Types out small and non-bold text smoothly character-by-character when scrolled into view.
- */
 export default function TypewriterText({
   text,
   children,
@@ -21,7 +18,6 @@ export default function TypewriterText({
   const containerRef = useRef(null);
 
   useEffect(() => {
-    // Reset typing if text changes (e.g. on language translation switch)
     setDisplayedText('');
     setIsDone(false);
     setHasStarted(false);
@@ -70,7 +66,6 @@ export default function TypewriterText({
     return () => clearTimeout(startTimer);
   }, [hasStarted, fullText, speed, delay]);
 
-  // If complex JSX children are passed instead of a plain string, render normally
   if (!fullText && children) {
     return <Component className={className}>{children}</Component>;
   }

@@ -32,27 +32,24 @@ export default function LeadDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, isDeveloper } = useAuth();
 
   const [noteText, setNoteText] = useState('');
   const [statusModal, setStatusModal] = useState({ open: false, targetStatus: null, note: '' });
   const [assigneeId, setAssigneeId] = useState('');
   const [actionError, setActionError] = useState(null);
 
-  // Fetch lead data
   const { data, isLoading, error } = useQuery({
     queryKey: ['lead-detail', id],
     queryFn: () => api.getLeadById(id)
   });
 
-  // Fetch employees for assignment (if admin)
   const { data: employeesData } = useQuery({
     queryKey: ['employees-for-assign'],
     queryFn: () => api.getEmployees({ limit: 100 }),
-    enabled: isAdmin
+    enabled: isAdmin || isDeveloper
   });
 
-  // Status mutation
   const statusMutation = useMutation({
     mutationFn: ({ status, note }) => api.updateLeadStatus(id, status, note),
     onSuccess: () => {
@@ -67,7 +64,6 @@ export default function LeadDetailPage() {
     }
   });
 
-  // Note mutation
   const noteMutation = useMutation({
     mutationFn: (text) => api.addLeadNote(id, text),
     onSuccess: () => {
@@ -80,7 +76,6 @@ export default function LeadDetailPage() {
     }
   });
 
-  // Assignment mutation
   const assignMutation = useMutation({
     mutationFn: (empId) => api.assignLead(id, empId || null),
     onSuccess: () => {
@@ -131,7 +126,6 @@ export default function LeadDetailPage() {
   return (
     <div className="max-w-6xl mx-auto space-y-6 select-none font-sans">
       
-      {/* Top Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <Link
@@ -150,7 +144,6 @@ export default function LeadDetailPage() {
           </div>
         </div>
 
-        {/* Current Status Pill */}
         <div className="flex items-center gap-2">
           <span className="font-mono-tech text-xs text-stone-500 font-bold uppercase">
             STATUS:
@@ -178,7 +171,6 @@ export default function LeadDetailPage() {
         </div>
       )}
 
-      {/* Visual Pipeline Progression Bar */}
       <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-4 sm:p-6 shadow-[5px_5px_0px_#000]">
         <div className="font-mono-tech text-[10px] font-bold text-stone-500 uppercase mb-3">
           // PIPELINE PROGRESSION STAGE
@@ -206,7 +198,6 @@ export default function LeadDetailPage() {
           })}
         </div>
 
-        {/* Mark as Lost or Reopen button */}
         <div className="mt-3 flex justify-end font-mono-tech text-xs">
           {lead.status !== 'LOST' ? (
             <button
@@ -227,13 +218,10 @@ export default function LeadDetailPage() {
         </div>
       </div>
 
-      {/* Grid: Left Customer & Message (7 cols) + Right Notes & Timeline (5 cols) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        {/* Left Column */}
         <div className="lg:col-span-7 space-y-6">
           
-          {/* Customer Profile Card */}
           <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-5 sm:p-6 shadow-[5px_5px_0px_#000] space-y-4">
             <div className="flex items-center justify-between border-b-2 border-black dark:border-stone-700 pb-3 font-mono-tech">
               <span className="font-bold text-xs text-stone-500 uppercase">// CUSTOMER SPECIFICATIONS</span>
@@ -286,7 +274,6 @@ export default function LeadDetailPage() {
 
             </div>
 
-            {/* Assignment Section (Admin only or display) */}
             <div className="pt-3 border-t border-stone-200 dark:border-stone-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 font-mono-tech text-xs">
               <div>
                 <span className="text-stone-500 text-[10px] uppercase font-bold">Current Assigned Agent: </span>
@@ -295,7 +282,7 @@ export default function LeadDetailPage() {
                 </span>
               </div>
 
-              {isAdmin && (
+              {(isAdmin || isDeveloper) && (
                 <div className="flex items-center gap-2">
                   <select
                     value={assigneeId || lead.assignedTo?._id || ''}
@@ -307,7 +294,7 @@ export default function LeadDetailPage() {
                   >
                     <option value="">Unassigned</option>
                     {(employeesData?.data?.employees || [])
-                      .filter((e) => e.role === 'ADMIN' || e.role === 'SUPER_ADMIN' || (e.expertise && e.expertise.includes(lead.service)))
+                      .filter((e) => isDeveloper || e.role === 'ADMIN' || e.role === 'SUPER_ADMIN' || (e.expertise && e.expertise.includes(lead.service)))
                       .map((emp) => (
                         <option key={emp._id} value={emp._id}>
                           {emp.name} ({emp.expertise?.join(', ') || 'Global'})
@@ -319,7 +306,6 @@ export default function LeadDetailPage() {
             </div>
           </div>
 
-          {/* Customer Inquiry Message Box */}
           <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-5 sm:p-6 shadow-[5px_5px_0px_#000] space-y-3">
             <div className="font-mono-tech text-[10px] font-bold text-stone-500 uppercase">
               // ORIGINAL TRANSMISSION MESSAGE
@@ -331,10 +317,8 @@ export default function LeadDetailPage() {
 
         </div>
 
-        {/* Right Column: Notes & Timeline Feed */}
         <div className="lg:col-span-5 space-y-6">
           
-          {/* Notes Feed Container */}
           <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-5 shadow-[5px_5px_0px_#000] space-y-4 font-mono-tech">
             <div className="flex items-center justify-between border-b-2 border-black dark:border-stone-700 pb-3">
               <span className="font-black text-xs text-black dark:text-white uppercase flex items-center gap-1.5">
@@ -343,7 +327,6 @@ export default function LeadDetailPage() {
               </span>
             </div>
 
-            {/* Add Note Input */}
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -368,7 +351,6 @@ export default function LeadDetailPage() {
               </button>
             </form>
 
-            {/* Notes List */}
             <div className="space-y-2.5 max-h-72 overflow-y-auto pr-1">
               {(lead.notes || []).length === 0 ? (
                 <div className="text-center py-6 text-stone-400 text-xs italic">
@@ -400,7 +382,6 @@ export default function LeadDetailPage() {
             </div>
           </div>
 
-          {/* Audit Timeline */}
           <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-5 shadow-[5px_5px_0px_#000] space-y-3 font-mono-tech">
             <div className="flex items-center gap-1.5 font-black text-xs text-black dark:text-white uppercase border-b-2 border-black dark:border-stone-700 pb-2">
               <Activity className="w-4 h-4 text-[#bef264]" />
@@ -430,7 +411,6 @@ export default function LeadDetailPage() {
 
       </div>
 
-      {/* Status Change Confirmation Modal */}
       {statusModal.open && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-6 max-w-md w-full shadow-[8px_8px_0px_#000] space-y-4 font-mono-tech animate-fade-in">
