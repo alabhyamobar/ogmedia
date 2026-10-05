@@ -1,15 +1,17 @@
 import { v4 as uuidv4 } from 'uuid';
-import { createDuplicateClient, getRedisClient } from '../config/redis.js';
+import { createDuplicateClient, getRedisClient, isRedisHealthy } from '../config/redis.js';
 import { connectDB } from '../config/db.js';
 import { Lead } from '../models/Lead.js';
 import { AuditLog } from '../models/AuditLog.js';
 import { FailedLeadEvent } from '../models/FailedLeadEvent.js';
 import { QUEUE_CONFIG, AUDIT_ACTIONS } from '../constants/index.js';
 import { enqueueToDLQ, initLeadQueue } from '../queues/lead.queue.js';
+import { invalidateCachePattern } from '../utils/cache.js';
 import { logger } from '../utils/logger.js';
 
 let isWorkerRunning = false;
 let shouldStop = false;
+let reconnectSupervisorTimer = null;
 
 /**
  * Parses raw Redis Stream entries into typed objects
@@ -50,19 +52,10 @@ function parseStreamEntries(streamData) {
 }
 
 /**
- * Invalidates analytics caches in Redis when new leads are inserted
+ * Invalidates analytics caches when new leads are inserted
  */
 async function invalidateAnalyticsCache() {
-  try {
-    const redis = getRedisClient();
-    const keys = await redis.keys('analytics:*');
-    if (keys.length > 0) {
-      await redis.del(...keys);
-      logger.debug({ msg: 'Invalidated analytics cache', keysCount: keys.length });
-    }
-  } catch (err) {
-    logger.warn({ msg: 'Failed to invalidate analytics cache', error: err.message });
-  }
+  await invalidateCachePattern('analytics:*');
 }
 
 /**
@@ -80,7 +73,9 @@ async function processBatch(redisConsumer, batch) {
       logger.warn({ msg: 'Skipping invalid lead payload', item });
       // Send directly to DLQ
       await enqueueToDLQ(item, 'Missing required lead fields (email or name)');
-      await redisConsumer.xack(QUEUE_CONFIG.STREAM_NAME, QUEUE_CONFIG.CONSUMER_GROUP, item.messageId);
+      if (redisConsumer) {
+        await redisConsumer.xack(QUEUE_CONFIG.STREAM_NAME, QUEUE_CONFIG.CONSUMER_GROUP, item.messageId).catch(() => {});
+      }
       continue;
     }
 
@@ -156,8 +151,10 @@ async function processBatch(redisConsumer, batch) {
     }
 
     // Safely acknowledge messages in Redis Stream
-    if (ackMessageIds.length > 0) {
-      await redisConsumer.xack(QUEUE_CONFIG.STREAM_NAME, QUEUE_CONFIG.CONSUMER_GROUP, ...ackMessageIds);
+    if (redisConsumer && ackMessageIds.length > 0) {
+      await redisConsumer.xack(QUEUE_CONFIG.STREAM_NAME, QUEUE_CONFIG.CONSUMER_GROUP, ...ackMessageIds).catch((e) =>
+        logger.warn({ msg: 'Failed to acknowledge messages in Redis stream', error: e.message })
+      );
     }
 
     // Invalidate analytics caches
@@ -193,8 +190,9 @@ async function processBatch(redisConsumer, batch) {
         ).catch((dlqErr) => logger.error({ msg: 'Failed to write DLQ to Mongo', error: dlqErr.message }));
 
         await enqueueToDLQ(item, error.message);
-        // Acknowledge from main queue so it does not block the worker
-        await redisConsumer.xack(QUEUE_CONFIG.STREAM_NAME, QUEUE_CONFIG.CONSUMER_GROUP, item.messageId);
+        if (redisConsumer) {
+          await redisConsumer.xack(QUEUE_CONFIG.STREAM_NAME, QUEUE_CONFIG.CONSUMER_GROUP, item.messageId).catch(() => {});
+        }
       } else {
         logger.warn({
           msg: 'Scheduling retry for lead event',
@@ -202,7 +200,6 @@ async function processBatch(redisConsumer, batch) {
           attempt: nextRetryCount,
           maxRetries
         });
-        // Exponential backoff wait before re-processing
         const backoffMs = Math.min(Math.pow(2, nextRetryCount) * 500, 10000);
         await new Promise((resolve) => setTimeout(resolve, backoffMs));
       }
@@ -214,8 +211,8 @@ async function processBatch(redisConsumer, batch) {
  * Recovers stuck unacknowledged messages (e.g. from crashed worker nodes)
  */
 async function recoverPendingMessages(redisConsumer, workerName) {
+  if (!redisConsumer) return;
   try {
-    // Check pending list for messages idle for more than 30 seconds
     const pendingList = await redisConsumer.xpending(
       QUEUE_CONFIG.STREAM_NAME,
       QUEUE_CONFIG.CONSUMER_GROUP,
@@ -228,7 +225,6 @@ async function recoverPendingMessages(redisConsumer, workerName) {
 
     for (const item of pendingList) {
       const [msgId, consumer, idleTimeMs, deliveryCount] = item;
-      // If idle for over 30000 ms, claim ownership
       if (idleTimeMs > 30000) {
         logger.info({
           msg: 'Claiming stale unacknowledged message from crashed consumer',
@@ -252,7 +248,7 @@ async function recoverPendingMessages(redisConsumer, workerName) {
       }
     }
   } catch (err) {
-    logger.warn({ msg: 'Pending message recovery check failed', error: err.message });
+    logger.debug({ msg: 'Pending message recovery check note', detail: err.message });
   }
 }
 
@@ -261,7 +257,34 @@ async function recoverPendingMessages(redisConsumer, workerName) {
  */
 export async function startLeadWorker(options = {}) {
   if (isWorkerRunning) {
-    logger.warn({ msg: 'Worker loop already running' });
+    logger.debug({ msg: 'Worker loop already running' });
+    return;
+  }
+
+  // Check Redis availability before starting
+  const redisUp = await isRedisHealthy();
+  if (!redisUp) {
+    logger.info({
+      msg: 'Lead worker consumer standing by: Redis is unavailable or unconfigured. Ingestion operates in DIRECT_DATABASE mode.'
+    });
+
+    // Start background reconnection supervisor to auto-start if Redis comes online
+    if (!reconnectSupervisorTimer && !shouldStop) {
+      reconnectSupervisorTimer = setInterval(async () => {
+        if (shouldStop) {
+          clearInterval(reconnectSupervisorTimer);
+          reconnectSupervisorTimer = null;
+          return;
+        }
+        const nowHealthy = await isRedisHealthy();
+        if (nowHealthy && !isWorkerRunning) {
+          logger.info({ msg: 'Redis is now healthy. Launching lead worker consumer stream...' });
+          clearInterval(reconnectSupervisorTimer);
+          reconnectSupervisorTimer = null;
+          startLeadWorker(options);
+        }
+      }, 15000);
+    }
     return;
   }
 
@@ -281,6 +304,10 @@ export async function startLeadWorker(options = {}) {
 
   await initLeadQueue();
   const redisConsumer = createDuplicateClient();
+  if (!redisConsumer) {
+    isWorkerRunning = false;
+    return;
+  }
 
   // Recovery check interval (runs every 60s)
   const recoveryInterval = setInterval(() => {
@@ -294,7 +321,6 @@ export async function startLeadWorker(options = {}) {
   (async () => {
     while (!shouldStop) {
       try {
-        // XREADGROUP block for up to 2000ms if no messages exist
         const streamData = await redisConsumer.xreadgroup(
           'GROUP',
           QUEUE_CONFIG.CONSUMER_GROUP,
@@ -316,18 +342,28 @@ export async function startLeadWorker(options = {}) {
         }
       } catch (error) {
         if (shouldStop) break;
-        logger.error({ msg: 'Error in worker polling loop', error: error.message });
+        logger.warn({ msg: 'Worker polling loop warning', error: error.message });
+
         if (error.message && error.message.includes('NOGROUP')) {
           logger.info({ msg: 'Detected missing stream or group, re-initializing consumer group...' });
           await initLeadQueue();
         }
-        // Prevent hot-looping on connection error
-        await new Promise((r) => setTimeout(r, 2000));
+
+        // If Redis disconnected, backoff and check health
+        const healthy = await isRedisHealthy();
+        if (!healthy) {
+          logger.warn({ msg: 'Redis connection lost in worker loop, waiting to reconnect...' });
+          await new Promise((r) => setTimeout(r, 5000));
+        } else {
+          await new Promise((r) => setTimeout(r, 2000));
+        }
       }
     }
 
     clearInterval(recoveryInterval);
-    await redisConsumer.quit();
+    try {
+      await redisConsumer.quit();
+    } catch {}
     isWorkerRunning = false;
     logger.info({ msg: 'Lead worker consumer stopped cleanly', workerId });
   })();
@@ -335,6 +371,10 @@ export async function startLeadWorker(options = {}) {
 
 export function stopLeadWorker() {
   shouldStop = true;
+  if (reconnectSupervisorTimer) {
+    clearInterval(reconnectSupervisorTimer);
+    reconnectSupervisorTimer = null;
+  }
 }
 
 // Standalone execution if launched via `node src/workers/lead.worker.js`

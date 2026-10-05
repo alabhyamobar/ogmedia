@@ -34,4 +34,3 @@ src/layouts/CrmLayout.jsx
 src/pages/crm/
 src/context/AuthContext.jsx
 src/services/api.js
-backend/

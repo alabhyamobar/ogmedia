@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import { Lead } from '../models/Lead.js';
 import { User } from '../models/User.js';
 import { buildLeadScopeFilter } from '../middleware/auth.js';
-import { getRedisClient } from '../config/redis.js';
+import { getCache, setCache } from '../utils/cache.js';
 import { SERVICES, LEAD_STATUS, ROLES } from '../constants/index.js';
 import { logger } from '../utils/logger.js';
 
@@ -21,22 +21,17 @@ function getCacheKey(prefix, req) {
  */
 export async function getOverviewAnalytics(req, res, next) {
   try {
-    const redis = getRedisClient();
     const cacheKey = getCacheKey('overview', req);
 
-    // 1. Try Redis cache
-    try {
-      const cached = await redis.get(cacheKey);
-      if (cached) {
-        return res.status(200).json({
-          success: true,
-          data: JSON.parse(cached),
-          source: 'cache',
-          requestId: req.id
-        });
-      }
-    } catch (err) {
-      logger.warn({ msg: 'Redis cache read error', error: err.message });
+    // 1. Try Cache (Redis or in-memory fallback)
+    const cached = await getCache(cacheKey);
+    if (cached) {
+      return res.status(200).json({
+        success: true,
+        data: cached,
+        source: 'cache',
+        requestId: req.id
+      });
     }
 
     // 2. Build filter
@@ -135,12 +130,8 @@ export async function getOverviewAnalytics(req, res, next) {
       }
     };
 
-    // Cache in Redis
-    try {
-      await redis.set(cacheKey, JSON.stringify(payload), 'EX', ANALYTICS_CACHE_TTL);
-    } catch (e) {
-      logger.warn({ msg: 'Failed to write analytics to Redis cache', error: e.message });
-    }
+    // Cache result
+    await setCache(cacheKey, payload, ANALYTICS_CACHE_TTL);
 
     return res.status(200).json({
       success: true,
@@ -159,15 +150,12 @@ export async function getOverviewAnalytics(req, res, next) {
  */
 export async function getServiceAnalytics(req, res, next) {
   try {
-    const redis = getRedisClient();
     const cacheKey = getCacheKey('services', req);
 
-    try {
-      const cached = await redis.get(cacheKey);
-      if (cached) {
-        return res.status(200).json({ success: true, data: JSON.parse(cached), source: 'cache', requestId: req.id });
-      }
-    } catch {}
+    const cached = await getCache(cacheKey);
+    if (cached) {
+      return res.status(200).json({ success: true, data: cached, source: 'cache', requestId: req.id });
+    }
 
     const scopedFilter = buildLeadScopeFilter(req.user);
 
@@ -194,9 +182,7 @@ export async function getServiceAnalytics(req, res, next) {
       conversionRate: item.total > 0 ? Math.round((item.converted / item.total) * 1000) / 10 : 0
     }));
 
-    try {
-      await redis.set(cacheKey, JSON.stringify(enriched), 'EX', ANALYTICS_CACHE_TTL);
-    } catch {}
+    await setCache(cacheKey, enriched, ANALYTICS_CACHE_TTL);
 
     return res.status(200).json({
       success: true,

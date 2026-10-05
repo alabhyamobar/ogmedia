@@ -1,7 +1,8 @@
+import 'dotenv/config';
 import { test, describe, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { connectDB, disconnectDB } from '../src/config/db.js';
-import { getRedisClient, closeRedis } from '../src/config/redis.js';
+import { getRedisClient, closeRedis, isRedisHealthy } from '../src/config/redis.js';
 import { initLeadQueue, enqueueLeadSubmission, checkAndSetDuplicate } from '../src/queues/lead.queue.js';
 import { User } from '../src/models/User.js';
 import { Lead } from '../src/models/Lead.js';
@@ -11,12 +12,16 @@ import { buildLeadScopeFilter } from '../src/middleware/auth.js';
 
 describe('OG Media CRM - Production Integration Test Suite', () => {
   let redis;
+  let redisAvailable = false;
 
   before(async () => {
     process.env.NODE_ENV = 'test';
     await connectDB();
-    redis = getRedisClient();
-    await initLeadQueue();
+    redisAvailable = await isRedisHealthy();
+    if (redisAvailable) {
+      redis = getRedisClient();
+      await initLeadQueue();
+    }
   });
 
   after(async () => {
@@ -24,11 +29,11 @@ describe('OG Media CRM - Production Integration Test Suite', () => {
     await closeRedis();
   });
 
-  describe('1. Redis Ingestion Queue & Deduplication', () => {
-    test('Should enqueue valid lead submission to Redis Stream and return eventId', async () => {
+  describe('1. Ingestion Queue, Direct DB Mode & Deduplication', () => {
+    test('Should ingest valid lead submission (Redis Stream or Direct DB) and return eventId', async () => {
       const payload = {
         name: 'Tony Stark',
-        email: 'tony@starkindustries.com',
+        email: `tony.${Date.now()}@starkindustries.com`,
         phone: '+1-555-0800',
         company: 'Stark Industries',
         service: SERVICES.WEB_DEVELOPMENT,
@@ -37,14 +42,23 @@ describe('OG Media CRM - Production Integration Test Suite', () => {
 
       const result = await enqueueLeadSubmission(payload);
       assert.ok(result.eventId, 'Expected eventId to be generated');
-      assert.ok(result.streamMessageId, 'Expected Redis stream message ID');
 
-      // Verify message exists in Redis Stream
-      const range = await redis.xrange('lead-submissions', result.streamMessageId, result.streamMessageId);
-      assert.equal(range.length, 1, 'Stream should contain the enqueued entry');
+      if (redisAvailable) {
+        assert.ok(result.streamMessageId, 'Expected Redis stream message ID in buffered mode');
+        const range = await redis.xrange('lead-submissions', result.streamMessageId, result.streamMessageId);
+        assert.equal(range.length, 1, 'Stream should contain the enqueued entry');
+      } else {
+        // Direct Database Mode verification
+        assert.equal(result.mode, 'DIRECT_DATABASE');
+        const savedLead = await Lead.findOne({ eventId: result.eventId });
+        assert.ok(savedLead, 'Lead should be persisted directly to MongoDB');
+        assert.equal(savedLead.email, payload.email.toLowerCase());
+        assert.equal(savedLead.status, 'NEW');
+        assert.ok(savedLead.timeline.length > 0, 'Timeline entry should be recorded');
+      }
     });
 
-    test('Should detect duplicate submission within window', async () => {
+    test('Should detect duplicate submission within window (Redis or MongoDB backed)', async () => {
       const email = `duplicate.test.${Date.now()}@example.com`;
       const phone = '+1-555-9999';
       const service = SERVICES.GOOGLE_ADS;

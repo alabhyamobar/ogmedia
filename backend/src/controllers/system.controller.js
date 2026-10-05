@@ -1,5 +1,5 @@
 import { isDbHealthy } from '../config/db.js';
-import { isRedisHealthy, getRedisClient } from '../config/redis.js';
+import { isRedisHealthy, getRedisClient, isRedisConfigured, getRedisStatus } from '../config/redis.js';
 import { getQueueMetrics } from '../queues/lead.queue.js';
 import { getErrorLogs, clearErrorLogs, recordError } from '../utils/errorTracker.js';
 import mongoose from 'mongoose';
@@ -14,16 +14,26 @@ export function getHealth(req, res) {
 
 export async function getReadiness(req, res) {
   const dbOk = isDbHealthy();
+  const redisConfigured = isRedisConfigured();
   const redisOk = await isRedisHealthy();
 
-  const isReady = dbOk && redisOk;
+  // In adaptable mode, database is the single hard dependency.
+  // If Redis is down or not configured, the CRM operates in DIRECT_DATABASE mode.
+  const requireRedis = process.env.REQUIRE_REDIS === 'true';
+  const isReady = dbOk && (!requireRedis || redisOk);
   const status = isReady ? 200 : 503;
+
+  let redisCheckStatus = 'DISABLED';
+  if (redisConfigured) {
+    redisCheckStatus = redisOk ? 'UP' : 'DOWN';
+  }
 
   res.status(status).json({
     status: isReady ? 'READY' : 'NOT_READY',
+    mode: redisOk ? 'REDIS_BUFFER' : 'DIRECT_DATABASE',
     checks: {
       database: dbOk ? 'UP' : 'DOWN',
-      redis: redisOk ? 'UP' : 'DOWN'
+      redis: redisCheckStatus
     },
     timestamp: new Date().toISOString()
   });
@@ -34,14 +44,16 @@ export async function getReadiness(req, res) {
  */
 export async function getSystemHealthMetrics(req, res, next) {
   try {
-    const [queueMetrics, redisUp] = await Promise.all([
+    const [queueMetrics, redisStatus] = await Promise.all([
       getQueueMetrics(),
-      isRedisHealthy()
+      getRedisStatus()
     ]);
 
-    const redis = getRedisClient();
+    const redisUp = redisStatus.status === 'UP';
+    const redis = redisUp ? getRedisClient() : null;
     let redisInfo = {};
-    if (redisUp) {
+
+    if (redis && redisUp) {
       try {
         const rawInfo = await redis.info('memory');
         const memoryMatch = rawInfo.match(/used_memory_human:(.*)/);
@@ -82,6 +94,7 @@ export async function getSystemHealthMetrics(req, res, next) {
           arch: process.arch,
           pid: process.pid,
           environment: process.env.NODE_ENV || 'development',
+          operatingMode: redisUp ? 'REDIS_BUFFER' : 'DIRECT_DATABASE',
           workerConcurrency: parseInt(process.env.LEAD_WORKER_CONCURRENCY || '20', 10),
           inProcessWorkerActive: process.env.START_IN_PROCESS_WORKER !== 'false',
           rateLimitSkipped: process.env.SKIP_RATE_LIMIT === 'true',
@@ -95,8 +108,7 @@ export async function getSystemHealthMetrics(req, res, next) {
         },
         database: dbStats,
         redis: {
-          status: redisUp ? 'UP' : 'DOWN',
-          url: (process.env.REDIS_URL || 'redis://127.0.0.1:6379').replace(/:[^:@]*@/, ':***@'),
+          ...redisStatus,
           ...redisInfo
         },
         queue: queueMetrics,

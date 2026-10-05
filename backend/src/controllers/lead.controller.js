@@ -9,20 +9,12 @@ import {
   assignLeadSchema
 } from '../validators/index.js';
 import { AUDIT_ACTIONS, LEAD_STATUS, ROLES } from '../constants/index.js';
-import { getRedisClient } from '../config/redis.js';
+import { invalidateCachePattern } from '../utils/cache.js';
 import { logger } from '../utils/logger.js';
 
-// Helper to invalidate analytics cache
+// Helper to invalidate analytics cache (safely handles Redis online/offline)
 async function invalidateAnalyticsCache() {
-  try {
-    const redis = getRedisClient();
-    const keys = await redis.keys('analytics:*');
-    if (keys.length > 0) {
-      await redis.del(...keys);
-    }
-  } catch (err) {
-    logger.warn({ msg: 'Analytics cache invalidation error', error: err.message });
-  }
+  await invalidateCachePattern('analytics:*');
 }
 
 /**

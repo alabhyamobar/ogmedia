@@ -10,6 +10,7 @@
     "create-super-admin": "node src/scripts/create-super-admin.js",
     "seed": "node src/scripts/seed-data.js",
     "test": "node --test tests/**/*.test.js",
+    "verify": "node tests/production-e2e-verification.js",
     "load-test": "node tests/load-test.js"
   },
   "keywords": [],

@@ -2,7 +2,7 @@ import http from 'http';
 import dotenv from 'dotenv';
 import { createApp } from './app.js';
 import { connectDB, disconnectDB } from './config/db.js';
-import { getRedisClient, closeRedis } from './config/redis.js';
+import { getRedisClient, closeRedis, isRedisConfigured, isRedisHealthy } from './config/redis.js';
 import { initLeadQueue } from './queues/lead.queue.js';
 import { startLeadWorker, stopLeadWorker } from './workers/lead.worker.js';
 import { logger } from './utils/logger.js';
@@ -45,9 +45,23 @@ async function startServer() {
     await connectDB();
     await ensureDeveloperAccount();
 
-    // 2. Initialize Redis and Stream Queue
-    getRedisClient();
-    await initLeadQueue();
+    // 2. Initialize Redis and Stream Queue (Adaptable: only if configured and healthy)
+    if (isRedisConfigured()) {
+      getRedisClient();
+      const redisUp = await isRedisHealthy();
+      if (redisUp) {
+        await initLeadQueue();
+        logger.info({ msg: 'CRM running in REDIS_BUFFER mode (queue buffering active)' });
+      } else {
+        logger.warn({
+          msg: 'Redis configured but currently unavailable. CRM running in DIRECT_DATABASE mode (falling back to direct MongoDB interactions)'
+        });
+      }
+    } else {
+      logger.info({
+        msg: 'Redis connection string not provided or disabled. CRM running in DIRECT_DATABASE mode (interacting directly with MongoDB)'
+      });
+    }
 
     // 3. Create Express app and HTTP server
     const app = createApp();

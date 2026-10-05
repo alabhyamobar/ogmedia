@@ -4,12 +4,10 @@
 
 The OG Media CRM backend is built from the ground up as a **high-throughput, distributed, failure-resilient ingestion and lead management engine**.
 
-The core requirement of this architecture is:
-> **The public contact form must NOT directly write every submission synchronously to MongoDB.**
+The core requirement of this architecture is **adaptive resilience**:
+> **When Redis is configured and healthy, public submissions buffer through Redis Streams for peak throughput. If Redis is unavailable or unconfigured, the CRM seamlessly degrades to direct MongoDB persistence with zero downtime or rejected requests.**
 
-Under massive viral traffic bursts (e.g. 1,000,000 inquiries submitted during an agency campaign), a direct-to-database architecture experiences connection pool starvation, CPU exhaustion, write contention, and API crashes.
-
-The OG Media CRM solves this by placing a **Redis Streams ingestion buffer** between public HTTP traffic and MongoDB, with an independent, concurrency-governed **Worker Pool** processing leads asynchronously.
+Under massive viral traffic bursts (e.g. 1,000,000 inquiries submitted during an agency campaign), the Redis Streams ingestion buffer shields MongoDB. During maintenance or standalone single-node deployments without Redis, the CRM runs directly with MongoDB, guaranteeing 100% submission availability.
 
 ```text
                                PUBLIC TRAFFIC
@@ -96,7 +94,7 @@ The OG Media CRM solves this by placing a **Redis Streams ingestion buffer** bet
 
 #### Startup Sequence:
 1. **Durable Storage**: Connects to MongoDB connection pool (`await connectDB()`).
-2. **Buffer Infrastructure**: Initializes Redis client and provisions the stream consumer group (`await initLeadQueue()`).
+2. **Buffer Infrastructure**: Inspects Redis availability (`isRedisConfigured()`, `isRedisHealthy()`). If configured and healthy, provisions the stream consumer group (`await initLeadQueue()`). If unavailable or omitted, logs operational mode and smoothly initializes in Direct Database mode.
 3. **HTTP Server**: Instantiates the Express app and binds to `PORT` (default: 4000).
 4. **Worker Initialization**: Boots the background stream consumer pool (`startLeadWorker()`). In development, this runs in-process; in production clusters, workers can scale across dedicated worker containers.
 

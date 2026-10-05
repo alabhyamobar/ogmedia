@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { connectDB, disconnectDB } from '../config/db.js';
-import { getRedisClient, closeRedis } from '../config/redis.js';
+import { getRedisClient, closeRedis, isRedisHealthy } from '../config/redis.js';
 import { User } from '../models/User.js';
 import { Lead } from '../models/Lead.js';
 import { AuditLog } from '../models/AuditLog.js';
@@ -19,13 +19,17 @@ async function seed() {
   // 1. Drop Database & Clear Redis
   console.log('1. Purging existing MongoDB database & Redis cache...');
   await mongoose.connection.db.dropDatabase();
-  console.log('   ✓ MongoDB database "ogmedia_crm" dropped.');
+  console.log('   ✓ MongoDB database dropped.');
 
-  try {
-    await redis.flushdb();
-    console.log('   ✓ Redis buffer streams & deduplication keys cleared.');
-  } catch (err) {
-    console.warn('   ! Redis flush warning:', err.message);
+  if (redis && (await isRedisHealthy())) {
+    try {
+      await redis.flushdb();
+      console.log('   ✓ Redis buffer streams & deduplication keys cleared.');
+    } catch (err) {
+      console.warn('   ! Redis flush warning:', err.message);
+    }
+  } else {
+    console.log('   ! Redis is offline or not configured. Skipped Redis cache flush.');
   }
 
   // 2. Create Administrator Account
