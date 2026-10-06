@@ -26,7 +26,7 @@ export default function HomePage() {
   }, [location]);
 
   return (
-    <main className="space-y-4">
+    <main className="space-y-4 overflow-x-hidden w-full max-w-full">
       <HeroSection />
       <Suspense fallback={
         <div className="h-48 flex items-center justify-center font-mono-tech text-xs text-stone-500">

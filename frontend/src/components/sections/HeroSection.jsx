@@ -644,7 +644,7 @@ export default function HeroSection() {
           <section
             ref={heroRef}
             aria-label="OG Media Hero Showcase"
-            className="relative w-full px-2 xs:px-3 sm:px-6 py-2 xs:py-3 sm:py-6 max-w-[1300px] mx-auto"
+            className="relative w-full px-2 xs:px-3 sm:px-6 py-2 xs:py-3 sm:py-6 max-w-[1300px] mx-auto overflow-x-hidden sm:overflow-x-visible"
             style={{ perspective: '1400px' }}
           >
             <div

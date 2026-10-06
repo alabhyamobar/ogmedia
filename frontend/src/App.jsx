@@ -24,7 +24,6 @@ const SettingsPage = lazy(() => import('./pages/crm/SettingsPage'));
 const LoadingGame = lazy(() => import('./components/loading/LoadingGame'));
 const ServiceDetailPage = lazy(() => import('./pages/ServiceDetailPage'));
 const FooterChapter = lazy(() => import('./components/layout/FooterChapter'));
-const DevPaletteConsole = lazy(() => import('./components/dev/DevPaletteConsole'));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -54,7 +53,7 @@ function AppRoutes({ isLoading }) {
   const isCrmRoute = location.pathname.startsWith('/crm') || location.pathname === '/login';
 
   return (
-    <div className="min-h-screen bg-[#ebebe5] dark:bg-[#09090b] text-stone-900 dark:text-stone-100 font-sans selection:bg-[#39FF14] selection:text-black transition-colors duration-300 flex flex-col justify-between">
+    <div className="min-h-screen bg-[#ebebe5] dark:bg-[#09090b] text-stone-900 dark:text-stone-100 font-sans selection:bg-[#39FF14] selection:text-black transition-colors duration-300 flex flex-col justify-between overflow-x-hidden w-full max-w-full">
       <div>
         {!isCrmRoute && <Navbar />}
 
@@ -198,7 +197,6 @@ function AppRoutes({ isLoading }) {
       {!isCrmRoute && (
         <Suspense fallback={null}>
           <FooterChapter />
-          {!isLoading && <DevPaletteConsole />}
         </Suspense>
       )}
     </div>

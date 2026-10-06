@@ -57,7 +57,7 @@ const SOCIAL_CHAPTERS = [
 
 export default function FooterChapter() {
   return (
-    <footer id="social-chapters" className="relative px-3 sm:px-6 pt-8 pb-12 max-w-[1300px] mx-auto select-none">
+    <footer id="social-chapters" className="relative px-3 sm:px-6 pt-8 pb-12 max-w-[1300px] mx-auto select-none overflow-x-hidden sm:overflow-x-visible">
       <div className="text-center my-8 flex flex-col items-center">
         <div className="mb-6">
           <OgLogo size="lg" withText={true} subtitle="CREATIVE INTELLIGENCE STUDIO" />

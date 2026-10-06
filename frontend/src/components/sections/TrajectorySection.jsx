@@ -151,7 +151,7 @@ export default function TrajectorySection() {
   }, [currentIndex]);
 
   return (
-    <section id="story" className="relative px-3 sm:px-6 py-16 sm:py-20 max-w-[1440px] mx-auto select-none">
+    <section id="story" className="relative px-3 sm:px-6 py-16 sm:py-20 max-w-[1440px] mx-auto select-none overflow-x-hidden sm:overflow-x-visible">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-12 relative px-2">
         <div>
           <div className="flex items-center gap-2 mb-2 font-mono-tech text-xs sm:text-sm font-bold text-stone-700 dark:text-stone-300">

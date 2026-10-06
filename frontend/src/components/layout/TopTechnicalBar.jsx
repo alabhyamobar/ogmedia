@@ -13,7 +13,7 @@ export default function TopTechnicalBar({ onOpenGame }) {
   }, []);
 
   return (
-    <div className="w-full bg-[#111111] dark:bg-[#070709] text-[#39FF14] text-[10px] sm:text-[11px] font-mono-tech border-b-2 border-black dark:border-stone-800 px-3 sm:px-6 py-1.5 flex flex-wrap items-center justify-between gap-2 select-none tracking-wider transition-colors duration-300">
+    <div className="w-full bg-[#111111] dark:bg-[#070709] text-[#39FF14] text-[10px] sm:text-[11px] font-mono-tech border-b-2 border-black dark:border-stone-800 px-3 sm:px-6 py-1.5 flex flex-wrap items-center justify-between gap-2 select-none tracking-wider transition-colors duration-300 overflow-hidden">
       <div className="flex items-center gap-2 sm:gap-4 flex-wrap text-white">
         <span className="text-[#39FF14] font-bold flex items-center gap-1.5">
           <span className="inline-block w-1.5 h-1.5 bg-[#39FF14] rounded-full animate-ping"></span>
