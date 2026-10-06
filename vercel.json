@@ -17,6 +17,14 @@
   ],
   "rewrites": [
     {
+      "source": "/api/(.*)",
+      "destination": "https://ogmedia-6uxn.onrender.com/api/$1"
+    },
+    {
+      "source": "/ogmedia/api/(.*)",
+      "destination": "https://ogmedia-6uxn.onrender.com/api/$1"
+    },
+    {
       "source": "/ogmedia/assets/(.*)",
       "destination": "/assets/$1"
     },

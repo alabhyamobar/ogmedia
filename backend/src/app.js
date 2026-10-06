@@ -34,12 +34,13 @@ export function createApp() {
   // CORS Configuration
   const normalizeOrigin = (url) => (url ? url.trim().replace(/\/+$/, '') : '');
 
-  // Default allowed origins for local dev and official production Vercel deployment
+  // Default allowed origins for local dev, official production Vercel deployment, and Render backend
   const defaultOrigins = [
     'http://localhost:5173',
     'http://localhost:3000',
     'http://127.0.0.1:5173',
-    'https://ogmedia-theta.vercel.app'
+    'https://ogmedia-theta.vercel.app',
+    'https://ogmedia-6uxn.onrender.com'
   ];
 
   // Additional origins parsed from FRONTEND_URL env var if provided

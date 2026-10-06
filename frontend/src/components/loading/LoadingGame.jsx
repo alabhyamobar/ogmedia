@@ -138,14 +138,21 @@ const sfx = new SoundFx();
 
 export default function LoadingGame({ onComplete }) {
   const canvasRef = useRef(null);
-  const { loadedBytes, totalBytes, speed } = useVideoPreload();
+  const {
+    loadedBytes,
+    totalBytes,
+    speed,
+    progress: videoProgress,
+    isLoaded: isVideoLoaded
+  } = useVideoPreload();
 
   const [displayProgress, setDisplayProgress] = useState(0);
   const [sfxEnabled, setSfxEnabled] = useState(true);
   const [score, setScore] = useState(0);
   const [hasShield, setHasShield] = useState(false);
   const [gameStateStatus, setGameStateStatus] = useState('READY');
-  const [isReady, setIsReady] = useState(false);
+  const [isForcedReady, setIsForcedReady] = useState(false);
+  const isReady = Boolean((isVideoLoaded && displayProgress >= 100) || isForcedReady);
   const [isExiting, setIsExiting] = useState(false);
   
   const hasFinishedRef = useRef(false);
@@ -171,17 +178,17 @@ export default function LoadingGame({ onComplete }) {
     return 'Hello';
   }, []);
 
-    const friendlyStatus = useMemo(() => {
-    if (isReady || displayProgress >= 100) return 'System Online // Archive Ready!';
+  const friendlyStatus = useMemo(() => {
+    if (isReady) return 'Hero Video Ready // Archive Online!';
     if (displayProgress >= 70) return 'Calibrating digital archive...';
-    if (displayProgress >= 30) return 'Loading visual protocols...';
+    if (displayProgress >= 30) return 'Buffering 4K hero video stream...';
     return 'Initializing creative engine...';
   }, [displayProgress, isReady]);
 
   const triggerEnterSite = useCallback(() => {
     if (hasFinishedRef.current) return;
     hasFinishedRef.current = true;
-    setIsReady(true);
+    setIsForcedReady(true);
     setIsExiting(true);
 
     try {
@@ -197,47 +204,47 @@ export default function LoadingGame({ onComplete }) {
     }, 200);
   }, []);
 
+  // Smoothly interpolate displayProgress towards real videoProgress
   useEffect(() => {
-    try {
-      if (sessionStorage.getItem('og_has_entered') === 'true') {
-        triggerEnterSite();
-        return;
-      }
-    } catch {
-      // ignore
-    }
-
-    const duration = 400;
-    const start = performance.now();
-
-    const interval = setInterval(() => {
-      const elapsed = performance.now() - start;
-      const pct = Math.min(100, Math.round((elapsed / duration) * 100));
-      setDisplayProgress(pct);
-
-      if (pct >= 100) {
-        clearInterval(interval);
-        setIsReady(true);
-        if (!exitTimeoutRef.current) {
-          exitTimeoutRef.current = setTimeout(() => {
-            triggerEnterSite();
-          }, 250);
+    let animId;
+    const animate = () => {
+      setDisplayProgress((curr) => {
+        if (curr < videoProgress) {
+          const diff = videoProgress - curr;
+          const increment = Math.max(1, Math.ceil(diff * 0.15));
+          return Math.min(videoProgress, curr + increment);
         }
-      }
-    }, 25);
+        return curr;
+      });
+      animId = requestAnimationFrame(animate);
+    };
+    animId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animId);
+  }, [videoProgress]);
 
+  // Complete loading once hero video is fully loaded and ready
+  useEffect(() => {
+    if (isReady && !exitTimeoutRef.current && !hasFinishedRef.current) {
+      exitTimeoutRef.current = setTimeout(() => {
+        triggerEnterSite();
+      }, 500);
+    }
+  }, [isReady, triggerEnterSite]);
+
+  // Safety fallback timer in case of extreme connection stalls or offline state
+  useEffect(() => {
     const safetyTimer = setTimeout(() => {
       if (!hasFinishedRef.current) {
-        triggerEnterSite();
+        setDisplayProgress(100);
+        setIsForcedReady(true);
       }
-    }, 800);
+    }, 15000);
 
     return () => {
-      clearInterval(interval);
       clearTimeout(safetyTimer);
       if (exitTimeoutRef.current) clearTimeout(exitTimeoutRef.current);
     };
-  }, [triggerEnterSite]);
+  }, []);
 
   const handleQuickSkip = () => {
     if (exitTimeoutRef.current) {
@@ -869,14 +876,14 @@ export default function LoadingGame({ onComplete }) {
                     <span>
                       {loadedBytes > 0
                         ? `${(loadedBytes / (1024 * 1024)).toFixed(1)} MB / ${(totalBytes / (1024 * 1024)).toFixed(1)} MB`
-                        : '4K HERO STREAM'}
+                        : 'BUFFERING HERO VIDEO'}
                     </span>
                     {speed && speed !== '0.0 MB/s' && (
                       <span className="text-stone-400 hidden sm:inline">({speed})</span>
                     )}
                   </span>
                   <span>
-                    {isReady ? 'Ready! Entering automatically...' : 'Auto-entering...'}
+                    {isReady ? 'Ready! Entering automatically...' : 'Buffering hero video...'}
                   </span>
                 </div>
 
@@ -956,7 +963,7 @@ export default function LoadingGame({ onComplete }) {
           </div>
 
           <div className="text-stone-500">
-            {isReady ? 'Opening...' : 'Loading experience...'}
+            {isReady ? 'Opening...' : isVideoLoaded ? 'Ready! Opening...' : 'Loading hero video...'}
           </div>
         </div>
       </footer>

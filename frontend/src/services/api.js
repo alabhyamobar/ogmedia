@@ -1,4 +1,8 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const rawApiUrl =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.PROD ? 'https://ogmedia-6uxn.onrender.com' : 'http://localhost:4000');
+
+const API_BASE_URL = rawApiUrl.replace(/\/+$/, '');
 
 class ApiClient {
   constructor() {

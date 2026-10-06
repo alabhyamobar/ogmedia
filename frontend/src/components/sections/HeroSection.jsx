@@ -12,7 +12,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function HeroSection() {
   const { isDark } = useTheme();
-  const { videoSrc, isLoaded: isHeroVideoLoaded } = useVideoPreload();
+  const { videoSrc, videoBlobUrl, isLoaded: isHeroVideoLoaded } = useVideoPreload();
 
   const pinWrapperRef = useRef(null);
   const cameraRigRef = useRef(null);
@@ -537,7 +537,7 @@ export default function HeroSection() {
         >
           <video
             ref={videoRef}
-            src={videoSrc}
+            src={videoBlobUrl || videoSrc}
             playsInline
             preload="auto"
             muted={isMuted}

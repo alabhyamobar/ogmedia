@@ -214,13 +214,6 @@ export default function App() {
       return false;
     }
 
-    try {
-      if (sessionStorage.getItem('og_has_entered') === 'true') {
-        return false;
-      }
-    } catch {
- 
-    }
     return true;
   });
 
