@@ -55,7 +55,7 @@ export default function AgentPerformanceVisualizer({
       <div className="space-y-3.5 my-2">
         {isLoading ? (
           <div className="py-16 text-center text-xs text-stone-500 animate-pulse space-y-2">
-            <div className="w-8 h-8 mx-auto border-2 border-t-[#bef264] border-stone-300 rounded-full animate-spin" />
+            <div className="w-8 h-8 mx-auto border-2 border-t-[#39FF14] border-stone-300 rounded-full animate-spin" />
             <div>Aggregating agent telemetry...</div>
           </div>
         ) : sortedEmployees.length === 0 ? (
@@ -66,7 +66,7 @@ export default function AgentPerformanceVisualizer({
           sortedEmployees.map((emp, index) => {
             const rank = index + 1;
             const rankBadge =
-              rank === 1 ? 'bg-[#bef264] text-black border-black' :
+              rank === 1 ? 'bg-[#39FF14] text-black border-black' :
               rank === 2 ? 'bg-[#38bdf8] text-black border-black' :
               rank === 3 ? 'bg-[#c084fc] text-black border-black' :
               'bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-black/20';

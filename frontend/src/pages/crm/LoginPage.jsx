@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Lock, User, ArrowRight, AlertCircle } from 'lucide-react';
+import OgLogo from '../../components/ui/OgLogo';
 
 export default function LoginPage() {
   const { login, isAuthenticated } = useAuth();
@@ -47,18 +48,19 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#ebebe5] dark:bg-[#09090b] flex flex-col justify-between p-4 sm:p-6 lg:p-10 font-sans select-none relative overflow-hidden">
+    <div className="min-h-screen bg-[#F5F5F5] dark:bg-[#0A0A0A] flex flex-col justify-between p-4 sm:p-6 lg:p-10 font-sans select-none relative overflow-hidden text-black dark:text-[#F5F5F5]">
       
       <div className="absolute inset-0 manga-halftone pointer-events-none opacity-20 dark:opacity-10" />
 
       <div className="max-w-6xl w-full mx-auto flex items-center justify-between z-10">
-        <Link to="/" className="flex items-center gap-2 group">
-          <span className="font-heading font-black text-2xl text-black dark:text-white tracking-tight uppercase group-hover:text-[#bef264] transition-colors">
+        <Link to="/" className="flex items-center gap-2.5 group">
+          <OgLogo size="sm" withText={false} />
+          <span className="font-heading font-black text-2xl text-black dark:text-white tracking-tight uppercase group-hover:text-[#39FF14] transition-colors">
             OG MEDIA
           </span>
           <span
             onDoubleClick={() => setForm({ login: 'developer', password: 'DevPass2026!@' })}
-            className="bg-black text-[#bef264] font-mono-tech text-xs font-black px-2 py-0.5 rounded shadow-[2px_2px_0px_#bef264] cursor-default"
+            className="bg-black text-[#39FF14] font-mono-tech text-xs font-black px-2 py-0.5 rounded shadow-[2px_2px_0px_#39FF14] cursor-default"
           >
             HQ
           </span>
@@ -73,11 +75,14 @@ export default function LoginPage() {
       </div>
 
       <div className="max-w-md w-full mx-auto my-8 z-10">
-        <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-6 sm:p-8 shadow-[8px_8px_0px_#000] dark:shadow-[8px_8px_0px_#000]">
+        <div className="flex justify-center mb-6">
+          <OgLogo size="lg" withText={true} subtitle="CREATIVE INTELLIGENCE STUDIO" />
+        </div>
+        <div className="bg-[#FFFFFF] dark:bg-[#1A1A1A] border-[2.5px] border-black dark:border-[#333333] rounded-2xl p-6 sm:p-8 shadow-[8px_8px_0px_#000] dark:shadow-[8px_8px_0px_#000]">
           
           <div className="flex items-center justify-between border-b-2 border-black dark:border-stone-700 pb-4 mb-6">
             <div className="flex items-center gap-2">
-              <span className="bg-black text-[#bef264] font-mono-tech font-black text-xs px-2.5 py-1 rounded">
+              <span className="bg-black text-[#39FF14] font-mono-tech font-black text-xs px-2.5 py-1 rounded">
                 SECURE AUTH
               </span>
               <span className="font-mono-tech text-xs font-bold text-stone-600 dark:text-stone-400 tracking-wider">
@@ -116,7 +121,7 @@ export default function LoginPage() {
                   value={form.login}
                   onChange={(e) => setForm({ ...form, login: e.target.value })}
                   placeholder="e.g. admin or username"
-                  className="w-full px-3.5 py-3 pl-10 bg-white dark:bg-[#1e1e24] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 outline-none focus:ring-2 focus:ring-[#bef264] transition-all"
+                  className="w-full px-3.5 py-3 pl-10 bg-white dark:bg-[#1e1e24] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 outline-none focus:ring-2 focus:ring-[#39FF14] transition-all"
                 />
                 <User className="w-4 h-4 text-stone-400 absolute left-3.5 top-3.5" />
               </div>
@@ -133,7 +138,7 @@ export default function LoginPage() {
                   value={form.password}
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
                   placeholder="••••••••••••"
-                  className="w-full px-3.5 py-3 pl-10 bg-white dark:bg-[#1e1e24] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 outline-none focus:ring-2 focus:ring-[#bef264] transition-all"
+                  className="w-full px-3.5 py-3 pl-10 bg-white dark:bg-[#1e1e24] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 outline-none focus:ring-2 focus:ring-[#39FF14] transition-all"
                 />
                 <Lock className="w-4 h-4 text-stone-400 absolute left-3.5 top-3.5" />
               </div>
@@ -142,7 +147,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-2 bg-[#bef264] hover:bg-[#a3e635] text-black font-mono-tech font-black text-xs sm:text-sm py-3.5 px-6 border-2 border-black rounded-xl shadow-[4px_4px_0px_#000] hover:shadow-[6px_6px_0px_#000] hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 cursor-pointer uppercase tracking-wider disabled:opacity-50"
+              className="w-full mt-2 bg-[#39FF14] hover:bg-[#7CFF5E] text-black font-mono-tech font-black text-xs sm:text-sm py-3.5 px-6 border-2 border-black rounded-xl shadow-[4px_4px_0px_#000] hover:shadow-[6px_6px_0px_#000] hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 cursor-pointer uppercase tracking-wider disabled:opacity-50"
             >
               <span>{loading ? 'AUTHENTICATING...' : 'ACCESS TERMINAL'}</span>
               <ArrowRight className="w-4 h-4" />
@@ -158,7 +163,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setForm({ login: 'admin', password: 'AdminPass2026!@' })}
-                  className="px-2.5 py-1 bg-stone-200 dark:bg-stone-800 hover:bg-black hover:text-[#bef264] text-stone-700 dark:text-stone-300 border border-black/20 rounded-lg font-bold transition-colors cursor-pointer"
+                  className="px-2.5 py-1 bg-stone-200 dark:bg-stone-800 hover:bg-black hover:text-[#39FF14] text-stone-700 dark:text-stone-300 border border-black/20 rounded-lg font-bold transition-colors cursor-pointer"
                 >
                   ADMIN: @admin
                 </button>

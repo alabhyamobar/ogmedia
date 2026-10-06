@@ -110,7 +110,7 @@ export default function LeadDetailPage() {
         </p>
         <Link
           to="/crm/leads"
-          className="inline-block bg-black text-[#bef264] px-4 py-2 text-xs font-black border border-black rounded shadow-[2px_2px_0px_#bef264]"
+          className="inline-block bg-black text-[#39FF14] px-4 py-2 text-xs font-black border border-black rounded shadow-[2px_2px_0px_#39FF14]"
         >
           ← Return to Leads
         </Link>
@@ -156,7 +156,7 @@ export default function LeadDetailPage() {
                 ? 'bg-[#ef4444] text-white animate-pulse'
                 : lead.status === 'LOST'
                 ? 'bg-stone-300 text-stone-800'
-                : 'bg-[#bef264] text-black'
+                : 'bg-[#39FF14] text-black'
             }`}
           >
             {lead.status}
@@ -186,9 +186,9 @@ export default function LeadDetailPage() {
                 onClick={() => setStatusModal({ open: true, targetStatus: st, note: '' })}
                 className={`p-2.5 border-2 rounded-xl text-center font-black transition-all cursor-pointer ${
                   isCurrent
-                    ? 'bg-black text-[#bef264] border-black shadow-[3px_3px_0px_#bef264] -translate-y-0.5'
+                    ? 'bg-black text-[#39FF14] border-black shadow-[3px_3px_0px_#39FF14] -translate-y-0.5'
                     : isCompleted
-                    ? 'bg-[#bef264] text-black border-black shadow-sm'
+                    ? 'bg-[#39FF14] text-black border-black shadow-sm'
                     : 'bg-white dark:bg-[#1e1e24] text-stone-600 dark:text-stone-400 border-black/30 dark:border-stone-800 hover:border-black'
                 }`}
               >
@@ -225,7 +225,7 @@ export default function LeadDetailPage() {
           <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-5 sm:p-6 shadow-[5px_5px_0px_#000] space-y-4">
             <div className="flex items-center justify-between border-b-2 border-black dark:border-stone-700 pb-3 font-mono-tech">
               <span className="font-bold text-xs text-stone-500 uppercase">// CUSTOMER SPECIFICATIONS</span>
-              <span className="bg-black text-[#bef264] font-black text-[10px] px-2 py-0.5 rounded">
+              <span className="bg-black text-[#39FF14] font-black text-[10px] px-2 py-0.5 rounded">
                 SECTOR: {lead.service}
               </span>
             </div>
@@ -236,7 +236,7 @@ export default function LeadDetailPage() {
                 <Mail className="w-4 h-4 text-stone-400 mt-0.5 shrink-0" />
                 <div>
                   <div className="text-[10px] text-stone-500 uppercase font-bold">Email Address</div>
-                  <a href={`mailto:${lead.email}`} className="font-black text-black dark:text-white hover:text-[#bef264]">
+                  <a href={`mailto:${lead.email}`} className="font-black text-black dark:text-white hover:text-[#39FF14]">
                     {lead.email}
                   </a>
                 </div>
@@ -339,12 +339,12 @@ export default function LeadDetailPage() {
                 value={noteText}
                 onChange={(e) => setNoteText(e.target.value)}
                 placeholder="Log call summary, client budget, timeline notes..."
-                className="w-full p-2.5 bg-white dark:bg-[#1e1e24] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 outline-none focus:ring-2 focus:ring-[#bef264]"
+                className="w-full p-2.5 bg-white dark:bg-[#1e1e24] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 outline-none focus:ring-2 focus:ring-[#39FF14]"
               />
               <button
                 type="submit"
                 disabled={!noteText.trim() || noteMutation.isPending}
-                className="w-full bg-[#bef264] hover:bg-[#a3e635] text-black font-black text-xs py-2 px-4 border-2 border-black rounded-lg shadow-[2px_2px_0px_#000] cursor-pointer disabled:opacity-50 flex items-center justify-center gap-1.5"
+                className="w-full bg-[#39FF14] hover:bg-[#7CFF5E] text-black font-black text-xs py-2 px-4 border-2 border-black rounded-lg shadow-[2px_2px_0px_#000] cursor-pointer disabled:opacity-50 flex items-center justify-center gap-1.5"
               >
                 <Send className="w-3 h-3" />
                 <span>POST INTERNAL NOTE</span>
@@ -384,7 +384,7 @@ export default function LeadDetailPage() {
 
           <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-5 shadow-[5px_5px_0px_#000] space-y-3 font-mono-tech">
             <div className="flex items-center gap-1.5 font-black text-xs text-black dark:text-white uppercase border-b-2 border-black dark:border-stone-700 pb-2">
-              <Activity className="w-4 h-4 text-[#bef264]" />
+              <Activity className="w-4 h-4 text-[#39FF14]" />
               <span>Immutable Audit Timeline</span>
             </div>
 
@@ -428,7 +428,7 @@ export default function LeadDetailPage() {
               <div className="text-xs text-stone-600 dark:text-stone-400">
                 Move lead <span className="font-black text-black dark:text-white">{lead.name}</span> to:
               </div>
-              <div className="text-lg font-black bg-[#bef264] text-black px-2 py-1 inline-block border border-black rounded">
+              <div className="text-lg font-black bg-[#39FF14] text-black px-2 py-1 inline-block border border-black rounded">
                 STAGE: {statusModal.targetStatus}
               </div>
             </div>
@@ -442,7 +442,7 @@ export default function LeadDetailPage() {
                 value={statusModal.note}
                 onChange={(e) => setStatusModal({ ...statusModal, note: e.target.value })}
                 placeholder="e.g. Budget agreed on call, sent contract proposal..."
-                className="w-full p-2.5 bg-white dark:bg-[#1e1e24] border-2 border-black dark:border-stone-700 rounded-xl text-xs text-black dark:text-white outline-none focus:ring-2 focus:ring-[#bef264]"
+                className="w-full p-2.5 bg-white dark:bg-[#1e1e24] border-2 border-black dark:border-stone-700 rounded-xl text-xs text-black dark:text-white outline-none focus:ring-2 focus:ring-[#39FF14]"
               />
             </div>
 
@@ -462,7 +462,7 @@ export default function LeadDetailPage() {
                   })
                 }
                 disabled={statusMutation.isPending}
-                className="px-4 py-2 bg-[#bef264] hover:bg-[#a3e635] text-black font-black border-2 border-black rounded-lg shadow-[2px_2px_0px_#000] text-xs cursor-pointer"
+                className="px-4 py-2 bg-[#39FF14] hover:bg-[#7CFF5E] text-black font-black border-2 border-black rounded-lg shadow-[2px_2px_0px_#000] text-xs cursor-pointer"
               >
                 {statusMutation.isPending ? 'UPDATING...' : 'CONFIRM TRANSITION →'}
               </button>

@@ -5,17 +5,17 @@ const ThemeContext = createContext();
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
     try {
-      const saved = localStorage.getItem('ogmedia_theme');
+      const saved = localStorage.getItem('ogmedia_theme_mode');
       if (saved === 'light' || saved === 'dark') return saved;
-      return 'dark';
+      return 'light';
     } catch {
-      return 'dark';
+      return 'light';
     }
   });
 
   useEffect(() => {
     try {
-      localStorage.setItem('ogmedia_theme', theme);
+      localStorage.setItem('ogmedia_theme_mode', theme);
     } catch {
     }
     const root = document.documentElement;
@@ -40,7 +40,7 @@ export function ThemeProvider({ children }) {
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (!context) {
-    return { theme: 'dark', toggleTheme: () => {}, isDark: true };
+    return { theme: 'light', toggleTheme: () => {}, isDark: false };
   }
   return context;
 }

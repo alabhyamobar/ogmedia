@@ -106,7 +106,7 @@ export default function LeadsPage() {
 
         <button
           onClick={() => refetch()}
-          className="self-start sm:self-auto flex items-center gap-1.5 px-3 py-2 bg-white dark:bg-[#1a1a20] hover:bg-[#bef264] hover:text-black border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs font-bold shadow-[2px_2px_0px_#000] cursor-pointer transition-all active:translate-y-0.5"
+          className="self-start sm:self-auto flex items-center gap-1.5 px-3 py-2 bg-white dark:bg-[#1a1a20] hover:bg-[#39FF14] hover:text-black border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs font-bold shadow-[2px_2px_0px_#000] cursor-pointer transition-all active:translate-y-0.5"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${isFetching ? 'animate-spin' : ''}`} />
           <span>REFRESH STREAM</span>
@@ -123,7 +123,7 @@ export default function LeadsPage() {
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder="Search customer, email..."
-              className="w-full pl-9 pr-3 py-2 bg-white dark:bg-[#1e1e24] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 outline-none focus:ring-2 focus:ring-[#bef264]"
+              className="w-full pl-9 pr-3 py-2 bg-white dark:bg-[#1e1e24] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 outline-none focus:ring-2 focus:ring-[#39FF14]"
             />
             <Search className="w-4 h-4 text-stone-400 absolute left-3 top-2.5" />
           </form>
@@ -227,7 +227,7 @@ export default function LeadsPage() {
                     </td>
 
                     <td className="py-3 px-4">
-                      <span className="bg-black text-[#bef264] font-black text-[10px] px-2 py-0.5 rounded border border-black dark:border-stone-700 whitespace-nowrap">
+                      <span className="bg-black text-[#39FF14] font-black text-[10px] px-2 py-0.5 rounded border border-black dark:border-stone-700 whitespace-nowrap">
                         {lead.service}
                       </span>
                     </td>
@@ -241,7 +241,7 @@ export default function LeadsPage() {
                             ? 'bg-[#ef4444] text-white border-black shadow-[1px_1px_0px_#000]'
                             : lead.status === 'LOST'
                             ? 'bg-stone-300 text-stone-800 border-stone-400'
-                            : 'bg-[#bef264] text-black border-black shadow-[1px_1px_0px_#000]'
+                            : 'bg-[#39FF14] text-black border-black shadow-[1px_1px_0px_#000]'
                         }`}
                       >
                         {lead.status}
@@ -272,7 +272,7 @@ export default function LeadsPage() {
                     <td className="py-3 px-4 text-right">
                       <Link
                         to={`/crm/leads/${lead._id}`}
-                        className="inline-block bg-white dark:bg-[#1a1a20] hover:bg-black hover:text-[#bef264] text-black dark:text-white px-3 py-1 border-2 border-black dark:border-stone-700 rounded-lg shadow-[2px_2px_0px_#000] font-black text-xs transition-all hover:-translate-y-0.5"
+                        className="inline-block bg-white dark:bg-[#1a1a20] hover:bg-black hover:text-[#39FF14] text-black dark:text-white px-3 py-1 border-2 border-black dark:border-stone-700 rounded-lg shadow-[2px_2px_0px_#000] font-black text-xs transition-all hover:-translate-y-0.5"
                       >
                         VIEW →
                       </Link>
@@ -299,7 +299,7 @@ export default function LeadsPage() {
               <ChevronLeft className="w-4 h-4" />
             </button>
 
-            <span className="px-3 py-1 bg-black text-[#bef264] border border-black rounded font-black text-xs">
+            <span className="px-3 py-1 bg-black text-[#39FF14] border border-black rounded font-black text-xs">
               PAGE {pagination.page} / {pagination.totalPages || 1}
             </span>
 

@@ -15,14 +15,14 @@ export default function ProtectedRoute({
     return (
       <div className="min-h-screen bg-[#ebebe5] dark:bg-[#09090b] flex flex-col items-center justify-center font-mono-tech select-none">
         <div className="border-2 border-black dark:border-stone-700 bg-white dark:bg-[#16161a] p-6 rounded-2xl shadow-[6px_6px_0px_#000] text-center space-y-4 max-w-sm">
-          <div className="inline-block bg-[#bef264] text-black font-extrabold text-xs px-3 py-1 border border-black rounded shadow-[2px_2px_0px_#000]">
+          <div className="inline-block bg-[#39FF14] text-black font-extrabold text-xs px-3 py-1 border border-black rounded shadow-[2px_2px_0px_#000]">
             SECURITY PROTOCOL ACTIVE
           </div>
           <div className="text-sm font-bold text-stone-900 dark:text-stone-100 animate-pulse">
             [ VERIFYING BIOMETRICS & CREDENTIALS... ]
           </div>
           <div className="w-full bg-stone-200 dark:bg-stone-800 h-2 rounded-full overflow-hidden border border-black/20">
-            <div className="bg-[#bef264] h-full w-2/3 animate-pulse" />
+            <div className="bg-[#39FF14] h-full w-2/3 animate-pulse" />
           </div>
         </div>
       </div>
@@ -48,7 +48,7 @@ export default function ProtectedRoute({
           </p>
           <Link
             to="/crm/dashboard"
-            className="inline-block bg-black text-[#bef264] px-4 py-2 text-xs font-bold border border-black rounded shadow-[2px_2px_0px_#bef264] hover:-translate-y-0.5 transition-transform"
+            className="inline-block bg-black text-[#39FF14] px-4 py-2 text-xs font-bold border border-black rounded shadow-[2px_2px_0px_#39FF14] hover:-translate-y-0.5 transition-transform"
           >
             ← Return to Dashboard
           </Link>
@@ -72,7 +72,7 @@ export default function ProtectedRoute({
           </p>
           <Link
             to="/crm/dashboard"
-            className="inline-block bg-black text-[#bef264] px-4 py-2 text-xs font-bold border border-black rounded shadow-[2px_2px_0px_#bef264] hover:-translate-y-0.5 transition-transform"
+            className="inline-block bg-black text-[#39FF14] px-4 py-2 text-xs font-bold border border-black rounded shadow-[2px_2px_0px_#39FF14] hover:-translate-y-0.5 transition-transform"
           >
             ← Return to Dashboard
           </Link>
@@ -96,7 +96,7 @@ export default function ProtectedRoute({
           </p>
           <Link
             to="/crm/dashboard"
-            className="inline-block bg-black text-[#bef264] px-4 py-2 text-xs font-bold border border-black rounded shadow-[2px_2px_0px_#bef264] hover:-translate-y-0.5 transition-transform"
+            className="inline-block bg-black text-[#39FF14] px-4 py-2 text-xs font-bold border border-black rounded shadow-[2px_2px_0px_#39FF14] hover:-translate-y-0.5 transition-transform"
           >
             ← Return to My Workspace
           </Link>

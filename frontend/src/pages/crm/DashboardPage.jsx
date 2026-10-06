@@ -67,7 +67,7 @@ export default function DashboardPage() {
           <div className="flex flex-wrap items-center gap-3">
             <Link
               to="/crm/leads"
-              className="bg-[#bef264] hover:bg-[#a3e635] text-black font-mono-tech font-black text-xs px-4 py-2.5 border-2 border-black rounded-xl shadow-[3px_3px_0px_#000] hover:-translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer"
+              className="bg-[#39FF14] hover:bg-[#7CFF5E] text-black font-mono-tech font-black text-xs px-4 py-2.5 border-2 border-black rounded-xl shadow-[3px_3px_0px_#000] hover:-translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <span>OPEN LEADS INVENTORY</span>
               <ArrowUpRight className="w-4 h-4" />
@@ -127,7 +127,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="bg-[#bef264] border-2 border-black rounded-xl p-5 shadow-[4px_4px_0px_#000] text-black space-y-2">
+        <div className="bg-[#39FF14] border-2 border-black rounded-xl p-5 shadow-[4px_4px_0px_#000] text-black space-y-2">
           <div className="flex items-center justify-between text-black/70 text-xs font-black uppercase">
             <span>Conversion Win Rate</span>
             <TrendingUp className="w-4 h-4 text-black" />
@@ -145,13 +145,13 @@ export default function DashboardPage() {
       {isDeveloper && healthData?.data?.queue && (
         <div className="bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-xl p-4 sm:p-5 shadow-[4px_4px_0px_#000] flex flex-col md:flex-row md:items-center justify-between gap-4 font-mono-tech text-xs">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-black text-[#bef264] border border-black rounded-lg">
+            <div className="p-2.5 bg-black text-[#39FF14] border border-black rounded-lg">
               <Layers className="w-5 h-5" />
             </div>
             <div>
               <div className="font-black text-black dark:text-white uppercase flex items-center gap-2">
                 <span>REDIS STREAM QUEUE TELEMETRY</span>
-                <span className="bg-[#bef264] text-black text-[9px] px-1.5 py-0.5 rounded font-black">
+                <span className="bg-[#39FF14] text-black text-[9px] px-1.5 py-0.5 rounded font-black">
                   {healthData.data.queue.status}
                 </span>
               </div>
@@ -176,7 +176,7 @@ export default function DashboardPage() {
             </div>
             <Link
               to="/crm/settings"
-              className="text-black dark:text-white underline font-bold hover:text-[#bef264]"
+              className="text-black dark:text-white underline font-bold hover:text-[#39FF14]"
             >
               Full Diagnostics →
             </Link>
@@ -197,7 +197,7 @@ export default function DashboardPage() {
 
           <Link
             to="/crm/leads"
-            className="font-mono-tech text-xs font-bold flex items-center gap-1 hover:text-[#bef264] transition-colors"
+            className="font-mono-tech text-xs font-bold flex items-center gap-1 hover:text-[#39FF14] transition-colors"
           >
             <span>View All ({leadsData?.data?.pagination?.total || 0})</span>
             <ChevronRight className="w-4 h-4" />
@@ -244,7 +244,7 @@ export default function DashboardPage() {
                     </td>
 
                     <td className="py-3.5 pr-4">
-                      <span className="bg-black text-[#bef264] font-black text-[10px] px-2 py-0.5 rounded border border-black dark:border-stone-700">
+                      <span className="bg-black text-[#39FF14] font-black text-[10px] px-2 py-0.5 rounded border border-black dark:border-stone-700">
                         {lead.service}
                       </span>
                     </td>
@@ -258,7 +258,7 @@ export default function DashboardPage() {
                             ? 'bg-[#ef4444] text-white border-black animate-pulse'
                             : lead.status === 'LOST'
                             ? 'bg-stone-300 text-stone-800 border-stone-400'
-                            : 'bg-[#bef264] text-black border-black'
+                            : 'bg-[#39FF14] text-black border-black'
                         }`}
                       >
                         {lead.status}
@@ -276,7 +276,7 @@ export default function DashboardPage() {
                     <td className="py-3.5 text-right">
                       <Link
                         to={`/crm/leads/${lead._id}`}
-                        className="inline-block bg-white dark:bg-[#1a1a20] hover:bg-black hover:text-[#bef264] px-2.5 py-1 border border-black dark:border-stone-700 rounded shadow-sm transition-all"
+                        className="inline-block bg-white dark:bg-[#1a1a20] hover:bg-black hover:text-[#39FF14] px-2.5 py-1 border border-black dark:border-stone-700 rounded shadow-sm transition-all"
                       >
                         Details →
                       </Link>

@@ -15,7 +15,7 @@ export default function DonutStatusChart({
         key: 'NEW',
         label: 'New Unassigned',
         count: counts.NEW || 0,
-        color: '#bef264',
+        color: '#39FF14',
         accent: '#84cc16'
       },
       {

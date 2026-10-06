@@ -85,7 +85,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="w-full bg-[#e5e5dc] dark:bg-[#121215] border-b-2 border-black dark:border-[#27272a] sticky top-0 z-40 px-3 sm:px-6 py-2 transition-colors duration-300">
+    <nav className="w-full bg-[#FFFFFF]/95 dark:bg-[#1A1A1A]/95 backdrop-blur-md border-b-2 border-black dark:border-[#333333] sticky top-0 z-40 px-3 sm:px-6 py-2 transition-colors duration-300">
       <div className="max-w-[1300px] mx-auto flex items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
           <Link
@@ -94,12 +94,12 @@ export default function Navbar() {
             onClick={() => setMobileMenuOpen(false)}
             className="flex items-center gap-2 hover:scale-[1.02] transition-transform"
           >
-            <OgLogo size="sm" withText={true} subtitle="DIGITAL MEDIA AGENCY" />
+            <OgLogo size="sm" withText={true} subtitle="CREATIVE INTELLIGENCE STUDIO" />
           </Link>
 
           <div className="hidden sm:flex bg-gradient-to-r from-[#ef4444] to-[#f43f5e] text-white font-mono-tech text-[10px] sm:text-xs font-bold px-2 py-1 tracking-tight uppercase border-2 border-black dark:border-stone-800 items-center gap-1.5 shadow-sm">
             <span className="w-1.5 h-1.5 bg-white rounded-full animate-ping"></span>
-            LIMITED FIRST EDITION // 01 / 100
+            OG MEDIA // ORIGINAL / 001
           </div>
         </div>
 
@@ -117,7 +117,7 @@ export default function Navbar() {
             ))}
             <Link
               to="/crm/dashboard"
-              className="bg-black text-[#bef264] hover:bg-[#bef264] hover:text-black dark:border-stone-700 px-2.5 py-1 border border-black transition-all hover:scale-105 font-black shadow-[2px_2px_0px_#bef264]"
+              className="bg-black text-[#39FF14] hover:bg-[#39FF14] hover:text-black dark:border-stone-700 px-2.5 py-1 border border-black transition-all hover:scale-105 font-black shadow-[2px_2px_0px_#39FF14]"
             >
               [ 05 CRM HQ ]
             </Link>
@@ -125,18 +125,18 @@ export default function Navbar() {
 
           <button
             onClick={toggleTheme}
-            title="Toggle between Dark Noir and Light Draft modes"
-            className="flex items-center gap-1.5 bg-[#bef264] hover:bg-[#a3e635] text-black font-mono-tech font-bold text-xs px-2.5 py-1 border-2 border-black manga-shadow-sm transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer shadow-[0_0_10px_rgba(190,242,100,0.3)]"
+            title="Toggle between Dark Noir and Light modes"
+            className="flex items-center gap-1.5 bg-[#39FF14] hover:bg-[#7CFF5E] text-black font-mono-tech font-bold text-xs px-2.5 py-1 border-2 border-black manga-shadow-sm transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer shadow-[0_0_12px_rgba(57,255,20,0.4)]"
           >
             <span className="text-sm">{isDark ? '☾' : '☼'}</span>
-            <span className="bg-black text-[#bef264] px-1.5 py-0.5 rounded text-[10px] uppercase font-mono-tech font-bold">
-              {isDark ? 'NOIR' : 'DRAFT'}
+            <span className="bg-black text-[#39FF14] px-1.5 py-0.5 rounded text-[10px] uppercase font-mono-tech font-bold">
+              {isDark ? 'NOIR' : 'LIGHT'}
             </span>
           </button>
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden flex items-center justify-center p-1.5 bg-white dark:bg-[#18181c] text-black dark:text-white border-2 border-black dark:border-[#38383e] manga-shadow-sm hover:bg-[#bef264] hover:text-black dark:hover:bg-[#bef264] dark:hover:text-black transition-all active:translate-y-0.5 cursor-pointer"
+            className="lg:hidden flex items-center justify-center p-1.5 bg-white dark:bg-[#18181c] text-black dark:text-white border-2 border-black dark:border-[#38383e] manga-shadow-sm hover:bg-[#39FF14] hover:text-black dark:hover:bg-[#39FF14] dark:hover:text-black transition-all active:translate-y-0.5 cursor-pointer"
             aria-label={mobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
             aria-expanded={mobileMenuOpen}
           >
@@ -154,7 +154,7 @@ export default function Navbar() {
       />
 
       <div
-        className={`lg:hidden fixed top-0 right-0 h-full w-[85%] max-w-[340px] bg-[#faf8f5] dark:bg-[#121216] border-l-[3px] border-black dark:border-[#38383e] z-50 flex flex-col justify-between p-5 shadow-[-8px_0px_0px_#000000] dark:shadow-[-8px_0px_0px_rgba(0,0,0,0.8)] transition-transform duration-300 ease-in-out ${
+        className={`lg:hidden fixed top-0 right-0 h-full w-[85%] max-w-[340px] bg-[#FFFFFF] dark:bg-[#1A1A1A] border-l-[3px] border-black dark:border-[#333333] z-50 flex flex-col justify-between p-5 shadow-[-8px_0px_0px_#000000] dark:shadow-[-8px_0px_0px_rgba(0,0,0,0.8)] transition-transform duration-300 ease-in-out ${
           mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         role="dialog"
@@ -167,7 +167,7 @@ export default function Navbar() {
               <span className="font-heading font-black text-lg text-black dark:text-white uppercase tracking-tight">
                 NAVIGATION
               </span>
-              <span className="bg-[#bef264] text-black font-mono-tech text-[10px] font-black px-1.5 py-0.5 border border-black shadow-[1px_1px_0px_#000]">
+              <span className="bg-[#39FF14] text-black font-mono-tech text-[10px] font-black px-1.5 py-0.5 border border-black shadow-[1px_1px_0px_#000]">
                 MENU
               </span>
             </div>
@@ -184,9 +184,9 @@ export default function Navbar() {
           <div className="bg-gradient-to-r from-[#ef4444] to-[#f43f5e] text-white font-mono-tech text-[10px] font-bold px-2.5 py-1.5 tracking-tight uppercase border-2 border-black dark:border-stone-800 flex items-center justify-between shadow-sm">
             <span className="flex items-center gap-1.5">
               <span className="w-2 h-2 bg-white rounded-full animate-ping"></span>
-              LIMITED FIRST EDITION
+              OG MEDIA // ORIGINAL
             </span>
-            <span className="font-black bg-black/40 px-1 rounded">01 / 100</span>
+            <span className="font-black bg-black/40 px-1 rounded">001</span>
           </div>
 
           <nav className="flex flex-col gap-2.5 pt-1 font-mono-tech text-xs font-bold">
@@ -218,15 +218,15 @@ export default function Navbar() {
             <Link
               to="/crm/dashboard"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-between bg-black text-[#bef264] border-2 border-black dark:border-stone-700 px-3.5 py-3 manga-shadow-lime hover:bg-[#bef264] hover:text-black transition-all active:translate-y-0.5 hover:translate-x-1 font-black mt-1"
+              className="flex items-center justify-between bg-black text-[#39FF14] border-2 border-black dark:border-stone-700 px-3.5 py-3 manga-shadow-lime hover:bg-[#39FF14] hover:text-black transition-all active:translate-y-0.5 hover:translate-x-1 font-black mt-1"
             >
               <div className="flex items-center gap-2.5">
-                <span className="bg-[#bef264] text-black text-[10px] px-1.5 py-0.5 rounded font-black">
+                <span className="bg-[#39FF14] text-black text-[10px] px-1.5 py-0.5 rounded font-black">
                   05
                 </span>
                 <div className="flex flex-col text-left leading-tight">
                   <span className="tracking-tight">CRM HQ // DISPATCH</span>
-                  <span className="text-[9px] text-[#bef264]/80 group-hover:text-black/80 font-normal">
+                  <span className="text-[9px] text-[#39FF14]/80 group-hover:text-black/80 font-normal">
                     OPERATIONAL DASHBOARD
                   </span>
                 </div>
@@ -243,10 +243,10 @@ export default function Navbar() {
             </span>
             <button
               onClick={toggleTheme}
-              className="flex items-center gap-1.5 bg-[#bef264] hover:bg-[#a3e635] text-black font-mono-tech font-bold text-xs px-2.5 py-1 border-2 border-black manga-shadow-sm transition-all cursor-pointer"
+              className="flex items-center gap-1.5 bg-[#39FF14] hover:bg-[#7CFF5E] text-black font-mono-tech font-bold text-xs px-2.5 py-1 border-2 border-black manga-shadow-sm transition-all cursor-pointer"
             >
               <span>{isDark ? '☾' : '☼'}</span>
-              <span className="bg-black text-[#bef264] px-1.5 py-0.5 rounded text-[10px] uppercase font-bold">
+              <span className="bg-black text-[#39FF14] px-1.5 py-0.5 rounded text-[10px] uppercase font-bold">
                 {isDark ? 'NOIR' : 'DRAFT'}
               </span>
             </button>

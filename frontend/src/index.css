@@ -1,6 +1,17 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --color-og-green: #39FF14;
+  --color-og-electric: #7CFF5E;
+  --color-og-dark: #0F2F0F;
+  --color-og-black: #0A0A0A;
+  --color-og-charcoal: #1A1A1A;
+  --color-og-steel: #333333;
+  --color-og-platinum: #E0E0E0;
+  --color-og-offwhite: #F5F5F5;
+}
+
 @layer base {
 
   :root {
@@ -16,8 +27,8 @@
 }
 
 body {
-  background-color: #ebebe5;
-  color: #111111;
+  background-color: #F5F5F5;
+  color: #0A0A0A;
   font-family: var(--font-body);
   overflow-x: hidden;
   background-image:
@@ -28,8 +39,8 @@ body {
 }
 
 .dark body {
-  background-color: #09090b;
-  color: #f4f4f5;
+  background-color: #0A0A0A;
+  color: #F5F5F5;
   background-image:
     linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
@@ -70,7 +81,7 @@ body {
 }
 
 .draft-board-grid {
-  background-color: #f7f7f4;
+  background-color: #F5F5F5;
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
@@ -78,7 +89,7 @@ body {
 }
 
 .dark .draft-board-grid {
-  background-color: #111114;
+  background-color: #1A1A1A;
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
@@ -96,6 +107,22 @@ body {
   box-shadow: 8px 8px 0px #000000;
 }
 
+.manga-shadow-og {
+  box-shadow: 5px 5px 0px #39FF14;
+}
+
+.og-glow {
+  box-shadow: 0 0 15px rgba(57, 255, 20, 0.4), 0 0 30px rgba(57, 255, 20, 0.2);
+}
+
+.og-glow-sm {
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.35);
+}
+
+.og-glow-text {
+  text-shadow: 0 0 10px rgba(57, 255, 20, 0.6);
+}
+
 .dark .manga-shadow-sm {
   box-shadow: 3px 3px 0px #000000, 0 0 8px rgba(0, 0, 0, 0.6);
 }
@@ -109,7 +136,7 @@ body {
 }
 
 .manga-shadow-lime {
-  box-shadow: 5px 5px 0px #a3e635;
+  box-shadow: 5px 5px 0px #39FF14;
 }
 
 .manga-shadow-red {
@@ -184,7 +211,7 @@ h6,
   right: -8px;
   bottom: 2px;
   height: 48%;
-  background: #bef264;
+  background: #39FF14;
   z-index: -1;
   transform: rotate(-1deg) skewX(-14deg);
   border-radius: 3px;
@@ -192,7 +219,7 @@ h6,
 }
 
 .dark .brush-highlight-lime::before {
-  background: #a3e635;
+  background: #7CFF5E;
   box-shadow: 0 0 15px rgba(163, 230, 53, 0.4);
 }
 
@@ -219,27 +246,27 @@ h6,
 }
 
 ::-webkit-scrollbar-track {
-  background: #ebebe5;
+  background: #F5F5F5;
   border-left: 1px solid #111;
 }
 
 .dark ::-webkit-scrollbar-track {
-  background: #09090b;
-  border-left: 1px solid #27272a;
+  background: #0A0A0A;
+  border-left: 1px solid #333333;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #111;
+  background: #333333;
 }
 
 .dark ::-webkit-scrollbar-thumb {
-  background: #3f3f46;
+  background: #333333;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a3e635;
+  background: #7CFF5E;
 }
 
 .dark ::-webkit-scrollbar-thumb:hover {
-  background: #bef264;
+  background: #39FF14;
 }

@@ -146,7 +146,7 @@ export default function ArsenalSection() {
               className="font-brush text-4xl sm:text-5xl md:text-6xl lg:text-7xl italic tracking-tight text-black dark:text-white uppercase leading-none drop-shadow-sm"
             />
 
-            <span className="absolute -left-2 -right-4 bottom-1 sm:bottom-2 h-[45%] bg-[#bef264] -z-10 -rotate-1 skew-x-[-14deg] rounded-sm shadow-sm pointer-events-none" />
+            <span className="absolute -left-2 -right-4 bottom-1 sm:bottom-2 h-[45%] bg-[#39FF14] -z-10 -rotate-1 skew-x-[-14deg] rounded-sm shadow-sm pointer-events-none" />
           </div>
 
           <div className="mt-4 inline-block">
@@ -204,10 +204,10 @@ export default function ArsenalSection() {
                   >
 
                     <div className="absolute inset-0 manga-hatch opacity-30 pointer-events-none" />
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[#bef264]/20 via-[#38bdf8]/10 to-transparent rounded-full blur-3xl pointer-events-none group-hover:opacity-100 transition-opacity" />
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[#39FF14]/20 via-[#38bdf8]/10 to-transparent rounded-full blur-3xl pointer-events-none group-hover:opacity-100 transition-opacity" />
 
                     <div className="flex items-center justify-between relative z-10">
-                      <div className="bg-white/10 backdrop-blur-md border border-white/20 text-[#bef264] font-mono-tech text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
+                      <div className="bg-white/10 backdrop-blur-md border border-white/20 text-[#39FF14] font-mono-tech text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
                         {item.icon}
                         <span>{item.tag}</span>
                       </div>
@@ -225,7 +225,7 @@ export default function ArsenalSection() {
                         fillColor="#ffffff"
                         delay={200 + idx * 70}
                         duration={1700}
-                        className="text-2xl sm:text-3xl lg:text-4xl font-bold font-heading text-white tracking-tight mb-2 group-hover:text-[#bef264] transition-colors"
+                        className="text-2xl sm:text-3xl lg:text-4xl font-bold font-heading text-white tracking-tight mb-2 group-hover:text-[#39FF14] transition-colors"
                       />
                       <p className="text-stone-300 text-xs sm:text-sm leading-relaxed max-w-lg mb-6">
                         {item.desc}
@@ -233,9 +233,9 @@ export default function ArsenalSection() {
 
                       <div className="w-full h-[1px] bg-white/20 mb-4" />
 
-                      <div className="flex items-center justify-between font-mono-tech text-xs font-bold text-[#bef264]">
+                      <div className="flex items-center justify-between font-mono-tech text-xs font-bold text-[#39FF14]">
                         <span>TRANSMIT BRIEF DOSSIER</span>
-                        <div className="w-9 h-9 rounded-full bg-[#bef264] text-black border border-black flex items-center justify-center font-black group-hover:scale-110 transition-transform">
+                        <div className="w-9 h-9 rounded-full bg-[#39FF14] text-black border border-black flex items-center justify-center font-black group-hover:scale-110 transition-transform">
                           →
                         </div>
                       </div>
@@ -280,8 +280,8 @@ export default function ArsenalSection() {
 
                   {item.hasRadar && (
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10">
-                      <div className="w-16 h-16 rounded-full border border-[#bef264]/70 flex items-center justify-center animate-pulse">
-                        <div className="w-1.5 h-1.5 bg-[#bef264] rounded-full shadow-[0_0_10px_#bef264]" />
+                      <div className="w-16 h-16 rounded-full border border-[#39FF14]/70 flex items-center justify-center animate-pulse">
+                        <div className="w-1.5 h-1.5 bg-[#39FF14] rounded-full shadow-[0_0_10px_#39FF14]" />
                       </div>
                     </div>
                   )}
@@ -306,7 +306,7 @@ export default function ArsenalSection() {
                       fillColor="#ffffff"
                       delay={200 + idx * 70}
                       duration={1700}
-                      className="text-2xl sm:text-3xl lg:text-4xl font-bold font-heading text-white tracking-tight mb-2 group-hover:text-[#bef264] transition-colors leading-tight"
+                      className="text-2xl sm:text-3xl lg:text-4xl font-bold font-heading text-white tracking-tight mb-2 group-hover:text-[#39FF14] transition-colors leading-tight"
                     />
 
                     <p className="text-stone-300 text-xs sm:text-sm leading-relaxed max-w-xl font-medium">
@@ -318,7 +318,7 @@ export default function ArsenalSection() {
                     <div className="flex items-center justify-between font-mono-tech text-[10px] sm:text-xs font-bold text-stone-300 group-hover:text-white transition-colors">
                       <span>EXPLORE THE SERVICE</span>
 
-                      <div className="w-8 h-8 rounded-full border border-white/30 bg-white/10 group-hover:bg-[#bef264] group-hover:text-black group-hover:border-black flex items-center justify-center text-white transition-all duration-200 group-hover:scale-110">
+                      <div className="w-8 h-8 rounded-full border border-white/30 bg-white/10 group-hover:bg-[#39FF14] group-hover:text-black group-hover:border-black flex items-center justify-center text-white transition-all duration-200 group-hover:scale-110">
                         <svg className="w-3.5 h-3.5 fill-current transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" viewBox="0 0 24 24">
                           <path d="M5 19L19 5M19 5H9M19 5V15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
                         </svg>

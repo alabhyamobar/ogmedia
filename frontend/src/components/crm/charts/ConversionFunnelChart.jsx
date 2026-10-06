@@ -19,8 +19,8 @@ export default function ConversionFunnelChart({
       desc: 'Total leads received',
       count: total,
       pctOfTotal: 100,
-      color: '#bef264',
-      barColor: 'bg-[#bef264]',
+      color: '#39FF14',
+      barColor: 'bg-[#39FF14]',
       textColor: 'text-black'
     },
     {
@@ -129,7 +129,7 @@ export default function ConversionFunnelChart({
                   <span className="text-sm font-black text-black dark:text-white">
                     {stage.count} <span className="text-[10px] text-stone-500 font-normal">leads</span>
                   </span>
-                  <span className="text-xs font-bold px-1.5 py-0.5 rounded bg-black text-[#bef264]">
+                  <span className="text-xs font-bold px-1.5 py-0.5 rounded bg-black text-[#39FF14]">
                     {stage.pctOfTotal}%
                   </span>
                 </div>

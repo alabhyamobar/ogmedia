@@ -1,12 +1,20 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useTheme } from '../../context/ThemeContext';
 import { useVideoPreload } from '../../context/VideoPreloadContext';
-import InkText from '../ui/InkText';
-import TypewriterText from '../ui/TypewriterText';
-import UnfoldPanel from '../ui/UnfoldPanel';
+
+import {
+  HeroStructuredData,
+  HeroBgCanvas,
+  HeroPrologueBar,
+  HeroOgEffectSticker,
+  HeroMangaPanel,
+  HeroTitleCard,
+  HeroActionFooter,
+  HeroTelemetryBar,
+  HeroVideoPortal
+} from './hero';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -607,74 +615,27 @@ export default function HeroSection() {
 
   return (
     <>
-      {isVideoMounted && typeof document !== 'undefined' && createPortal(
-        <div
-          ref={videoContainerRef}
-          className="fixed inset-0 z-50 opacity-0 pointer-events-none bg-black flex items-center justify-center"
-        >
-          <video
-            ref={videoRef}
-            src={videoBlobUrl || videoSrc}
-            playsInline
-            preload="auto"
-            muted={isMuted}
-            className="w-full h-full object-cover"
-            onTimeUpdate={handleTimeUpdate}
-            onEnded={handleVideoEnded}
-          />
+      {/* Schema.org Structured Data for Search Engine Optimization */}
+      <HeroStructuredData />
 
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 pointer-events-none" />
+      {/* Full-screen 4K interactive video portal */}
+      <HeroVideoPortal
+        isVideoMounted={isVideoMounted}
+        videoContainerRef={videoContainerRef}
+        videoRef={videoRef}
+        videoSrc={videoSrc}
+        videoBlobUrl={videoBlobUrl}
+        isMuted={isMuted}
+        onToggleMute={() => setIsMuted(!isMuted)}
+        onReverseCamera={triggerReverseCamera}
+        videoProgress={videoProgress}
+        isHeroVideoLoaded={isHeroVideoLoaded}
+        onTimeUpdate={handleTimeUpdate}
+        onEnded={handleVideoEnded}
+      />
 
-          <div className="absolute top-0 left-0 right-0 p-3 sm:p-6 flex items-center justify-between z-40 bg-gradient-to-b from-black/85 via-black/40 to-transparent">
-            <div className="flex items-center gap-1.5 sm:gap-2 font-mono-tech text-[10px] sm:text-xs text-[#bef264]">
-              <span className="w-2 h-2 rounded-full bg-[#ef4444] animate-ping" />
-              <span className="font-bold">LIVE FEED // HEROVID1.MP4</span>
-              <span className="text-stone-400 hidden md:inline">
-                | {isHeroVideoLoaded ? 'MEMORY BUFFERED // ZERO LAG' : '4K ARCHIVE TRANSMISSION'}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-1.5 sm:gap-3">
-              <button
-                onClick={() => setIsMuted(!isMuted)}
-                className="bg-black/80 hover:bg-black text-[#bef264] border border-[#bef264] px-2.5 sm:px-3 py-1 font-mono-tech text-[10px] sm:text-xs font-bold transition-colors cursor-pointer flex items-center gap-1"
-              >
-                <span>{isMuted ? '🔇' : '🔊'}</span>
-                <span>{isMuted ? 'UNMUTE' : 'MUTED'}</span>
-              </button>
-
-              <button
-                onClick={triggerReverseCamera}
-                title="Reverse camera back to comic desk"
-                className="bg-[#ef4444] hover:bg-red-600 text-white border border-white px-2.5 sm:px-3 py-1 font-mono-tech text-[10px] sm:text-xs font-bold transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-1 shadow-lg"
-              >
-                <span>↺</span>
-                <span className="hidden sm:inline">REVERSE CAMERA</span>
-                <span className="sm:hidden">EXIT</span>
-              </button>
-            </div>
-          </div>
-
-          <div className="absolute bottom-0 left-0 right-0 z-40 bg-gradient-to-t from-black/80 to-transparent p-4 sm:p-6">
-            <div className="max-w-3xl mx-auto flex items-center gap-3">
-              <span className="font-mono-tech text-xs text-white/80">LIVE</span>
-              <div className="flex-1 h-1.5 bg-white/20 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-[#ef4444] transition-all duration-100"
-                  style={{ width: `${videoProgress}%` }}
-                />
-              </div>
-              <span className="font-mono-tech text-xs text-[#bef264] font-bold">
-                {Math.round(videoProgress)}%
-              </span>
-            </div>
-          </div>
-        </div>,
-        document.body
-      )}
-
+      {/* Fixed scroll trigger pin wrapper */}
       <div ref={pinWrapperRef} className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
-
         <div
           ref={cameraRigRef}
           className="w-full h-full flex items-center justify-center"
@@ -682,6 +643,7 @@ export default function HeroSection() {
         >
           <section
             ref={heroRef}
+            aria-label="OG Media Hero Showcase"
             className="relative w-full px-2 xs:px-3 sm:px-6 py-2 xs:py-3 sm:py-6 max-w-[1300px] mx-auto"
             style={{ perspective: '1400px' }}
           >
@@ -696,325 +658,56 @@ export default function HeroSection() {
                   : '6px 6px 0px #000000, 12px 12px 0px rgba(0,0,0,0.08)'
               }}
             >
-              <div ref={cornerMarksRef} className="contents">
-                <div
-                  className="absolute top-1.5 left-2 sm:top-2 sm:left-3 font-mono-tech text-[9px] sm:text-xs font-bold text-stone-600 dark:text-stone-400 select-none z-20 pointer-events-none"
-                  style={{ transform: 'translateZ(15px)' }}
-                >
-                  + C_01
-                </div>
-                <div
-                  className="absolute top-1.5 right-2 sm:top-2 sm:right-3 font-mono-tech text-[9px] sm:text-xs font-bold text-stone-600 dark:text-stone-400 select-none z-20 pointer-events-none"
-                  style={{ transform: 'translateZ(15px)' }}
-                >
-                  C_02 +
-                </div>
-                <div
-                  className="absolute bottom-1.5 left-2 sm:bottom-2 sm:left-3 font-mono-tech text-[9px] sm:text-xs font-bold text-stone-600 dark:text-stone-400 select-none z-20 pointer-events-none"
-                  style={{ transform: 'translateZ(15px)' }}
-                >
-                  + C_03
-                </div>
-                <div
-                  className="absolute bottom-1.5 right-2 sm:bottom-2 sm:right-3 font-mono-tech text-[9px] sm:text-xs font-bold text-stone-600 dark:text-stone-400 select-none z-20 pointer-events-none"
-                  style={{ transform: 'translateZ(15px)' }}
-                >
-                  C_04 +
-                </div>
-              </div>
+              {/* Background drafting rays and viewfinder corner marks */}
+              <HeroBgCanvas
+                bgRaysRef={bgRaysRef}
+                cornerMarksRef={cornerMarksRef}
+                isDark={isDark}
+              />
 
-              <div
-                ref={bgRaysRef}
-                className="absolute inset-0 overflow-hidden pointer-events-none z-0"
-                style={{ transform: 'translateZ(-15px)' }}
-              >
-                <svg
-                  className="w-full h-full opacity-25 dark:opacity-15"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <line x1="0" y1="0" x2="100%" y2="100%" stroke={isDark ? '#fff' : '#000'} strokeWidth="0.75" />
-                  <line x1="100%" y1="0" x2="0" y2="100%" stroke={isDark ? '#fff' : '#000'} strokeWidth="0.75" />
-                  <line x1="50%" y1="0" x2="50%" y2="100%" stroke={isDark ? '#fff' : '#000'} strokeWidth="0.75" />
-                  <line x1="0" y1="50%" x2="100%" y2="50%" stroke={isDark ? '#fff' : '#000'} strokeWidth="0.75" />
-                  <line x1="25%" y1="0" x2="50%" y2="50%" stroke={isDark ? '#fff' : '#000'} strokeWidth="0.5" strokeDasharray="3 3" />
-                  <line x1="75%" y1="0" x2="50%" y2="50%" stroke={isDark ? '#fff' : '#000'} strokeWidth="0.5" strokeDasharray="3 3" />
-                  <line x1="0" y1="25%" x2="50%" y2="50%" stroke={isDark ? '#fff' : '#000'} strokeWidth="0.5" strokeDasharray="3 3" />
-                  <line x1="100%" y1="25%" x2="50%" y2="50%" stroke={isDark ? '#fff' : '#000'} strokeWidth="0.5" strokeDasharray="3 3" />
-                </svg>
-              </div>
+              {/* Narrative dialogue prologue and vision typewriter badge */}
+              <HeroPrologueBar
+                prologueRef={prologueRef}
+                limeBoxRef={limeBoxRef}
+                isDark={isDark}
+              />
 
-              <div
-                className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4 pt-1 sm:pt-4 px-1 sm:px-4 mb-3 sm:mb-6"
-                style={{ transformStyle: 'preserve-3d' }}
-              >
-                <div
-                  ref={prologueRef}
-                  className="border-2 border-black dark:border-[#38383e] p-2.5 sm:p-4 max-w-full sm:max-w-sm transition-colors duration-300 cursor-default"
-                  style={{
-                    backgroundColor: isDark ? '#18181c' : '#ffffff',
-                    transform: 'translateZ(45px) rotate(-1deg)',
-                    boxShadow: isDark
-                      ? '4px 4px 0px #000000, 8px 8px 0px rgba(0,0,0,0.3)'
-                      : '4px 4px 0px #000000, 8px 8px 0px rgba(0,0,0,0.12)',
-                    transformStyle: 'preserve-3d'
-                  }}
-                >
-                  <div className="flex items-center gap-1.5 font-mono-tech text-[9px] sm:text-xs font-bold text-stone-800 dark:text-stone-300 uppercase mb-0.5 sm:mb-1">
-                    <span className="inline-block w-2 h-2 sm:w-2.5 sm:h-2.5 bg-[#ef4444]"></span>
-                    <span>NARRATIVE PROLOGUE:</span>
-                  </div>
-                  <InkText
-                    as="div"
-                    strokeColor={isDark ? '#ffffff' : '#000000'}
-                    fillColor={isDark ? '#ffffff' : '#000000'}
-                    strokeWidth="1.2px"
-                    delay={200}
-                    duration={1800}
-                    className="font-heading font-bold text-xs sm:text-base md:text-lg tracking-tight text-black dark:text-white"
-                    text='"THIS IS NOT JUST A WEBSITE."'
-                  />
-                </div>
-
-                <div
-                  ref={limeBoxRef}
-                  className="bg-[#bef264] border-2 border-black px-3 py-1.5 sm:px-4 sm:py-2 font-mono-tech font-bold text-[11px] sm:text-sm text-black flex items-center gap-1.5 flex-wrap cursor-default self-start sm:self-auto"
-                  style={{
-                    transform: 'translateZ(45px) rotate(1deg)',
-                    boxShadow: isDark
-                      ? '4px 4px 0px #000000, 8px 8px 0px rgba(0,0,0,0.35)'
-                      : '4px 4px 0px #000000, 8px 8px 0px rgba(0,0,0,0.12)',
-                    transformStyle: 'preserve-3d'
-                  }}
-                >
-                  <TypewriterText
-                    as="span"
-                    speed={14}
-                    delay={200}
-                    cursor={false}
-                    text="IT'S A STORY YOU SCROLL THROUGH."
-                  />
-                  <span className="hidden sm:inline">//</span>
-                  <span className="font-heading font-black tracking-wider text-black hidden sm:inline">
-                    NEVER STOP SCROLLING.
-                  </span>
-                </div>
-              </div>
-
+              {/* Central Drafting Window & Brand Title Anchor */}
               <div
                 ref={windowWrapperRef}
                 className="relative z-10 max-w-4xl mx-auto w-full my-2 sm:my-8 px-1 sm:px-2"
                 style={{ transformStyle: 'preserve-3d' }}
               >
-                <div
-                  className="relative z-10"
-                  style={{
-                    transform: 'translateZ(25px)',
-                    transformStyle: 'preserve-3d'
-                  }}
-                >
-                  <UnfoldPanel direction="right" duration={1.2} delay={0.15}>
-                    <div
-                      ref={panelFrameRef}
-                      onClick={handleDiveIntoWindow}
-                      role="button"
-                      tabIndex={0}
-                      title="Tap or scroll down to dive into window"
-                      className="relative border-3 border-black dark:border-[#38383e] overflow-hidden bg-black aspect-[16/10] sm:aspect-[2.35/1] w-full transition-shadow duration-300 cursor-pointer group"
-                      style={{
-                        boxShadow: isDark
-                          ? '6px 6px 0px #000000, 12px 12px 0px rgba(0,0,0,0.4)'
-                          : '6px 6px 0px #000000, 12px 12px 0px rgba(0,0,0,0.14)'
-                      }}
-                    >
-                      <img
-                        ref={comicImageRef}
-                        src="/ogmedia/assets/hero_city.webp"
-                        alt="Neo-Seoul Manga Overview"
-                        loading="eager"
-                        fetchPriority="high"
-                        decoding="async"
-                        className="w-full h-full object-cover object-center scale-100 transition-transform duration-700 group-hover:scale-105"
-                      />
+                {/* Visual Comic Frame */}
+                <HeroMangaPanel
+                  panelFrameRef={panelFrameRef}
+                  comicImageRef={comicImageRef}
+                  frameBadgesRef={frameBadgesRef}
+                  onDive={handleDiveIntoWindow}
+                  isDark={isDark}
+                />
 
-                      <div className="absolute inset-0 manga-halftone-light opacity-20 pointer-events-none" />
+                {/* 3D Tilted Sticker: IMPACT */}
+                <HeroOgEffectSticker ref={boomStickerRef} />
 
-                      <div ref={frameBadgesRef} className="contents">
-                        <div className="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 z-20">
-                          <div className="bg-white/95 dark:bg-black/90 text-black dark:text-white border border-black dark:border-stone-700 px-2 py-0.5 sm:px-2.5 sm:py-0.5 font-mono-tech font-bold text-[8px] sm:text-[11px] shadow-sm">
-                            <span className="sm:hidden">FRAME: 001_A</span>
-                            <span className="hidden sm:inline">FRAME: ARCHIVE_001_A // OVERVIEW PERSPECTIVE</span>
-                          </div>
-                        </div>
+                {/* Main Brand Title Card & SEO Value Proposition */}
+                <HeroTitleCard
+                  titleCardRef={titleCardRef}
+                  descRef={descRef}
+                  isDark={isDark}
+                />
 
-                        <div className="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 z-20">
-                          <span className="bg-[#bef264] text-black font-mono-tech font-bold text-[8px] sm:text-[10px] px-1.5 py-0.5 sm:px-2 sm:py-0.5 border border-black shadow-sm flex items-center gap-1 group-hover:scale-105 transition-transform">
-                            <span>▶</span>
-                            <span className="hidden sm:inline">WATCH 4K STREAM</span>
-                            <span className="sm:hidden">4K PLAY</span>
-                          </span>
-                        </div>
-
-                        <div className="absolute bottom-2 right-2 sm:bottom-2.5 sm:right-3 z-20">
-                          <span className="bg-black/85 px-1.5 py-0.5 sm:px-2 sm:py-0.5 text-[#bef264] font-mono-tech font-bold text-[8px] sm:text-xs tracking-wider border border-black/40">
-                            SEOUL GRID: SECTOR 07
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </UnfoldPanel>
-                </div>
-
-                <div
-                  ref={boomStickerRef}
-                  className="absolute -top-7 sm:-top-14 right-2 sm:right-6 z-40 flex flex-col items-center select-none group cursor-help"
-                  style={{
-                    transform: 'translateZ(85px) rotate(-6deg)',
-                    transformStyle: 'preserve-3d'
-                  }}
-                >
-                  <span className="font-heading text-4xl sm:text-7xl text-[#ef4444] font-black tracking-tighter drop-shadow-[3px_3px_0px_#000] sm:drop-shadow-[4px_4px_0px_#000] drop-shadow-[6px_6px_0px_rgba(0,0,0,0.4)]">
-                    BOOM!
-                  </span>
-                  <div
-                    className="bg-black text-white font-mono-tech font-extrabold text-[9px] sm:text-xs px-2.5 py-0.5 border border-black transform rotate-3 -mt-2 sm:-mt-3"
-                    style={{
-                      boxShadow: '2px 2px 0px #ef4444'
-                    }}
-                  >
-                    INTRO
-                  </div>
-                </div>
-
-                <div
-                  ref={titleCardRef}
-                  className="relative z-50 text-center -mt-4 sm:-mt-14"
-                  style={{
-                    transform: 'translateZ(95px)',
-                    transformStyle: 'preserve-3d'
-                  }}
-                >
-                  <div
-                    className="inline-block border-3 border-black dark:border-[#38383e] px-6 sm:px-14 py-1.5 sm:py-3.5 transition-colors duration-300 cursor-default"
-                    style={{
-                      backgroundColor: isDark ? '#16161a' : '#ffffff',
-                      boxShadow: isDark
-                        ? '6px 8px 0px #000000, 12px 14px 0px rgba(0,0,0,0.5)'
-                        : '6px 8px 0px #000000, 12px 14px 0px rgba(0,0,0,0.18)'
-                    }}
-                  >
-                    <InkText
-                      as="h1"
-                      strokeColor={isDark ? '#ffffff' : '#000000'}
-                      fillColor={isDark ? '#ffffff' : '#000000'}
-                      strokeWidth="1.4px"
-                      delay={200}
-                      duration={2400}
-                      className="text-4xl sm:text-7xl md:text-8xl font-bold font-comic-title tracking-wider leading-none drop-shadow-[2px_2px_0px_rgba(0,0,0,0.15)] select-none text-black dark:text-white"
-                      text="OG MEDIA"
-                    />
-                  </div>
-
-                  <div className="block -mt-1 sm:-mt-2">
-                    <div
-                      className="inline-block bg-black text-[#bef264] px-3 sm:px-6 py-1 sm:py-1.5 font-mono-tech font-extrabold text-[10px] sm:text-sm md:text-base tracking-wider sm:tracking-widest uppercase border border-stone-800 dark:border-stone-700 cursor-default"
-                      style={{
-                        boxShadow: '4px 4px 0px #000000, 8px 8px 0px rgba(0,0,0,0.3)'
-                      }}
-                    >
-                      <InkText
-                        as="span"
-                        strokeColor="#bef264"
-                        fillColor="#bef264"
-                        strokeWidth="1px"
-                        delay={500}
-                        duration={2000}
-                        text="CINEMATIC IP // KOREAN MANHWA ARCHIVE"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div ref={descRef} style={{ transform: 'translateZ(30px)' }}>
-                  <TypewriterText
-                    delay={750}
-                    speed={12}
-                    className="max-w-2xl mx-auto text-stone-800 dark:text-stone-300 font-medium text-xs sm:text-sm md:text-base leading-relaxed text-center mt-3 sm:mt-8 mb-3 sm:mb-6 px-2 sm:px-4"
-                    text="We forge brand worldbuilding, dynamic digital experiences, and high-impact intellectual properties with the relentless momentum and visual intensity of premier webtoons."
-                  />
-                </div>
-
-                <div
-                  className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-6 pt-1 sm:pt-2 px-1 sm:px-4"
-                  style={{ transformStyle: 'preserve-3d' }}
-                >
-                  <div
-                    ref={swooshRef}
-                    className="flex flex-col items-center sm:items-start select-none group cursor-help"
-                    style={{
-                      transform: 'translateZ(60px)',
-                      transformStyle: 'preserve-3d'
-                    }}
-                  >
-                    <InkText
-                      as="div"
-                      strokeColor={isDark ? '#ffffff' : '#000000'}
-                      fillColor={isDark ? '#ffffff' : '#000000'}
-                      strokeWidth="1.2px"
-                      delay={400}
-                      duration={1800}
-                      className="font-heading text-2xl sm:text-5xl text-black dark:text-white font-black tracking-tight leading-none drop-shadow-[2px_2px_0px_rgba(0,0,0,0.2)]"
-                      text="SWOO-OOSH!"
-                    />
-                    <div
-                      className="bg-[#bef264] text-black font-mono-tech font-extrabold text-[9px] sm:text-[11px] px-1.5 py-0.5 border border-black -mt-0.5 sm:-mt-1"
-                      style={{
-                        boxShadow: '2px 2px 0px #000000, 4px 4px 0px rgba(0,0,0,0.15)'
-                      }}
-                    >
-                      [SWOOSH: SPEED VECTOR]
-                    </div>
-                  </div>
-
-                  <div
-                    ref={ctaRef}
-                    className="w-full sm:w-auto flex items-center justify-center gap-3"
-                    style={{
-                      transform: 'translateZ(50px)',
-                      transformStyle: 'preserve-3d'
-                    }}
-                  >
-                    <button
-                      type="button"
-                      onClick={handleDiveIntoWindow}
-                      className="w-full sm:w-auto justify-center bg-black dark:bg-[#18181c] hover:bg-stone-900 dark:hover:bg-black text-white font-mono-tech font-bold text-xs sm:text-sm px-4 sm:px-5 py-2.5 border-2 border-black dark:border-stone-700 flex items-center gap-2 transition-all duration-200 active:translate-x-1 active:translate-y-1 cursor-pointer shadow-[4px_4px_0px_#000] sm:shadow-[5px_5px_0px_#000]"
-                    >
-                      <span>SCROLL OR TAP TO DIVE INTO WINDOW</span>
-                      <span className="text-[#bef264]">↓</span>
-                    </button>
-                    <div
-                      className="bg-white dark:bg-[#18181c] text-stone-600 dark:text-stone-400 font-mono-tech text-xs px-3 py-2.5 border border-stone-300 dark:border-stone-700 hidden lg:block"
-                      style={{
-                        boxShadow: '3px 3px 0px rgba(0,0,0,0.15)'
-                      }}
-                    >
-                      [SYS_PROMPT: 24 FRAMES LOADED]
-                    </div>
-                  </div>
-                </div>
+                {/* Action Footer: Comic SFX & Window Dive CTA */}
+                <HeroActionFooter
+                  swooshRef={swooshRef}
+                  ctaRef={ctaRef}
+                  onDive={handleDiveIntoWindow}
+                  isDark={isDark}
+                />
               </div>
 
-              <div
-                ref={telemetryRef}
-                className="relative z-10 border-t border-black dark:border-stone-800 pt-2 sm:pt-2.5 mt-2 sm:mt-4 flex items-center justify-between font-mono-tech text-[9px] sm:text-xs text-stone-600 dark:text-stone-400 px-1"
-                style={{ transform: 'translateZ(15px)' }}
-              >
-                <div>00:00:01 // SCENE_INIT</div>
-                <div className="flex items-center gap-2">
-                  <span className="tracking-widest text-black dark:text-white font-bold">•••</span>
-                  <div className="w-12 sm:w-16 h-1.5 bg-[#bef264] border border-black dark:border-stone-700"></div>
-                </div>
-                <div>CHAPTER 00 : PROLOGUE FINISHED</div>
-              </div>
+              {/* Scene Timestamp & Chapter Telemetry */}
+              <HeroTelemetryBar telemetryRef={telemetryRef} />
             </div>
           </section>
         </div>
@@ -1022,4 +715,3 @@ export default function HeroSection() {
     </>
   );
 }
-

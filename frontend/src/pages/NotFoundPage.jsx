@@ -30,7 +30,7 @@ export default function NotFoundPage() {
         <div className="pt-2">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 bg-[#bef264] hover:bg-[#a3e635] text-black font-mono-tech font-bold text-sm px-6 py-3 border-2 border-black manga-shadow transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+            className="inline-flex items-center gap-2 bg-[#39FF14] hover:bg-[#7CFF5E] text-black font-mono-tech font-bold text-sm px-6 py-3 border-2 border-black manga-shadow transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
           >
             <span>←</span>
             <span>RETURN TO ARCHIVE HEADQUARTERS</span>

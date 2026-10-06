@@ -65,7 +65,7 @@ export default function ServiceBarChart({
             <button
               onClick={() => setSortBy('total')}
               className={`px-2 py-1 rounded transition-colors cursor-pointer ${
-                sortBy === 'total' ? 'bg-black text-[#bef264]' : 'text-stone-500 hover:text-black dark:hover:text-white'
+                sortBy === 'total' ? 'bg-black text-[#39FF14]' : 'text-stone-500 hover:text-black dark:hover:text-white'
               }`}
             >
               By Volume
@@ -73,7 +73,7 @@ export default function ServiceBarChart({
             <button
               onClick={() => setSortBy('conversionRate')}
               className={`px-2 py-1 rounded transition-colors cursor-pointer ${
-                sortBy === 'conversionRate' ? 'bg-black text-[#bef264]' : 'text-stone-500 hover:text-black dark:hover:text-white'
+                sortBy === 'conversionRate' ? 'bg-black text-[#39FF14]' : 'text-stone-500 hover:text-black dark:hover:text-white'
               }`}
             >
               By Win Rate
@@ -81,7 +81,7 @@ export default function ServiceBarChart({
             <button
               onClick={() => setSortBy('converted')}
               className={`px-2 py-1 rounded transition-colors cursor-pointer ${
-                sortBy === 'converted' ? 'bg-black text-[#bef264]' : 'text-stone-500 hover:text-black dark:hover:text-white'
+                sortBy === 'converted' ? 'bg-black text-[#39FF14]' : 'text-stone-500 hover:text-black dark:hover:text-white'
               }`}
             >
               By Won Deals
@@ -104,7 +104,7 @@ export default function ServiceBarChart({
       <div className="space-y-4 my-2">
         {isLoading ? (
           <div className="py-16 text-center text-xs text-stone-500 animate-pulse space-y-2">
-            <div className="w-8 h-8 mx-auto border-2 border-t-[#bef264] border-stone-300 rounded-full animate-spin" />
+            <div className="w-8 h-8 mx-auto border-2 border-t-[#39FF14] border-stone-300 rounded-full animate-spin" />
             <div>Calculating sector telemetry across permanent records...</div>
           </div>
         ) : sortedList.length === 0 ? (
@@ -130,7 +130,7 @@ export default function ServiceBarChart({
                 onClick={() => onSelectService?.(isSelected ? 'ALL' : item.service)}
                 className={`p-3 rounded-xl border-2 transition-all cursor-pointer ${
                   isSelected
-                    ? 'bg-[#bef264]/10 dark:bg-[#bef264]/5 border-black dark:border-[#bef264] shadow-[3px_3px_0px_#000]'
+                    ? 'bg-[#39FF14]/10 dark:bg-[#39FF14]/5 border-black dark:border-[#39FF14] shadow-[3px_3px_0px_#000]'
                     : isHovered
                     ? 'bg-stone-100 dark:bg-stone-800/80 border-black/40 dark:border-stone-600'
                     : 'bg-white dark:bg-[#1e1e24] border-black/10 dark:border-stone-800 hover:border-black/30'
@@ -141,14 +141,14 @@ export default function ServiceBarChart({
                   <div className="flex items-center gap-2">
                     <span
                       className={`w-2.5 h-2.5 rounded-sm border border-black/30 transition-transform ${
-                        isSelected ? 'bg-[#bef264] scale-125' : 'bg-stone-300 dark:bg-stone-700'
+                        isSelected ? 'bg-[#39FF14] scale-125' : 'bg-stone-300 dark:bg-stone-700'
                       }`}
                     />
                     <span className="font-bold text-black dark:text-white tracking-tight">
                       {label}
                     </span>
                     {isSelected && (
-                      <span className="text-[9px] bg-black text-[#bef264] px-1.5 py-0.5 rounded font-black tracking-wide uppercase">
+                      <span className="text-[9px] bg-black text-[#39FF14] px-1.5 py-0.5 rounded font-black tracking-wide uppercase">
                         Active Filter
                       </span>
                     )}

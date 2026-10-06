@@ -330,7 +330,7 @@ export default function LoadingGame({ onComplete }) {
         vy: (Math.random() - 0.5) * 2,
         size: Math.random() * 3 + 2,
         life: 1,
-        color: Math.random() > 0.5 ? '#bef264' : '#38bdf8'
+        color: Math.random() > 0.5 ? '#39FF14' : '#38bdf8'
       });
     }
   }, []);
@@ -445,7 +445,7 @@ export default function LoadingGame({ onComplete }) {
         ctx.lineWidth = 2;
         ctx.strokeRect(obs.x, 0, pillarWidth, obs.topH);
 
-        ctx.fillStyle = '#bef264';
+        ctx.fillStyle = '#39FF14';
         ctx.fillRect(obs.x, obs.topH - 8, pillarWidth, 8);
 
         const botH = height - obs.bottomY;
@@ -455,7 +455,7 @@ export default function LoadingGame({ onComplete }) {
         ctx.lineWidth = 2;
         ctx.strokeRect(obs.x, obs.bottomY, pillarWidth, botH);
 
-        ctx.fillStyle = '#bef264';
+        ctx.fillStyle = '#39FF14';
         ctx.fillRect(obs.x, obs.bottomY, pillarWidth, 8);
 
         if (!obs.passed && obs.x + pillarWidth < gs.drone.x) {
@@ -468,7 +468,7 @@ export default function LoadingGame({ onComplete }) {
             x: gs.drone.x + 20,
             y: gs.drone.y - 12,
             text: '+1 POINT',
-            color: '#bef264',
+            color: '#39FF14',
             life: 1
           });
 
@@ -528,7 +528,7 @@ export default function LoadingGame({ onComplete }) {
           if (item.type === 'star') {
             ctx.beginPath();
             ctx.arc(item.x, item.y, r, 0, Math.PI * 2);
-            ctx.fillStyle = '#bef264';
+            ctx.fillStyle = '#39FF14';
             ctx.fill();
             ctx.strokeStyle = '#ffffff';
             ctx.lineWidth = 1.5;
@@ -574,7 +574,7 @@ export default function LoadingGame({ onComplete }) {
                 x: item.x,
                 y: item.y - 12,
                 text: '+100 STAR',
-                color: '#bef264',
+                color: '#39FF14',
                 life: 1
               });
             }
@@ -679,7 +679,7 @@ export default function LoadingGame({ onComplete }) {
       ctx.closePath();
       ctx.fillStyle = '#09090b';
       ctx.fill();
-      ctx.strokeStyle = '#bef264';
+      ctx.strokeStyle = '#39FF14';
       ctx.lineWidth = 2;
       ctx.stroke();
 
@@ -690,11 +690,11 @@ export default function LoadingGame({ onComplete }) {
       ctx.lineTo(7, 0);
       ctx.fillStyle = '#27272a';
       ctx.fill();
-      ctx.strokeStyle = '#bef264';
+      ctx.strokeStyle = '#39FF14';
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      ctx.fillStyle = '#bef264';
+      ctx.fillStyle = '#39FF14';
       ctx.font = 'bold 7px sans-serif';
       ctx.fillText('OG', -4, 2.5);
 
@@ -744,7 +744,7 @@ export default function LoadingGame({ onComplete }) {
         ctx.textAlign = 'center';
         ctx.fillText('OG FLIGHT MINI-GAME', width / 2, height / 2 - 16);
 
-        ctx.fillStyle = '#bef264';
+        ctx.fillStyle = '#39FF14';
         ctx.font = 'bold 12px sans-serif';
         ctx.fillText('[ Click, Tap, or Spacebar to Play ]', width / 2, height / 2 + 16);
       }
@@ -758,7 +758,7 @@ export default function LoadingGame({ onComplete }) {
         ctx.textAlign = 'center';
         ctx.fillText('Nice Try!', width / 2, height / 2 - 25);
 
-        ctx.fillStyle = '#bef264';
+        ctx.fillStyle = '#39FF14';
         ctx.font = 'bold 14px sans-serif';
         ctx.fillText(`Score: ${gs.score}   |   Best: ${bestScore}`, width / 2, height / 2 + 5);
 
@@ -812,7 +812,7 @@ export default function LoadingGame({ onComplete }) {
 
             <button
               onClick={handleQuickSkip}
-              className="bg-white dark:bg-stone-900 hover:bg-[#bef264] hover:text-black border border-black px-3 py-1 font-mono-tech text-[11px] font-bold transition-colors cursor-pointer flex items-center gap-1 shadow-sm"
+              className="bg-white dark:bg-stone-900 hover:bg-[#39FF14] hover:text-black border border-black px-3 py-1 font-mono-tech text-[11px] font-bold transition-colors cursor-pointer flex items-center gap-1 shadow-sm"
               title="Skip straight to site"
             >
               <span>Skip</span>
@@ -828,7 +828,7 @@ export default function LoadingGame({ onComplete }) {
           <div className="lg:col-span-5 space-y-4">
             <div className="bg-white dark:bg-stone-900 border-3 border-black p-5 sm:p-7 manga-shadow-lg space-y-4">
               
-              <div className="inline-flex items-center gap-2 bg-[#bef264] text-black border-2 border-black font-mono-tech font-bold text-xs sm:text-sm px-3 py-1 manga-shadow-sm transform -rotate-1">
+              <div className="inline-flex items-center gap-2 bg-[#39FF14] text-black border-2 border-black font-mono-tech font-bold text-xs sm:text-sm px-3 py-1 manga-shadow-sm transform -rotate-1">
                 <span>👋</span>
                 <span>{greetingTime}, Welcome!</span>
               </div>
@@ -844,7 +844,7 @@ export default function LoadingGame({ onComplete }) {
               <div className="bg-stone-50 dark:bg-stone-800/60 border-2 border-black p-3.5 space-y-2">
                 <div className="flex items-center justify-between font-mono-tech text-xs font-bold text-black dark:text-white">
                   <span className="flex items-center gap-2">
-                    <span className={`w-2 h-2 rounded-full ${isReady ? 'bg-[#16a34a]' : 'bg-[#bef264] animate-ping'}`} />
+                    <span className={`w-2 h-2 rounded-full ${isReady ? 'bg-[#16a34a]' : 'bg-[#39FF14] animate-ping'}`} />
                     <span>{friendlyStatus}</span>
                   </span>
                   <span className="text-sm font-black">
@@ -854,7 +854,7 @@ export default function LoadingGame({ onComplete }) {
 
                 <div className="w-full h-3 bg-stone-200 dark:bg-black border border-black overflow-hidden">
                   <div
-                    className="h-full bg-[#bef264] transition-all duration-150 relative overflow-hidden"
+                    className="h-full bg-[#39FF14] transition-all duration-150 relative overflow-hidden"
                     style={{
                       width: `${displayProgress}%`,
                       backgroundImage: `
@@ -872,7 +872,7 @@ export default function LoadingGame({ onComplete }) {
 
                 <div className="text-[10px] sm:text-[11px] font-mono-tech text-stone-500 dark:text-stone-400 pt-0.5 flex items-center justify-between">
                   <span className="flex items-center gap-1.5">
-                    <span className={`w-1.5 h-1.5 rounded-full ${isReady ? 'bg-[#16a34a]' : 'bg-[#bef264] animate-pulse'}`} />
+                    <span className={`w-1.5 h-1.5 rounded-full ${isReady ? 'bg-[#16a34a]' : 'bg-[#39FF14] animate-pulse'}`} />
                     <span>
                       {loadedBytes > 0
                         ? `${(loadedBytes / (1024 * 1024)).toFixed(1)} MB / ${(totalBytes / (1024 * 1024)).toFixed(1)} MB`
@@ -888,7 +888,7 @@ export default function LoadingGame({ onComplete }) {
                 </div>
 
                 <button onClick={triggerEnterSite}
-                    className="w-full mt-2 bg-[#bef264] hover:bg-[#a3e635] text-black font-mono-tech font-extrabold text-xs py-2.5 px-4 border-2 border-black rounded shadow-[2px_2px_0px_#000] cursor-pointer flex items-center justify-center gap-2 transition-transform hover:-translate-y-0.5"
+                    className="w-full mt-2 bg-[#39FF14] hover:bg-[#7CFF5E] text-black font-mono-tech font-extrabold text-xs py-2.5 px-4 border-2 border-black rounded shadow-[2px_2px_0px_#000] cursor-pointer flex items-center justify-center gap-2 transition-transform hover:-translate-y-0.5"
                   >
                     <span>ENTER WEBSITE NOW &rarr;</span>
                   </button>
@@ -926,7 +926,7 @@ export default function LoadingGame({ onComplete }) {
 
               {gameStateStatus === 'READY' && (
                 <div className="absolute top-4 left-0 right-0 text-center pointer-events-none z-20">
-                  <span className="bg-black/90 text-[#bef264] border border-[#bef264] px-3.5 py-1 font-mono-tech text-xs font-bold tracking-wider shadow-md">
+                  <span className="bg-black/90 text-[#39FF14] border border-[#39FF14] px-3.5 py-1 font-mono-tech text-xs font-bold tracking-wider shadow-md">
                     [ Tap, Click, or Spacebar to Play ]
                   </span>
                 </div>
@@ -934,8 +934,8 @@ export default function LoadingGame({ onComplete }) {
 
               {isReady && (
                 <div className="absolute top-3 left-4 right-4 z-30 pointer-events-none flex justify-center">
-                  <div className="bg-black/90 border border-[#bef264] px-4 py-1.5 font-mono-tech text-xs text-[#bef264] font-bold shadow-lg flex items-center gap-2 animate-bounce">
-                    <span className="w-2 h-2 rounded-full bg-[#bef264] animate-ping" />
+                  <div className="bg-black/90 border border-[#39FF14] px-4 py-1.5 font-mono-tech text-xs text-[#39FF14] font-bold shadow-lg flex items-center gap-2 animate-bounce">
+                    <span className="w-2 h-2 rounded-full bg-[#39FF14] animate-ping" />
                     <span>Loaded! Opening website now &rarr;</span>
                   </div>
                 </div>
@@ -955,7 +955,7 @@ export default function LoadingGame({ onComplete }) {
         <div className="bg-white dark:bg-stone-900 border-2 border-black px-3.5 py-2 flex flex-wrap items-center justify-between gap-2 text-[10px] sm:text-xs font-mono-tech text-stone-600 dark:text-stone-400">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="font-bold text-black dark:text-white flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 bg-[#bef264] rounded-full inline-block" />
+              <span className="w-1.5 h-1.5 bg-[#39FF14] rounded-full inline-block" />
               OG MEDIA STUDIO
             </span>
             <span>•</span>

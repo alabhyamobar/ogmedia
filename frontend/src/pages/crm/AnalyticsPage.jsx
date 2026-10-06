@@ -105,7 +105,7 @@ export default function AnalyticsPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-5 sm:p-6 shadow-[5px_5px_0px_#000]">
         <div>
           <div className="flex items-center gap-2 font-mono-tech text-xs font-black text-stone-500">
-            <span className="inline-block w-2 h-2 rounded-full bg-[#bef264] animate-ping" />
+            <span className="inline-block w-2 h-2 rounded-full bg-[#39FF14] animate-ping" />
             <span className="text-[#84cc16]">/// 03 PERFORMANCE TELEMETRY</span>
             <span className="text-stone-400">• LIVE MONGODB & REDIS STREAM</span>
           </div>
@@ -165,7 +165,7 @@ export default function AnalyticsPage() {
             onClick={() => setActiveTab(key)}
             className={`px-3.5 py-2 rounded-xl border-2 font-bold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
               activeTab === key
-                ? 'bg-black text-[#bef264] border-black shadow-[3px_3px_0px_#bef264] dark:shadow-[3px_3px_0px_#fff]'
+                ? 'bg-black text-[#39FF14] border-black shadow-[3px_3px_0px_#39FF14] dark:shadow-[3px_3px_0px_#fff]'
                 : 'bg-[#faf8f5] dark:bg-[#16161a] border-black/30 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:border-black'
             }`}
           >
@@ -175,7 +175,7 @@ export default function AnalyticsPage() {
         ))}
 
         {selectedService !== 'ALL' && (
-          <div className="ml-auto flex items-center gap-1.5 px-3 py-1.5 bg-[#bef264]/20 border border-[#bef264] rounded-lg text-black dark:text-white text-[11px] font-bold">
+          <div className="ml-auto flex items-center gap-1.5 px-3 py-1.5 bg-[#39FF14]/20 border border-[#39FF14] rounded-lg text-black dark:text-white text-[11px] font-bold">
             <Filter className="w-3.5 h-3.5 text-[#84cc16]" />
             <span>Filtered: <strong>{selectedService.replace(/_/g, ' ')}</strong></span>
             <button
@@ -198,7 +198,7 @@ export default function AnalyticsPage() {
           icon={Users}
           trend={comparison.percentageChange}
           trendLabel="Period Inflow"
-          color="#bef264"
+          color="#39FF14"
           sparklineData={sparklineInquiries}
           isLoading={overviewLoading}
         />

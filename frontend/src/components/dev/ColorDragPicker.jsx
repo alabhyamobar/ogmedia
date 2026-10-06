@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import { hexToHsv, hsvToHex, hexToRgb, clamp } from './colorUtils';
 
 const QUICK_PRESETS = [
-  { name: 'Neon Lime', hex: '#bef264' },
+  { name: 'Neon Lime', hex: '#39FF14' },
   { name: 'Cyber Red', hex: '#ef4444' },
   { name: 'Electric Cyan', hex: '#06b6d4' },
   { name: 'Hot Pink', hex: '#ec4899' },
@@ -14,7 +14,7 @@ const QUICK_PRESETS = [
   { name: 'Pitch Black', hex: '#000000' }
 ];
 
-export default function ColorDragPicker({ value = '#bef264', onChange, label }) {
+export default function ColorDragPicker({ value = '#39FF14', onChange, label }) {
   const [hsv, setHsv] = useState(() => hexToHsv(value));
   const [copied, setCopied] = useState(false);
   const [prevValue, setPrevValue] = useState(value);
@@ -111,7 +111,7 @@ export default function ColorDragPicker({ value = '#bef264', onChange, label }) 
     <div className="dev-console-drag-picker select-none">
       {label && (
         <div className="flex justify-between items-center mb-1.5 font-mono-tech text-[11px] text-stone-300">
-          <span className="font-bold tracking-wider uppercase text-[#bef264]">{label}</span>
+          <span className="font-bold tracking-wider uppercase text-[#39FF14]">{label}</span>
           <span className="font-mono-tech text-[10px] text-stone-400">{currentHex}</span>
         </div>
       )}
@@ -184,7 +184,7 @@ export default function ColorDragPicker({ value = '#bef264', onChange, label }) 
           max="100"
           value={hsv.v}
           onChange={(e) => updateColor({ ...hsv, v: parseInt(e.target.value, 10) })}
-          className="w-full h-2 bg-stone-700 rounded-lg appearance-none cursor-pointer accent-[#bef264]"
+          className="w-full h-2 bg-stone-700 rounded-lg appearance-none cursor-pointer accent-[#39FF14]"
         />
       </div>
 
@@ -223,7 +223,7 @@ export default function ColorDragPicker({ value = '#bef264', onChange, label }) 
           <button
             type="button"
             onClick={copyHex}
-            className="dev-console-btn px-2 py-1 bg-stone-800 hover:bg-stone-700 text-[10px] font-bold text-[#bef264] border border-stone-700 rounded cursor-pointer transition-colors"
+            className="dev-console-btn px-2 py-1 bg-stone-800 hover:bg-stone-700 text-[10px] font-bold text-[#39FF14] border border-stone-700 rounded cursor-pointer transition-colors"
           >
             {copied ? '✓ COPIED' : 'COPY'}
           </button>
@@ -244,7 +244,7 @@ export default function ColorDragPicker({ value = '#bef264', onChange, label }) 
               }}
               className={`dev-console-btn w-5 h-5 rounded-sm border transition-transform hover:scale-115 active:scale-95 cursor-pointer ${
                 currentHex.toLowerCase() === preset.hex.toLowerCase()
-                  ? 'border-white ring-1 ring-[#bef264]'
+                  ? 'border-white ring-1 ring-[#39FF14]'
                   : 'border-stone-700'
               }`}
               style={{ backgroundColor: preset.hex }}

@@ -39,7 +39,7 @@ const queryClient = new QueryClient({
 const CrmFallback = () => (
   <div className="min-h-screen bg-[#ebebe5] dark:bg-[#09090b] flex flex-col items-center justify-center font-mono-tech select-none">
     <div className="border-2 border-black dark:border-stone-700 bg-white dark:bg-[#16161a] p-6 rounded-2xl shadow-[6px_6px_0px_#000] text-center space-y-3 max-w-sm">
-      <div className="inline-block bg-[#bef264] text-black font-extrabold text-xs px-3 py-1 border border-black rounded shadow-[2px_2px_0px_#000]">
+      <div className="inline-block bg-[#39FF14] text-black font-extrabold text-xs px-3 py-1 border border-black rounded shadow-[2px_2px_0px_#000]">
         CRM PROTOCOL
       </div>
       <div className="text-xs font-bold text-stone-900 dark:text-stone-100 animate-pulse">
@@ -54,7 +54,7 @@ function AppRoutes({ isLoading }) {
   const isCrmRoute = location.pathname.startsWith('/crm') || location.pathname === '/login';
 
   return (
-    <div className="min-h-screen bg-[#ebebe5] dark:bg-[#09090b] text-stone-900 dark:text-stone-100 font-sans selection:bg-[#bef264] selection:text-black transition-colors duration-300 flex flex-col justify-between">
+    <div className="min-h-screen bg-[#ebebe5] dark:bg-[#09090b] text-stone-900 dark:text-stone-100 font-sans selection:bg-[#39FF14] selection:text-black transition-colors duration-300 flex flex-col justify-between">
       <div>
         {!isCrmRoute && <Navbar />}
 

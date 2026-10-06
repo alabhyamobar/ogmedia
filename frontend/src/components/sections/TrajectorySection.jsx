@@ -7,81 +7,95 @@ const STORY_PILLARS = [
   {
     id: 'influencer-marketing',
     title: 'INFLUENCER MARKETING',
-    code: 'PILLAR 01 // CREATOR NETWORK',
-    subtitle: 'HIGH-AFFINITY CREATOR ALLIANCES',
-    description: 'We orchestrate high-affinity creator networks, bespoke talent integrations, and viral ambassador campaigns that build authentic audience trust and explosive conversion velocity.',
+    code: 'STAGE 01 // CREATOR PARTNERSHIPS',
+    subtitle: 'GET YOUR BRAND IN FRONT OF THE RIGHT AUDIENCE',
+    description:
+      'We find and partner with relevant creators who introduce your products to audiences that already trust them—helping you build awareness, credibility, and sales.',
     videoSrc: '/ogmedia/videos/service_influencer.mp4',
     poster: '/ogmedia/assets/service_influencer.webp',
-    sfxBadge: 'VIRAL IMPACT',
-    dialogueTag: 'DIRECTOR // TALENT STRATEGY',
-    dialogueQuote: '"CREATORS DON’T JUST ENDORSE — THEY IGNITE CULTURAL CONVERSATION."',
-    statLabel: 'VIRAL REACH',
-    statValue: '+450% ENGAGEMENT',
-    resolution: '3840 x 2160 // 120 FPS',
+    sfxBadge: 'REAL TRUST',
+    dialogueTag: 'CREATOR STRATEGY',
+    dialogueQuote:
+      '"People trust creators they follow—and that trust can drive real buying decisions."',
+    statLabel: 'RESULTS',
+    statValue: '4X HIGHER ENGAGEMENT',
+    resolution: 'FULL HD // 60 FPS',
     accentColor: '#38bdf8'
   },
+
   {
     id: 'meme-marketing',
     title: 'MEME MARKETING',
-    code: 'PILLAR 02 // VIRAL VELOCITY',
-    subtitle: 'CULTURE-FIRST SOCIAL DOMINANCE',
-    description: 'Rapid-response trend engineering, high-share format iteration, and relatable humor designed to hack social algorithms and spark organic repost cascades across millions of feeds.',
+    code: 'STAGE 02 // VIRAL CONTENT',
+    subtitle: 'TURN YOUR BRAND INTO CONTENT PEOPLE WANT TO SHARE',
+    description:
+      'We create memes and social content built around your brand that feels native to internet culture—helping you earn attention, shares, and organic reach.',
     videoSrc: '/ogmedia/videos/service_meme.mp4',
     poster: '/ogmedia/assets/service_meme.webp',
-    sfxBadge: 'ALGORITHM BREAK',
-    dialogueTag: 'CULTURE LEAD // TREND LAB',
-    dialogueQuote: '"IF A CAMPAIGN CAN BE MEMED, IT DOMINATES THE INTERNET."',
-    statLabel: 'ORGANIC REACH',
-    statValue: '10M+ IMPRESSIONS',
-    resolution: '1920 x 1080 // 60 FPS',
-    accentColor: '#bef264'
+    sfxBadge: 'VIRAL BUZZ',
+    dialogueTag: 'SOCIAL CONTENT LEAD',
+    dialogueQuote:
+      '"The best marketing does not feel like marketing—it feels worth sharing."',
+    statLabel: 'EXPOSURE',
+    statValue: '10M+ NATURAL VIEWS',
+    resolution: 'FULL HD // 60 FPS',
+    accentColor: '#39FF14'
   },
+
   {
     id: 'meta-ads',
     title: 'META ADS',
-    code: 'PILLAR 03 // PERFORMANCE FUNNELS',
-    subtitle: 'PRECISION ROAS ARCHITECTURE',
-    description: 'Data-driven paid media frameworks, AI-assisted creative testing, and high-converting performance funnels across Instagram, Facebook, and TikTok engineered for sustainable customer acquisition.',
+    code: 'STAGE 03 // TARGETED ADS',
+    subtitle: 'TURN INSTAGRAM & FACEBOOK INTO SALES CHANNELS',
+    description:
+      'We create, launch, test, and optimize Meta ad campaigns to reach the right customers and turn your advertising budget into measurable results.',
     videoSrc: '/ogmedia/videos/service_meta_ads.mp4',
     poster: '/ogmedia/assets/service_meta_ads.webp',
-    sfxBadge: 'MAX ROAS',
-    dialogueTag: 'HEAD OF GROWTH // MEDIA BUYING',
-    dialogueQuote: '"HIGH-VELOCITY CREATIVE ITERATION MEETS MATHEMATICAL ROAS PRECISION."',
-    statLabel: 'PERFORMANCE',
-    statValue: '4.8X AVG ROAS',
-    resolution: '4K ULTRA-HD // 60 FPS',
+    sfxBadge: 'PROFITABLE ADS',
+    dialogueTag: 'PAID ADS SPECIALIST',
+    dialogueQuote:
+      '"We test what works, cut what does not, and scale campaigns that deliver."',
+    statLabel: 'AVERAGE RETURN',
+    statValue: '4.8X AD RETURN',
+    resolution: 'FULL HD // 60 FPS',
     accentColor: '#ef4444'
   },
+
   {
     id: 'premium-brands',
     title: 'PREMIUM BRANDS',
-    code: 'PILLAR 04 // LUXURY WORLD CRAFT',
-    subtitle: 'ELEVATED BRAND IMMERSION',
-    description: 'High-end visual identity, bespoke 3D brand worldbuilding, and cinematic art direction that elevates market positioning to tier-one global prestige.',
+    code: 'STAGE 04 // BRAND DESIGN',
+    subtitle: 'BUILD A BRAND THAT LOOKS WORTH BUYING',
+    description:
+      'We design your brand identity, website, packaging, and visual content to create a consistent, premium look that makes your business stand out and feel trustworthy.',
     videoSrc: '/ogmedia/videos/service_premium_brands.mp4',
     poster: '/ogmedia/assets/service_premium_brands.webp',
-    sfxBadge: 'TIER-1 LUXURY',
-    dialogueTag: 'EXECUTIVE CREATIVE DIRECTOR',
-    dialogueQuote: '"BUILDING WORLDS SO IMMERSIVE THAT YOUR BRAND BECOMES UNFORGETTABLE."',
-    statLabel: 'POSITIONING',
-    statValue: 'TIER-1 STATUS',
-    resolution: '3840 x 2160 // MASTER CUT',
+    sfxBadge: 'PREMIUM LOOK',
+    dialogueTag: 'CREATIVE DESIGNER',
+    dialogueQuote:
+      '"Strong brands make a powerful first impression before a customer reads a single word."',
+    statLabel: 'PERCEPTION',
+    statValue: 'TOP-TIER QUALITY',
+    resolution: 'FULL HD // MASTER CUT',
     accentColor: '#c084fc'
   },
+
   {
     id: 'scale-stage',
     title: 'SCALE STAGE',
-    code: 'PILLAR 05 // GLOBAL EXPANSION',
-    subtitle: 'ENTERPRISE DISTRIBUTION ENGINE',
-    description: 'Enterprise-grade omnichannel amplification, global audience expansion, and automated growth flywheels that transform breakout brands into category leaders.',
+    code: 'STAGE 05 // FAST GROWTH',
+    subtitle: 'TURN WHAT WORKS INTO SUSTAINABLE GROWTH',
+    description:
+      'We take your proven marketing strategies and scale them across platforms, audiences, and campaigns—helping your brand reach more customers without losing momentum.',
     videoSrc: '/ogmedia/videos/service_scale_stage.mp4',
     poster: '/ogmedia/assets/service_scale_stage.webp',
-    sfxBadge: 'HYPER SCALE',
-    dialogueTag: 'CHIEF STRATEGY OFFICER',
-    dialogueQuote: '"FROM INITIAL PRODUCT TRACTION TO WORLDWIDE MARKET DOMINATION."',
+    sfxBadge: 'FAST GROWTH',
+    dialogueTag: 'GROWTH STRATEGIST',
+    dialogueQuote:
+      '"Once we know what works, we scale it—not guess our way forward."',
     statLabel: 'EXPANSION',
-    statValue: 'OMNICHANNEL SCALE',
-    resolution: '4K CINEMATIC // HDR',
+    statValue: 'STEADY GROWTH',
+    resolution: 'FULL HD // MASTER CUT',
     accentColor: '#f59e0b'
   }
 ];
@@ -153,20 +167,20 @@ export default function TrajectorySection() {
           <div className="relative inline-block">
             <InkText
               as="h2"
-              text="The Story — Beyond Static Pixels"
+              text="The Story — What We Do ?"
               strokeWidth="1.5px"
               delay={120}
               duration={2000}
               className="font-brush text-4xl sm:text-5xl md:text-6xl lg:text-7xl italic tracking-tight text-black dark:text-white uppercase leading-none drop-shadow-sm"
             />
-            <span className="absolute -left-2 -right-4 bottom-1 sm:bottom-2 h-[45%] bg-[#bef264] -z-10 -rotate-1 skew-x-[-14deg] rounded-sm shadow-sm pointer-events-none" />
+            <span className="absolute -left-2 -right-4 bottom-1 sm:bottom-2 h-[45%] bg-[#39FF14] -z-10 -rotate-1 skew-x-[-14deg] rounded-sm shadow-sm pointer-events-none" />
           </div>
 
           <div className="mt-4 inline-block">
             <div className="font-mono-tech text-xs sm:text-sm font-medium text-stone-800 dark:text-stone-200 uppercase tracking-wider space-y-0.5">
-              <div>Interactive Video Capabilities Pipeline.</div>
-              <div>05 Core Growth Trajectory Stages.</div>
-              <div>Cinematic Storyboards In Motion.</div>
+              <div>See Our Core Marketing Services In Action.</div>
+              <div>Clear Strategies Built To Scale Your Brand.</div>
+              <div>Select Any Service Below To Watch In Action.</div>
             </div>
             <div className="w-20 h-1.5 bg-gradient-to-r from-[#f43f5e] via-[#ec4899] to-transparent rounded-full mt-1.5 transform -rotate-1" />
           </div>
@@ -214,7 +228,7 @@ export default function TrajectorySection() {
                   <button
                     onClick={() => setIsAutoPlaying(!isAutoPlaying)}
                     className={`text-[9px] font-bold font-mono-tech px-2.5 py-1 border border-black rounded shadow-[1px_1px_0px_#000] cursor-pointer transition-colors ${
-                      isAutoPlaying ? 'bg-[#bef264] text-black' : 'bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300'
+                      isAutoPlaying ? 'bg-[#39FF14] text-black' : 'bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300'
                     }`}
                     title={isAutoPlaying ? 'Click to Pause auto-slide' : 'Click to Resume auto-slide'}
                   >
@@ -242,7 +256,8 @@ export default function TrajectorySection() {
 
                 <div className="absolute inset-0 manga-halftone-light opacity-15 pointer-events-none" />
 
-                <div className="absolute top-3 left-3 z-20 group/sfx">
+                {/* Top-left badge: hidden on mobile */}
+                <div className="hidden sm:block absolute top-3 left-3 z-20 group/sfx">
                   <div 
                     className="border-2 border-black px-3 py-1 manga-shadow-sm rounded transform -rotate-3 transition-transform group-hover/sfx:scale-105"
                     style={{ backgroundColor: currentPillar.accentColor }}
@@ -253,7 +268,8 @@ export default function TrajectorySection() {
                   </div>
                 </div>
 
-                <div className="absolute top-3 right-3 z-20">
+                {/* Top-right stat: hidden on mobile */}
+                <div className="hidden sm:block absolute top-3 right-3 z-20">
                   <span className="bg-black/85 text-white border border-stone-700 font-mono-tech text-[9px] sm:text-[10px] font-bold px-2.5 py-1 rounded shadow-md">
                     {currentPillar.statValue}
                   </span>
@@ -265,7 +281,7 @@ export default function TrajectorySection() {
                       e.stopPropagation();
                       handlePrev();
                     }}
-                    className="pointer-events-auto bg-black/80 hover:bg-[#bef264] text-white hover:text-black border-2 border-white hover:border-black w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center font-black text-sm sm:text-base manga-shadow-sm transition-all duration-150 transform hover:-translate-x-0.5 hover:scale-110 active:scale-95 cursor-pointer shadow-lg"
+                    className="pointer-events-auto bg-black/80 hover:bg-[#39FF14] text-white hover:text-black border-2 border-white hover:border-black w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center font-black text-sm sm:text-base manga-shadow-sm transition-all duration-150 transform hover:-translate-x-0.5 hover:scale-110 active:scale-95 cursor-pointer shadow-lg"
                     title="Previous: Reverse Video"
                   >
                     ◀
@@ -276,14 +292,15 @@ export default function TrajectorySection() {
                       e.stopPropagation();
                       handleNext();
                     }}
-                    className="pointer-events-auto bg-black/80 hover:bg-[#bef264] text-white hover:text-black border-2 border-white hover:border-black w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center font-black text-sm sm:text-base manga-shadow-sm transition-all duration-150 transform hover:translate-x-0.5 hover:scale-110 active:scale-95 cursor-pointer shadow-lg"
+                    className="pointer-events-auto bg-black/80 hover:bg-[#39FF14] text-white hover:text-black border-2 border-white hover:border-black w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center font-black text-sm sm:text-base manga-shadow-sm transition-all duration-150 transform hover:translate-x-0.5 hover:scale-110 active:scale-95 cursor-pointer shadow-lg"
                     title="Next: Forward Video"
                   >
                     ▶
                   </button>
                 </div>
 
-                <div className="absolute bottom-3 left-3 right-3 sm:right-auto sm:max-w-md z-20">
+                {/* Bottom dialogue card: hidden on mobile */}
+                <div className="hidden sm:block absolute bottom-3 left-3 right-3 sm:right-auto sm:max-w-md z-20">
                   <div className="bg-black/90 backdrop-blur-xs text-white border-2 border-[#38bdf8] px-3.5 py-2 rounded-lg text-xs sm:text-sm font-mono-tech manga-shadow shadow-[0_0_12px_rgba(56,189,248,0.3)]">
                     <div className="text-[#38bdf8] text-[9px] sm:text-[10px] font-bold">
                       [ {currentPillar.dialogueTag} ]
@@ -296,7 +313,7 @@ export default function TrajectorySection() {
 
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/60 z-30 overflow-hidden">
                   <div
-                    className="h-full bg-[#bef264] transition-all duration-75"
+                    className="h-full bg-[#39FF14] transition-all duration-75"
                     style={{ width: `${timerProgress}%` }}
                   />
                 </div>
@@ -310,7 +327,7 @@ export default function TrajectorySection() {
                       onClick={() => handleSelect(idx)}
                       className={`h-2 rounded-full transition-all cursor-pointer ${
                         idx === currentIndex
-                          ? 'bg-[#bef264] w-6 border border-black'
+                          ? 'bg-[#39FF14] w-6 border border-black'
                           : 'bg-stone-300 dark:bg-stone-700 w-2 hover:bg-stone-400'
                       }`}
                       title={`Jump to ${pillar.title}`}
@@ -329,7 +346,7 @@ export default function TrajectorySection() {
             <div className="border-[2.5px] border-black dark:border-[#38383e] bg-[#faf8f5] dark:bg-[#16161a] p-5 sm:p-6 rounded-3xl manga-shadow">
               
               <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
-                <span className="bg-black text-[#bef264] font-mono-tech text-[10px] font-bold px-2.5 py-0.5 rounded border border-stone-800 shadow-sm">
+                <span className="bg-black text-[#39FF14] font-mono-tech text-[10px] font-bold px-2.5 py-0.5 rounded border border-stone-800 shadow-sm">
                   PANEL 01-C [ {currentPillar.code} ]
                 </span>
                 <span className="text-[10px] font-mono-tech font-bold text-stone-500 dark:text-stone-400">
@@ -356,6 +373,21 @@ export default function TrajectorySection() {
                 {currentPillar.description}
               </p>
 
+              {/* Mobile-only info card: Displays quote & key stat cleanly below video instead of covering the video */}
+              <div className="sm:hidden mb-4 p-3 bg-white dark:bg-[#18181c] border-2 border-black dark:border-stone-700 rounded-xl space-y-1.5 shadow-sm">
+                <div className="flex items-center justify-between text-[10px] font-mono-tech">
+                  <span className="font-bold text-[#0284c7] dark:text-[#38bdf8] uppercase">
+                    [ {currentPillar.dialogueTag} ]
+                  </span>
+                  <span className="font-bold bg-[#39FF14] text-black px-2 py-0.5 rounded border border-black text-[9px]">
+                    {currentPillar.statValue}
+                  </span>
+                </div>
+                <div className="text-xs italic text-stone-800 dark:text-stone-200 font-medium pt-0.5">
+                  {currentPillar.dialogueQuote}
+                </div>
+              </div>
+
               <div className="pt-3 border-t border-stone-200 dark:border-stone-800">
                 <div className="text-[9px] font-mono-tech text-stone-500 uppercase font-bold mb-2">
                   SELECT STAGE TO PREVIEW VIDEO:
@@ -369,7 +401,7 @@ export default function TrajectorySection() {
                         onClick={() => handleSelect(idx)}
                         className={`font-mono-tech text-[10px] sm:text-[11px] font-bold px-3 py-1.5 rounded border transition-all cursor-pointer ${
                           isActive
-                            ? 'bg-[#bef264] text-black border-black manga-shadow-sm font-black scale-105'
+                            ? 'bg-[#39FF14] text-black border-black manga-shadow-sm font-black scale-105'
                             : 'bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 border-black/30 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800'
                         }`}
                       >
@@ -408,7 +440,7 @@ export default function TrajectorySection() {
                 />
 
                 <div className="absolute top-2.5 right-2.5 z-20">
-                  <div className="bg-gradient-to-r from-[#bef264] to-[#10b981] text-black border border-black font-mono-tech text-[9px] font-black px-2.5 py-1 rounded manga-shadow-sm shadow-[0_0_10px_rgba(190,242,100,0.4)]">
+                  <div className="bg-gradient-to-r from-[#39FF14] to-[#10b981] text-black border border-black font-mono-tech text-[9px] font-black px-2.5 py-1 rounded manga-shadow-sm shadow-[0_0_10px_rgba(190,242,100,0.4)]">
                     SOLO LEVELING AESTHETIC // LV.99
                   </div>
                 </div>
@@ -446,13 +478,13 @@ export default function TrajectorySection() {
                 delay={200}
                 duration={2000}
                 className="text-lg sm:text-xl font-bold font-heading text-black dark:text-white mb-2"
-                text='"WE TURN IDEAS INTO UNFORGETTABLE EXPERIENCES."'
+                text='"WE MAKE BRANDS IMPOSSIBLE TO IGNORE."'
               />
               <TypewriterText
                 speed={14}
                 delay={400}
                 className="text-stone-700 dark:text-stone-300 text-xs sm:text-sm leading-relaxed min-h-[3em]"
-                text="From brand worldbuilding to global cultural footprint, our creative frameworks merge comic-paced storytelling with high-converting marketing velocity."
+                text="We blend culture, creativity, and strategy to create campaigns that capture attention and turn it into real growth."
               />
             </div>
           </UnfoldPanel>
@@ -461,13 +493,13 @@ export default function TrajectorySection() {
 
       <div className="mt-8 border-[2.5px] border-black dark:border-[#38383e] bg-[#faf8f5] dark:bg-[#16161a] rounded-2xl px-4 py-3 flex flex-wrap items-center justify-between gap-3 font-mono-tech text-[10px] sm:text-xs manga-shadow">
         <div className="text-stone-600 dark:text-stone-400">
-          L/R: 05 GROWTH STAGES // DYNAMIC VIDEO PIPELINE
+          5 PROVEN SERVICES TO SCALE YOUR BRAND
         </div>
         <div className="text-stone-900 dark:text-stone-200 font-bold">
-          STORYBOARDING ENGINE // CELL NO. 23 // TOTAL CELLS: 104 LOADED
+          TAILORED STRATEGY FOR EVERY STAGE OF GROWTH
         </div>
-        <div className="bg-[#bef264] text-black font-bold px-3 py-1 rounded border border-black uppercase text-[10px] shadow-[1px_1px_0px_#000]">
-          READY TO LINK
+        <div className="bg-[#39FF14] text-black font-bold px-3 py-1 rounded border border-black uppercase text-[10px] shadow-[1px_1px_0px_#000]">
+          GROW WITH US
         </div>
       </div>
     </section>

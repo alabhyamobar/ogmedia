@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { NavLink, Outlet, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import OgLogo from '../components/ui/OgLogo';
 import {
   LayoutDashboard,
   Users,
@@ -39,9 +40,9 @@ export default function CrmLayout() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#ebebe5] dark:bg-[#09090b] text-stone-900 dark:text-stone-100 font-sans flex flex-col transition-colors duration-300">
+    <div className="min-h-screen bg-[#F5F5F5] dark:bg-[#0A0A0A] text-stone-900 dark:text-[#F5F5F5] font-sans flex flex-col transition-colors duration-300">
       
-      <header className="sticky top-0 z-40 bg-[#faf8f5] dark:bg-[#121216] border-b-[2.5px] border-black dark:border-stone-700 px-4 sm:px-6 py-3 shadow-[0_4px_0_rgba(0,0,0,0.06)]">
+      <header className="sticky top-0 z-40 bg-[#FFFFFF] dark:bg-[#1A1A1A] border-b-[2.5px] border-black dark:border-[#333333] px-4 sm:px-6 py-3 shadow-[0_4px_0_rgba(0,0,0,0.06)]">
         <div className="max-w-[1720px] mx-auto flex items-center justify-between gap-4">
           
           <div className="flex items-center gap-3">
@@ -52,11 +53,12 @@ export default function CrmLayout() {
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
 
-            <Link to="/crm/dashboard" className="flex items-center gap-2 group">
-              <span className="font-heading font-black text-xl sm:text-2xl text-black dark:text-white tracking-tight uppercase group-hover:text-[#bef264] transition-colors">
+            <Link to="/crm/dashboard" className="flex items-center gap-2.5 group">
+              <OgLogo size="sm" withText={false} />
+              <span className="font-heading font-black text-xl sm:text-2xl text-black dark:text-white tracking-tight uppercase group-hover:text-[#39FF14] transition-colors">
                 OG MEDIA
               </span>
-              <span className="bg-black text-[#bef264] border border-black font-mono-tech text-[10px] sm:text-xs font-black px-2 py-0.5 rounded shadow-[2px_2px_0px_#bef264]">
+              <span className="bg-black text-[#39FF14] border border-black font-mono-tech text-[10px] sm:text-xs font-black px-2 py-0.5 rounded shadow-[2px_2px_0px_#39FF14]">
                 DISPATCH HQ
               </span>
             </Link>
@@ -70,7 +72,7 @@ export default function CrmLayout() {
           <div className="flex items-center gap-3">
             <Link
               to="/"
-              className="hidden sm:flex items-center gap-1.5 font-mono-tech text-[11px] font-bold px-3 py-1.5 bg-white dark:bg-[#1a1a20] hover:bg-[#bef264] hover:text-black border-2 border-black dark:border-stone-700 rounded-lg shadow-[2px_2px_0px_#000] transition-all"
+              className="hidden sm:flex items-center gap-1.5 font-mono-tech text-[11px] font-bold px-3 py-1.5 bg-white dark:bg-[#1a1a20] hover:bg-[#39FF14] hover:text-black border-2 border-black dark:border-stone-700 rounded-lg shadow-[2px_2px_0px_#000] transition-all"
             >
               <span>PUBLIC TRANSMISSION</span>
               <ExternalLink className="w-3.5 h-3.5" />
@@ -81,11 +83,11 @@ export default function CrmLayout() {
               className="p-2 border-2 border-black dark:border-stone-700 rounded-lg bg-white dark:bg-[#1a1a20] hover:bg-stone-100 dark:hover:bg-stone-800 shadow-[2px_2px_0px_#000] cursor-pointer transition-transform active:translate-y-0.5"
               title="Toggle theme"
             >
-              {isDark ? <Sun className="w-4 h-4 text-[#bef264]" /> : <Moon className="w-4 h-4 text-black" />}
+              {isDark ? <Sun className="w-4 h-4 text-[#39FF14]" /> : <Moon className="w-4 h-4 text-black" />}
             </button>
 
             <div className="flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-xl shadow-[3px_3px_0px_#000]">
-              <div className="w-6 h-6 rounded bg-[#bef264] border border-black text-black font-mono-tech font-black text-xs flex items-center justify-center">
+              <div className="w-6 h-6 rounded bg-[#39FF14] border border-black text-black font-mono-tech font-black text-xs flex items-center justify-center">
                 {user?.name?.charAt(0) || 'U'}
               </div>
               <div className="text-left font-mono-tech leading-tight hidden sm:block">
@@ -124,7 +126,7 @@ export default function CrmLayout() {
                 NODE // {user?.username}
               </div>
               <div className="text-[10px] font-mono-tech text-stone-600 dark:text-stone-400">
-                ROLE: <span className="bg-[#bef264] text-black px-1.5 py-0.2 rounded font-black">{user?.role}</span>
+                ROLE: <span className="bg-[#39FF14] text-black px-1.5 py-0.2 rounded font-black">{user?.role}</span>
               </div>
             </div>
 
@@ -138,7 +140,7 @@ export default function CrmLayout() {
                     className={({ isActive }) =>
                       `flex items-center gap-3 px-3.5 py-2.5 rounded-xl border-2 transition-all cursor-pointer ${
                         isActive
-                          ? 'bg-black text-[#bef264] border-black dark:border-stone-600 shadow-[3px_3px_0px_#bef264] -translate-y-0.5'
+                          ? 'bg-black text-[#39FF14] border-black dark:border-stone-600 shadow-[3px_3px_0px_#39FF14] -translate-y-0.5'
                           : 'bg-white dark:bg-[#1a1a20] text-stone-700 dark:text-stone-300 border-black/30 dark:border-stone-800 hover:border-black shadow-[2px_2px_0px_#000]'
                       }`
                     }
@@ -155,7 +157,7 @@ export default function CrmLayout() {
           <div className="pt-4 border-t-2 border-black/20 dark:border-stone-800 space-y-2 font-mono-tech text-[10px]">
             <div className="font-bold text-stone-500 uppercase tracking-wider flex items-center justify-between">
               <span>AUTHORIZED SECTORS</span>
-              <Radio className="w-3 h-3 text-[#bef264] animate-pulse" />
+              <Radio className="w-3 h-3 text-[#39FF14] animate-pulse" />
             </div>
 
             {isEmployee ? (
@@ -164,7 +166,7 @@ export default function CrmLayout() {
                   user.expertise.map((srv) => (
                     <span
                       key={srv}
-                      className="bg-black text-[#bef264] px-2 py-0.5 rounded border border-black font-extrabold text-[9px]"
+                      className="bg-black text-[#39FF14] px-2 py-0.5 rounded border border-black font-extrabold text-[9px]"
                     >
                       {srv.replace('_', ' ')}
                     </span>
@@ -174,7 +176,7 @@ export default function CrmLayout() {
                 )}
               </div>
             ) : isDeveloper ? (
-              <div className="bg-[#bef264]/20 border border-[#bef264] p-2 rounded text-black dark:text-stone-200 font-bold space-y-0.5">
+              <div className="bg-[#39FF14]/20 border border-[#39FF14] p-2 rounded text-black dark:text-stone-200 font-bold space-y-0.5">
                 <div className="text-[#a855f7] dark:text-[#c084fc] font-black flex items-center gap-1.5">
                   <span>⚡ DEVELOPER MASTER ROOT</span>
                 </div>
@@ -183,7 +185,7 @@ export default function CrmLayout() {
                 </div>
               </div>
             ) : (
-              <div className="bg-[#bef264]/20 border border-[#bef264] p-2 rounded text-black dark:text-stone-200 font-bold space-y-0.5">
+              <div className="bg-[#39FF14]/20 border border-[#39FF14] p-2 rounded text-black dark:text-stone-200 font-bold space-y-0.5">
                 <div className="font-black">★ AGENCY EXECUTIVE</div>
                 <div className="text-[9px] text-stone-500 font-mono-tech">
                   GLOBAL DISPATCH CLEARANCE
@@ -221,7 +223,7 @@ export default function CrmLayout() {
                         className={({ isActive }) =>
                           `flex items-center gap-3 px-3 py-2.5 rounded-xl border-2 ${
                             isActive
-                              ? 'bg-black text-[#bef264] border-black shadow-[3px_3px_0px_#bef264]'
+                              ? 'bg-black text-[#39FF14] border-black shadow-[3px_3px_0px_#39FF14]'
                               : 'bg-white dark:bg-[#1a1a20] border-black/30'
                           }`
                         }

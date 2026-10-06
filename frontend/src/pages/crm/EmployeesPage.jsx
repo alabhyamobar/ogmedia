@@ -276,7 +276,7 @@ export default function EmployeesPage() {
           <div className="font-mono-tech text-xs font-bold text-stone-500 flex items-center gap-1.5">
             <span>/// 04 PERSONNEL PROTOCOL</span>
             {canManage && (
-              <span className="bg-[#bef264] text-black font-black text-[9px] px-1.5 py-0.2 rounded border border-black">
+              <span className="bg-[#39FF14] text-black font-black text-[9px] px-1.5 py-0.2 rounded border border-black">
                 {isDeveloper ? '⚡ DEVELOPER ROOT CLEARANCE' : 'ADMIN AUTHORIZED'}
               </span>
             )}
@@ -292,7 +292,7 @@ export default function EmployeesPage() {
         {canManage ? (
           <button
             onClick={() => setCreateModalOpen(true)}
-            className="bg-[#bef264] hover:bg-[#a3e635] text-black font-mono-tech font-black text-xs px-4 py-2.5 border-2 border-black rounded-xl shadow-[3px_3px_0px_#000] hover:-translate-y-0.5 transition-all flex items-center gap-2 cursor-pointer uppercase"
+            className="bg-[#39FF14] hover:bg-[#7CFF5E] text-black font-mono-tech font-black text-xs px-4 py-2.5 border-2 border-black rounded-xl shadow-[3px_3px_0px_#000] hover:-translate-y-0.5 transition-all flex items-center gap-2 cursor-pointer uppercase"
           >
             <UserPlus className="w-4 h-4" />
             <span>RECRUIT AGENT</span>
@@ -313,7 +313,7 @@ export default function EmployeesPage() {
       )}
 
       {actionSuccess && (
-        <div className="p-3.5 bg-[#bef264]/25 border-2 border-[#16a34a] rounded-xl flex items-start gap-2.5 text-black dark:text-white font-mono-tech text-xs animate-fade-in">
+        <div className="p-3.5 bg-[#39FF14]/25 border-2 border-[#16a34a] rounded-xl flex items-start gap-2.5 text-black dark:text-white font-mono-tech text-xs animate-fade-in">
           <Check className="w-4 h-4 shrink-0 mt-0.5 text-[#16a34a]" />
           <div className="font-bold">{actionSuccess}</div>
         </div>
@@ -333,7 +333,7 @@ export default function EmployeesPage() {
                 onClick={() => setRoleFilter(tab.id)}
                 className={`px-3 py-1.5 border-2 border-black rounded-lg font-bold text-[11px] transition-all cursor-pointer ${
                   active
-                    ? 'bg-black text-[#bef264] shadow-[2px_2px_0px_#bef264]'
+                    ? 'bg-black text-[#39FF14] shadow-[2px_2px_0px_#39FF14]'
                     : 'bg-white dark:bg-[#1a1a20] text-stone-700 dark:text-stone-300 hover:bg-stone-100 shadow-[2px_2px_0px_#000]'
                 }`}
               >
@@ -350,7 +350,7 @@ export default function EmployeesPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Filter by name, username, email..."
-            className="w-full pl-9 pr-3 py-1.5 bg-white dark:bg-[#16161a] border-2 border-black dark:border-stone-700 rounded-lg text-xs font-mono-tech outline-none focus:ring-2 focus:ring-[#bef264]"
+            className="w-full pl-9 pr-3 py-1.5 bg-white dark:bg-[#16161a] border-2 border-black dark:border-stone-700 rounded-lg text-xs font-mono-tech outline-none focus:ring-2 focus:ring-[#39FF14]"
           />
         </div>
       </div>
@@ -402,7 +402,7 @@ export default function EmployeesPage() {
 
                       <td className="py-3.5 px-4">
                         {isAdminRole ? (
-                          <span className="bg-[#bef264] text-black font-black text-[10px] px-2.5 py-0.5 rounded border border-black shadow-[1.5px_1.5px_0px_#000] inline-flex items-center gap-1">
+                          <span className="bg-[#39FF14] text-black font-black text-[10px] px-2.5 py-0.5 rounded border border-black shadow-[1.5px_1.5px_0px_#000] inline-flex items-center gap-1">
                             ⚡ ADMIN
                           </span>
                         ) : (
@@ -414,7 +414,7 @@ export default function EmployeesPage() {
 
                       <td className="py-3.5 px-4">
                         {isAdminRole ? (
-                          <span className="bg-black text-[#bef264] font-extrabold text-[10px] px-2 py-0.5 rounded border border-black">
+                          <span className="bg-black text-[#39FF14] font-extrabold text-[10px] px-2 py-0.5 rounded border border-black">
                             ★ GLOBAL ACCESS
                           </span>
                         ) : (
@@ -456,7 +456,7 @@ export default function EmployeesPage() {
                           <>
                             <button
                               onClick={() => openEditModal(emp)}
-                              className="p-1.5 bg-white dark:bg-[#1a1a20] hover:bg-[#bef264] hover:text-black border-2 border-black dark:border-stone-700 rounded-lg shadow-[2px_2px_0px_#000] cursor-pointer transition-colors"
+                              className="p-1.5 bg-white dark:bg-[#1a1a20] hover:bg-[#39FF14] hover:text-black border-2 border-black dark:border-stone-700 rounded-lg shadow-[2px_2px_0px_#000] cursor-pointer transition-colors"
                               title="Edit Role & Clearances"
                             >
                               <Shield className="w-3.5 h-3.5" />
@@ -502,7 +502,7 @@ export default function EmployeesPage() {
           <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-6 max-w-xl w-full shadow-[8px_8px_0px_#000] space-y-4 font-mono-tech animate-fade-in max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b-2 border-black dark:border-stone-700 pb-3">
               <span className="font-black text-xs uppercase flex items-center gap-2">
-                <UserPlus className="w-4 h-4 text-[#bef264]" />
+                <UserPlus className="w-4 h-4 text-[#39FF14]" />
                 <span>ONBOARD PERSONNEL & GENERATE CREDENTIALS</span>
               </span>
               <button
@@ -536,7 +536,7 @@ export default function EmployeesPage() {
                     }));
                   }}
                   placeholder="e.g. Maya Patel"
-                  className="w-full px-3 py-2 bg-white dark:bg-[#1e1e24] border-2 border-black dark:border-stone-700 rounded-xl outline-none focus:ring-2 focus:ring-[#bef264]"
+                  className="w-full px-3 py-2 bg-white dark:bg-[#1e1e24] border-2 border-black dark:border-stone-700 rounded-xl outline-none focus:ring-2 focus:ring-[#39FF14]"
                 />
               </div>
 
@@ -549,9 +549,9 @@ export default function EmployeesPage() {
                     type="button"
                     onClick={handleGenerateUsername}
                     disabled={isGeneratingUsername}
-                    className="text-[10px] font-bold text-black dark:text-[#bef264] hover:underline flex items-center gap-1 cursor-pointer"
+                    className="text-[10px] font-bold text-black dark:text-[#39FF14] hover:underline flex items-center gap-1 cursor-pointer"
                   >
-                    <Wand2 className="w-3 h-3 text-[#bef264]" />
+                    <Wand2 className="w-3 h-3 text-[#39FF14]" />
                     <span>{isGeneratingUsername ? 'GENERATING...' : 'GENERATE USERNAME'}</span>
                   </button>
                 </div>
@@ -561,7 +561,7 @@ export default function EmployeesPage() {
                     value={newEmployee.username}
                     onChange={(e) => setNewEmployee({ ...newEmployee, username: e.target.value.toLowerCase() })}
                     placeholder="Leave blank to auto-generate or click Generate"
-                    className="w-full px-3 py-2 bg-white dark:bg-[#1e1e24] border-2 border-black dark:border-stone-700 rounded-xl outline-none focus:ring-2 focus:ring-[#bef264]"
+                    className="w-full px-3 py-2 bg-white dark:bg-[#1e1e24] border-2 border-black dark:border-stone-700 rounded-xl outline-none focus:ring-2 focus:ring-[#39FF14]"
                   />
                 </div>
                 <div className="mt-1 text-[9px] text-stone-500">
@@ -579,7 +579,7 @@ export default function EmployeesPage() {
                   value={newEmployee.email}
                   onChange={(e) => setNewEmployee({ ...newEmployee, email: e.target.value })}
                   placeholder="maya@ogmedia.agency"
-                  className="w-full px-3 py-2 bg-white dark:bg-[#1e1e24] border-2 border-black dark:border-stone-700 rounded-xl outline-none focus:ring-2 focus:ring-[#bef264]"
+                  className="w-full px-3 py-2 bg-white dark:bg-[#1e1e24] border-2 border-black dark:border-stone-700 rounded-xl outline-none focus:ring-2 focus:ring-[#39FF14]"
                 />
               </div>
 
@@ -609,11 +609,11 @@ export default function EmployeesPage() {
                     onClick={() => setNewEmployee({ ...newEmployee, role: 'ADMIN' })}
                     className={`p-3 border-2 rounded-xl cursor-pointer transition-all ${
                       newEmployee.role === 'ADMIN'
-                        ? 'border-black bg-[#bef264]/25 dark:bg-[#bef264]/20 shadow-[3px_3px_0px_#bef264]'
+                        ? 'border-black bg-[#39FF14]/25 dark:bg-[#39FF14]/20 shadow-[3px_3px_0px_#39FF14]'
                         : 'border-black/30 dark:border-stone-700 bg-white dark:bg-[#1e1e24] opacity-80'
                     }`}
                   >
-                    <div className="font-black text-xs text-black dark:text-[#bef264] flex items-center justify-between">
+                    <div className="font-black text-xs text-black dark:text-[#39FF14] flex items-center justify-between">
                       <span>⚡ ADMIN</span>
                       {newEmployee.role === 'ADMIN' && <Check className="w-3.5 h-3.5 text-[#16a34a]" />}
                     </div>
@@ -644,7 +644,7 @@ export default function EmployeesPage() {
                           onClick={() => toggleCreateExpertise(srv)}
                           className={`p-2 border rounded-lg text-[10px] font-bold text-left transition-all cursor-pointer ${
                             isSelected
-                              ? 'bg-black text-[#bef264] border-black shadow-[2px_2px_0px_#bef264]'
+                              ? 'bg-black text-[#39FF14] border-black shadow-[2px_2px_0px_#39FF14]'
                               : 'bg-white dark:bg-[#1e1e24] text-stone-700 dark:text-stone-300 border-black/30'
                           }`}
                         >
@@ -656,8 +656,8 @@ export default function EmployeesPage() {
                   </div>
                 </div>
               ) : (
-                <div className="p-2.5 bg-[#bef264]/15 border border-black dark:border-[#bef264]/30 rounded-xl text-[10px] text-stone-800 dark:text-stone-200 font-mono-tech flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-[#bef264] shrink-0" />
+                <div className="p-2.5 bg-[#39FF14]/15 border border-black dark:border-[#39FF14]/30 rounded-xl text-[10px] text-stone-800 dark:text-stone-200 font-mono-tech flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-[#39FF14] shrink-0" />
                   <span>Administrators automatically possess global clearance across all sectors.</span>
                 </div>
               )}
@@ -670,9 +670,9 @@ export default function EmployeesPage() {
                   <button
                     type="button"
                     onClick={handleGeneratePassword}
-                    className="text-[10px] font-bold text-black dark:text-[#bef264] hover:underline flex items-center gap-1 cursor-pointer"
+                    className="text-[10px] font-bold text-black dark:text-[#39FF14] hover:underline flex items-center gap-1 cursor-pointer"
                   >
-                    <RefreshCw className="w-3 h-3 text-[#bef264]" />
+                    <RefreshCw className="w-3 h-3 text-[#39FF14]" />
                     <span>GENERATE SECURE KEY</span>
                   </button>
                 </div>
@@ -682,7 +682,7 @@ export default function EmployeesPage() {
                     value={newEmployee.temporaryPassword}
                     onChange={(e) => setNewEmployee({ ...newEmployee, temporaryPassword: e.target.value })}
                     placeholder="Leave blank to auto-generate random 12-char key"
-                    className="w-full px-3 py-2 pr-10 bg-white dark:bg-[#1e1e24] border-2 border-black dark:border-stone-700 rounded-xl outline-none focus:ring-2 focus:ring-[#bef264] font-mono-tech"
+                    className="w-full px-3 py-2 pr-10 bg-white dark:bg-[#1e1e24] border-2 border-black dark:border-stone-700 rounded-xl outline-none focus:ring-2 focus:ring-[#39FF14] font-mono-tech"
                   />
                   {newEmployee.temporaryPassword && (
                     <button
@@ -707,7 +707,7 @@ export default function EmployeesPage() {
                 <button
                   type="submit"
                   disabled={createMutation.isPending}
-                  className="px-4 py-2 bg-[#bef264] hover:bg-[#a3e635] text-black font-black border-2 border-black rounded-lg shadow-[2px_2px_0px_#000] text-xs cursor-pointer flex items-center gap-1.5"
+                  className="px-4 py-2 bg-[#39FF14] hover:bg-[#7CFF5E] text-black font-black border-2 border-black rounded-lg shadow-[2px_2px_0px_#000] text-xs cursor-pointer flex items-center gap-1.5"
                 >
                   {createMutation.isPending ? 'DEPLOYING...' : 'ENROLL AGENT & ISSUE CREDENTIALS →'}
                 </button>
@@ -722,7 +722,7 @@ export default function EmployeesPage() {
           <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-6 max-w-lg w-full shadow-[8px_8px_0px_#000] space-y-4 font-mono-tech animate-fade-in max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b-2 border-black dark:border-stone-700 pb-3">
               <span className="font-black text-xs uppercase flex items-center gap-2">
-                <Shield className="w-4 h-4 text-[#bef264]" />
+                <Shield className="w-4 h-4 text-[#39FF14]" />
                 <span>EDIT CLEARANCE & ASSIGN ROLE: @{editModal.employee.username}</span>
               </span>
               <button
@@ -784,7 +784,7 @@ export default function EmployeesPage() {
                         onClick={() => setEditForm({ ...editForm, role: r })}
                         className={`p-2.5 border-2 rounded-xl text-[10px] font-black text-center transition-all cursor-pointer ${
                           isSelected
-                            ? 'bg-[#bef264] text-black border-black shadow-[2px_2px_0px_#000]'
+                            ? 'bg-[#39FF14] text-black border-black shadow-[2px_2px_0px_#000]'
                             : 'bg-white dark:bg-[#1e1e24] text-stone-700 dark:text-stone-300 border-black/30'
                         }`}
                       >
@@ -815,7 +815,7 @@ export default function EmployeesPage() {
                           onClick={() => toggleEditExpertise(srv)}
                           className={`p-2 border rounded-lg text-[10px] font-bold text-left transition-all cursor-pointer ${
                             isSelected
-                              ? 'bg-black text-[#bef264] border-black shadow-[2px_2px_0px_#bef264]'
+                              ? 'bg-black text-[#39FF14] border-black shadow-[2px_2px_0px_#39FF14]'
                               : 'bg-white dark:bg-[#1e1e24] text-stone-700 dark:text-stone-300 border-black/30'
                           }`}
                         >
@@ -827,8 +827,8 @@ export default function EmployeesPage() {
                   </div>
                 </div>
               ) : (
-                <div className="p-2.5 bg-[#bef264]/15 border border-black dark:border-[#bef264]/30 rounded-xl text-[10px] text-stone-800 dark:text-stone-200 font-mono-tech flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-[#bef264] shrink-0" />
+                <div className="p-2.5 bg-[#39FF14]/15 border border-black dark:border-[#39FF14]/30 rounded-xl text-[10px] text-stone-800 dark:text-stone-200 font-mono-tech flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-[#39FF14] shrink-0" />
                   <span>Global sector authorization is automatically active for Administrators.</span>
                 </div>
               )}
@@ -874,7 +874,7 @@ export default function EmployeesPage() {
                 <button
                   type="submit"
                   disabled={updateMutation.isPending}
-                  className="px-4 py-2 bg-[#bef264] hover:bg-[#a3e635] text-black font-black border-2 border-black rounded-lg shadow-[2px_2px_0px_#000] text-xs cursor-pointer"
+                  className="px-4 py-2 bg-[#39FF14] hover:bg-[#7CFF5E] text-black font-black border-2 border-black rounded-lg shadow-[2px_2px_0px_#000] text-xs cursor-pointer"
                 >
                   {updateMutation.isPending ? 'SAVING...' : 'COMMIT ROLE & CLEARANCE →'}
                 </button>
@@ -886,8 +886,8 @@ export default function EmployeesPage() {
 
       {credentialsModal.open && (
         <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[3px] border-black dark:border-stone-700 rounded-2xl p-6 max-w-md w-full shadow-[10px_10px_0px_#bef264] space-y-4 font-mono-tech animate-fade-in text-center">
-            <div className="inline-block bg-[#bef264] text-black text-[11px] font-black px-3 py-1 border border-black rounded shadow-[2px_2px_0px_#000]">
+          <div className="bg-[#faf8f5] dark:bg-[#16161a] border-[3px] border-black dark:border-stone-700 rounded-2xl p-6 max-w-md w-full shadow-[10px_10px_0px_#39FF14] space-y-4 font-mono-tech animate-fade-in text-center">
+            <div className="inline-block bg-[#39FF14] text-black text-[11px] font-black px-3 py-1 border border-black rounded shadow-[2px_2px_0px_#000]">
               {credentialsModal.title}
             </div>
 
@@ -906,7 +906,7 @@ export default function EmployeesPage() {
             <div className="bg-black text-stone-100 border-2 border-black rounded-xl p-4 text-left space-y-3 shadow-inner">
               <div className="flex items-center justify-between border-b border-stone-800 pb-2">
                 <span className="text-[10px] text-stone-400 font-bold uppercase">Assigned Clearance:</span>
-                <span className="bg-[#bef264] text-black font-black text-[10px] px-2 py-0.5 rounded">
+                <span className="bg-[#39FF14] text-black font-black text-[10px] px-2 py-0.5 rounded">
                   {credentialsModal.employee?.role === 'SUPER_ADMIN' ? 'ADMIN' : credentialsModal.employee?.role || 'EMPLOYEE'}
                 </span>
               </div>
@@ -923,7 +923,7 @@ export default function EmployeesPage() {
                   onClick={() => {
                     navigator.clipboard.writeText(credentialsModal.employee?.username || '');
                   }}
-                  className="p-1.5 text-stone-400 hover:text-[#bef264] cursor-pointer"
+                  className="p-1.5 text-stone-400 hover:text-[#39FF14] cursor-pointer"
                   title="Copy username"
                 >
                   <Copy className="w-4 h-4" />
@@ -933,7 +933,7 @@ export default function EmployeesPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-[9px] text-stone-400 uppercase font-bold">Temporary Key</div>
-                  <div className="font-mono-tech font-black text-[#bef264] text-base tracking-wider">
+                  <div className="font-mono-tech font-black text-[#39FF14] text-base tracking-wider">
                     {showPasswordInModal ? credentialsModal.temporaryPassword : '••••••••••••'}
                   </div>
                 </div>
@@ -949,10 +949,10 @@ export default function EmployeesPage() {
                   <button
                     type="button"
                     onClick={handleCopySingleKey}
-                    className="p-1.5 text-stone-400 hover:text-[#bef264] cursor-pointer"
+                    className="p-1.5 text-stone-400 hover:text-[#39FF14] cursor-pointer"
                     title="Copy key"
                   >
-                    {copiedKey ? <Check className="w-4 h-4 text-[#bef264]" /> : <Copy className="w-4 h-4" />}
+                    {copiedKey ? <Check className="w-4 h-4 text-[#39FF14]" /> : <Copy className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
@@ -971,7 +971,7 @@ export default function EmployeesPage() {
                   </>
                 ) : (
                   <>
-                    <Copy className="w-4 h-4 text-[#bef264]" />
+                    <Copy className="w-4 h-4 text-[#39FF14]" />
                     <span>COPY FORMATTED HANDOVER DOSSIER</span>
                   </>
                 )}
@@ -980,7 +980,7 @@ export default function EmployeesPage() {
               <button
                 type="button"
                 onClick={() => setCredentialsModal({ open: false, employee: null, temporaryPassword: '', title: '' })}
-                className="w-full bg-[#bef264] hover:bg-[#a3e635] text-black font-black py-2.5 px-4 border-2 border-black rounded-xl shadow-[3px_3px_0px_#000] text-xs cursor-pointer"
+                className="w-full bg-[#39FF14] hover:bg-[#7CFF5E] text-black font-black py-2.5 px-4 border-2 border-black rounded-xl shadow-[3px_3px_0px_#000] text-xs cursor-pointer"
               >
                 DISMISS CREDENTIAL DIALOG
               </button>

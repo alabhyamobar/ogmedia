@@ -50,7 +50,7 @@ export default function ServiceDetailPage() {
         <div className="flex items-center gap-3 flex-wrap">
           <Link
             to="/#arsenal"
-            className="bg-black hover:bg-[#bef264] text-white hover:text-black font-mono-tech font-bold text-xs px-3 py-1.5 border-2 border-black manga-shadow-sm transition-all hover:-translate-x-0.5 cursor-pointer flex items-center gap-1.5"
+            className="bg-black hover:bg-[#39FF14] text-white hover:text-black font-mono-tech font-bold text-xs px-3 py-1.5 border-2 border-black manga-shadow-sm transition-all hover:-translate-x-0.5 cursor-pointer flex items-center gap-1.5"
           >
             <span>←</span>
             <span>BACK TO MAIN ARCHIVE</span>
@@ -75,7 +75,7 @@ export default function ServiceDetailPage() {
       </div>
 
       <div className="space-y-2">
-        <div className="inline-block bg-black text-[#bef264] font-mono-tech text-xs font-bold px-2.5 py-0.5 border border-stone-800 uppercase tracking-widest mb-1">
+        <div className="inline-block bg-black text-[#39FF14] font-mono-tech text-xs font-bold px-2.5 py-0.5 border border-stone-800 uppercase tracking-widest mb-1">
           CAPABILITY SPECIFICATION // 0{currentIndex + 1}
         </div>
         <h1 className="text-3xl sm:text-5xl md:text-6xl font-black font-heading tracking-tight text-black dark:text-white uppercase leading-none">
@@ -127,7 +127,8 @@ export default function ServiceDetailPage() {
 
               <div className="absolute inset-0 manga-halftone-light opacity-15 pointer-events-none" />
 
-              <div className="absolute top-3 left-3 z-20">
+              {/* Top-left badge: hidden on mobile */}
+              <div className="hidden sm:block absolute top-3 left-3 z-20">
                 <div 
                   className="border-2 border-black px-3 py-0.5 manga-shadow-sm transform -rotate-3 text-black font-black font-heading text-lg sm:text-xl tracking-wider shadow-md"
                   style={{ backgroundColor: service.color }}
@@ -136,13 +137,15 @@ export default function ServiceDetailPage() {
                 </div>
               </div>
 
-              <div className="absolute top-3 right-3 z-20">
+              {/* Top-right stat: hidden on mobile */}
+              <div className="hidden sm:block absolute top-3 right-3 z-20">
                 <span className="bg-black/90 text-white font-mono-tech text-[10px] font-bold px-2.5 py-1 border border-stone-700 shadow-lg">
                   {service.resolution}
                 </span>
               </div>
 
-              <div className="absolute bottom-3 left-3 right-3 z-20">
+              {/* Bottom quote: hidden on mobile */}
+              <div className="hidden sm:block absolute bottom-3 left-3 right-3 z-20">
                 <div className="bg-black/90 backdrop-blur-xs text-white border-2 border-stone-700 p-3 manga-shadow text-xs font-mono-tech">
                   <div className="text-[#38bdf8] text-[10px] font-bold mb-0.5">
                     [ {service.dialogueAuthor} ]
@@ -166,7 +169,7 @@ export default function ServiceDetailPage() {
             
             <div className="flex items-center justify-between font-mono-tech text-xs pb-2 border-b border-black dark:border-stone-800">
               <span className="font-bold text-[#ef4444]">BRIEF & PROTOCOL OVERVIEW</span>
-              <span className="bg-[#bef264] text-black font-bold px-2 py-0.5 border border-black text-[10px]">
+              <span className="bg-[#39FF14] text-black font-bold px-2 py-0.5 border border-black text-[10px]">
                 {service.slot}
               </span>
             </div>
@@ -205,7 +208,7 @@ export default function ServiceDetailPage() {
             <div className="pt-2">
               <Link
                 to="/#contact"
-                className="w-full bg-[#bef264] hover:bg-lime-400 text-black border-2 border-black py-3 font-mono-tech font-black text-xs sm:text-sm uppercase tracking-wider transition-all duration-150 cursor-pointer flex items-center justify-center gap-2 manga-shadow hover:translate-x-0.5 hover:-translate-y-0.5"
+                className="w-full bg-[#39FF14] hover:bg-lime-400 text-black border-2 border-black py-3 font-mono-tech font-black text-xs sm:text-sm uppercase tracking-wider transition-all duration-150 cursor-pointer flex items-center justify-center gap-2 manga-shadow hover:translate-x-0.5 hover:-translate-y-0.5"
               >
                 <span>DEPLOY {service.title} NOW</span>
                 <span>→</span>
@@ -293,7 +296,7 @@ export default function ServiceDetailPage() {
                   className="flex items-center justify-between p-2.5 bg-stone-50 dark:bg-stone-800/50 border border-stone-200 dark:border-stone-700 font-mono-tech text-xs"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="bg-black text-[#bef264] px-1.5 py-0.5 font-bold text-[10px]">
+                    <span className="bg-black text-[#39FF14] px-1.5 py-0.5 font-bold text-[10px]">
                       {m.phase}
                     </span>
                     <span className="font-bold text-black dark:text-white">{m.name}</span>
@@ -329,7 +332,7 @@ export default function ServiceDetailPage() {
                 {service.techStack.map((tech, i) => (
                   <span
                     key={i}
-                    className="bg-black text-[#bef264] font-mono-tech text-[10px] font-bold px-2 py-0.5 border border-stone-700"
+                    className="bg-black text-[#39FF14] font-mono-tech text-[10px] font-bold px-2 py-0.5 border border-stone-700"
                   >
                     {tech}
                   </span>
@@ -361,7 +364,7 @@ export default function ServiceDetailPage() {
                 onClick={() => navigate(`/service/${s.slug}`)}
                 className={`w-3 h-3 rounded-full transition-all cursor-pointer ${
                   s.id === service.id
-                    ? 'bg-[#bef264] w-7 border border-black'
+                    ? 'bg-[#39FF14] w-7 border border-black'
                     : 'bg-stone-300 dark:bg-stone-700 hover:bg-stone-400'
                 }`}
                 title={s.title}

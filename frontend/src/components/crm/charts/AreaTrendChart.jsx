@@ -120,7 +120,7 @@ export default function AreaTrendChart({
             <button
               onClick={() => setActiveSeries('ALL')}
               className={`px-2 py-1 rounded transition-colors cursor-pointer ${
-                activeSeries === 'ALL' ? 'bg-black text-[#bef264]' : 'text-stone-500 hover:text-black dark:hover:text-white'
+                activeSeries === 'ALL' ? 'bg-black text-[#39FF14]' : 'text-stone-500 hover:text-black dark:hover:text-white'
               }`}
             >
               All Signals
@@ -128,7 +128,7 @@ export default function AreaTrendChart({
             <button
               onClick={() => setActiveSeries('TOTAL')}
               className={`px-2 py-1 rounded transition-colors cursor-pointer ${
-                activeSeries === 'TOTAL' ? 'bg-[#bef264] text-black font-black' : 'text-stone-500 hover:text-black dark:hover:text-white'
+                activeSeries === 'TOTAL' ? 'bg-[#39FF14] text-black font-black' : 'text-stone-500 hover:text-black dark:hover:text-white'
               }`}
             >
               Inquiries
@@ -200,7 +200,7 @@ export default function AreaTrendChart({
       <div className="relative w-full overflow-hidden">
         {isLoading && (
           <div className="absolute inset-0 z-10 bg-[#faf8f5]/60 dark:bg-[#16161a]/60 backdrop-blur-xs flex items-center justify-center">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-black text-[#bef264] text-xs font-bold shadow-md">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-black text-[#39FF14] text-xs font-bold shadow-md">
               <Loader2 className="w-3.5 h-3.5 animate-spin" />
               <span>Syncing timeline...</span>
             </div>
@@ -214,8 +214,8 @@ export default function AreaTrendChart({
           <defs>
             {/* Gradients */}
             <linearGradient id="areaTotalGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#bef264" stopOpacity="0.45" />
-              <stop offset="100%" stopColor="#bef264" stopOpacity="0.0" />
+              <stop offset="0%" stopColor="#39FF14" stopOpacity="0.45" />
+              <stop offset="100%" stopColor="#39FF14" stopOpacity="0.0" />
             </linearGradient>
 
             <linearGradient id="areaConvertedGrad" x1="0" y1="0" x2="0" y2="1">
@@ -347,7 +347,7 @@ export default function AreaTrendChart({
                   cx={coords[hoverIndex].x}
                   cy={coords[hoverIndex].yTotal}
                   r="5"
-                  fill="#bef264"
+                  fill="#39FF14"
                   stroke="#000"
                   strokeWidth="2"
                 />

@@ -74,7 +74,7 @@ export default function TypewriterText({
     <Component ref={containerRef} className={`relative ${className}`}>
       <span>{displayedText}</span>
       {cursor && isTyping && (
-        <span className="inline-block text-[#a3e635] text-[0.85em] animate-pulse ml-0.5 select-none">
+        <span className="inline-block text-[#7CFF5E] text-[0.85em] animate-pulse ml-0.5 select-none">
           {cursorChar}
         </span>
       )}

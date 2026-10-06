@@ -123,7 +123,7 @@ export default function ContactTransmissionSection() {
               duration={2000}
               className="font-brush text-4xl sm:text-5xl md:text-6xl lg:text-7xl italic tracking-tight text-black dark:text-white uppercase leading-none drop-shadow-sm"
             />
-            <span className="absolute -left-2 -right-4 bottom-1 sm:bottom-2 h-[45%] bg-[#bef264] -z-10 -rotate-1 skew-x-[-14deg] rounded-sm shadow-sm pointer-events-none" />
+            <span className="absolute -left-2 -right-4 bottom-1 sm:bottom-2 h-[45%] bg-[#39FF14] -z-10 -rotate-1 skew-x-[-14deg] rounded-sm shadow-sm pointer-events-none" />
           </div>
 
           <div className="mt-4 inline-block">
@@ -210,7 +210,7 @@ export default function ContactTransmissionSection() {
                   </div>
 
                   <div className="absolute bottom-2.5 right-2.5">
-                    <span className="bg-[#bef264] text-black font-mono-tech text-[9px] sm:text-[10px] font-bold px-2 py-0.5 border border-black shadow-sm">
+                    <span className="bg-[#39FF14] text-black font-mono-tech text-[9px] sm:text-[10px] font-bold px-2 py-0.5 border border-black shadow-sm">
                       TOKYO • SEOUL • SF
                     </span>
                   </div>
@@ -248,7 +248,7 @@ export default function ContactTransmissionSection() {
                     <div className="flex items-center gap-2 mt-2 pt-2 border-t border-stone-200 dark:border-stone-800">
                       <button
                         onClick={handleCopyEmail}
-                        className="bg-stone-100 hover:bg-[#bef264] hover:text-black dark:bg-stone-800 text-stone-800 dark:text-stone-200 text-xs font-mono-tech font-bold px-3 py-1 border border-black rounded transition-all cursor-pointer flex items-center gap-1.5"
+                        className="bg-stone-100 hover:bg-[#39FF14] hover:text-black dark:bg-stone-800 text-stone-800 dark:text-stone-200 text-xs font-mono-tech font-bold px-3 py-1 border border-black rounded transition-all cursor-pointer flex items-center gap-1.5"
                       >
                         <span>{copiedEmail ? '✓ COPIED!' : '📋 COPY EMAIL'}</span>
                       </button>
@@ -277,7 +277,7 @@ export default function ContactTransmissionSection() {
                     </div>
                   </div>
 
-                  <div className="bg-[#bef264]/20 border border-[#bef264] p-2.5 rounded-lg flex items-center gap-2 text-xs font-mono-tech font-bold text-stone-800 dark:text-stone-200">
+                  <div className="bg-[#39FF14]/20 border border-[#39FF14] p-2.5 rounded-lg flex items-center gap-2 text-xs font-mono-tech font-bold text-stone-800 dark:text-stone-200">
                     <span className="text-[#16a34a] text-base">⚡</span>
                     <span>WE TYPICALLY REPLY WITHIN 24 HOURS</span>
                   </div>
@@ -293,7 +293,7 @@ export default function ContactTransmissionSection() {
                     href="https://x.com"
                     target="_blank"
                     rel="noreferrer"
-                    className="font-mono-tech text-[10px] font-bold px-2 py-0.5 bg-stone-100 dark:bg-stone-800 border border-black text-stone-800 dark:text-stone-200 hover:bg-[#bef264] hover:text-black rounded"
+                    className="font-mono-tech text-[10px] font-bold px-2 py-0.5 bg-stone-100 dark:bg-stone-800 border border-black text-stone-800 dark:text-stone-200 hover:bg-[#39FF14] hover:text-black rounded"
                   >
                     X
                   </a>
@@ -301,7 +301,7 @@ export default function ContactTransmissionSection() {
                     href="https://instagram.com"
                     target="_blank"
                     rel="noreferrer"
-                    className="font-mono-tech text-[10px] font-bold px-2 py-0.5 bg-stone-100 dark:bg-stone-800 border border-black text-stone-800 dark:text-stone-200 hover:bg-[#bef264] hover:text-black rounded"
+                    className="font-mono-tech text-[10px] font-bold px-2 py-0.5 bg-stone-100 dark:bg-stone-800 border border-black text-stone-800 dark:text-stone-200 hover:bg-[#39FF14] hover:text-black rounded"
                   >
                     IG
                   </a>
@@ -309,7 +309,7 @@ export default function ContactTransmissionSection() {
                     href="https://discord.com"
                     target="_blank"
                     rel="noreferrer"
-                    className="font-mono-tech text-[10px] font-bold px-2 py-0.5 bg-stone-100 dark:bg-stone-800 border border-black text-stone-800 dark:text-stone-200 hover:bg-[#bef264] hover:text-black rounded"
+                    className="font-mono-tech text-[10px] font-bold px-2 py-0.5 bg-stone-100 dark:bg-stone-800 border border-black text-stone-800 dark:text-stone-200 hover:bg-[#39FF14] hover:text-black rounded"
                   >
                     DISCORD
                   </a>
@@ -317,7 +317,7 @@ export default function ContactTransmissionSection() {
                     href="https://youtube.com"
                     target="_blank"
                     rel="noreferrer"
-                    className="font-mono-tech text-[10px] font-bold px-2 py-0.5 bg-stone-100 dark:bg-stone-800 border border-black text-stone-800 dark:text-stone-200 hover:bg-[#bef264] hover:text-black rounded"
+                    className="font-mono-tech text-[10px] font-bold px-2 py-0.5 bg-stone-100 dark:bg-stone-800 border border-black text-stone-800 dark:text-stone-200 hover:bg-[#39FF14] hover:text-black rounded"
                   >
                     YOUTUBE
                   </a>
@@ -364,7 +364,7 @@ export default function ContactTransmissionSection() {
                       duration={1800}
                       className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl text-black dark:text-white uppercase tracking-tight"
                     />
-                    <div className="bg-[#bef264] text-black font-mono-tech font-extrabold text-[10px] sm:text-xs px-3 py-1 border border-black rounded shadow-[2px_2px_0px_#000]">
+                    <div className="bg-[#39FF14] text-black font-mono-tech font-extrabold text-[10px] sm:text-xs px-3 py-1 border border-black rounded shadow-[2px_2px_0px_#000]">
                       AVAILABLE FOR WORK
                     </div>
                   </div>
@@ -380,7 +380,7 @@ export default function ContactTransmissionSection() {
                 )}
 
                 {submitted ? (
-                  <div className="p-6 sm:p-8 bg-[#bef264] border-2 border-black text-black font-mono-tech text-center my-6 rounded-xl shadow-[4px_4px_0px_#000] animate-fade-in space-y-3">
+                  <div className="p-6 sm:p-8 bg-[#39FF14] border-2 border-black text-black font-mono-tech text-center my-6 rounded-xl shadow-[4px_4px_0px_#000] animate-fade-in space-y-3">
                     <div className="inline-block border-2 border-black bg-white px-3 py-1 text-xs font-black uppercase shadow-sm">
                       [ MESSAGE ENQUEUED // BUFFERED ]
                     </div>
@@ -432,7 +432,7 @@ export default function ContactTransmissionSection() {
                               onClick={() => toggleService(srv)}
                               className={`font-mono-tech text-[11px] font-bold px-3 py-1.5 border rounded-lg transition-all cursor-pointer ${
                                 isSelected
-                                  ? 'bg-black text-[#bef264] border-black shadow-[2px_2px_0px_#bef264]'
+                                  ? 'bg-black text-[#39FF14] border-black shadow-[2px_2px_0px_#39FF14]'
                                   : 'bg-white dark:bg-[#1a1a20] text-stone-700 dark:text-stone-300 border-black/30 dark:border-stone-700 hover:border-black shadow-[1px_1px_0px_#000]'
                               }`}
                             >
@@ -455,7 +455,7 @@ export default function ContactTransmissionSection() {
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                           placeholder="e.g. Alex Rivera or Studio Name"
-                          className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 dark:placeholder-stone-500 outline-none focus:ring-2 focus:ring-[#bef264] transition-all"
+                          className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 dark:placeholder-stone-500 outline-none focus:ring-2 focus:ring-[#39FF14] transition-all"
                         />
                       </div>
 
@@ -469,7 +469,7 @@ export default function ContactTransmissionSection() {
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           placeholder="name@company.com"
-                          className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 dark:placeholder-stone-500 outline-none focus:ring-2 focus:ring-[#bef264] transition-all"
+                          className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 dark:placeholder-stone-500 outline-none focus:ring-2 focus:ring-[#39FF14] transition-all"
                         />
                       </div>
                     </div>
@@ -484,7 +484,7 @@ export default function ContactTransmissionSection() {
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                           placeholder="+1 (555) 000-0000"
-                          className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 dark:placeholder-stone-500 outline-none focus:ring-2 focus:ring-[#bef264] transition-all"
+                          className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 dark:placeholder-stone-500 outline-none focus:ring-2 focus:ring-[#39FF14] transition-all"
                         />
                       </div>
 
@@ -497,7 +497,7 @@ export default function ContactTransmissionSection() {
                           value={formData.company}
                           onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                           placeholder="e.g. Acme Corp"
-                          className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 dark:placeholder-stone-500 outline-none focus:ring-2 focus:ring-[#bef264] transition-all"
+                          className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 dark:placeholder-stone-500 outline-none focus:ring-2 focus:ring-[#39FF14] transition-all"
                         />
                       </div>
                     </div>
@@ -512,14 +512,14 @@ export default function ContactTransmissionSection() {
                         value={formData.message}
                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                         placeholder="Tell us about your project, your goals, or any timeline in mind..."
-                        className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 dark:placeholder-stone-500 outline-none focus:ring-2 focus:ring-[#bef264] resize-y transition-all"
+                        className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 dark:placeholder-stone-500 outline-none focus:ring-2 focus:ring-[#39FF14] resize-y transition-all"
                       />
                     </div>
 
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="w-full bg-[#bef264] hover:bg-[#a3e635] text-black font-mono-tech font-black text-xs sm:text-sm py-4 px-6 border-2 border-black rounded-xl shadow-[4px_4px_0px_#000000] hover:shadow-[6px_6px_0px_#000000] transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center justify-center gap-3 uppercase tracking-wider disabled:opacity-50"
+                      className="w-full bg-[#39FF14] hover:bg-[#7CFF5E] text-black font-mono-tech font-black text-xs sm:text-sm py-4 px-6 border-2 border-black rounded-xl shadow-[4px_4px_0px_#000000] hover:shadow-[6px_6px_0px_#000000] transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center justify-center gap-3 uppercase tracking-wider disabled:opacity-50"
                     >
                       <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
                         <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />

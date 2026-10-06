@@ -61,7 +61,7 @@ export default function AuditLogsPage() {
           <div className="pt-3">
             <Link
               to="/crm/dashboard"
-              className="inline-flex items-center gap-2 bg-[#bef264] hover:bg-[#a3e635] text-black font-mono-tech font-bold text-xs px-5 py-2.5 border-2 border-black rounded-xl shadow-[3px_3px_0px_#000] transition-transform hover:scale-105 active:scale-95"
+              className="inline-flex items-center gap-2 bg-[#39FF14] hover:bg-[#7CFF5E] text-black font-mono-tech font-bold text-xs px-5 py-2.5 border-2 border-black rounded-xl shadow-[3px_3px_0px_#000] transition-transform hover:scale-105 active:scale-95"
             >
               <span>RETURN TO CRM DASHBOARD</span>
               <span>→</span>
@@ -79,7 +79,7 @@ export default function AuditLogsPage() {
         <div>
           <div className="font-mono-tech text-xs font-bold text-stone-500 flex items-center gap-2">
             <span>/// 05 IMMUTABLE SECURITY LEDGER</span>
-            <span className="bg-[#bef264] text-black font-black text-[9px] px-1.5 py-0.5 rounded border border-black shadow-[1px_1px_0px_#000]">
+            <span className="bg-[#39FF14] text-black font-black text-[9px] px-1.5 py-0.5 rounded border border-black shadow-[1px_1px_0px_#000]">
               DEVELOPER EXCLUSIVE
             </span>
           </div>
@@ -93,7 +93,7 @@ export default function AuditLogsPage() {
 
         <button
           onClick={() => refetch()}
-          className="self-start sm:self-auto flex items-center gap-1.5 px-3 py-2 bg-white dark:bg-[#1a1a20] hover:bg-[#bef264] hover:text-black border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs font-bold shadow-[2px_2px_0px_#000] cursor-pointer"
+          className="self-start sm:self-auto flex items-center gap-1.5 px-3 py-2 bg-white dark:bg-[#1a1a20] hover:bg-[#39FF14] hover:text-black border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs font-bold shadow-[2px_2px_0px_#000] cursor-pointer"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${isFetching ? 'animate-spin' : ''}`} />
           <span>REFRESH LOGS</span>
@@ -166,7 +166,7 @@ export default function AuditLogsPage() {
                             ? 'bg-[#ef4444] text-white border-black'
                             : log.action.includes('CREATED')
                             ? 'bg-[#16a34a] text-white border-black'
-                            : 'bg-black text-[#bef264] border-black'
+                            : 'bg-black text-[#39FF14] border-black'
                         }`}
                       >
                         {log.action}

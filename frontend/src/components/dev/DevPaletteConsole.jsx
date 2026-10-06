@@ -5,13 +5,13 @@ import { parseCssColorToHex } from './colorUtils';
 const DEFAULT_PALETTE = {
   baseBg: '#ebebe5',
   baseText: '#111111',
-  baseAccent: '#bef264',
+  baseAccent: '#39FF14',
   
-  btnBg: '#bef264',
+  btnBg: '#39FF14',
   btnText: '#000000',
   btnBorder: '#000000',
   btnShadow: '#000000',
-  btnHover: '#a3e635'
+  btnHover: '#7CFF5E'
 };
 
 export default function DevPaletteConsole() {
@@ -28,7 +28,7 @@ export default function DevPaletteConsole() {
   const selectedElementRef = useRef(null);
   const [selectedElementInfo, setSelectedElementInfo] = useState(null);
   const [elementColors, setElementColors] = useState({
-    bg: '#bef264',
+    bg: '#39FF14',
     text: '#000000',
     border: '#000000'
   });
@@ -147,7 +147,7 @@ export default function DevPaletteConsole() {
       setActiveTab('element');
 
       const computed = window.getComputedStyle(target);
-      const initialBg = parseCssColorToHex(computed.backgroundColor, '#bef264');
+      const initialBg = parseCssColorToHex(computed.backgroundColor, '#39FF14');
       const initialText = parseCssColorToHex(computed.color, '#111111');
       const initialBorder = parseCssColorToHex(computed.borderColor, '#000000');
 
@@ -304,7 +304,7 @@ export default function DevPaletteConsole() {
     <>
       {isInspectMode && hoveredElement && (
         <div
-          className="fixed pointer-events-none z-[99999] border-2 border-dashed border-[#bef264] bg-[#bef264]/10 transition-all duration-75"
+          className="fixed pointer-events-none z-[99999] border-2 border-dashed border-[#39FF14] bg-[#39FF14]/10 transition-all duration-75"
           style={{
             top: `${hoveredElement.getBoundingClientRect().top}px`,
             left: `${hoveredElement.getBoundingClientRect().left}px`,
@@ -312,15 +312,15 @@ export default function DevPaletteConsole() {
             height: `${hoveredElement.getBoundingClientRect().height}px`
           }}
         >
-          <div className="absolute -top-7 left-0 bg-black text-[#bef264] border border-[#bef264] px-1.5 py-0.5 font-mono-tech text-[10px] font-bold tracking-wider whitespace-nowrap shadow-md">
+          <div className="absolute -top-7 left-0 bg-black text-[#39FF14] border border-[#39FF14] px-1.5 py-0.5 font-mono-tech text-[10px] font-bold tracking-wider whitespace-nowrap shadow-md">
             &lt;{hoveredElement.tagName.toLowerCase()}&gt; {hoveredElement.className ? `.${hoveredElement.className.toString().split(' ')[0]}` : ''}
           </div>
         </div>
       )}
 
       {isInspectMode && (
-        <div className="dev-console-root fixed top-3 left-1/2 -translate-x-1/2 z-[100000] bg-black text-white px-4 py-2 border-2 border-[#bef264] manga-shadow font-mono-tech text-xs flex items-center gap-3 animate-bounce">
-          <span className="text-[#bef264] text-sm animate-pulse">🎯</span>
+        <div className="dev-console-root fixed top-3 left-1/2 -translate-x-1/2 z-[100000] bg-black text-white px-4 py-2 border-2 border-[#39FF14] manga-shadow font-mono-tech text-xs flex items-center gap-3 animate-bounce">
+          <span className="text-[#39FF14] text-sm animate-pulse">🎯</span>
           <span><b>INSPECT MODE ACTIVE:</b> Click any element on the page to customize its color.</span>
           <button
             type="button"
@@ -338,10 +338,10 @@ export default function DevPaletteConsole() {
             type="button"
             onClick={() => setIsOpen(true)}
             title="Open UI Color Palette Console (Alt+P)"
-            className="dev-console-btn bg-black hover:bg-stone-900 text-white border-2 border-[#bef264] px-3.5 py-2 font-mono-tech font-bold text-xs manga-shadow transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-2"
+            className="dev-console-btn bg-black hover:bg-stone-900 text-white border-2 border-[#39FF14] px-3.5 py-2 font-mono-tech font-bold text-xs manga-shadow transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-2"
           >
-            <span className="w-2.5 h-2.5 rounded-full bg-[#bef264] animate-pulse" />
-            <span className="text-[#bef264]">🎨 DEV PALETTE</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#39FF14] animate-pulse" />
+            <span className="text-[#39FF14]">🎨 DEV PALETTE</span>
             {(hasBaseOverrides || hasButtonOverrides || modifiedCount > 0) && (
               <span className="bg-[#ef4444] text-white text-[9px] px-1.5 py-0.2 rounded-full font-black">
                 ACTIVE
@@ -368,11 +368,11 @@ export default function DevPaletteConsole() {
             }`}
           >
             <div className="flex items-center gap-2">
-              <span className="text-base text-[#bef264]">⚙</span>
+              <span className="text-base text-[#39FF14]">⚙</span>
               <div>
                 <div className="text-xs font-bold text-white tracking-wider flex items-center gap-1.5">
                   <span>COLOR LAB</span>
-                  <span className="bg-[#bef264] text-black text-[9px] px-1 py-0.2 font-black rounded">
+                  <span className="bg-[#39FF14] text-black text-[9px] px-1 py-0.2 font-black rounded">
                     DEV HUD
                   </span>
                 </div>
@@ -418,7 +418,7 @@ export default function DevPaletteConsole() {
               <button
                 type="button"
                 onClick={() => setIsMinimized(false)}
-                className="text-[#bef264] underline text-[10px] cursor-pointer"
+                className="text-[#39FF14] underline text-[10px] cursor-pointer"
               >
                 Expand Controls
               </button>
@@ -431,7 +431,7 @@ export default function DevPaletteConsole() {
                   onClick={() => setActiveTab('base')}
                   className={`dev-console-btn py-1.5 rounded transition-all cursor-pointer ${
                     activeTab === 'base'
-                      ? 'bg-[#bef264] text-black manga-shadow-sm font-black'
+                      ? 'bg-[#39FF14] text-black manga-shadow-sm font-black'
                       : 'text-stone-300 hover:text-white'
                   }`}
                 >
@@ -442,7 +442,7 @@ export default function DevPaletteConsole() {
                   onClick={() => setActiveTab('buttons')}
                   className={`dev-console-btn py-1.5 rounded transition-all cursor-pointer ${
                     activeTab === 'buttons'
-                      ? 'bg-[#bef264] text-black manga-shadow-sm font-black'
+                      ? 'bg-[#39FF14] text-black manga-shadow-sm font-black'
                       : 'text-stone-300 hover:text-white'
                   }`}
                 >
@@ -453,7 +453,7 @@ export default function DevPaletteConsole() {
                   onClick={() => setActiveTab('element')}
                   className={`dev-console-btn py-1.5 rounded transition-all cursor-pointer ${
                     activeTab === 'element'
-                      ? 'bg-[#bef264] text-black manga-shadow-sm font-black'
+                      ? 'bg-[#39FF14] text-black manga-shadow-sm font-black'
                       : 'text-stone-300 hover:text-white'
                   }`}
                 >
@@ -464,7 +464,7 @@ export default function DevPaletteConsole() {
                   onClick={() => setActiveTab('export')}
                   className={`dev-console-btn py-1.5 rounded transition-all cursor-pointer ${
                     activeTab === 'export'
-                      ? 'bg-[#bef264] text-black manga-shadow-sm font-black'
+                      ? 'bg-[#39FF14] text-black manga-shadow-sm font-black'
                       : 'text-stone-300 hover:text-white'
                   }`}
                 >
@@ -481,7 +481,7 @@ export default function DevPaletteConsole() {
                         type="checkbox"
                         checked={hasBaseOverrides}
                         onChange={(e) => setHasBaseOverrides(e.target.checked)}
-                        className="accent-[#bef264]"
+                        className="accent-[#39FF14]"
                       />
                       <span>Enable Override</span>
                     </label>
@@ -522,7 +522,7 @@ export default function DevPaletteConsole() {
                         type="checkbox"
                         checked={hasButtonOverrides}
                         onChange={(e) => setHasButtonOverrides(e.target.checked)}
-                        className="accent-[#bef264]"
+                        className="accent-[#39FF14]"
                       />
                       <span>Enable Override</span>
                     </label>
@@ -605,7 +605,7 @@ export default function DevPaletteConsole() {
                   <button
                     type="button"
                     onClick={() => setIsInspectMode(true)}
-                    className="dev-console-btn w-full py-2.5 bg-black hover:bg-stone-900 text-[#bef264] border-2 border-[#bef264] font-bold text-xs flex items-center justify-center gap-2 cursor-pointer manga-shadow-sm transition-all hover:scale-[1.02] active:scale-95"
+                    className="dev-console-btn w-full py-2.5 bg-black hover:bg-stone-900 text-[#39FF14] border-2 border-[#39FF14] font-bold text-xs flex items-center justify-center gap-2 cursor-pointer manga-shadow-sm transition-all hover:scale-[1.02] active:scale-95"
                   >
                     <span>🎯</span>
                     <span>{isInspectMode ? 'SELECTING ELEMENT...' : 'PICK / INSPECT ELEMENT'}</span>
@@ -615,7 +615,7 @@ export default function DevPaletteConsole() {
                     <div className="p-2.5 bg-stone-900 border border-stone-700 rounded space-y-2">
                       <div className="flex justify-between items-center text-[10px]">
                         <span className="text-stone-400">TARGET:</span>
-                        <span className="text-[#bef264] font-bold">{selectedElementInfo.dimensions}</span>
+                        <span className="text-[#39FF14] font-bold">{selectedElementInfo.dimensions}</span>
                       </div>
                       <div className="text-[11px] font-bold text-white bg-black p-1.5 border border-stone-700 rounded break-all">
                         {selectedElementInfo.selector}
@@ -654,7 +654,7 @@ export default function DevPaletteConsole() {
                   {modifiedCount > 0 && (
                     <div className="text-[10px] text-stone-400 flex justify-between items-center bg-stone-900 p-2 rounded">
                       <span>Elements customized in session:</span>
-                      <span className="text-[#bef264] font-bold">{modifiedCount}</span>
+                      <span className="text-[#39FF14] font-bold">{modifiedCount}</span>
                     </div>
                   )}
                 </div>
@@ -667,7 +667,7 @@ export default function DevPaletteConsole() {
                     <button
                       type="button"
                       onClick={handleCopyCss}
-                      className="dev-console-btn px-2.5 py-1 bg-[#bef264] hover:bg-[#a3e635] text-black font-bold text-[10px] rounded cursor-pointer transition-colors"
+                      className="dev-console-btn px-2.5 py-1 bg-[#39FF14] hover:bg-[#7CFF5E] text-black font-bold text-[10px] rounded cursor-pointer transition-colors"
                     >
                       {copyStatus ? '✓ COPIED!' : '📋 COPY CSS'}
                     </button>
@@ -681,7 +681,7 @@ export default function DevPaletteConsole() {
                     readOnly
                     value={generateExportCss()}
                     rows={8}
-                    className="w-full bg-black text-[#bef264] p-2 text-[10px] font-mono-tech border border-stone-700 rounded resize-none focus:outline-none"
+                    className="w-full bg-black text-[#39FF14] p-2 text-[10px] font-mono-tech border border-stone-700 rounded resize-none focus:outline-none"
                   />
 
                   <div className="p-2 bg-stone-900/80 border border-stone-800 rounded text-[10px] text-stone-400">
@@ -694,7 +694,7 @@ export default function DevPaletteConsole() {
 
           <div className="p-2 bg-black border-t border-stone-800 flex justify-between items-center text-[10px] text-stone-500">
             <div className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#bef264]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#39FF14]" />
               <span>SESSION ONLY • NON-PERMANENT</span>
             </div>
             <button

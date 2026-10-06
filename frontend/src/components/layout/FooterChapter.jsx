@@ -2,6 +2,7 @@ import React from 'react';
 import InkText from '../ui/InkText';
 import TypewriterText from '../ui/TypewriterText';
 import UnfoldPanel from '../ui/UnfoldPanel';
+import OgLogo from '../ui/OgLogo';
 
 const SOCIAL_CHAPTERS = [
   {
@@ -57,7 +58,10 @@ const SOCIAL_CHAPTERS = [
 export default function FooterChapter() {
   return (
     <footer id="social-chapters" className="relative px-3 sm:px-6 pt-8 pb-12 max-w-[1300px] mx-auto select-none">
-      <div className="text-center my-8">
+      <div className="text-center my-8 flex flex-col items-center">
+        <div className="mb-6">
+          <OgLogo size="lg" withText={true} subtitle="CREATIVE INTELLIGENCE STUDIO" />
+        </div>
         <div className="inline-block bg-black dark:bg-[#16161a] text-white px-8 sm:px-14 py-4 sm:py-5 border-3 border-black dark:border-[#38383e] manga-shadow-lg transform -rotate-0.5">
           <InkText
             as="h2"
@@ -72,7 +76,7 @@ export default function FooterChapter() {
         </div>
 
         <div className="mt-3">
-          <div className="inline-block bg-[#bef264] text-black border-2 border-black px-4 py-1 font-mono-tech font-bold text-xs sm:text-sm manga-shadow-sm">
+          <div className="inline-block bg-[#39FF14] text-black border-2 border-black px-4 py-1 font-mono-tech font-bold text-xs sm:text-sm manga-shadow-sm">
             <span>[ TO BE CONTINUED IN VOL. 02 ... // </span>
             <span className="font-heading font-black text-black">CONTINUE ON SOCIALS</span>
             <span> ]</span>
@@ -140,13 +144,13 @@ export default function FooterChapter() {
             <div className="text-stone-500 dark:text-stone-400 font-medium">Tokyo, Japan</div>
           </div>
 
-          <div className="border-l-3 border-[#bef264] pl-3.5 bg-[#bef264]/5 p-2">
+          <div className="border-l-3 border-[#39FF14] pl-3.5 bg-[#39FF14]/5 p-2">
             <InkText
               as="div"
               strokeWidth="1px"
               delay={250}
               duration={2000}
-              className="font-bold text-[#65a30d] dark:text-[#bef264] uppercase tracking-wider mb-1"
+              className="font-bold text-[#65a30d] dark:text-[#39FF14] uppercase tracking-wider mb-1"
               text="NEW YORK TRANSMISSION"
             />
             <TypewriterText speed={15} delay={350} cursor={false} text="SoHo Creative Studio," />
@@ -164,7 +168,7 @@ export default function FooterChapter() {
               href="https://github.com/alabhyamobar"
               target="_blank"
               rel="noreferrer"
-              className="font-bold text-black dark:text-[#bef264] hover:underline bg-stone-100 dark:bg-[#1e1e24] px-2 py-0.5 rounded border border-black/20 dark:border-stone-700 shadow-sm transition-colors"
+              className="font-bold text-black dark:text-[#39FF14] hover:underline bg-stone-100 dark:bg-[#1e1e24] px-2 py-0.5 rounded border border-black/20 dark:border-stone-700 shadow-sm transition-colors"
             >
               @alabhyamobar
             </a>

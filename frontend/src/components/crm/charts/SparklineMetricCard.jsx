@@ -8,7 +8,7 @@ export default function SparklineMetricCard({
   icon: Icon,
   trend,
   trendLabel,
-  color = '#bef264',
+  color = '#39FF14',
   sparklineData = [12, 18, 15, 24, 28, 22, 35, 42, 38, 48],
   isLoading = false
 }) {
@@ -41,7 +41,7 @@ export default function SparklineMetricCard({
         {Icon && (
           <div
             className="p-1.5 rounded-lg border border-black/20 dark:border-stone-700"
-            style={{ backgroundColor: `${color}20`, color: color === '#bef264' ? '#111' : color }}
+            style={{ backgroundColor: `${color}20`, color: color === '#39FF14' ? '#111' : color }}
           >
             <Icon className="w-4 h-4 text-black dark:text-white" />
           </div>
@@ -80,7 +80,7 @@ export default function SparklineMetricCard({
             <path
               d={linePath}
               fill="none"
-              stroke={color === '#bef264' ? '#84cc16' : color}
+              stroke={color === '#39FF14' ? '#84cc16' : color}
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -90,7 +90,7 @@ export default function SparklineMetricCard({
                 cx={points[points.length - 1].x}
                 cy={points[points.length - 1].y}
                 r="3"
-                fill={color === '#bef264' ? '#84cc16' : color}
+                fill={color === '#39FF14' ? '#84cc16' : color}
                 stroke="#000"
                 strokeWidth="1"
               />

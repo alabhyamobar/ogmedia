@@ -8,8 +8,8 @@ export default function FloatingThemeWidget() {
   return (
     <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-2">
       {showInfo && (
-        <div className="bg-black dark:bg-[#18181b] text-white p-3 border-2 border-white dark:border-[#bef264] manga-shadow max-w-xs text-xs font-mono-tech mb-1 animate-fadeIn">
-          <div className="flex justify-between items-center text-[#bef264] font-bold border-b border-stone-700 pb-1 mb-1">
+        <div className="bg-black dark:bg-[#18181b] text-white p-3 border-2 border-white dark:border-[#39FF14] manga-shadow max-w-xs text-xs font-mono-tech mb-1 animate-fadeIn">
+          <div className="flex justify-between items-center text-[#39FF14] font-bold border-b border-stone-700 pb-1 mb-1">
             <span>⚡ THEME CONTROLLER</span>
             <button
               onClick={() => setShowInfo(false)}
@@ -20,10 +20,10 @@ export default function FloatingThemeWidget() {
           </div>
           <p className="text-stone-300 text-[11px] leading-relaxed">
             {isDark
-              ? 'Currently in DARK NOIR mode: High-contrast cyberpunk webtoon aesthetic with deep blacks, electric lime, and crimson accents.'
-              : 'Currently in LIGHT DRAFT mode: Authentic technical manga drafting paper aesthetic with ink hatching and screentone grid.'}
+              ? 'Currently in DARK NOIR mode: Deep black background with glowing OG Green and electric highlights.'
+              : 'Currently in LIGHT mode: Clean off-white canvas with bold contrast and electric OG Green accents.'}
           </p>
-          <div className="mt-2 text-[#bef264] text-[10px] font-bold">
+          <div className="mt-2 text-[#39FF14] text-[10px] font-bold">
             Click button below to toggle theme anytime!
           </div>
         </div>
@@ -40,7 +40,7 @@ export default function FloatingThemeWidget() {
 
         <button
           onClick={toggleTheme}
-          className="bg-[#bef264] hover:bg-[#a3e635] text-black border-2 border-black px-3.5 py-2 font-mono-tech font-black text-xs manga-shadow transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-2"
+          className="bg-[#39FF14] hover:bg-[#7CFF5E] text-black border-2 border-black px-3.5 py-2 font-mono-tech font-black text-xs manga-shadow transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-2"
         >
           <span className="text-sm">{isDark ? '☾' : '☼'}</span>
           <span>{isDark ? 'DARK NOIR' : 'LIGHT DRAFT'}</span>
