@@ -149,20 +149,22 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-5 pt-4 border-t-2 border-black/10 dark:border-stone-800 space-y-2 font-mono-tech text-[11px]">
-            <div className="text-stone-500 font-bold uppercase tracking-wider text-[10px]">
-              QUICK-FILL TEST PRESETS:
+          {import.meta.env.DEV && (
+            <div className="mt-5 pt-4 border-t-2 border-black/10 dark:border-stone-800 space-y-2 font-mono-tech text-[11px]">
+              <div className="text-stone-500 font-bold uppercase tracking-wider text-[10px]">
+                QUICK-FILL TEST PRESETS (DEV ONLY):
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => setForm({ login: 'admin', password: 'AdminPass2026!@' })}
+                  className="px-2.5 py-1 bg-stone-200 dark:bg-stone-800 hover:bg-black hover:text-[#bef264] text-stone-700 dark:text-stone-300 border border-black/20 rounded-lg font-bold transition-colors cursor-pointer"
+                >
+                  ADMIN: @admin
+                </button>
+              </div>
             </div>
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => setForm({ login: 'admin', password: 'AdminPass2026!@' })}
-                className="px-2.5 py-1 bg-stone-200 dark:bg-stone-800 hover:bg-black hover:text-[#bef264] text-stone-700 dark:text-stone-300 border border-black/20 rounded-lg font-bold transition-colors cursor-pointer"
-              >
-                ADMIN: @admin
-              </button>
-            </div>
-          </div>
+          )}
 
         </div>
       </div>
