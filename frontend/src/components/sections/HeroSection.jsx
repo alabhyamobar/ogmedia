@@ -23,6 +23,7 @@ export default function HeroSection() {
   const limeBoxRef = useRef(null);
   const boomStickerRef = useRef(null);
   const titleCardRef = useRef(null);
+  const descRef = useRef(null);
   const swooshRef = useRef(null);
   const ctaRef = useRef(null);
   const cornerMarksRef = useRef(null);
@@ -37,13 +38,14 @@ export default function HeroSection() {
   const cameraTlRef = useRef(null);
   const isVideoActiveRef = useRef(false);
   const isReversedRef = useRef(false);
+  const isZoomingRef = useRef(false);
 
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const [_scrollProgress, setScrollProgress] = useState(0);
   const [isZooming, setIsZooming] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [videoProgress, setVideoProgress] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-  const [videoEnded, setVideoEnded] = useState(false);
+  const [_videoEnded, setVideoEnded] = useState(false);
   const [isVideoMounted, setIsVideoMounted] = useState(true);
   const stRef = useRef(null);
 
@@ -61,26 +63,74 @@ export default function HeroSection() {
     const mm = gsap.matchMedia();
 
     const setupCameraTimeline = (isMobile) => {
-      gsap.set(cameraRig, { transformOrigin: 'center center' });
+      // Calculate dynamic transform origin and translate vector to keep panelFrame dead-center on screen
+      const getZoomTarget = () => {
+        if (!cameraRig || !panelFrame) {
+          return { origin: 'center center', x: 0, y: 0, scale: isMobile ? 5.4 : 4.2 };
+        }
+
+        gsap.set(cameraRig, { scale: 1, x: 0, y: 0, xPercent: 0, yPercent: 0 });
+
+        const rigRect = cameraRig.getBoundingClientRect();
+        const panelRect = panelFrame.getBoundingClientRect();
+
+        const panelCenterX = panelRect.left + panelRect.width / 2;
+        const panelCenterY = panelRect.top + panelRect.height / 2;
+
+        const screenCenterX = window.innerWidth / 2;
+        const screenCenterY = window.innerHeight / 2;
+
+        const originX = panelCenterX - rigRect.left;
+        const originY = panelCenterY - rigRect.top;
+
+        const moveX = screenCenterX - panelCenterX;
+        const moveY = screenCenterY - panelCenterY;
+
+        const scaleX = window.innerWidth / Math.max(panelRect.width, 1);
+        const scaleY = window.innerHeight / Math.max(panelRect.height, 1);
+        const coverScale = Math.max(scaleX, scaleY) * 1.15;
+        const targetScale = isMobile ? Math.max(coverScale, 5.2) : Math.max(coverScale, 4.2);
+
+        return {
+          origin: `${originX}px ${originY}px`,
+          x: moveX,
+          y: moveY,
+          scale: targetScale
+        };
+      };
+
+      const zoomTarget = getZoomTarget();
+      gsap.set(cameraRig, { transformOrigin: zoomTarget.origin });
 
       const cameraTl = gsap.timeline({ paused: true });
       cameraTlRef.current = cameraTl;
       isVideoActiveRef.current = false;
       isReversedRef.current = false;
 
-      const targetScale = isMobile ? 5.4 : 4.2;
-
       cameraTl.to(
         cameraRig,
         {
-          scale: targetScale,
-          x: 0,
-          y: 0,
+          scale: zoomTarget.scale,
+          x: zoomTarget.x,
+          y: zoomTarget.y,
           xPercent: 0,
           yPercent: 0,
-          transformOrigin: 'center center',
+          transformOrigin: zoomTarget.origin,
           ease: 'power1.inOut',
           duration: 1
+        },
+        0
+      );
+
+      // Level board tilt to 0 immediately so zooming is orthogonal and clean
+      cameraTl.to(
+        board,
+        {
+          rotateX: 0,
+          rotateY: 0,
+          rotateZ: 0,
+          duration: 0.3,
+          ease: 'power1.out'
         },
         0
       );
@@ -90,6 +140,9 @@ export default function HeroSection() {
       }
       if (titleCardRef.current) {
         gsap.set(titleCardRef.current, { z: 95, transformStyle: 'preserve-3d' });
+      }
+      if (descRef.current) {
+        gsap.set(descRef.current, { z: 30, transformStyle: 'preserve-3d' });
       }
       if (prologueRef.current) {
         gsap.set(prologueRef.current, { z: 45, rotation: -1, transformStyle: 'preserve-3d' });
@@ -104,30 +157,33 @@ export default function HeroSection() {
         gsap.set(ctaRef.current, { z: 60, transformStyle: 'preserve-3d' });
       }
 
-      const dispX = isMobile ? 260 : 480;
-      const dispY = isMobile ? 220 : 320;
-      const boomX = isMobile ? 280 : 550;
-      const boomY = isMobile ? 180 : 260;
-      const titleY = isMobile ? 340 : 480;
+      const dispX = isMobile ? 320 : 540;
+      const dispY = isMobile ? 260 : 380;
+      const boomX = isMobile ? 300 : 550;
+      const boomY = isMobile ? 240 : 320;
+      const titleY = isMobile ? 320 : 480;
       const swooshY = isMobile ? 260 : 380;
 
       if (prologueRef.current) {
-        cameraTl.to(prologueRef.current, { x: -dispX, y: -dispY, opacity: 0, scale: isMobile ? 1.4 : 1.8, duration: 0.8, ease: 'power1.in' }, 0);
+        cameraTl.to(prologueRef.current, { x: -dispX, y: -dispY, opacity: 0, scale: isMobile ? 1.3 : 1.8, duration: 0.75, ease: 'power1.in' }, 0);
       }
       if (limeBoxRef.current) {
-        cameraTl.to(limeBoxRef.current, { x: dispX, y: -dispY, opacity: 0, scale: isMobile ? 1.4 : 1.8, duration: 0.8, ease: 'power1.in' }, 0);
+        cameraTl.to(limeBoxRef.current, { x: dispX, y: -dispY, opacity: 0, scale: isMobile ? 1.3 : 1.8, duration: 0.75, ease: 'power1.in' }, 0);
       }
       if (boomStickerRef.current) {
-        cameraTl.to(boomStickerRef.current, { x: boomX, y: -boomY, z: 85, rotation: -6, opacity: 0, scale: isMobile ? 1.8 : 2.5, duration: 0.8, ease: 'power1.in' }, 0);
+        cameraTl.to(boomStickerRef.current, { x: boomX, y: -boomY, z: 85, rotation: -6, opacity: 0, scale: isMobile ? 1.6 : 2.5, duration: 0.75, ease: 'power1.in' }, 0);
       }
       if (titleCardRef.current) {
-        cameraTl.to(titleCardRef.current, { y: titleY, z: 95, opacity: 0, scale: isMobile ? 1.8 : 2.4, duration: 0.8, ease: 'power1.in' }, 0);
+        cameraTl.to(titleCardRef.current, { y: titleY, z: 95, opacity: 0, scale: isMobile ? 1.6 : 2.4, duration: 0.75, ease: 'power1.in' }, 0);
+      }
+      if (descRef.current) {
+        cameraTl.to(descRef.current, { y: isMobile ? 200 : 300, opacity: 0, scale: isMobile ? 1.2 : 1.5, duration: 0.65, ease: 'power1.in' }, 0);
       }
       if (swooshRef.current) {
-        cameraTl.to(swooshRef.current, { x: -dispX, y: swooshY, opacity: 0, scale: isMobile ? 1.4 : 1.8, duration: 0.8, ease: 'power1.in' }, 0);
+        cameraTl.to(swooshRef.current, { x: -dispX, y: swooshY, opacity: 0, scale: isMobile ? 1.3 : 1.8, duration: 0.75, ease: 'power1.in' }, 0);
       }
       if (ctaRef.current) {
-        cameraTl.to(ctaRef.current, { x: dispX, y: swooshY, opacity: 0, scale: isMobile ? 1.4 : 1.8, duration: 0.8, ease: 'power1.in' }, 0);
+        cameraTl.to(ctaRef.current, { x: dispX, y: swooshY, opacity: 0, scale: isMobile ? 1.3 : 1.8, duration: 0.75, ease: 'power1.in' }, 0);
       }
       if (bgRaysRef.current) {
         cameraTl.to(bgRaysRef.current, { scale: isMobile ? 3 : 4, opacity: 0, duration: 0.8, ease: 'power1.in' }, 0);
@@ -139,7 +195,7 @@ export default function HeroSection() {
         cameraTl.to(telemetryRef.current, { opacity: 0, y: isMobile ? 120 : 180, duration: 0.8, ease: 'power1.in' }, 0);
       }
       if (frameBadgesRef.current) {
-        cameraTl.to(frameBadgesRef.current, { opacity: 0, duration: 0.6, ease: 'power1.in' }, 0);
+        cameraTl.to(frameBadgesRef.current, { opacity: 0, duration: 0.5, ease: 'power1.in' }, 0);
       }
 
       cameraTl.to(
@@ -193,8 +249,10 @@ export default function HeroSection() {
 
           if (p > 0.05) {
             setIsZooming(true);
+            isZoomingRef.current = true;
           } else {
             setIsZooming(false);
+            isZoomingRef.current = false;
           }
 
           if (!isVideoActiveRef.current) {
@@ -230,13 +288,21 @@ export default function HeroSection() {
           setIsVideoPlaying(false);
           setVideoEnded(false);
           setIsZooming(false);
+          isZoomingRef.current = false;
           cameraTl.progress(0);
         }
       };
-      window.addEventListener('scroll', handleScrollReset, { passive: true });
+      const handleResize = () => {
+        if (!isVideoActiveRef.current && !isZoomingRef.current) {
+          const updated = getZoomTarget();
+          gsap.set(cameraRig, { transformOrigin: updated.origin });
+        }
+      };
+      window.addEventListener('resize', handleResize, { passive: true });
 
       return () => {
         window.removeEventListener('scroll', handleScrollReset);
+        window.removeEventListener('resize', handleResize);
         st.kill();
         stRef.current = null;
       };
@@ -278,6 +344,7 @@ export default function HeroSection() {
           setIsVideoMounted(false);
           setVideoEnded(true);
           setIsZooming(false);
+          isZoomingRef.current = false;
           setScrollProgress(0);
 
           const elementsToReset = [
@@ -289,6 +356,7 @@ export default function HeroSection() {
             limeBoxRef.current,
             boomStickerRef.current,
             titleCardRef.current,
+            descRef.current,
             swooshRef.current,
             ctaRef.current,
             bgRaysRef.current,
@@ -316,6 +384,11 @@ export default function HeroSection() {
             titleCardRef.current.style.transformStyle = 'preserve-3d';
             titleCardRef.current.style.zIndex = '50';
             titleCardRef.current.style.opacity = '1';
+          }
+          if (descRef.current) {
+            descRef.current.style.transform = 'translateZ(30px)';
+            descRef.current.style.transformStyle = 'preserve-3d';
+            descRef.current.style.opacity = '1';
           }
           if (prologueRef.current) {
             prologueRef.current.style.transform = 'translateZ(45px) rotate(-1deg)';
@@ -360,7 +433,7 @@ export default function HeroSection() {
             if (stRef.current) {
               try {
                 stRef.current.kill(true);
-              } catch (e) { }
+              } catch { }
               stRef.current = null;
             }
             window.scrollTo({ top: 0, behavior: 'instant' });
@@ -475,6 +548,9 @@ export default function HeroSection() {
               ? `${shadowX}px ${shadowY}px 0px #000000, ${shadowX * 1.5}px ${shadowY * 1.5}px 12px rgba(168,85,247,0.3)`
               : `${shadowX}px ${shadowY}px 0px #000000, ${shadowX * 1.5}px ${shadowY * 1.5}px 8px rgba(56,189,248,0.25)`;
           }
+          if (descRef.current) {
+            gsap.to(descRef.current, { x: x * 10, y: y * 8, z: 30, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
+          }
           if (swooshRef.current) {
             gsap.to(swooshRef.current, { x: x * 18, y: y * 14, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
           }
@@ -514,6 +590,7 @@ export default function HeroSection() {
           ? '8px 12px 0px #000000, 16px 20px 16px rgba(168,85,247,0.3)'
           : '8px 12px 0px #000000, 16px 20px 10px rgba(56,189,248,0.2)';
       }
+      if (descRef.current) gsap.to(descRef.current, { x: 0, y: 0, z: 30, duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
       if (swooshRef.current) gsap.to(swooshRef.current, { x: 0, y: 0, duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
       if (ctaRef.current) gsap.to(ctaRef.current, { x: 0, y: 0, duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
     };
@@ -605,41 +682,41 @@ export default function HeroSection() {
         >
           <section
             ref={heroRef}
-            className="relative w-full px-3 sm:px-6 py-4 sm:py-6 max-w-[1300px] mx-auto"
+            className="relative w-full px-2 xs:px-3 sm:px-6 py-2 xs:py-3 sm:py-6 max-w-[1300px] mx-auto"
             style={{ perspective: '1400px' }}
           >
             <div
               ref={boardRef}
-              className="relative border-2 border-black dark:border-[#38383e] p-4 sm:p-8 min-h-[680px] flex flex-col justify-between transition-colors duration-300"
+              className="relative border-2 border-black dark:border-[#38383e] p-3 sm:p-8 min-h-0 sm:min-h-[680px] flex flex-col justify-between transition-colors duration-300"
               style={{
                 transformStyle: 'preserve-3d',
                 backgroundColor: isDark ? '#121215' : '#fafaf6',
                 boxShadow: isDark
-                  ? '10px 10px 0px #000000, 20px 20px 0px rgba(0,0,0,0.55)'
-                  : '10px 10px 0px #000000, 20px 20px 0px rgba(0,0,0,0.08)'
+                  ? '6px 6px 0px #000000, 12px 12px 0px rgba(0,0,0,0.5)'
+                  : '6px 6px 0px #000000, 12px 12px 0px rgba(0,0,0,0.08)'
               }}
             >
               <div ref={cornerMarksRef} className="contents">
                 <div
-                  className="absolute top-2 left-3 font-mono-tech text-xs font-bold text-stone-600 dark:text-stone-400 select-none z-20 pointer-events-none"
+                  className="absolute top-1.5 left-2 sm:top-2 sm:left-3 font-mono-tech text-[9px] sm:text-xs font-bold text-stone-600 dark:text-stone-400 select-none z-20 pointer-events-none"
                   style={{ transform: 'translateZ(15px)' }}
                 >
                   + C_01
                 </div>
                 <div
-                  className="absolute top-2 right-3 font-mono-tech text-xs font-bold text-stone-600 dark:text-stone-400 select-none z-20 pointer-events-none"
+                  className="absolute top-1.5 right-2 sm:top-2 sm:right-3 font-mono-tech text-[9px] sm:text-xs font-bold text-stone-600 dark:text-stone-400 select-none z-20 pointer-events-none"
                   style={{ transform: 'translateZ(15px)' }}
                 >
                   C_02 +
                 </div>
                 <div
-                  className="absolute bottom-2 left-3 font-mono-tech text-xs font-bold text-stone-600 dark:text-stone-400 select-none z-20 pointer-events-none"
+                  className="absolute bottom-1.5 left-2 sm:bottom-2 sm:left-3 font-mono-tech text-[9px] sm:text-xs font-bold text-stone-600 dark:text-stone-400 select-none z-20 pointer-events-none"
                   style={{ transform: 'translateZ(15px)' }}
                 >
                   + C_03
                 </div>
                 <div
-                  className="absolute bottom-2 right-3 font-mono-tech text-xs font-bold text-stone-600 dark:text-stone-400 select-none z-20 pointer-events-none"
+                  className="absolute bottom-1.5 right-2 sm:bottom-2 sm:right-3 font-mono-tech text-[9px] sm:text-xs font-bold text-stone-600 dark:text-stone-400 select-none z-20 pointer-events-none"
                   style={{ transform: 'translateZ(15px)' }}
                 >
                   C_04 +
@@ -667,23 +744,23 @@ export default function HeroSection() {
               </div>
 
               <div
-                className="relative z-10 flex items-start justify-between flex-wrap gap-4 pt-4 px-1 sm:px-4"
+                className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4 pt-1 sm:pt-4 px-1 sm:px-4 mb-3 sm:mb-6"
                 style={{ transformStyle: 'preserve-3d' }}
               >
                 <div
                   ref={prologueRef}
-                  className="border-2 border-black dark:border-[#38383e] p-3 sm:p-4 max-w-xs sm:max-w-sm transition-colors duration-300 cursor-default"
+                  className="border-2 border-black dark:border-[#38383e] p-2.5 sm:p-4 max-w-full sm:max-w-sm transition-colors duration-300 cursor-default"
                   style={{
                     backgroundColor: isDark ? '#18181c' : '#ffffff',
                     transform: 'translateZ(45px) rotate(-1deg)',
                     boxShadow: isDark
-                      ? '6px 6px 0px #000000, 12px 12px 0px rgba(0,0,0,0.3)'
-                      : '6px 6px 0px #000000, 12px 12px 0px rgba(0,0,0,0.12)',
+                      ? '4px 4px 0px #000000, 8px 8px 0px rgba(0,0,0,0.3)'
+                      : '4px 4px 0px #000000, 8px 8px 0px rgba(0,0,0,0.12)',
                     transformStyle: 'preserve-3d'
                   }}
                 >
-                  <div className="flex items-center gap-1.5 font-mono-tech text-[10px] sm:text-xs font-bold text-stone-800 dark:text-stone-300 uppercase mb-1">
-                    <span className="inline-block w-2.5 h-2.5 bg-[#ef4444]"></span>
+                  <div className="flex items-center gap-1.5 font-mono-tech text-[9px] sm:text-xs font-bold text-stone-800 dark:text-stone-300 uppercase mb-0.5 sm:mb-1">
+                    <span className="inline-block w-2 h-2 sm:w-2.5 sm:h-2.5 bg-[#ef4444]"></span>
                     <span>NARRATIVE PROLOGUE:</span>
                   </div>
                   <InkText
@@ -693,19 +770,19 @@ export default function HeroSection() {
                     strokeWidth="1.2px"
                     delay={200}
                     duration={1800}
-                    className="font-heading font-bold text-sm sm:text-base md:text-lg tracking-tight text-black dark:text-white"
+                    className="font-heading font-bold text-xs sm:text-base md:text-lg tracking-tight text-black dark:text-white"
                     text='"THIS IS NOT JUST A WEBSITE."'
                   />
                 </div>
 
                 <div
                   ref={limeBoxRef}
-                  className="bg-[#bef264] border-2 border-black px-4 py-2 font-mono-tech font-bold text-xs sm:text-sm text-black flex items-center gap-1.5 flex-wrap cursor-default"
+                  className="bg-[#bef264] border-2 border-black px-3 py-1.5 sm:px-4 sm:py-2 font-mono-tech font-bold text-[11px] sm:text-sm text-black flex items-center gap-1.5 flex-wrap cursor-default self-start sm:self-auto"
                   style={{
                     transform: 'translateZ(45px) rotate(1deg)',
                     boxShadow: isDark
-                      ? '6px 6px 0px #000000, 12px 12px 0px rgba(0,0,0,0.35)'
-                      : '6px 6px 0px #000000, 12px 12px 0px rgba(0,0,0,0.12)',
+                      ? '4px 4px 0px #000000, 8px 8px 0px rgba(0,0,0,0.35)'
+                      : '4px 4px 0px #000000, 8px 8px 0px rgba(0,0,0,0.12)',
                     transformStyle: 'preserve-3d'
                   }}
                 >
@@ -716,8 +793,8 @@ export default function HeroSection() {
                     cursor={false}
                     text="IT'S A STORY YOU SCROLL THROUGH."
                   />
-                  <span>//</span>
-                  <span className="font-heading font-black tracking-wider text-black">
+                  <span className="hidden sm:inline">//</span>
+                  <span className="font-heading font-black tracking-wider text-black hidden sm:inline">
                     NEVER STOP SCROLLING.
                   </span>
                 </div>
@@ -725,7 +802,7 @@ export default function HeroSection() {
 
               <div
                 ref={windowWrapperRef}
-                className="relative z-10 max-w-4xl mx-auto w-full my-6 sm:my-8 px-2"
+                className="relative z-10 max-w-4xl mx-auto w-full my-2 sm:my-8 px-1 sm:px-2"
                 style={{ transformStyle: 'preserve-3d' }}
               >
                 <div
@@ -742,11 +819,11 @@ export default function HeroSection() {
                       role="button"
                       tabIndex={0}
                       title="Tap or scroll down to dive into window"
-                      className="relative border-3 border-black dark:border-[#38383e] overflow-hidden bg-black aspect-[21/9] sm:aspect-[2.35/1] w-full transition-shadow duration-300 cursor-pointer group"
+                      className="relative border-3 border-black dark:border-[#38383e] overflow-hidden bg-black aspect-[16/10] sm:aspect-[2.35/1] w-full transition-shadow duration-300 cursor-pointer group"
                       style={{
                         boxShadow: isDark
-                          ? '8px 8px 0px #000000, 16px 16px 0px rgba(0,0,0,0.4)'
-                          : '8px 8px 0px #000000, 16px 16px 0px rgba(0,0,0,0.14)'
+                          ? '6px 6px 0px #000000, 12px 12px 0px rgba(0,0,0,0.4)'
+                          : '6px 6px 0px #000000, 12px 12px 0px rgba(0,0,0,0.14)'
                       }}
                     >
                       <img
@@ -762,22 +839,23 @@ export default function HeroSection() {
                       <div className="absolute inset-0 manga-halftone-light opacity-20 pointer-events-none" />
 
                       <div ref={frameBadgesRef} className="contents">
-                        <div className="absolute top-2.5 left-2.5 z-20">
-                          <div className="bg-white/95 dark:bg-black/90 text-black dark:text-white border border-black dark:border-stone-700 px-2.5 py-0.5 font-mono-tech font-bold text-[9px] sm:text-[11px] shadow-sm">
-                            FRAME: ARCHIVE_001_A // OVERVIEW PERSPECTIVE
+                        <div className="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 z-20">
+                          <div className="bg-white/95 dark:bg-black/90 text-black dark:text-white border border-black dark:border-stone-700 px-2 py-0.5 sm:px-2.5 sm:py-0.5 font-mono-tech font-bold text-[8px] sm:text-[11px] shadow-sm">
+                            <span className="sm:hidden">FRAME: 001_A</span>
+                            <span className="hidden sm:inline">FRAME: ARCHIVE_001_A // OVERVIEW PERSPECTIVE</span>
                           </div>
                         </div>
 
-                        <div className="absolute top-2.5 right-2.5 z-20">
-                          <span className="bg-[#bef264] text-black font-mono-tech font-bold text-[9px] sm:text-[10px] px-2 py-0.5 border border-black shadow-sm flex items-center gap-1 group-hover:scale-105 transition-transform">
+                        <div className="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 z-20">
+                          <span className="bg-[#bef264] text-black font-mono-tech font-bold text-[8px] sm:text-[10px] px-1.5 py-0.5 sm:px-2 sm:py-0.5 border border-black shadow-sm flex items-center gap-1 group-hover:scale-105 transition-transform">
                             <span>▶</span>
                             <span className="hidden sm:inline">WATCH 4K STREAM</span>
-                            <span className="sm:hidden">PLAY</span>
+                            <span className="sm:hidden">4K PLAY</span>
                           </span>
                         </div>
 
-                        <div className="absolute bottom-2.5 right-3 z-20">
-                          <span className="bg-black/85 px-2 py-0.5 text-[#bef264] font-mono-tech font-bold text-[10px] sm:text-xs tracking-wider border border-black/40">
+                        <div className="absolute bottom-2 right-2 sm:bottom-2.5 sm:right-3 z-20">
+                          <span className="bg-black/85 px-1.5 py-0.5 sm:px-2 sm:py-0.5 text-[#bef264] font-mono-tech font-bold text-[8px] sm:text-xs tracking-wider border border-black/40">
                             SEOUL GRID: SECTOR 07
                           </span>
                         </div>
@@ -788,45 +866,40 @@ export default function HeroSection() {
 
                 <div
                   ref={boomStickerRef}
-                  className="absolute -top-10 sm:-top-14 right-2 sm:right-6 z-40 flex flex-col items-center select-none group cursor-help"
+                  className="absolute -top-7 sm:-top-14 right-2 sm:right-6 z-40 flex flex-col items-center select-none group cursor-help"
                   style={{
                     transform: 'translateZ(85px) rotate(-6deg)',
                     transformStyle: 'preserve-3d'
                   }}
                 >
-                  <span className="font-heading text-5xl sm:text-7xl text-[#ef4444] font-black tracking-tighter drop-shadow-[4px_4px_0px_#000] drop-shadow-[8px_8px_0px_rgba(0,0,0,0.4)]">
+                  <span className="font-heading text-4xl sm:text-7xl text-[#ef4444] font-black tracking-tighter drop-shadow-[3px_3px_0px_#000] sm:drop-shadow-[4px_4px_0px_#000] drop-shadow-[6px_6px_0px_rgba(0,0,0,0.4)]">
                     BOOM!
                   </span>
                   <div
-                    className="bg-black text-white font-mono-tech font-extrabold text-[10px] sm:text-xs px-3 py-0.5 border border-black transform rotate-3 -mt-2.5 sm:-mt-3"
+                    className="bg-black text-white font-mono-tech font-extrabold text-[9px] sm:text-xs px-2.5 py-0.5 border border-black transform rotate-3 -mt-2 sm:-mt-3"
                     style={{
-                      boxShadow: '3px 3px 0px #ef4444'
+                      boxShadow: '2px 2px 0px #ef4444'
                     }}
                   >
                     INTRO
-                  </div>
-
-                  <div className="absolute right-0 top-full mt-1 w-44 bg-black text-white text-[10px] font-mono-tech p-2 border border-stone-600 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 shadow-2xl">
-                    <div className="text-[#bef264] font-bold">SFX: BOOM!</div>
-                    <div className="text-stone-300">Explosive cinematic prologue intro</div>
                   </div>
                 </div>
 
                 <div
                   ref={titleCardRef}
-                  className="relative z-50 text-center -mt-10 sm:-mt-14"
+                  className="relative z-50 text-center -mt-4 sm:-mt-14"
                   style={{
                     transform: 'translateZ(95px)',
                     transformStyle: 'preserve-3d'
                   }}
                 >
                   <div
-                    className="inline-block border-3 border-black dark:border-[#38383e] px-8 sm:px-14 py-2 sm:py-3.5 transition-colors duration-300 cursor-default"
+                    className="inline-block border-3 border-black dark:border-[#38383e] px-6 sm:px-14 py-1.5 sm:py-3.5 transition-colors duration-300 cursor-default"
                     style={{
                       backgroundColor: isDark ? '#16161a' : '#ffffff',
                       boxShadow: isDark
-                        ? '8px 12px 0px #000000, 16px 20px 0px rgba(0,0,0,0.5)'
-                        : '8px 12px 0px #000000, 16px 20px 0px rgba(0,0,0,0.18)'
+                        ? '6px 8px 0px #000000, 12px 14px 0px rgba(0,0,0,0.5)'
+                        : '6px 8px 0px #000000, 12px 14px 0px rgba(0,0,0,0.18)'
                     }}
                   >
                     <InkText
@@ -836,16 +909,16 @@ export default function HeroSection() {
                       strokeWidth="1.4px"
                       delay={200}
                       duration={2400}
-                      className="text-5xl sm:text-7xl md:text-8xl font-bold font-comic-title tracking-wider leading-none drop-shadow-[2px_2px_0px_rgba(0,0,0,0.15)] select-none text-black dark:text-white"
+                      className="text-4xl sm:text-7xl md:text-8xl font-bold font-comic-title tracking-wider leading-none drop-shadow-[2px_2px_0px_rgba(0,0,0,0.15)] select-none text-black dark:text-white"
                       text="OG MEDIA"
                     />
                   </div>
 
-                  <div className="block -mt-1.5 sm:-mt-2">
+                  <div className="block -mt-1 sm:-mt-2">
                     <div
-                      className="inline-block bg-black text-[#bef264] px-4 sm:px-6 py-1.5 font-mono-tech font-extrabold text-xs sm:text-sm md:text-base tracking-widest uppercase border border-stone-800 dark:border-stone-700 cursor-default"
+                      className="inline-block bg-black text-[#bef264] px-3 sm:px-6 py-1 sm:py-1.5 font-mono-tech font-extrabold text-[10px] sm:text-sm md:text-base tracking-wider sm:tracking-widest uppercase border border-stone-800 dark:border-stone-700 cursor-default"
                       style={{
-                        boxShadow: '6px 6px 0px #000000, 14px 14px 0px rgba(0,0,0,0.3)'
+                        boxShadow: '4px 4px 0px #000000, 8px 8px 0px rgba(0,0,0,0.3)'
                       }}
                     >
                       <InkText
@@ -861,22 +934,22 @@ export default function HeroSection() {
                   </div>
                 </div>
 
-                <div style={{ transform: 'translateZ(30px)' }}>
+                <div ref={descRef} style={{ transform: 'translateZ(30px)' }}>
                   <TypewriterText
                     delay={750}
                     speed={12}
-                    className="max-w-2xl mx-auto text-stone-800 dark:text-stone-300 font-medium text-xs sm:text-sm md:text-base leading-relaxed text-center mt-10 mb-8 px-4"
+                    className="max-w-2xl mx-auto text-stone-800 dark:text-stone-300 font-medium text-xs sm:text-sm md:text-base leading-relaxed text-center mt-3 sm:mt-8 mb-3 sm:mb-6 px-2 sm:px-4"
                     text="We forge brand worldbuilding, dynamic digital experiences, and high-impact intellectual properties with the relentless momentum and visual intensity of premier webtoons."
                   />
                 </div>
 
                 <div
-                  className="flex flex-wrap items-center justify-between gap-6 pt-2 px-2 sm:px-4"
+                  className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-6 pt-1 sm:pt-2 px-1 sm:px-4"
                   style={{ transformStyle: 'preserve-3d' }}
                 >
                   <div
                     ref={swooshRef}
-                    className="flex flex-col items-start select-none group cursor-help"
+                    className="flex flex-col items-center sm:items-start select-none group cursor-help"
                     style={{
                       transform: 'translateZ(60px)',
                       transformStyle: 'preserve-3d'
@@ -889,27 +962,22 @@ export default function HeroSection() {
                       strokeWidth="1.2px"
                       delay={400}
                       duration={1800}
-                      className="font-heading text-4xl sm:text-5xl text-black dark:text-white font-black tracking-tight leading-none drop-shadow-[3px_3px_0px_rgba(0,0,0,0.2)]"
+                      className="font-heading text-2xl sm:text-5xl text-black dark:text-white font-black tracking-tight leading-none drop-shadow-[2px_2px_0px_rgba(0,0,0,0.2)]"
                       text="SWOO-OOSH!"
                     />
                     <div
-                      className="bg-[#bef264] text-black font-mono-tech font-extrabold text-[10px] sm:text-[11px] px-2 py-0.5 border border-black -mt-1"
+                      className="bg-[#bef264] text-black font-mono-tech font-extrabold text-[9px] sm:text-[11px] px-1.5 py-0.5 border border-black -mt-0.5 sm:-mt-1"
                       style={{
-                        boxShadow: '3px 3px 0px #000000, 6px 6px 0px rgba(0,0,0,0.15)'
+                        boxShadow: '2px 2px 0px #000000, 4px 4px 0px rgba(0,0,0,0.15)'
                       }}
                     >
                       [SWOOSH: SPEED VECTOR]
-                    </div>
-
-                    <div className="absolute left-0 bottom-full mb-1 w-44 bg-black text-white text-[10px] font-mono-tech p-2 border border-stone-600 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 shadow-2xl">
-                      <div className="text-[#bef264] font-bold">SFX: SWOO-OOSH!</div>
-                      <div className="text-stone-300">High velocity motion vector</div>
                     </div>
                   </div>
 
                   <div
                     ref={ctaRef}
-                    className="flex items-center gap-3 flex-wrap"
+                    className="w-full sm:w-auto flex items-center justify-center gap-3"
                     style={{
                       transform: 'translateZ(50px)',
                       transformStyle: 'preserve-3d'
@@ -918,16 +986,13 @@ export default function HeroSection() {
                     <button
                       type="button"
                       onClick={handleDiveIntoWindow}
-                      className="bg-black dark:bg-[#18181c] hover:bg-stone-900 dark:hover:bg-black text-white font-mono-tech font-bold text-xs sm:text-sm px-5 py-2.5 border-2 border-black dark:border-stone-700 flex items-center gap-2 transition-all duration-200 active:translate-x-1 active:translate-y-1 cursor-pointer"
-                      style={{
-                        boxShadow: '5px 5px 0px #000000, 10px 10px 0px rgba(0,0,0,0.25)'
-                      }}
+                      className="w-full sm:w-auto justify-center bg-black dark:bg-[#18181c] hover:bg-stone-900 dark:hover:bg-black text-white font-mono-tech font-bold text-xs sm:text-sm px-4 sm:px-5 py-2.5 border-2 border-black dark:border-stone-700 flex items-center gap-2 transition-all duration-200 active:translate-x-1 active:translate-y-1 cursor-pointer shadow-[4px_4px_0px_#000] sm:shadow-[5px_5px_0px_#000]"
                     >
                       <span>SCROLL OR TAP TO DIVE INTO WINDOW</span>
                       <span className="text-[#bef264]">↓</span>
                     </button>
                     <div
-                      className="bg-white dark:bg-[#18181c] text-stone-600 dark:text-stone-400 font-mono-tech text-xs px-3 py-2.5 border border-stone-300 dark:border-stone-700 hidden sm:block"
+                      className="bg-white dark:bg-[#18181c] text-stone-600 dark:text-stone-400 font-mono-tech text-xs px-3 py-2.5 border border-stone-300 dark:border-stone-700 hidden lg:block"
                       style={{
                         boxShadow: '3px 3px 0px rgba(0,0,0,0.15)'
                       }}
@@ -940,13 +1005,13 @@ export default function HeroSection() {
 
               <div
                 ref={telemetryRef}
-                className="relative z-10 border-t border-black dark:border-stone-800 pt-2.5 mt-4 flex items-center justify-between font-mono-tech text-[10px] sm:text-xs text-stone-600 dark:text-stone-400 px-1"
+                className="relative z-10 border-t border-black dark:border-stone-800 pt-2 sm:pt-2.5 mt-2 sm:mt-4 flex items-center justify-between font-mono-tech text-[9px] sm:text-xs text-stone-600 dark:text-stone-400 px-1"
                 style={{ transform: 'translateZ(15px)' }}
               >
                 <div>00:00:01 // SCENE_INIT</div>
                 <div className="flex items-center gap-2">
                   <span className="tracking-widest text-black dark:text-white font-bold">•••</span>
-                  <div className="w-16 h-1.5 bg-[#bef264] border border-black dark:border-stone-700"></div>
+                  <div className="w-12 sm:w-16 h-1.5 bg-[#bef264] border border-black dark:border-stone-700"></div>
                 </div>
                 <div>CHAPTER 00 : PROLOGUE FINISHED</div>
               </div>

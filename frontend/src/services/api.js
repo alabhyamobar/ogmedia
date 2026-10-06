@@ -204,6 +204,14 @@ class ApiClient {
     return this.request('/api/v1/analytics/services');
   }
 
+  getTimelineAnalytics(params = {}) {
+    const query = new URLSearchParams();
+    Object.entries(params).forEach(([k, v]) => {
+      if (v !== undefined && v !== null && v !== '') query.append(k, v);
+    });
+    return this.request(`/api/v1/analytics/timeline?${query.toString()}`);
+  }
+
   getEmployeeAnalytics() {
     return this.request('/api/v1/analytics/employees');
   }

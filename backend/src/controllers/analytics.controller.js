@@ -43,19 +43,31 @@ export async function getOverviewAnalytics(req, res, next) {
       baseFilter.assignedTo = req.query.assignedTo;
     }
 
-    // Date range for current period
     const now = new Date();
-    const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-    const previousMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-    const previousMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
+    let startDate = null;
+    let endDate = now;
 
-    const startDate = req.query.startDate ? new Date(req.query.startDate) : currentMonthStart;
-    const endDate = req.query.endDate ? new Date(req.query.endDate) : now;
+    if (req.query.startDate) {
+      startDate = new Date(req.query.startDate);
+      if (req.query.endDate) {
+        endDate = new Date(req.query.endDate);
+      }
+    } else if (req.query.days) {
+      const days = parseInt(req.query.days, 10);
+      if (!isNaN(days) && days > 0) {
+        startDate = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
+      }
+    }
+
+    const timeFilter = {};
+    if (startDate) {
+      timeFilter.createdAt = { $gte: startDate, $lte: endDate };
+    }
 
     // Apply DB-level role and expertise scope
     const scopedFilter = buildLeadScopeFilter(req.user, {
       ...baseFilter,
-      createdAt: { $gte: startDate, $lte: endDate }
+      ...timeFilter
     });
 
     // 3. Compute status breakdown in single aggregation pipeline
@@ -93,38 +105,52 @@ export async function getOverviewAnalytics(req, res, next) {
     // Conversion rate for selected range: (Converted / Total) * 100
     const conversionRate = totalLeads > 0 ? Math.round((countsMap.CONVERTED / totalLeads) * 1000) / 10 : 0;
 
-    // 4. Period Comparison: Current Month vs Previous Month
+    // 4. Period Comparison: Current Calendar Month vs Previous Calendar Month
+    const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const previousMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const previousMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
+
+    const currentMonthScopedFilter = buildLeadScopeFilter(req.user, {
+      ...baseFilter,
+      createdAt: { $gte: currentMonthStart, $lte: now }
+    });
+
     const prevMonthScopedFilter = buildLeadScopeFilter(req.user, {
       ...baseFilter,
       createdAt: { $gte: previousMonthStart, $lte: previousMonthEnd }
     });
 
-    const [prevTotal, prevConverted] = await Promise.all([
-      Lead.countDocuments(prevMonthScopedFilter),
-      Lead.countDocuments({ ...prevMonthScopedFilter, status: LEAD_STATUS.CONVERTED })
+    const [currentConverted, prevConverted, currentTotal, prevTotal] = await Promise.all([
+      Lead.countDocuments({ ...currentMonthScopedFilter, status: LEAD_STATUS.CONVERTED }),
+      Lead.countDocuments({ ...prevMonthScopedFilter, status: LEAD_STATUS.CONVERTED }),
+      Lead.countDocuments(currentMonthScopedFilter),
+      Lead.countDocuments(prevMonthScopedFilter)
     ]);
 
     let conversionChangePercent = null;
     let baselineNote = null;
 
     if (prevConverted === 0) {
-      baselineNote = 'No previous-period baseline';
+      baselineNote = currentConverted > 0 ? `+${currentConverted} won this month` : 'No previous-period baseline';
     } else {
       // Formula: ((Current - Previous) / Previous) * 100
-      const diff = countsMap.CONVERTED - prevConverted;
+      const diff = currentConverted - prevConverted;
       conversionChangePercent = Math.round((diff / prevConverted) * 1000) / 10;
     }
 
     const payload = {
       period: {
         startDate,
-        endDate
+        endDate,
+        isAllTime: !startDate
       },
       counts: countsMap,
       conversionRate,
       comparison: {
         previousMonthConverted: prevConverted,
-        currentMonthConverted: countsMap.CONVERTED,
+        currentMonthConverted: currentConverted,
+        previousMonthTotal: prevTotal,
+        currentMonthTotal: currentTotal,
         percentageChange: conversionChangePercent,
         baselineNote
       }
@@ -166,21 +192,53 @@ export async function getServiceAnalytics(req, res, next) {
           _id: '$service',
           total: { $sum: 1 },
           converted: { $sum: { $cond: [{ $eq: ['$status', LEAD_STATUS.CONVERTED] }, 1, 0] } },
-          qualified: { $sum: { $cond: [{ $eq: ['$status', LEAD_STATUS.QUALIFIED] }, 1, 0] } },
-          lost: { $sum: { $cond: [{ $eq: ['$status', LEAD_STATUS.LOST] }, 1, 0] } }
+          qualified: {
+            $sum: {
+              $cond: [
+                { $in: ['$status', [LEAD_STATUS.QUALIFIED, LEAD_STATUS.PROPOSAL, LEAD_STATUS.NEGOTIATION]] },
+                1,
+                0
+              ]
+            }
+          },
+          lost: {
+            $sum: {
+              $cond: [
+                { $in: ['$status', [LEAD_STATUS.LOST, LEAD_STATUS.CLOSED]] },
+                1,
+                0
+              ]
+            }
+          }
         }
-      },
-      { $sort: { total: -1 } }
+      }
     ]);
 
-    const enriched = breakdown.map((item) => ({
-      service: item._id,
-      total: item.total,
-      converted: item.converted,
-      qualified: item.qualified,
-      lost: item.lost,
-      conversionRate: item.total > 0 ? Math.round((item.converted / item.total) * 1000) / 10 : 0
-    }));
+    // Build map for ALL defined services so no sector is missing
+    const serviceMap = new Map();
+    Object.values(SERVICES).forEach((svc) => {
+      serviceMap.set(svc, {
+        service: svc,
+        total: 0,
+        converted: 0,
+        qualified: 0,
+        lost: 0,
+        conversionRate: 0
+      });
+    });
+
+    breakdown.forEach((item) => {
+      if (serviceMap.has(item._id)) {
+        const s = serviceMap.get(item._id);
+        s.total = item.total;
+        s.converted = item.converted;
+        s.qualified = item.qualified;
+        s.lost = item.lost;
+        s.conversionRate = item.total > 0 ? Math.round((item.converted / item.total) * 1000) / 10 : 0;
+      }
+    });
+
+    const enriched = Array.from(serviceMap.values()).sort((a, b) => b.total - a.total);
 
     await setCache(cacheKey, enriched, ANALYTICS_CACHE_TTL);
 
@@ -200,6 +258,13 @@ export async function getServiceAnalytics(req, res, next) {
  */
 export async function getEmployeeAnalytics(req, res, next) {
   try {
+    const cacheKey = getCacheKey('employees', req);
+
+    const cached = await getCache(cacheKey);
+    if (cached) {
+      return res.status(200).json({ success: true, data: cached, source: 'cache', requestId: req.id });
+    }
+
     const employees = await User.find({ role: { $in: [ROLES.EMPLOYEE, ROLES.ADMIN] } })
       .select('name username role expertise status')
       .lean();
@@ -220,7 +285,15 @@ export async function getEmployeeAnalytics(req, res, next) {
               ]
             }
           },
-          lost: { $sum: { $cond: [{ $eq: ['$status', LEAD_STATUS.LOST] }, 1, 0] } }
+          lost: {
+            $sum: {
+              $cond: [
+                { $in: ['$status', [LEAD_STATUS.LOST, LEAD_STATUS.CLOSED]] },
+                1,
+                0
+              ]
+            }
+          }
         }
       }
     ]);
@@ -243,6 +316,8 @@ export async function getEmployeeAnalytics(req, res, next) {
       };
     });
 
+    await setCache(cacheKey, result, ANALYTICS_CACHE_TTL);
+
     return res.status(200).json({
       success: true,
       data: result,
@@ -252,3 +327,114 @@ export async function getEmployeeAnalytics(req, res, next) {
     next(error);
   }
 }
+
+/**
+ * GET /api/v1/analytics/timeline
+ * Aggregated time-series trend data for interactive charts
+ */
+export async function getTimelineAnalytics(req, res, next) {
+  try {
+    const days = Math.min(Math.max(parseInt(req.query.days, 10) || 30, 7), 365);
+    const cacheKey = getCacheKey(`timeline:${days}`, req);
+
+    const cached = await getCache(cacheKey);
+    if (cached) {
+      return res.status(200).json({ success: true, data: cached, source: 'cache', requestId: req.id });
+    }
+
+    const baseFilter = {};
+    if (req.query.service && req.query.service !== 'ALL') {
+      baseFilter.service = req.query.service;
+    }
+    if (req.query.assignedTo && req.query.assignedTo !== 'ALL') {
+      baseFilter.assignedTo = req.query.assignedTo;
+    }
+
+    // Determine the calendar date window: exactly `days` continuous days up to now
+    const now = new Date();
+    const startDate = new Date(now);
+    startDate.setDate(startDate.getDate() - (days - 1));
+    startDate.setHours(0, 0, 0, 0);
+
+    const scopedFilter = buildLeadScopeFilter(req.user, {
+      ...baseFilter,
+      createdAt: { $gte: startDate, $lte: now }
+    });
+
+    const timeline = await Lead.aggregate([
+      { $match: scopedFilter },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: '%Y-%m-%d', date: '$createdAt' }
+          },
+          total: { $sum: 1 },
+          converted: {
+            $sum: { $cond: [{ $eq: ['$status', LEAD_STATUS.CONVERTED] }, 1, 0] }
+          },
+          qualified: {
+            $sum: {
+              $cond: [
+                { $in: ['$status', [LEAD_STATUS.QUALIFIED, LEAD_STATUS.PROPOSAL, LEAD_STATUS.NEGOTIATION]] },
+                1,
+                0
+              ]
+            }
+          },
+          lost: {
+            $sum: {
+              $cond: [
+                { $in: ['$status', [LEAD_STATUS.LOST, LEAD_STATUS.CLOSED]] },
+                1,
+                0
+              ]
+            }
+          }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]);
+
+    // Build contiguous calendar map for all `days` days
+    const dateMap = new Map();
+    for (let i = 0; i < days; i++) {
+      const d = new Date(startDate);
+      d.setDate(d.getDate() + i);
+      const dateStr = d.toISOString().slice(0, 10);
+      const fullDate = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      dateMap.set(dateStr, {
+        date: dateStr,
+        fullDate,
+        total: 0,
+        converted: 0,
+        qualified: 0,
+        lost: 0,
+        conversionRate: 0
+      });
+    }
+
+    timeline.forEach((item) => {
+      if (dateMap.has(item._id)) {
+        const entry = dateMap.get(item._id);
+        entry.total = item.total;
+        entry.converted = item.converted;
+        entry.qualified = item.qualified;
+        entry.lost = item.lost;
+        entry.conversionRate = item.total > 0 ? Math.round((item.converted / item.total) * 1000) / 10 : 0;
+      }
+    });
+
+    const result = Array.from(dateMap.values());
+
+    await setCache(cacheKey, result, ANALYTICS_CACHE_TTL);
+
+    return res.status(200).json({
+      success: true,
+      data: result,
+      requestId: req.id
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
