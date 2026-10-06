@@ -32,22 +32,49 @@ export function createApp() {
   );
 
   // CORS Configuration
-  const allowedOrigins = process.env.FRONTEND_URL
-    ? process.env.FRONTEND_URL.split(',').map((url) => url.trim())
-    : ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173'];
+  const normalizeOrigin = (url) => (url ? url.trim().replace(/\/+$/, '') : '');
+
+  // Default allowed origins for local dev and official production Vercel deployment
+  const defaultOrigins = [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'http://127.0.0.1:5173',
+    'https://ogmedia-theta.vercel.app'
+  ];
+
+  // Additional origins parsed from FRONTEND_URL env var if provided
+  const configuredOrigins = process.env.FRONTEND_URL
+    ? process.env.FRONTEND_URL.split(',').map(normalizeOrigin).filter(Boolean)
+    : [];
+
+  const allowedOrigins = Array.from(new Set([...defaultOrigins, ...configuredOrigins]));
 
   app.use(
     cors({
       origin: (origin, callback) => {
         // Allow requests with no origin (like mobile apps, curl, or server-to-server)
-        if (!origin || allowedOrigins.includes(origin)) {
+        if (!origin) {
           return callback(null, true);
         }
-        return callback(new Error('Blocked by CORS policy.'));
+
+        const normalizedOrigin = normalizeOrigin(origin);
+
+        // Check explicit allowed origins
+        if (allowedOrigins.includes(normalizedOrigin)) {
+          return callback(null, true);
+        }
+
+        // Allow any ogmedia vercel preview or production deployment
+        if (/^https:\/\/ogmedia(-[a-z0-9_-]+)?\.vercel\.app$/i.test(normalizedOrigin)) {
+          return callback(null, true);
+        }
+
+        return callback(new Error(`Blocked by CORS policy for origin: ${origin}`));
       },
       credentials: true,
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-Id']
+      allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-Id', 'Accept'],
+      exposedHeaders: ['X-Request-Id']
     })
   );
 
