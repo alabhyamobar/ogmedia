@@ -14,9 +14,9 @@ const PROJECTS_DATA = [
     tags: ['React', 'Node.js', 'MongoDB', 'Socket.IO'],
     img: '/ogmedia/assets/card_syncboard.webp',
     video: '/ogmedia/videos/service_web_app_design.mp4',
-    codeUrl: 'https://github.com',
     liveUrl: 'https://syncboard.example.com'
   },
+
   {
     id: '02',
     num: '02',
@@ -28,12 +28,25 @@ const PROJECTS_DATA = [
     tags: ['React', 'Three.js', 'GSAP', 'Tailwind'],
     img: '/ogmedia/assets/card_skysolar.webp',
     video: '/ogmedia/videos/service_scale_stage.mp4',
-    codeUrl: 'https://github.com',
     liveUrl: 'https://skysolar.example.com'
   },
   {
     id: '03',
     num: '03',
+    category: '// INSURANCE TECH',
+    title: 'Kumbh Prasadam',
+    badgeType: 'star',
+    subtitle: 'E-Commerce for Sacred Offerings',
+    desc: 'An e-commerce platform for authentic Mahakumbh prasadam and sacred offerings.',
+    tags: ['E-Commerce', 'WEB APP', 'Branding', 'Digital Marketing'],
+    img: '/ogmedia/assets/preashadam.png',
+    video: '/ogmedia/videos/kumbhPreashadam.mp4',
+    liveUrl: 'https://kumbhprasadam.com/'
+  },
+
+  {
+    id: '04',
+    num: '04',
     category: '// AI PLACEMENT',
     title: 'PLACIFY',
     badgeType: 'star',
@@ -42,13 +55,13 @@ const PROJECTS_DATA = [
     tags: ['Python', 'MERN', 'OpenAI', 'NLP'],
     img: '/ogmedia/assets/card_placify.webp',
     video: '/ogmedia/herovid1.mp4',
-    codeUrl: 'https://github.com',
     liveUrl: 'https://placify.example.com'
   },
+
   {
-    id: '04',
-    num: '04',
-    category: '// INSURANCE TECH',
+    id: '05',
+    num: '05',
+    category: '// WEB APP',
     title: 'Apricoat Insurance',
     badgeType: 'shield',
     subtitle: 'Smart Insurance, Simplified',
@@ -56,27 +69,11 @@ const PROJECTS_DATA = [
     tags: ['React', 'Node.js', 'MongoDB', 'JWT'],
     img: '/ogmedia/assets/service_web_app_design.webp',
     video: '/ogmedia/videos/service_influencer.mp4',
-    codeUrl: 'https://github.com',
     liveUrl: 'https://apricoat.example.com'
   },
-  {
-    id: '05',
-    num: '05',
-    category: '// DOCUMENT AI',
-    title: 'IndustrialBrain',
-    badgeType: 'brain',
-    subtitle: 'Document Processing with GenAI',
-    desc: 'Intelligent document parsing pipeline using Google GenAI for real-world problem solving.',
-    tags: ['Python', 'GenAI', 'RAG', 'PDF'],
-    img: '/ogmedia/assets/cover_protocol.webp',
-    video: '/ogmedia/videos/service_meta_ads.mp4',
-    codeUrl: 'https://github.com',
-    liveUrl: 'https://industrialbrain.example.com'
-  }
 ];
-
 export default function CollectorCoversSection() {
-  const [activeIndex, setActiveIndex] = useState(2); 
+  const [activeIndex, setActiveIndex] = useState(2);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [activeVideoModal, setActiveVideoModal] = useState(null);
   const containerRef = useRef(null);
@@ -154,11 +151,11 @@ export default function CollectorCoversSection() {
     const isActive = activeIndex === idx;
 
     const fanConfig = [
-      { rotate: -3.5, y: 14, z: 10 },  
-      { rotate: -1.8, y: 6, z: 20 },   
-      { rotate: 0, y: -16, z: 35 },     
-      { rotate: 1.8, y: 6, z: 20 },    
-      { rotate: 3.5, y: 14, z: 10 }    
+      { rotate: -3.5, y: 14, z: 10 },
+      { rotate: -1.8, y: 6, z: 20 },
+      { rotate: 0, y: -16, z: 35 },
+      { rotate: 1.8, y: 6, z: 20 },
+      { rotate: 3.5, y: 14, z: 10 }
     ];
 
     const currentFan = fanConfig[idx] || { rotate: 0, y: 0, z: 15 };
@@ -192,7 +189,7 @@ export default function CollectorCoversSection() {
 
       <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-[#e0f2fe]/45 via-[#fce7f3]/25 to-transparent dark:from-[#0c1829]/50 dark:via-[#1e1029]/30 dark:to-transparent" />
-        
+
         <div className="absolute top-8 left-[18%] w-3 h-3 bg-pink-300/80 rounded-full blur-[0.4px] transform rotate-45" />
         <div className="absolute top-20 right-[28%] w-4 h-2 bg-pink-400/70 rounded-full blur-[0.4px] transform rotate-12" />
         <div className="absolute top-1/2 left-[8%] w-3 h-2 bg-pink-300/80 rounded-full transform -rotate-45" />
@@ -303,11 +300,10 @@ export default function CollectorCoversSection() {
                     onMouseEnter={() => setHoveredIndex(idx)}
                     onMouseLeave={() => setHoveredIndex(null)}
                     onClick={() => setActiveIndex(idx)}
-                    className={`w-[270px] lg:w-[285px] xl:w-[305px] bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-xl overflow-hidden cursor-pointer transition-shadow duration-300 relative ${
-                      isCenter || activeIndex === idx
+                    className={`w-[270px] lg:w-[285px] xl:w-[305px] bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-xl overflow-hidden cursor-pointer transition-shadow duration-300 relative ${isCenter || activeIndex === idx
                         ? 'shadow-[8px_8px_0px_#000000] dark:shadow-[8px_8px_0px_#000000,0_0_20px_rgba(190,242,100,0.2)]'
                         : 'shadow-[5px_5px_0px_#000000] hover:shadow-[8px_8px_0px_#000000]'
-                    }`}
+                      }`}
                   >
 
                     <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black dark:border-stone-700 bg-white dark:bg-[#1e1e24]">
@@ -400,7 +396,7 @@ export default function CollectorCoversSection() {
                               e.stopPropagation();
                               setActiveVideoModal(project);
                             }}
-                            className="flex items-center gap-1.5 bg-[#39FF14] hover:bg-[#7CFF5E] text-black font-mono-tech font-bold text-[11px] px-2.5 py-1.5 border border-black rounded shadow-[2px_2px_0px_#000] hover:-translate-y-0.5 transition-transform"
+                            className="flex items-center gap-1.5 bg-[#39FF14] hover:bg-[#7CFF5E] text-black font-mono-tech font-bold text-[11px] px-2.5 py-1.5 border border-black rounded shadow-[2px_2px_0px_#000] hover:-translate-y-0.5 transition-transform cursor-pointer"
                           >
                             <svg className="w-3 h-3 fill-current" viewBox="0 0 24 24">
                               <path d="M8 5v14l11-7z" />
@@ -408,31 +404,21 @@ export default function CollectorCoversSection() {
                             <span>WATCH DEMO</span>
                           </button>
 
-                          <a
-                            href={project.codeUrl}
-                            target="_blank"
-                            rel="noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="flex items-center gap-1 text-[11px] font-mono-tech font-bold text-stone-800 dark:text-stone-200 hover:text-black dark:hover:text-[#39FF14] transition-colors"
-                          >
-                            <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-                              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
-                            </svg>
-                            <span>VIEW CODE</span>
-                          </a>
-
-                          <a
-                            href={project.liveUrl}
-                            target="_blank"
-                            rel="noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            aria-label="Open live project"
-                            className="p-1 text-stone-600 dark:text-stone-300 hover:text-black dark:hover:text-[#39FF14] border border-black/20 dark:border-stone-700 rounded"
-                          >
-                            <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-                              <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z" />
-                            </svg>
-                          </a>
+                          {project.liveUrl && (
+                            <a
+                              href={project.liveUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              aria-label="Open live project"
+                              className="flex items-center gap-1 text-[11px] font-mono-tech font-bold text-stone-800 dark:text-stone-200 hover:text-black dark:hover:text-[#39FF14] border border-black/20 dark:border-stone-700 hover:border-black dark:hover:border-[#39FF14] px-2 py-1 rounded transition-colors"
+                            >
+                              <span>LIVE SITE</span>
+                              <svg className="w-3 h-3 fill-current" viewBox="0 0 24 24">
+                                <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z" />
+                              </svg>
+                            </a>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -529,14 +515,16 @@ export default function CollectorCoversSection() {
                     >
                       ▶ WATCH DEMO
                     </button>
-                    <a
-                      href={project.codeUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-[10px] font-mono-tech font-bold text-stone-800 dark:text-stone-200"
-                    >
-                      VIEW CODE ↗
-                    </a>
+                    {project.liveUrl && (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[10px] font-mono-tech font-bold text-stone-800 dark:text-stone-200 hover:text-black dark:hover:text-[#39FF14]"
+                      >
+                        LIVE DEMO ↗
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
@@ -559,11 +547,10 @@ export default function CollectorCoversSection() {
                 key={idx}
                 onClick={() => setActiveIndex(idx)}
                 aria-label={`Go to slide ${idx + 1}`}
-                className={`transition-all duration-300 rounded-full ${
-                  idx === activeIndex
+                className={`transition-all duration-300 rounded-full ${idx === activeIndex
                     ? 'w-3 h-3 bg-black dark:bg-[#39FF14] scale-110 shadow-sm'
                     : 'w-2 h-2 bg-stone-300 dark:bg-stone-700 hover:bg-stone-500'
-                }`}
+                  }`}
               />
             ))}
           </div>
@@ -631,22 +618,26 @@ export default function CollectorCoversSection() {
               </div>
 
               <div className="flex items-center gap-2">
-                <a
-                  href={activeVideoModal.codeUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="bg-stone-200 dark:bg-stone-800 hover:bg-stone-300 text-black dark:text-white px-3 py-1.5 rounded font-mono-tech text-xs font-bold border border-black dark:border-stone-700"
-                >
-                  GitHub Source
-                </a>
-                <a
-                  href={activeVideoModal.liveUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="bg-[#39FF14] hover:bg-[#7CFF5E] text-black px-3.5 py-1.5 rounded font-mono-tech text-xs font-bold border border-black shadow-[2px_2px_0px_#000]"
-                >
-                  Launch App ↗
-                </a>
+                {activeVideoModal.codeUrl && (
+                  <a
+                    href={activeVideoModal.codeUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="bg-stone-200 dark:bg-stone-800 hover:bg-stone-300 text-black dark:text-white px-3 py-1.5 rounded font-mono-tech text-xs font-bold border border-black dark:border-stone-700"
+                  >
+                    GitHub Source
+                  </a>
+                )}
+                {activeVideoModal.liveUrl && (
+                  <a
+                    href={activeVideoModal.liveUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="bg-[#39FF14] hover:bg-[#7CFF5E] text-black px-3.5 py-1.5 rounded font-mono-tech text-xs font-bold border border-black shadow-[2px_2px_0px_#000]"
+                  >
+                    Launch App ↗
+                  </a>
+                )}
               </div>
             </div>
           </div>
