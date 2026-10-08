@@ -2,13 +2,7 @@ import React from 'react';
 import InkText from '../../ui/InkText';
 import TypewriterText from '../../ui/TypewriterText';
 
-/**
- * HeroTitleCard
- * The primary brand and SEO anchor for the website.
- * Contains the crowned OG emblem, semantic <h1> with crawlable keyword text,
- * semantic <h2> subtitle, and crawlable value proposition paragraph.
- * Explicitly positioned to overlap in front of the video/manga panel in 3D perspective space.
- */
+
 export default function HeroTitleCard({ titleCardRef, descRef, isDark }) {
   return (
     <div
@@ -32,14 +26,14 @@ export default function HeroTitleCard({ titleCardRef, descRef, isDark }) {
           }}
         >
           <div className="flex items-center justify-center gap-3 sm:gap-4">
-            {/* Crowned OG Crest Logo */}
+
             <div className="relative group/logo">
               <div
                 className="absolute inset-0 bg-[#39FF14]/40 rounded-xl blur-md opacity-60 group-hover/logo:opacity-100 transition-opacity"
                 aria-hidden="true"
               />
               <img
-                src="/ogmedia/assets/og_logo.png"
+                src="/ogmedia/assets/og_logo.webp"
                 alt="OG Media official crowned crest emblem"
                 width="56"
                 height="56"
@@ -49,7 +43,7 @@ export default function HeroTitleCard({ titleCardRef, descRef, isDark }) {
               />
             </div>
 
-            {/* Primary Semantic H1 with Screen-Reader / Crawler Keyword Enhancements */}
+ 
             <h1 className="text-4xl sm:text-7xl md:text-8xl font-bold font-comic-title tracking-wider leading-none drop-shadow-[2px_2px_0px_rgba(0,0,0,0.15)] text-black dark:text-white m-0 p-0">
               <span className="sr-only">
                 OG MEDIA — Creative Intelligence, Viral Marketing &amp; Brand Worldbuilding Studio
@@ -68,7 +62,7 @@ export default function HeroTitleCard({ titleCardRef, descRef, isDark }) {
           </div>
         </div>
 
-        {/* Tagline / Subtitle Badge */}
+
         <div className="block -mt-1 sm:-mt-2">
           <h2 className="sr-only">Where Ideas Meet Impact — Viral Marketing &amp; Creative Media Agency</h2>
           <div
@@ -89,7 +83,7 @@ export default function HeroTitleCard({ titleCardRef, descRef, isDark }) {
           </div>
         </div>
 
-        {/* Crawlable Description Paragraph with Typewriter Visual Effect */}
+
         <div ref={descRef} style={{ transform: 'translateZ(30px)' }}>
           <p className="sr-only">
             We turn bold ideas into unforgettable brands, scroll-stopping content, and digital experiences built to capture attention and drive growth.

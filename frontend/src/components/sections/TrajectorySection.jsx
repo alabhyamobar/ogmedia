@@ -97,9 +97,27 @@ const STORY_PILLARS = [
     statValue: 'STEADY GROWTH',
     resolution: 'FULL HD // MASTER CUT',
     accentColor: '#f59e0b'
+  },
+
+  {
+    id: 'website-app-design',
+    title: 'WEBSITE & APP DESIGN',
+    code: 'STAGE 06 // DIGITAL EXPERIENCES',
+    subtitle: 'BUILD A DIGITAL EXPERIENCE PEOPLE REMEMBER',
+    description:
+      'We design and build modern websites and apps that look impressive, work smoothly on every device, and make it easy for visitors to understand your business and take action.',
+    videoSrc: '/ogmedia/videos/service_web_app_design.mp4',
+    poster: '/ogmedia/assets/service_web_app_design.webp',
+    sfxBadge: 'MAX SPEED',
+    dialogueTag: 'DIGITAL EXPERIENCE',
+    dialogueQuote:
+      '"Your website is often the first experience people have with your brand—make it count."',
+    statLabel: 'PERFORMANCE',
+    statValue: '<0.4S LOAD TIME',
+    resolution: 'ULTRA-RESPONSIVE // 120HZ',
+    accentColor: '#10b981'
   }
 ];
-
 export default function TrajectorySection() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);

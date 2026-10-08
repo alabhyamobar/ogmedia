@@ -30,7 +30,7 @@ export default function OgLogo({
           }`}
         >
           <img
-            src="/ogmedia/assets/og_logo.png"
+            src="/ogmedia/assets/og_logo.webp"
             alt="OG Crest Logo"
             className={`${imgSizeClasses[size] || imgSizeClasses.md} object-contain transition-transform`}
           />

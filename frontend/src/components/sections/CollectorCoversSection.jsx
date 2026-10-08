@@ -4,42 +4,51 @@ import UnfoldPanel from '../ui/UnfoldPanel';
 
 const PROJECTS_DATA = [
   {
-    id: '01',
-    num: '01',
-    category: '// COLLABORATION',
-    title: 'SyncBoard AI',
-    badgeType: 'sun',
-    subtitle: 'Real-Time Collaborative Workspace',
-    desc: 'A modern workspace with real-time documents, canvas, team collaboration and role based access control.',
-    tags: ['React', 'Node.js', 'MongoDB', 'Socket.IO'],
-    img: '/ogmedia/assets/card_syncboard.webp',
-    video: '/ogmedia/videos/service_web_app_design.mp4',
-    liveUrl: 'https://syncboard.example.com'
-  },
+  id: '01',
+  num: '01',
+  category: '// BRAND WORK',
+  title: 'Pilgrims',
+  badgeType: 'star',
+  subtitle: 'AI-Powered Content & Digital Experience',
+  desc: 'A modern digital experience for Pilgrims, with an engaging online presence.',
+  tags: [
+    'AI Content Creation',
+    'AI Visuals',
+    'Digital Branding'
+  ],
+  img: '/ogmedia/assets/pilgrims.webp',
+  video: '/ogmedia/videos/ogbrandad.mp4',
+  liveUrl: 'https://discoverpilgrim.com/'
+},
 
   {
-    id: '02',
-    num: '02',
-    category: '// CLEAN ENERGY',
-    title: 'SkySolar',
-    badgeType: 'leaf',
-    subtitle: 'Solar Solutions for a Cleaner Tomorrow',
-    desc: 'A cinematic landing site for a solar brand with 3D visuals, parallax animations and a modern UI/UX.',
-    tags: ['React', 'Three.js', 'GSAP', 'Tailwind'],
-    img: '/ogmedia/assets/card_skysolar.webp',
-    video: '/ogmedia/videos/service_scale_stage.mp4',
-    liveUrl: 'https://skysolar.example.com'
-  },
+  id: '02',
+  num: '02',
+  category: '// META-ADS AND DIGITAL PRESENCE',
+  title: 'SkySolar',
+  badgeType: 'leaf',
+  subtitle: 'Solar Solutions for a Cleaner Tomorrow',
+  desc: 'A strong digital presence designed to showcase SkySolar and support targeted ads.',
+  tags: [
+    'Meta Ads',
+    'Digital Marketing',
+    'Brand Awareness',
+    'Online Presence'
+  ],
+  img: '/ogmedia/assets/ogsky.webp',
+  video: '/ogmedia/videos/ogsky.mp4',
+  liveUrl: 'https://www.instagram.com/skyrenewableenergies/'
+},
   {
     id: '03',
     num: '03',
-    category: '// INSURANCE TECH',
+    category: '// E-commerce TECH',
     title: 'Kumbh Prasadam',
     badgeType: 'star',
     subtitle: 'E-Commerce for Sacred Offerings',
     desc: 'An e-commerce platform for authentic Mahakumbh prasadam and sacred offerings.',
     tags: ['E-Commerce', 'WEB APP', 'Branding', 'Digital Marketing'],
-    img: '/ogmedia/assets/preashadam.png',
+    img: '/ogmedia/assets/preashadam.webp',
     video: '/ogmedia/videos/kumbhPreashadam.mp4',
     liveUrl: 'https://kumbhprasadam.com/'
   },

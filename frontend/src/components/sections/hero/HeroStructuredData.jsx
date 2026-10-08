@@ -17,7 +17,7 @@ export default function HeroStructuredData() {
         'url': 'https://ogmedia.agency',
         'logo': {
           '@type': 'ImageObject',
-          'url': 'https://ogmedia.agency/ogmedia/assets/og_logo.png',
+          'url': 'https://ogmedia.agency/ogmedia/assets/og_logo.webp',
           'caption': 'OG Media Official Logo'
         },
         'slogan': 'Where Ideas Meet Impact',
