@@ -8,7 +8,7 @@ export default function InkText({
   className = '',
   strokeColor,
   fillColor,
-  strokeWidth = '1.2px',
+  strokeWidth = '0.5px',
   delay = 200,
   duration = 2000,
   triggerOnce = true
@@ -54,14 +54,14 @@ export default function InkText({
       className={`inline-block select-none relative ${className}`}
       style={{
         color: isFilled ? resolvedFill : 'transparent',
-        WebkitTextStroke: `${strokeWidth} ${resolvedStroke}`,
+        WebkitTextStroke: isFilled ? '0px transparent' : `${strokeWidth} ${resolvedStroke}`,
         paintOrder: 'stroke fill',
         backgroundImage: `linear-gradient(105deg, ${resolvedFill} 0%, ${resolvedFill} 100%)`,
         backgroundRepeat: 'no-repeat',
         backgroundSize: isFilled ? '100% 100%' : '0% 100%',
         WebkitBackgroundClip: 'text',
         backgroundClip: 'text',
-        transition: `background-size ${duration}ms cubic-bezier(0.45, 0.05, 0.25, 1), color 350ms ease ${Math.max(0, duration - 200)}ms`,
+        transition: `background-size ${duration}ms cubic-bezier(0.45, 0.05, 0.25, 1), color 350ms ease ${Math.max(0, duration - 200)}ms, -webkit-text-stroke 300ms ease`,
         willChange: 'background-size, color'
       }}
     >

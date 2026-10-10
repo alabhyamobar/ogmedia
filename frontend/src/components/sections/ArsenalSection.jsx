@@ -140,10 +140,10 @@ export default function ArsenalSection() {
             <InkText
               as="h2"
               text="The Creative Arsenal"
-              strokeWidth="1.5px"
+              strokeWidth="0.5px"
               delay={120}
               duration={2000}
-              className="font-brush text-4xl sm:text-5xl md:text-6xl lg:text-7xl italic tracking-tight text-black dark:text-white uppercase leading-none drop-shadow-sm"
+              className="font-brush text-4xl sm:text-5xl md:text-6xl lg:text-7xl italic tracking-wide text-black dark:text-white uppercase leading-none drop-shadow-sm font-normal"
             />
 
             <span className="absolute -left-2 -right-4 bottom-1 sm:bottom-2 h-[45%] bg-[#39FF14] -z-10 -rotate-1 skew-x-[-14deg] rounded-sm shadow-sm pointer-events-none" />
@@ -220,12 +220,12 @@ export default function ArsenalSection() {
                       <InkText
                         as="h3"
                         text={item.title}
-                        strokeWidth="1.2px"
+                        strokeWidth="0.5px"
                         strokeColor="#ffffff"
                         fillColor="#ffffff"
                         delay={200 + idx * 70}
                         duration={1700}
-                        className="text-2xl sm:text-3xl lg:text-4xl font-bold font-heading text-white tracking-tight mb-2 group-hover:text-[#39FF14] transition-colors"
+                        className="text-2xl sm:text-3xl lg:text-4xl font-normal font-heading text-white tracking-wide mb-2 group-hover:text-[#39FF14] transition-colors"
                       />
                       <p className="text-stone-300 text-xs sm:text-sm leading-relaxed max-w-lg mb-6">
                         {item.desc}
@@ -301,12 +301,12 @@ export default function ArsenalSection() {
                     <InkText
                       as="h3"
                       text={item.title}
-                      strokeWidth="1.2px"
+                      strokeWidth="0.5px"
                       strokeColor="#ffffff"
                       fillColor="#ffffff"
                       delay={200 + idx * 70}
                       duration={1700}
-                      className="text-2xl sm:text-3xl lg:text-4xl font-bold font-heading text-white tracking-tight mb-2 group-hover:text-[#39FF14] transition-colors leading-tight"
+                      className="text-2xl sm:text-3xl lg:text-4xl font-normal font-heading text-white tracking-wide mb-2 group-hover:text-[#39FF14] transition-colors leading-tight"
                     />
 
                     <p className="text-stone-300 text-xs sm:text-sm leading-relaxed max-w-xl font-medium">

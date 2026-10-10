@@ -35,10 +35,10 @@ export default function HeroPrologueBar({ prologueRef, limeBoxRef, isDark }) {
           as="p"
           strokeColor={isDark ? '#ffffff' : '#000000'}
           fillColor={isDark ? '#ffffff' : '#000000'}
-          strokeWidth="1.2px"
+          strokeWidth="0.4px"
           delay={200}
           duration={1800}
-          className="font-heading font-bold text-xs sm:text-base md:text-lg tracking-tight text-black dark:text-white m-0"
+          className="font-heading font-normal text-xs sm:text-base md:text-lg tracking-wide text-black dark:text-white m-0"
           text='"THIS IS NOT JUST A WEBSITE."'
         />
       </div>
@@ -63,7 +63,7 @@ export default function HeroPrologueBar({ prologueRef, limeBoxRef, isDark }) {
           text="WE BUILD THE VISION."
         />
         <span className="hidden sm:inline" aria-hidden="true">//</span>
-        <span className="font-heading font-black tracking-wider text-black hidden sm:inline">
+        <span className="font-heading font-normal tracking-wider text-black hidden sm:inline">
           YOU OWN THE IMPACT.
         </span>
       </div>

@@ -186,10 +186,10 @@ export default function TrajectorySection() {
             <InkText
               as="h2"
               text="The Story — What We Do ?"
-              strokeWidth="1.5px"
+              strokeWidth="0.5px"
               delay={120}
               duration={2000}
-              className="font-brush text-4xl sm:text-5xl md:text-6xl lg:text-7xl italic tracking-tight text-black dark:text-white uppercase leading-none drop-shadow-sm"
+              className="font-brush text-4xl sm:text-5xl md:text-6xl lg:text-7xl italic tracking-wide text-black dark:text-white uppercase leading-none drop-shadow-sm font-normal"
             />
             <span className="absolute -left-2 -right-4 bottom-1 sm:bottom-2 h-[45%] bg-[#39FF14] -z-10 -rotate-1 skew-x-[-14deg] rounded-sm shadow-sm pointer-events-none" />
           </div>
@@ -377,10 +377,10 @@ export default function TrajectorySection() {
                   as="h3"
                   key={`title-${currentIndex}`}
                   text={currentPillar.title}
-                  strokeWidth="1.2px"
+                  strokeWidth="0.5px"
                   delay={100}
                   duration={1600}
-                  className="text-2xl sm:text-3xl font-black font-heading text-black dark:text-white uppercase tracking-tight"
+                  className="text-2xl sm:text-3xl font-normal font-heading text-black dark:text-white uppercase tracking-wide"
                 />
               </div>
 
@@ -468,10 +468,10 @@ export default function TrajectorySection() {
                     <div className="text-[#ef4444] text-[10px] font-bold">[ DIALOGUE 01-B // LEAD ARTIST ]</div>
                     <InkText
                       as="div"
-                      strokeWidth="1.2px"
+                      strokeWidth="0.4px"
                       delay={300}
                       duration={2000}
-                      className="font-bold text-black dark:text-white text-sm sm:text-base tracking-tight font-heading mt-0.5"
+                      className="font-normal text-black dark:text-white text-sm sm:text-base tracking-wide font-heading mt-0.5"
                       text='"WE BUILD WORLDS."'
                     />
                   </div>
@@ -492,10 +492,10 @@ export default function TrajectorySection() {
               </div>
               <InkText
                 as="h3"
-                strokeWidth="1.2px"
+                strokeWidth="0.5px"
                 delay={200}
                 duration={2000}
-                className="text-lg sm:text-xl font-bold font-heading text-black dark:text-white mb-2"
+                className="text-lg sm:text-xl font-normal font-heading text-black dark:text-white mb-2 tracking-wide"
                 text='"WE MAKE BRANDS IMPOSSIBLE TO IGNORE."'
               />
               <TypewriterText

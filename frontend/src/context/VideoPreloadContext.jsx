@@ -5,7 +5,7 @@ const VideoPreloadContext = createContext({
   videoBlobUrl: null,
   progress: 0,
   loadedBytes: 0,
-  totalBytes: 15686480,
+  totalBytes: 8223392,
   speed: '0.0 MB/s',
   isLoaded: false,
   status: 'idle',
@@ -22,7 +22,7 @@ export function VideoPreloadProvider({ children }) {
   const [videoBlobUrl, setVideoBlobUrl] = useState(null);
   const [progress, setProgress] = useState(0);
   const [loadedBytes, setLoadedBytes] = useState(0);
-  const [totalBytes, setTotalBytes] = useState(15686480);
+  const [totalBytes, setTotalBytes] = useState(8223392);
   const [speed, setSpeed] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
   const [status, setStatus] = useState('loading'); // 'idle' | 'loading' | 'ready' | 'error'
@@ -38,7 +38,7 @@ export function VideoPreloadProvider({ children }) {
       const startTime = performance.now();
       let lastTime = startTime;
       let lastLoaded = 0;
-      let targetTotal = 15686480;
+      let targetTotal = 8223392;
 
       try {
         const response = await fetch(videoSrc, { signal: controller.signal });
@@ -155,7 +155,7 @@ export function VideoPreloadProvider({ children }) {
         if (verified || isCancelled) return;
         verified = true;
         setProgress(100);
-        setLoadedBytes(15686480);
+        setLoadedBytes(8223392);
         setIsLoaded(true);
         setStatus('ready');
         testVideo.src = '';
@@ -168,8 +168,8 @@ export function VideoPreloadProvider({ children }) {
           const bufferedEnd = testVideo.buffered.end(testVideo.buffered.length - 1);
           const pct = Math.min(100, Math.round((bufferedEnd / testVideo.duration) * 100));
           setProgress(pct);
-          setLoadedBytes(Math.round((pct / 100) * 15686480));
-          if (pct >= 95) {
+          setLoadedBytes(Math.round((pct / 100) * 8223392));
+          if (pct >= 90) {
             markReady();
           }
         }

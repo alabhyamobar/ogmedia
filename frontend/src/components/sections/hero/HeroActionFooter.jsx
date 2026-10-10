@@ -31,10 +31,10 @@ export default function HeroActionFooter({
           as="div"
           strokeColor={isDark ? '#ffffff' : '#000000'}
           fillColor={isDark ? '#ffffff' : '#000000'}
-          strokeWidth="1.2px"
+          strokeWidth="0.5px"
           delay={400}
           duration={1800}
-          className="font-heading text-2xl sm:text-5xl text-black dark:text-white font-black tracking-tight leading-none drop-shadow-[2px_2px_0px_rgba(0,0,0,0.2)]"
+          className="font-heading text-2xl sm:text-5xl text-black dark:text-white font-normal tracking-wide leading-none drop-shadow-[2px_2px_0px_rgba(0,0,0,0.2)]"
           text="SWOO-OOSH!"
         />
         <div
@@ -57,6 +57,7 @@ export default function HeroActionFooter({
         }}
       >
         <button
+          id="hero-dive-btn"
           type="button"
           onClick={onDive}
           aria-label="Scroll or tap to dive into 4K video window"

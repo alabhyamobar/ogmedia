@@ -16,7 +16,7 @@ const HeroOgEffectSticker = forwardRef(function HeroOgEffectSticker(props, ref) 
         transformStyle: 'preserve-3d'
       }}
     >
-      <span className="font-heading text-3xl sm:text-6xl md:text-7xl text-[#ef4444] font-black tracking-tight sm:tracking-tighter whitespace-nowrap drop-shadow-[3px_3px_0px_#000] sm:drop-shadow-[5px_5px_0px_#000] drop-shadow-[7px_7px_0px_rgba(0,0,0,0.4)]">
+      <span className="font-heading text-3xl sm:text-6xl md:text-7xl text-[#ef4444] font-normal tracking-wide whitespace-nowrap drop-shadow-[3px_3px_0px_#000] sm:drop-shadow-[5px_5px_0px_#000] drop-shadow-[7px_7px_0px_rgba(0,0,0,0.4)]">
         IMPACT
       </span>
       <div

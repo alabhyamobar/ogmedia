@@ -52,7 +52,7 @@ export default function HeroTitleCard({ titleCardRef, descRef, isDark }) {
                 as="span"
                 strokeColor={isDark ? '#ffffff' : '#000000'}
                 fillColor={isDark ? '#ffffff' : '#000000'}
-                strokeWidth="1.4px"
+                strokeWidth="0.6px"
                 delay={200}
                 duration={2400}
                 className="select-none"

@@ -240,10 +240,10 @@ export default function CollectorCoversSection() {
             <InkText
               as="h2"
               text="Proof of Work"
-              strokeWidth="1.5px"
+              strokeWidth="0.5px"
               delay={120}
               duration={2000}
-              className="font-brush text-5xl sm:text-6xl md:text-7xl lg:text-8xl italic tracking-tight text-black dark:text-white uppercase leading-none drop-shadow-sm"
+              className="font-brush text-5xl sm:text-6xl md:text-7xl lg:text-8xl italic tracking-wide text-black dark:text-white uppercase leading-none drop-shadow-sm font-normal"
             />
 
             <span className="absolute -left-2 -right-4 bottom-1 sm:bottom-2 md:bottom-3 h-[45%] bg-[#39FF14] -z-10 -rotate-1 skew-x-[-14deg] rounded-sm shadow-sm pointer-events-none" />
@@ -370,10 +370,10 @@ export default function CollectorCoversSection() {
                           <InkText
                             as="h3"
                             text={project.title}
-                            strokeWidth="1.2px"
+                            strokeWidth="0.5px"
                             delay={250 + idx * 80}
                             duration={1600}
-                            className="font-bold text-lg sm:text-xl font-heading text-black dark:text-white tracking-tight"
+                            className="font-normal text-lg sm:text-xl font-heading text-black dark:text-white tracking-wide"
                           />
                           {renderBadgeIcon(project.badgeType)}
                         </div>
@@ -491,10 +491,10 @@ export default function CollectorCoversSection() {
                     <InkText
                       as="h3"
                       text={project.title}
-                      strokeWidth="1.2px"
+                      strokeWidth="0.5px"
                       delay={200 + idx * 60}
                       duration={1600}
-                      className="font-bold text-lg font-heading text-black dark:text-white"
+                      className="font-normal text-lg font-heading text-black dark:text-white tracking-wide"
                     />
                     {renderBadgeIcon(project.badgeType)}
                   </div>

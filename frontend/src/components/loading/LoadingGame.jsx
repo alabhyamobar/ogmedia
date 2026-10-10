@@ -179,10 +179,10 @@ export default function LoadingGame({ onComplete }) {
   }, []);
 
   const friendlyStatus = useMemo(() => {
-    if (isReady) return 'Hero Video Ready // Archive Online!';
-    if (displayProgress >= 70) return 'Calibrating digital archive...';
+    if (isReady) return 'Hero Video Ready // Entering Website!';
+    if (displayProgress >= 70) return 'Hero video buffered // Finalizing...';
     if (displayProgress >= 30) return 'Buffering 4K hero video stream...';
-    return 'Initializing creative engine...';
+    return 'Preloading hero video...';
   }, [displayProgress, isReady]);
 
   const triggerEnterSite = useCallback(() => {
@@ -201,22 +201,26 @@ export default function LoadingGame({ onComplete }) {
       if (onCompleteRef.current) {
         onCompleteRef.current();
       }
-    }, 200);
+    }, 450);
   }, []);
 
-  // Smoothly interpolate displayProgress towards real videoProgress
+  // Smoothly interpolate displayProgress towards real videoProgress without idle RAF spinning
   useEffect(() => {
+    if (displayProgress >= videoProgress) return;
     let animId;
     const animate = () => {
       setDisplayProgress((curr) => {
         if (curr < videoProgress) {
           const diff = videoProgress - curr;
-          const increment = Math.max(1, Math.ceil(diff * 0.15));
-          return Math.min(videoProgress, curr + increment);
+          const increment = Math.max(1, Math.ceil(diff * 0.2));
+          const next = Math.min(videoProgress, curr + increment);
+          if (next < videoProgress) {
+            animId = requestAnimationFrame(animate);
+          }
+          return next;
         }
         return curr;
       });
-      animId = requestAnimationFrame(animate);
     };
     animId = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animId);
@@ -227,7 +231,7 @@ export default function LoadingGame({ onComplete }) {
     if (isReady && !exitTimeoutRef.current && !hasFinishedRef.current) {
       exitTimeoutRef.current = setTimeout(() => {
         triggerEnterSite();
-      }, 500);
+      }, 400);
     }
   }, [isReady, triggerEnterSite]);
 
@@ -768,12 +772,16 @@ export default function LoadingGame({ onComplete }) {
       }
 
       ctx.restore();
-      animationFrameId = requestAnimationFrame(render);
+      if (!isExiting) {
+        animationFrameId = requestAnimationFrame(render);
+      }
     };
 
-    animationFrameId = requestAnimationFrame(render);
+    if (!isExiting) {
+      animationFrameId = requestAnimationFrame(render);
+    }
     return () => cancelAnimationFrame(animationFrameId);
-  }, [bestScore]);
+  }, [bestScore, isExiting]);
 
   return (
     <div
@@ -833,7 +841,7 @@ export default function LoadingGame({ onComplete }) {
                 <span>{greetingTime}, Welcome!</span>
               </div>
 
-              <h1 className="font-heading text-2xl sm:text-3xl font-black uppercase tracking-tight text-black dark:text-white leading-tight">
+              <h1 className="font-heading text-2xl sm:text-3xl font-normal uppercase tracking-wide text-black dark:text-white leading-tight">
                 Creative Digital Experiences
               </h1>
 
@@ -897,11 +905,11 @@ export default function LoadingGame({ onComplete }) {
               <div className="grid grid-cols-2 gap-3 pt-1">
                 <div className="bg-stone-50 dark:bg-stone-800/50 border-2 border-black p-2.5 text-center">
                   <div className="font-mono-tech text-[10px] text-stone-500 uppercase">Score</div>
-                  <div className="font-heading text-xl font-black text-black dark:text-white">{score}</div>
+                  <div className="font-heading text-xl font-normal text-black dark:text-white">{score}</div>
                 </div>
                 <div className="bg-stone-50 dark:bg-stone-800/50 border-2 border-black p-2.5 text-center">
                   <div className="font-mono-tech text-[10px] text-stone-500 uppercase">Best Score</div>
-                  <div className="font-heading text-xl font-black text-[#16a34a]">{bestScore}</div>
+                  <div className="font-heading text-xl font-normal text-[#16a34a]">{bestScore}</div>
                 </div>
               </div>
 
