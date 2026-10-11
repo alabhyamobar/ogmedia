@@ -484,11 +484,6 @@ export default function HeroSection() {
     const board = boardRef.current;
     if (!hero || !board) return;
 
-    // Disable 3D tilt calculation on mobile and touch devices to save GPU/CPU
-    if (typeof window !== 'undefined' && (window.innerWidth < 1024 || window.matchMedia('(pointer: coarse)').matches)) {
-      return;
-    }
-
     if (isZooming) {
       gsap.to(board, { rotateX: 0, rotateY: 0, duration: 0.3, overwrite: 'auto' });
       return;
@@ -506,6 +501,54 @@ export default function HeroSection() {
       paused: false
     });
 
+    const updateTilt = (clientX, clientY) => {
+      const rect = hero.getBoundingClientRect();
+      const x = (clientX - rect.left) / rect.width - 0.5;
+      const y = (clientY - rect.top) / rect.height - 0.5;
+
+      gsap.to(board, {
+        rotateY: x * 12,
+        rotateX: -y * 10,
+        duration: 0.5,
+        ease: 'power2.out',
+        transformPerspective: 1200,
+        transformOrigin: 'center center',
+        overwrite: 'auto'
+      });
+
+      if (bgRaysRef.current) {
+        gsap.to(bgRaysRef.current, { x: -x * 20, y: -y * 15, duration: 0.7, ease: 'power2.out', overwrite: 'auto' });
+      }
+      if (prologueRef.current) {
+        gsap.to(prologueRef.current, { x: x * 15, y: y * 10, rotateZ: -1 + x * 3, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
+      }
+      if (limeBoxRef.current) {
+        gsap.to(limeBoxRef.current, { x: x * 16, y: y * 12, rotateZ: 1 + x * 3, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
+      }
+      if (boomStickerRef.current) {
+        gsap.to(boomStickerRef.current, { x: x * 28, y: y * 20, z: 85, rotateZ: -6 + x * 6, duration: 0.45, ease: 'power2.out', overwrite: 'auto' });
+      }
+      if (titleCardRef.current) {
+        gsap.to(titleCardRef.current, { x: x * 20, y: y * 14, z: 95, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
+        const shadowX = 8 - x * 20;
+        const shadowY = 12 - y * 16;
+        titleCardRef.current.style.boxShadow = isDark
+          ? `${shadowX}px ${shadowY}px 0px #000000, ${shadowX * 1.5}px ${shadowY * 1.5}px 12px rgba(168,85,247,0.3)`
+          : `${shadowX}px ${shadowY}px 0px #000000, ${shadowX * 1.5}px ${shadowY * 1.5}px 8px rgba(56,189,248,0.25)`;
+      }
+      if (descRef.current) {
+        gsap.to(descRef.current, { x: x * 10, y: y * 8, z: 30, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
+      }
+      if (swooshRef.current) {
+        gsap.to(swooshRef.current, { x: x * 18, y: y * 14, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
+      }
+      if (ctaRef.current) {
+        gsap.to(ctaRef.current, { x: x * 14, y: y * 10, duration: 0.55, ease: 'power2.out', overwrite: 'auto' });
+      }
+    };
+
+    let ticking = false;
+
     const handleMouseMove = (e) => {
       if (isZooming) return;
 
@@ -514,56 +557,29 @@ export default function HeroSection() {
 
       if (!ticking) {
         requestAnimationFrame(() => {
-          const rect = hero.getBoundingClientRect();
-          const x = (e.clientX - rect.left) / rect.width - 0.5;
-          const y = (e.clientY - rect.top) / rect.height - 0.5;
-
-          gsap.to(board, {
-            rotateY: x * 12,
-            rotateX: -y * 10,
-            duration: 0.5,
-            ease: 'power2.out',
-            transformPerspective: 1200,
-            transformOrigin: 'center center',
-            overwrite: 'auto'
-          });
-
-          if (bgRaysRef.current) {
-            gsap.to(bgRaysRef.current, { x: -x * 20, y: -y * 15, duration: 0.7, ease: 'power2.out', overwrite: 'auto' });
-          }
-          if (prologueRef.current) {
-            gsap.to(prologueRef.current, { x: x * 15, y: y * 10, rotateZ: -1 + x * 3, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
-          }
-          if (limeBoxRef.current) {
-            gsap.to(limeBoxRef.current, { x: x * 16, y: y * 12, rotateZ: 1 + x * 3, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
-          }
-          if (boomStickerRef.current) {
-            gsap.to(boomStickerRef.current, { x: x * 28, y: y * 20, z: 85, rotateZ: -6 + x * 6, duration: 0.45, ease: 'power2.out', overwrite: 'auto' });
-          }
-          if (titleCardRef.current) {
-            gsap.to(titleCardRef.current, { x: x * 20, y: y * 14, z: 95, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
-            const shadowX = 8 - x * 20;
-            const shadowY = 12 - y * 16;
-            titleCardRef.current.style.boxShadow = isDark
-              ? `${shadowX}px ${shadowY}px 0px #000000, ${shadowX * 1.5}px ${shadowY * 1.5}px 12px rgba(168,85,247,0.3)`
-              : `${shadowX}px ${shadowY}px 0px #000000, ${shadowX * 1.5}px ${shadowY * 1.5}px 8px rgba(56,189,248,0.25)`;
-          }
-          if (descRef.current) {
-            gsap.to(descRef.current, { x: x * 10, y: y * 8, z: 30, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
-          }
-          if (swooshRef.current) {
-            gsap.to(swooshRef.current, { x: x * 18, y: y * 14, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
-          }
-          if (ctaRef.current) {
-            gsap.to(ctaRef.current, { x: x * 14, y: y * 10, duration: 0.55, ease: 'power2.out', overwrite: 'auto' });
-          }
+          updateTilt(e.clientX, e.clientY);
           ticking = false;
         });
         ticking = true;
       }
     };
 
-    let ticking = false;
+    const handleTouchMove = (e) => {
+      if (isZooming || !e.touches || !e.touches[0]) return;
+
+      isHovered = true;
+      idleTween.pause();
+
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          if (e.touches && e.touches[0]) {
+            updateTilt(e.touches[0].clientX, e.touches[0].clientY);
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
 
     const handleMouseLeave = () => {
       isHovered = false;
@@ -595,13 +611,23 @@ export default function HeroSection() {
       if (ctaRef.current) gsap.to(ctaRef.current, { x: 0, y: 0, duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
     };
 
+    const handleTouchEnd = () => {
+      handleMouseLeave();
+    };
+
     hero.addEventListener('mousemove', handleMouseMove, { passive: true });
     hero.addEventListener('mouseleave', handleMouseLeave);
+    hero.addEventListener('touchmove', handleTouchMove, { passive: true });
+    hero.addEventListener('touchend', handleTouchEnd, { passive: true });
+    hero.addEventListener('touchcancel', handleTouchEnd, { passive: true });
 
     return () => {
       idleTween.kill();
       hero.removeEventListener('mousemove', handleMouseMove);
       hero.removeEventListener('mouseleave', handleMouseLeave);
+      hero.removeEventListener('touchmove', handleTouchMove);
+      hero.removeEventListener('touchend', handleTouchEnd);
+      hero.removeEventListener('touchcancel', handleTouchEnd);
     };
   }, [isDark, isZooming]);
 
