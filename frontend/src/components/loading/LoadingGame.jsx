@@ -841,9 +841,13 @@ export default function LoadingGame({ onComplete }) {
                 <span>{greetingTime}, Welcome!</span>
               </div>
 
-              <h1 className="font-heading text-2xl sm:text-3xl font-normal uppercase tracking-wide text-black dark:text-white leading-tight">
+              <div
+                role="heading"
+                aria-level={2}
+                className="font-heading text-2xl sm:text-3xl font-normal uppercase tracking-wide text-black dark:text-white leading-tight"
+              >
                 Creative Digital Experiences
-              </h1>
+              </div>
 
               <p className="font-sans text-xs sm:text-sm text-stone-600 dark:text-stone-300 leading-relaxed">
                 Welcome to OG Media. We create high-impact brand stories, viral media, and interactive digital worlds. Enjoy this quick flight mini-game while we get things ready for you!

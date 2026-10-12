@@ -117,7 +117,7 @@ const STORY_PILLARS = [
     resolution: 'ULTRA-RESPONSIVE // 120HZ',
     accentColor: '#10b981'
   }
-];
+]
 export default function TrajectorySection() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
@@ -125,7 +125,7 @@ export default function TrajectorySection() {
   const videoRef = useRef(null);
 
   const currentPillar = STORY_PILLARS[currentIndex];
-  const slideDuration = 6000;
+  const slideDuration = 8000;
 
   const handleNext = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % STORY_PILLARS.length);

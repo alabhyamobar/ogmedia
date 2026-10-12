@@ -64,13 +64,15 @@ export default function HeroTitleCard({ titleCardRef, descRef, isDark }) {
 
 
         <div className="block -mt-1 sm:-mt-2">
-          <h2 className="sr-only">Where Ideas Meet Impact — Viral Marketing &amp; Creative Media Agency</h2>
-          <div
-            className="inline-block bg-black text-[#39FF14] px-3 sm:px-6 py-1 sm:py-1.5 font-mono-tech font-extrabold text-[10px] sm:text-sm md:text-base tracking-wider sm:tracking-widest uppercase border border-stone-800 dark:border-stone-700 cursor-default"
+          <h2
+            className="inline-block bg-black text-[#39FF14] px-3 sm:px-6 py-1 sm:py-1.5 font-mono-tech font-extrabold text-[10px] sm:text-sm md:text-base tracking-wider sm:tracking-widest uppercase border border-stone-800 dark:border-stone-700 cursor-default m-0"
             style={{
               boxShadow: '4px 4px 0px #000000, 8px 8px 0px rgba(0,0,0,0.3)'
             }}
           >
+            <span className="sr-only">
+              Where Ideas Meet Impact — Viral Marketing &amp; Creative Media Agency:{" "}
+            </span>
             <InkText
               as="span"
               strokeColor="#39FF14"
@@ -80,7 +82,7 @@ export default function HeroTitleCard({ titleCardRef, descRef, isDark }) {
               duration={2000}
               text="Where Ideas Meet Impact"
             />
-          </div>
+          </h2>
         </div>
 
 

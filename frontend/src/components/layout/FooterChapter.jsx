@@ -120,7 +120,7 @@ export default function FooterChapter() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-mono-tech text-xs">
           <div className="border-l-3 border-[#38bdf8] pl-3.5 bg-[#38bdf8]/5 p-2">
             <InkText
-              as="div"
+              as="h3"
               strokeWidth="1px"
               delay={150}
               duration={2000}
@@ -133,7 +133,7 @@ export default function FooterChapter() {
 
           <div className="border-l-3 border-[#ef4444] pl-3.5 bg-[#ef4444]/5 p-2">
             <InkText
-              as="div"
+              as="h3"
               strokeWidth="1px"
               delay={200}
               duration={2000}
@@ -146,7 +146,7 @@ export default function FooterChapter() {
 
           <div className="border-l-3 border-[#39FF14] pl-3.5 bg-[#39FF14]/5 p-2">
             <InkText
-              as="div"
+              as="h3"
               strokeWidth="1px"
               delay={250}
               duration={2000}

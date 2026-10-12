@@ -47,6 +47,7 @@ export default function HeroSection() {
   const isVideoActiveRef = useRef(false);
   const isReversedRef = useRef(false);
   const isZoomingRef = useRef(false);
+  const hasZoomPlayedRef = useRef(false);
 
   const [_scrollProgress, setScrollProgress] = useState(0);
   const [isZooming, setIsZooming] = useState(false);
@@ -55,7 +56,32 @@ export default function HeroSection() {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [_videoEnded, setVideoEnded] = useState(false);
   const [isVideoMounted, setIsVideoMounted] = useState(true);
-  const stRef = useRef(null);
+
+  const playZoomAnimation = () => {
+    if (isVideoActiveRef.current) return;
+    hasZoomPlayedRef.current = true;
+    isVideoActiveRef.current = true;
+    setIsZooming(true);
+    isZoomingRef.current = true;
+    isReversedRef.current = false;
+
+    if (window.scrollY > 0) {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    if (cameraTlRef.current) {
+      cameraTlRef.current.tweenTo(cameraTlRef.current.duration(), {
+        duration: 1.15,
+        ease: 'power2.inOut',
+        onComplete: () => {
+          setIsVideoPlaying(true);
+          if (videoRef.current && videoRef.current.paused) {
+            videoRef.current.play().catch(() => {});
+          }
+        }
+      });
+    }
+  };
 
   useEffect(() => {
     const pinWrapper = pinWrapperRef.current;
@@ -239,72 +265,82 @@ export default function HeroSection() {
         0.65
       );
 
-      let st = null;
+      // Desktop: single scroll trigger to smoothly play zoom animation forward once into video portal
+      let removeDesktopListeners = null;
       if (!isMobile) {
-        const scrollDistance = '+=2000';
-        const triggerThreshold = 0.75;
+        if (window.scrollY > 40) {
+          hasZoomPlayedRef.current = true;
+        }
 
-        st = ScrollTrigger.create({
-          trigger: pinWrapper,
-          start: 'top top',
-          end: scrollDistance,
-          pin: true,
-          scrub: 0.5,
-          anticipatePin: 1,
-          onUpdate: (self) => {
-            if (isReversedRef.current) return;
+        const handleWheel = (e) => {
+          if (hasZoomPlayedRef.current || isVideoActiveRef.current || isReversedRef.current) return;
+          if (window.scrollY > 40) {
+            hasZoomPlayedRef.current = true;
+            return;
+          }
+          if (e.deltaY > 5) {
+            e.preventDefault();
+            playZoomAnimation();
+          }
+        };
 
-            const p = self.progress;
-            setScrollProgress(p);
+        let touchStartY = 0;
+        const handleTouchStart = (e) => {
+          if (e.touches && e.touches[0]) {
+            touchStartY = e.touches[0].clientY;
+          }
+        };
 
-            if (p > 0.05) {
-              setIsZooming(true);
-              isZoomingRef.current = true;
-            } else {
-              setIsZooming(false);
-              isZoomingRef.current = false;
-            }
-
-            if (!isVideoActiveRef.current) {
-              gsap.to(cameraTl, {
-                progress: p,
-                duration: 0.8,
-                ease: 'power2.out',
-                overwrite: 'auto'
-              });
-
-              if (p >= triggerThreshold) {
-                isVideoActiveRef.current = true;
-                gsap.to(cameraTl, {
-                  progress: 1,
-                  duration: 0.45,
-                  ease: 'power2.out',
-                  overwrite: 'auto'
-                });
-                setIsVideoPlaying(true);
-                if (video && video.paused && !video.ended) {
-                  video.play().catch(() => { });
-                }
-              }
+        const handleTouchMove = (e) => {
+          if (hasZoomPlayedRef.current || isVideoActiveRef.current || isReversedRef.current) return;
+          if (window.scrollY > 40) {
+            hasZoomPlayedRef.current = true;
+            return;
+          }
+          if (e.touches && e.touches[0]) {
+            const deltaY = touchStartY - e.touches[0].clientY;
+            if (deltaY > 15) {
+              e.preventDefault();
+              playZoomAnimation();
             }
           }
-        });
-        stRef.current = st;
-      } else {
-        stRef.current = null;
+        };
+
+        const handleKeyDown = (e) => {
+          if (hasZoomPlayedRef.current || isVideoActiveRef.current || isReversedRef.current) return;
+          if (window.scrollY > 40) {
+            hasZoomPlayedRef.current = true;
+            return;
+          }
+          if (['ArrowDown', 'PageDown', ' '].includes(e.key)) {
+            if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
+            e.preventDefault();
+            playZoomAnimation();
+          }
+        };
+
+        const handleScrollFallback = () => {
+          if (hasZoomPlayedRef.current || isVideoActiveRef.current || isReversedRef.current) return;
+          if (window.scrollY > 15) {
+            playZoomAnimation();
+          }
+        };
+
+        window.addEventListener('wheel', handleWheel, { passive: false });
+        window.addEventListener('touchstart', handleTouchStart, { passive: true });
+        window.addEventListener('touchmove', handleTouchMove, { passive: false });
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('scroll', handleScrollFallback, { passive: true });
+
+        removeDesktopListeners = () => {
+          window.removeEventListener('wheel', handleWheel);
+          window.removeEventListener('touchstart', handleTouchStart);
+          window.removeEventListener('touchmove', handleTouchMove);
+          window.removeEventListener('keydown', handleKeyDown);
+          window.removeEventListener('scroll', handleScrollFallback);
+        };
       }
 
-      const handleScrollReset = () => {
-        if (!isMobile && window.scrollY <= 10 && !isReversedRef.current) {
-          isReversedRef.current = false;
-          isVideoActiveRef.current = false;
-          setIsVideoPlaying(false);
-          setVideoEnded(false);
-          setIsZooming(false);
-          isZoomingRef.current = false;
-          cameraTl.progress(0);
-        }
-      };
       const handleResize = () => {
         if (!isVideoActiveRef.current && !isZoomingRef.current) {
           const updated = getZoomTarget();
@@ -312,20 +348,13 @@ export default function HeroSection() {
         }
       };
 
-      if (!isMobile) {
-        window.addEventListener('scroll', handleScrollReset, { passive: true });
-      }
       window.addEventListener('resize', handleResize, { passive: true });
 
       return () => {
-        if (!isMobile) {
-          window.removeEventListener('scroll', handleScrollReset);
+        if (removeDesktopListeners) {
+          removeDesktopListeners();
         }
         window.removeEventListener('resize', handleResize);
-        if (st) {
-          st.kill();
-        }
-        stRef.current = null;
         if (cameraTl) {
           cameraTl.kill();
         }
@@ -347,18 +376,22 @@ export default function HeroSection() {
   }, [isDark]);
 
   useEffect(() => {
-    if (isVideoPlaying || isZooming) {
-      const preventScroll = (e) => {
+    if (isVideoPlaying) {
+      const handleWheelWhileVideo = (e) => {
+        // Full-screen video dialog is active; prevent background page scroll
         e.preventDefault();
       };
-      window.addEventListener('wheel', preventScroll, { passive: false });
-      window.addEventListener('touchmove', preventScroll, { passive: false });
+      const preventTouch = (e) => {
+        e.preventDefault();
+      };
+      window.addEventListener('wheel', handleWheelWhileVideo, { passive: false });
+      window.addEventListener('touchmove', preventTouch, { passive: false });
       return () => {
-        window.removeEventListener('wheel', preventScroll);
-        window.removeEventListener('touchmove', preventScroll);
+        window.removeEventListener('wheel', handleWheelWhileVideo);
+        window.removeEventListener('touchmove', preventTouch);
       };
     }
-  }, [isVideoPlaying, isZooming]);
+  }, [isVideoPlaying]);
 
   const runReverseCameraAnimation = () => {
     if (videoRef.current) {
@@ -386,12 +419,7 @@ export default function HeroSection() {
             });
           }
 
-          if (stRef.current) {
-            setTimeout(() => {
-              window.scrollTo({ top: 0, behavior: 'instant' });
-              ScrollTrigger.refresh();
-            }, 80);
-          }
+          window.scrollTo({ top: 0, behavior: 'instant' });
         }
       });
     } else {
@@ -427,56 +455,7 @@ export default function HeroSection() {
   };
 
   const handleDiveIntoWindow = (e) => {
-    if (e && e.preventDefault) e.preventDefault();
-    if (isVideoActiveRef.current || isZoomingRef.current) return;
-
-    if (stRef.current) {
-      // Desktop: scrub ScrollTrigger
-      const targetScroll = stRef.current.start + (stRef.current.end - stRef.current.start) * 0.78;
-      window.scrollTo({
-        top: targetScroll,
-        behavior: 'smooth'
-      });
-    } else if (cameraTlRef.current) {
-      // Mobile: activate the 3D zooming animation directly on button tap!
-      isVideoActiveRef.current = true;
-      setIsZooming(true);
-      isZoomingRef.current = true;
-      isReversedRef.current = false;
-
-      // Bring viewport to top if user scrolled slightly down on mobile
-      if (window.scrollY > 0) {
-        window.scrollTo({ top: 0, behavior: 'instant' });
-      }
-
-      cameraTlRef.current.tweenTo(cameraTlRef.current.duration(), {
-        duration: 1.15,
-        ease: 'power2.inOut',
-        onComplete: () => {
-          setIsVideoPlaying(true);
-          if (videoRef.current && videoRef.current.paused) {
-            videoRef.current.play().catch(() => {});
-          }
-        }
-      });
-    } else {
-      // Direct opening fallback
-      isVideoActiveRef.current = true;
-      setIsVideoPlaying(true);
-      if (videoContainerRef.current) {
-        gsap.to(videoContainerRef.current, {
-          opacity: 1,
-          pointerEvents: 'auto',
-          duration: 0.35,
-          ease: 'power2.out',
-          onComplete: () => {
-            if (videoRef.current && videoRef.current.paused) {
-              videoRef.current.play().catch(() => {});
-            }
-          }
-        });
-      }
-    }
+    playZoomAnimation(e);
   };
 
   useEffect(() => {
@@ -484,7 +463,7 @@ export default function HeroSection() {
     const board = boardRef.current;
     if (!hero || !board) return;
 
-    if (isZooming) {
+    if (isZoomingRef.current) {
       gsap.to(board, { rotateX: 0, rotateY: 0, duration: 0.3, overwrite: 'auto' });
       return;
     }
@@ -550,7 +529,7 @@ export default function HeroSection() {
     let ticking = false;
 
     const handleMouseMove = (e) => {
-      if (isZooming) return;
+      if (isZoomingRef.current) return;
 
       isHovered = true;
       idleTween.pause();
@@ -565,7 +544,7 @@ export default function HeroSection() {
     };
 
     const handleTouchMove = (e) => {
-      if (isZooming || !e.touches || !e.touches[0]) return;
+      if (isZoomingRef.current || !e.touches || !e.touches[0]) return;
 
       isHovered = true;
       idleTween.pause();
@@ -583,7 +562,7 @@ export default function HeroSection() {
 
     const handleMouseLeave = () => {
       isHovered = false;
-      if (isZooming) return;
+      if (isZoomingRef.current) return;
 
       gsap.to(board, {
         rotateY: 0,
@@ -592,7 +571,7 @@ export default function HeroSection() {
         ease: 'power2.out',
         overwrite: 'auto',
         onComplete: () => {
-          if (!isHovered && !isZooming) idleTween.play();
+          if (!isHovered && !isZoomingRef.current) idleTween.play();
         }
       });
 
@@ -629,7 +608,7 @@ export default function HeroSection() {
       hero.removeEventListener('touchend', handleTouchEnd);
       hero.removeEventListener('touchcancel', handleTouchEnd);
     };
-  }, [isDark, isZooming]);
+  }, [isDark]);
 
   return (
     <>

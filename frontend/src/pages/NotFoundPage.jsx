@@ -13,12 +13,12 @@ export default function NotFoundPage() {
         </div>
 
         <div>
-          <div className="font-comic-title text-8xl sm:text-9xl text-black dark:text-white leading-none tracking-tight">
+          <h1 className="font-comic-title text-8xl sm:text-9xl text-black dark:text-white leading-none tracking-tight m-0">
             404
-          </div>
-          <div className="font-kr-impact text-2xl sm:text-3xl text-red-600 dark:text-red-500 mt-1">
+          </h1>
+          <h2 className="font-kr-impact text-2xl sm:text-3xl text-red-600 dark:text-red-500 mt-1 m-0">
             경로 이탈 // SECTOR UNCHARTED
-          </div>
+          </h2>
         </div>
 
         <div className="relative bg-white dark:bg-[#1e1e24] text-black dark:text-white p-4 border-2 border-black manga-shadow-sm font-sans text-sm font-semibold">
