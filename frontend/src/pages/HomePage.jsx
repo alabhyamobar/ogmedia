@@ -20,10 +20,8 @@ export default function HomePage() {
         }
       }, 100);
       return () => clearTimeout(timer);
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }, [location]);
+  }, [location.hash]);
 
   return (
     <main className="space-y-4 overflow-x-hidden w-full max-w-full">

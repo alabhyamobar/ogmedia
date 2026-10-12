@@ -72,6 +72,7 @@ export default function HeroVideoPortal({
 
           <button
             type="button"
+            id="hero-reverse-camera-btn"
             onClick={onReverseCamera}
             title="Reverse camera back to comic desk"
             aria-label="Reverse camera back to comic desk"

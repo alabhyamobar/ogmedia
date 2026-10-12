@@ -11,6 +11,7 @@ export default function HeroMangaPanel({
   panelFrameRef,
   comicImageRef,
   frameBadgesRef,
+  portalGlowRef,
   onDive,
   isDark
 }) {
@@ -67,6 +68,39 @@ export default function HeroMangaPanel({
             className="absolute inset-0 manga-halftone-light opacity-20 pointer-events-none"
             aria-hidden="true"
           />
+
+
+
+          {/* Window Penetration Portal Aperture Flare */}
+          <div
+            ref={portalGlowRef}
+            className="absolute inset-0 pointer-events-none opacity-0 z-30 flex items-center justify-center overflow-hidden"
+            style={{
+              background: 'radial-gradient(circle at center, rgba(57, 255, 20, 0.75) 0%, rgba(6, 182, 212, 0.55) 30%, rgba(168, 85, 247, 0.35) 60%, transparent 85%)',
+              mixBlendMode: 'screen',
+              boxShadow: 'inset 0 0 100px rgba(57, 255, 20, 0.9), 0 0 80px rgba(6, 182, 212, 0.6)',
+              willChange: 'opacity, transform'
+            }}
+            aria-hidden="true"
+          >
+            {/* Dimensional portal aperture rings for striking penetration sensation */}
+            <div
+              className="w-48 h-48 sm:w-80 sm:h-80 rounded-full border-2 border-[#39FF14] animate-pulse pointer-events-none"
+              style={{
+                boxShadow: '0 0 40px #39FF14, inset 0 0 40px #39FF14'
+              }}
+            />
+            <div
+              className="absolute w-72 h-72 sm:w-[480px] sm:h-[480px] rounded-full border border-cyan-400/80 pointer-events-none"
+              style={{
+                boxShadow: '0 0 50px rgba(6, 182, 212, 0.7)'
+              }}
+            />
+            {/* Speed flare center burst */}
+            <div
+              className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(255,255,255,0.7)_0%,_transparent_55%)] pointer-events-none"
+            />
+          </div>
 
           {/* Perspective & Frame Telemetry Badges */}
           <div ref={frameBadgesRef} className="contents">

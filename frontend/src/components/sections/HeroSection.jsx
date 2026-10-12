@@ -40,14 +40,31 @@ export default function HeroSection() {
   const windowWrapperRef = useRef(null);
   const panelFrameRef = useRef(null);
   const comicImageRef = useRef(null);
+  const portalGlowRef = useRef(null);
   const frameBadgesRef = useRef(null);
   const videoContainerRef = useRef(null);
   const videoRef = useRef(null);
   const cameraTlRef = useRef(null);
+  const stRef = useRef(null);
+  const idleTweenRef = useRef(null);
   const isVideoActiveRef = useRef(false);
   const isReversedRef = useRef(false);
   const isZoomingRef = useRef(false);
-  const hasZoomPlayedRef = useRef(false);
+  const hasCompletedRef = useRef(false);
+  const isScrollLockedRef = useRef(false);
+  const touchStartYRef = useRef(0);
+
+  const lockScrollingSystem = () => {
+    isScrollLockedRef.current = true;
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+  };
+
+  const unlockScrollingSystem = () => {
+    isScrollLockedRef.current = false;
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+  };
 
   const [_scrollProgress, setScrollProgress] = useState(0);
   const [isZooming, setIsZooming] = useState(false);
@@ -57,31 +74,28 @@ export default function HeroSection() {
   const [_videoEnded, setVideoEnded] = useState(false);
   const [isVideoMounted, setIsVideoMounted] = useState(true);
 
-  const playZoomAnimation = () => {
-    if (isVideoActiveRef.current) return;
-    hasZoomPlayedRef.current = true;
-    isVideoActiveRef.current = true;
-    setIsZooming(true);
-    isZoomingRef.current = true;
-    isReversedRef.current = false;
-
-    if (window.scrollY > 0) {
-      window.scrollTo({ top: 0, behavior: 'instant' });
+  useEffect(() => {
+    // If user arrived with a specific anchor hash (e.g. #arsenal, #trajectory), skip hero pin
+    if (window.location.hash && window.location.hash !== '#' && window.location.hash !== '#hero') {
+      hasCompletedRef.current = true;
+      unlockScrollingSystem();
+      return;
     }
 
-    if (cameraTlRef.current) {
-      cameraTlRef.current.tweenTo(cameraTlRef.current.duration(), {
-        duration: 1.15,
-        ease: 'power2.inOut',
-        onComplete: () => {
-          setIsVideoPlaying(true);
-          if (videoRef.current && videoRef.current.paused) {
-            videoRef.current.play().catch(() => {});
-          }
-        }
-      });
+    // Set scrollRestoration to manual so reloading starts at top
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
     }
-  };
+
+    // Ensure clean start at top for landing experience
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    hasCompletedRef.current = false;
+    unlockScrollingSystem();
+
+    return () => {
+      unlockScrollingSystem();
+    };
+  }, []);
 
   useEffect(() => {
     const pinWrapper = pinWrapperRef.current;
@@ -100,9 +114,14 @@ export default function HeroSection() {
       // Calculate dynamic transform origin and translate vector to keep panelFrame dead-center on screen
       const getZoomTarget = () => {
         if (!cameraRig || !panelFrame) {
-          return { origin: 'center center', x: 0, y: 0, scale: isMobile ? 5.2 : 4.2 };
+          return { origin: 'center center', x: 0, y: 0, scale: isMobile ? 5.2 : 4.4 };
         }
 
+        // Temporarily reset board rotation to 0 to accurately measure panelFrame center without tilt distortion
+        const currRotX = gsap.getProperty(board, 'rotateX') || 0;
+        const currRotY = gsap.getProperty(board, 'rotateY') || 0;
+        const currRotZ = gsap.getProperty(board, 'rotateZ') || 0;
+        gsap.set(board, { rotateX: 0, rotateY: 0, rotateZ: 0 });
         gsap.set(cameraRig, { scale: 1, x: 0, y: 0, xPercent: 0, yPercent: 0 });
 
         const rigRect = cameraRig.getBoundingClientRect();
@@ -123,7 +142,10 @@ export default function HeroSection() {
         const scaleX = window.innerWidth / Math.max(panelRect.width, 1);
         const scaleY = window.innerHeight / Math.max(panelRect.height, 1);
         const coverScale = Math.max(scaleX, scaleY) * (isMobile ? 1.08 : 1.15);
-        const targetScale = Math.max(coverScale, isMobile ? 5.2 : 4.2);
+        const targetScale = Math.max(coverScale, isMobile ? 5.2 : 4.4);
+
+        // Restore board rotation
+        gsap.set(board, { rotateX: currRotX, rotateY: currRotY, rotateZ: currRotZ });
 
         return {
           origin: `${originX}px ${originY}px`,
@@ -141,6 +163,7 @@ export default function HeroSection() {
       isVideoActiveRef.current = false;
       isReversedRef.current = false;
 
+      // 1. Camera Zoom into the Manga Window (Normalized 1.0 duration for ScrollTrigger scrub)
       cameraTl.to(
         cameraRig,
         {
@@ -151,19 +174,19 @@ export default function HeroSection() {
           yPercent: 0,
           transformOrigin: zoomTarget.origin,
           ease: 'power1.inOut',
-          duration: 1
+          duration: 1.0
         },
         0
       );
 
-      // Level board tilt to 0 immediately so zooming is orthogonal and clean
+      // 2. Smoothly level board tilt to 0 immediately so zooming is orthogonal and clean
       cameraTl.to(
         board,
         {
           rotateX: 0,
           rotateY: 0,
           rotateZ: 0,
-          duration: 0.3,
+          duration: 0.35,
           ease: 'power1.out'
         },
         0
@@ -198,163 +221,161 @@ export default function HeroSection() {
       const titleY = isMobile ? 320 : 480;
       const swooshY = isMobile ? 260 : 380;
 
+      // 3. Peripheral HUD & stickers fly past the camera with 3D parallax
       if (prologueRef.current) {
-        cameraTl.to(prologueRef.current, { x: -dispX, y: -dispY, opacity: 0, scale: 1.8, duration: 0.75, ease: 'power1.in' }, 0);
+        cameraTl.to(prologueRef.current, { x: -dispX, y: -dispY, opacity: 0, scale: 1.8, duration: 0.65, ease: 'power2.in' }, 0);
       }
       if (limeBoxRef.current) {
-        cameraTl.to(limeBoxRef.current, { x: dispX, y: -dispY, opacity: 0, scale: 1.8, duration: 0.75, ease: 'power1.in' }, 0);
+        cameraTl.to(limeBoxRef.current, { x: dispX, y: -dispY, opacity: 0, scale: 1.8, duration: 0.65, ease: 'power2.in' }, 0);
       }
       if (boomStickerRef.current) {
-        cameraTl.to(boomStickerRef.current, { x: boomX, y: -boomY, z: 85, rotation: -6, opacity: 0, scale: 2.5, duration: 0.75, ease: 'power1.in' }, 0);
+        cameraTl.to(boomStickerRef.current, { x: boomX, y: -boomY, z: 85, rotation: -6, opacity: 0, scale: 2.5, duration: 0.7, ease: 'power2.in' }, 0);
       }
       if (titleCardRef.current) {
-        cameraTl.to(titleCardRef.current, { y: titleY, z: 95, opacity: 0, scale: 2.4, duration: 0.75, ease: 'power1.in' }, 0);
+        cameraTl.to(titleCardRef.current, { y: titleY, z: 95, opacity: 0, scale: 2.4, duration: 0.7, ease: 'power2.in' }, 0);
       }
       if (descRef.current) {
-        cameraTl.to(descRef.current, { y: 300, opacity: 0, scale: 1.5, duration: 0.65, ease: 'power1.in' }, 0);
+        cameraTl.to(descRef.current, { y: 300, opacity: 0, scale: 1.5, duration: 0.6, ease: 'power2.in' }, 0);
       }
       if (swooshRef.current) {
-        cameraTl.to(swooshRef.current, { x: -dispX, y: swooshY, opacity: 0, scale: 1.8, duration: 0.75, ease: 'power1.in' }, 0);
+        cameraTl.to(swooshRef.current, { x: -dispX, y: swooshY, opacity: 0, scale: 1.8, duration: 0.65, ease: 'power2.in' }, 0);
       }
       if (ctaRef.current) {
-        cameraTl.to(ctaRef.current, { x: dispX, y: swooshY, opacity: 0, scale: 1.8, duration: 0.75, ease: 'power1.in' }, 0);
+        cameraTl.to(ctaRef.current, { x: dispX, y: swooshY, opacity: 0, scale: 1.8, duration: 0.65, ease: 'power2.in' }, 0);
       }
       if (bgRaysRef.current) {
-        cameraTl.to(bgRaysRef.current, { scale: 4, opacity: 0, duration: 0.8, ease: 'power1.in' }, 0);
+        cameraTl.to(bgRaysRef.current, { scale: 4, opacity: 0, duration: 0.75, ease: 'power2.in' }, 0);
       }
       if (cornerMarksRef.current) {
-        cameraTl.to(cornerMarksRef.current, { scale: 2, opacity: 0, duration: 0.8, ease: 'power1.in' }, 0);
+        cameraTl.to(cornerMarksRef.current, { scale: 2, opacity: 0, duration: 0.75, ease: 'power2.in' }, 0);
       }
       if (telemetryRef.current) {
-        cameraTl.to(telemetryRef.current, { opacity: 0, y: 180, duration: 0.8, ease: 'power1.in' }, 0);
+        cameraTl.to(telemetryRef.current, { opacity: 0, y: 180, duration: 0.75, ease: 'power2.in' }, 0);
       }
       if (frameBadgesRef.current) {
-        cameraTl.to(frameBadgesRef.current, { opacity: 0, duration: 0.5, ease: 'power1.in' }, 0);
+        cameraTl.to(frameBadgesRef.current, { opacity: 0, duration: 0.45, ease: 'power2.in' }, 0);
       }
 
+      // 4. Panel Frame borders dissolve into viewport edges
       cameraTl.to(
         panelFrame,
         {
           borderWidth: 0,
           boxShadow: '0px 0px 0px rgba(0,0,0,0)',
-          duration: 0.8,
+          duration: 0.5,
           ease: 'power1.inOut'
         },
-        0
+        0.25
       );
 
+      // 5. WINDOW PENETRATION PORTAL APERTURE FLARE (The dimensional gate breach!)
+      if (portalGlowRef.current) {
+        // Ignite flare as camera gets close to window pane
+        cameraTl.to(
+          portalGlowRef.current,
+          {
+            opacity: 0.95,
+            scale: 1.15,
+            duration: 0.26,
+            ease: 'power2.in'
+          },
+          0.40
+        );
+        // Expand and dissipate flare as camera pierces through into video
+        cameraTl.to(
+          portalGlowRef.current,
+          {
+            opacity: 0,
+            scale: 1.6,
+            duration: 0.28,
+            ease: 'power2.out'
+          },
+          0.66
+        );
+      }
+
+      // 6. Comic Illustration dissolves as camera passes through the glass plane
       cameraTl.to(
         comicImg,
         {
           opacity: 0,
-          scale: 1.15,
-          duration: 0.28,
+          scale: 1.25,
+          duration: 0.24,
           ease: 'power2.inOut'
         },
-        0.58
+        0.54
       );
 
+      // 7. Video Container reveals seamlessly as living canvas emerges
       cameraTl.to(
         videoContainer,
         {
           opacity: 1,
           pointerEvents: 'auto',
-          duration: 0.28,
+          duration: 0.24,
           ease: 'power2.inOut'
         },
-        0.65
+        0.64
       );
 
-      // Desktop: single scroll trigger to smoothly play zoom animation forward once into video portal
-      let removeDesktopListeners = null;
-      if (!isMobile) {
-        if (window.scrollY > 40) {
-          hasZoomPlayedRef.current = true;
-        }
+      // ScrollTrigger scrubs the 3D camera zoom smoothly as user scrolls
+      let st = null;
+      if (!hasCompletedRef.current) {
+        st = ScrollTrigger.create({
+          trigger: pinWrapper,
+          start: 'top top',
+          end: '+=1500',
+          pin: true,
+          animation: cameraTl,
+          scrub: 1.0,
+          anticipatePin: 1,
+          onUpdate: (self) => {
+            if (hasCompletedRef.current) return;
+            const p = self.progress;
 
-        const handleWheel = (e) => {
-          if (hasZoomPlayedRef.current || isVideoActiveRef.current || isReversedRef.current) return;
-          if (window.scrollY > 40) {
-            hasZoomPlayedRef.current = true;
-            return;
-          }
-          if (e.deltaY > 5) {
-            e.preventDefault();
-            playZoomAnimation();
-          }
-        };
+            if (p > 0.02) {
+              isZoomingRef.current = true;
+              setIsZooming(true);
+            }
 
-        let touchStartY = 0;
-        const handleTouchStart = (e) => {
-          if (e.touches && e.touches[0]) {
-            touchStartY = e.touches[0].clientY;
-          }
-        };
+            if (p >= 0.85) {
+              if (!isVideoActiveRef.current) {
+                isVideoActiveRef.current = true;
+                setIsVideoPlaying(true);
+                lockScrollingSystem();
 
-        const handleTouchMove = (e) => {
-          if (hasZoomPlayedRef.current || isVideoActiveRef.current || isReversedRef.current) return;
-          if (window.scrollY > 40) {
-            hasZoomPlayedRef.current = true;
-            return;
-          }
-          if (e.touches && e.touches[0]) {
-            const deltaY = touchStartY - e.touches[0].clientY;
-            if (deltaY > 15) {
-              e.preventDefault();
-              playZoomAnimation();
+                if (cameraTlRef.current) {
+                  cameraTlRef.current.tweenTo(cameraTlRef.current.duration(), {
+                    duration: 0.35,
+                    ease: 'power1.out'
+                  });
+                }
+                if (video && video.paused) {
+                  video.play().catch(() => {});
+                }
+              }
             }
           }
-        };
-
-        const handleKeyDown = (e) => {
-          if (hasZoomPlayedRef.current || isVideoActiveRef.current || isReversedRef.current) return;
-          if (window.scrollY > 40) {
-            hasZoomPlayedRef.current = true;
-            return;
-          }
-          if (['ArrowDown', 'PageDown', ' '].includes(e.key)) {
-            if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
-            e.preventDefault();
-            playZoomAnimation();
-          }
-        };
-
-        const handleScrollFallback = () => {
-          if (hasZoomPlayedRef.current || isVideoActiveRef.current || isReversedRef.current) return;
-          if (window.scrollY > 15) {
-            playZoomAnimation();
-          }
-        };
-
-        window.addEventListener('wheel', handleWheel, { passive: false });
-        window.addEventListener('touchstart', handleTouchStart, { passive: true });
-        window.addEventListener('touchmove', handleTouchMove, { passive: false });
-        window.addEventListener('keydown', handleKeyDown);
-        window.addEventListener('scroll', handleScrollFallback, { passive: true });
-
-        removeDesktopListeners = () => {
-          window.removeEventListener('wheel', handleWheel);
-          window.removeEventListener('touchstart', handleTouchStart);
-          window.removeEventListener('touchmove', handleTouchMove);
-          window.removeEventListener('keydown', handleKeyDown);
-          window.removeEventListener('scroll', handleScrollFallback);
-        };
+        });
+        stRef.current = st;
       }
 
       const handleResize = () => {
-        if (!isVideoActiveRef.current && !isZoomingRef.current) {
+        if (!isVideoActiveRef.current && !isZoomingRef.current && !isScrollLockedRef.current) {
           const updated = getZoomTarget();
           gsap.set(cameraRig, { transformOrigin: updated.origin });
+          ScrollTrigger.refresh();
         }
       };
 
       window.addEventListener('resize', handleResize, { passive: true });
 
       return () => {
-        if (removeDesktopListeners) {
-          removeDesktopListeners();
-        }
         window.removeEventListener('resize', handleResize);
+        if (st) {
+          st.kill();
+        }
+        stRef.current = null;
         if (cameraTl) {
           cameraTl.kill();
         }
@@ -362,12 +383,10 @@ export default function HeroSection() {
       };
     };
 
-    // Desktop: full 3D scroll zoom camera timeline with ScrollTrigger
     mm.add('(min-width: 1024px)', () => {
       return setupCameraTimeline(false);
     });
 
-    // Mobile: camera timeline ready for button tap activation (no ScrollTrigger, native fluid scroll)
     mm.add('(max-width: 1023px)', () => {
       return setupCameraTimeline(true);
     });
@@ -375,67 +394,116 @@ export default function HeroSection() {
     return () => mm.revert();
   }, [isDark]);
 
+  // Scrolling system lock listeners:
+  // Intercepts all wheel, touch, and keyboard scrolling while isScrollLockedRef.current is true!
+  // Completely pins the Hero section and locks the scrolling system while video is playing
+  // and while the reverse camera animation is running!
   useEffect(() => {
-    if (isVideoPlaying) {
-      const handleWheelWhileVideo = (e) => {
-        // Full-screen video dialog is active; prevent background page scroll
+    const handleWheel = (e) => {
+      if (isScrollLockedRef.current) {
         e.preventDefault();
-      };
-      const preventTouch = (e) => {
+      }
+    };
+
+    const handleTouchStart = (e) => {
+      touchStartYRef.current = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e) => {
+      if (isScrollLockedRef.current) {
         e.preventDefault();
-      };
-      window.addEventListener('wheel', handleWheelWhileVideo, { passive: false });
-      window.addEventListener('touchmove', preventTouch, { passive: false });
-      return () => {
-        window.removeEventListener('wheel', handleWheelWhileVideo);
-        window.removeEventListener('touchmove', preventTouch);
-      };
+      }
+    };
+
+    const handleKeyDown = (e) => {
+      if (isScrollLockedRef.current) {
+        if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '].includes(e.key)) {
+          if (!['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
+            e.preventDefault();
+          }
+        }
+        if (e.key === 'Escape') {
+          runReverseCameraAnimation();
+        }
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  const finishHeroAnimation = () => {
+    // 1. Permanently mark completed once so animation will NEVER loop or re-trigger
+    hasCompletedRef.current = true;
+    isVideoActiveRef.current = false;
+    setIsVideoPlaying(false);
+    isZoomingRef.current = false;
+    setIsZooming(false);
+
+    // 2. Unpin and kill ScrollTrigger completely so pin-spacer is cleanly removed
+    if (stRef.current) {
+      stRef.current.kill(true);
+      stRef.current = null;
     }
-  }, [isVideoPlaying]);
+
+    // 3. Clear any leftover pin transform/styles on pinWrapper
+    if (pinWrapperRef.current) {
+      gsap.set(pinWrapperRef.current, { clearProps: 'transform,top,left,position,width,height' });
+    }
+
+    // 4. Reset camera timeline to initial state (0)
+    if (cameraTlRef.current) {
+      cameraTlRef.current.seek(0);
+    }
+
+    // 5. Set scroll cleanly to top of unpinned desk
+    window.scrollTo({ top: 0, behavior: 'instant' });
+
+    // 6. UNLOCK the scrolling system now that reverse camera animation is completed!
+    unlockScrollingSystem();
+
+    // 7. Refresh ScrollTrigger for subsequent page sections
+    ScrollTrigger.refresh();
+  };
 
   const runReverseCameraAnimation = () => {
     if (videoRef.current) {
       videoRef.current.pause();
     }
-    setIsVideoPlaying(false);
-    isReversedRef.current = true;
-    isVideoActiveRef.current = false;
 
+    // Ensure scroll lock remains active during reverse animation
+    lockScrollingSystem();
+
+    // Fade out video container
+    if (videoContainerRef.current) {
+      gsap.to(videoContainerRef.current, {
+        opacity: 0,
+        pointerEvents: 'none',
+        duration: 0.4,
+        ease: 'power2.out'
+      });
+    }
+
+    // Smoothly reverse camera rig back to comic desk while STILL PINNED & SCROLL LOCKED!
     if (cameraTlRef.current) {
       cameraTlRef.current.tweenTo(0, {
-        duration: 1.15,
+        duration: 1.4,
         ease: 'power2.inOut',
         onComplete: () => {
-          setVideoEnded(true);
-          setIsZooming(false);
-          isZoomingRef.current = false;
-          isReversedRef.current = false;
-          setScrollProgress(0);
-
-          if (videoContainerRef.current) {
-            gsap.set(videoContainerRef.current, {
-              opacity: 0,
-              pointerEvents: 'none'
-            });
-          }
-
-          window.scrollTo({ top: 0, behavior: 'instant' });
+          finishHeroAnimation();
         }
       });
     } else {
-      // Direct reverse fallback
-      if (videoContainerRef.current) {
-        gsap.to(videoContainerRef.current, {
-          opacity: 0,
-          pointerEvents: 'none',
-          duration: 0.35,
-          ease: 'power2.out',
-          onComplete: () => {
-            isReversedRef.current = false;
-            setIsVideoPlaying(false);
-          }
-        });
-      }
+      finishHeroAnimation();
     }
   };
 
@@ -447,6 +515,7 @@ export default function HeroSection() {
   };
 
   const handleVideoEnded = () => {
+    // Video completed: smoothly reverse camera back to comic desk and unlock scroll on completion!
     runReverseCameraAnimation();
   };
 
@@ -455,7 +524,27 @@ export default function HeroSection() {
   };
 
   const handleDiveIntoWindow = (e) => {
-    playZoomAnimation(e);
+    if (e && e.preventDefault) e.preventDefault();
+    if (isVideoActiveRef.current || isScrollLockedRef.current) return;
+
+    // Immediately lock scrolling system so hero remains pinned and scroll is locked
+    lockScrollingSystem();
+    isZoomingRef.current = true;
+    setIsZooming(true);
+
+    if (cameraTlRef.current) {
+      cameraTlRef.current.tweenTo(cameraTlRef.current.duration(), {
+        duration: 1.4,
+        ease: 'power2.inOut',
+        onComplete: () => {
+          isVideoActiveRef.current = true;
+          setIsVideoPlaying(true);
+          if (videoRef.current && videoRef.current.paused) {
+            videoRef.current.play().catch(() => {});
+          }
+        }
+      });
+    }
   };
 
   useEffect(() => {
@@ -463,7 +552,7 @@ export default function HeroSection() {
     const board = boardRef.current;
     if (!hero || !board) return;
 
-    if (isZoomingRef.current) {
+    if (isZoomingRef.current || isScrollLockedRef.current) {
       gsap.to(board, { rotateX: 0, rotateY: 0, duration: 0.3, overwrite: 'auto' });
       return;
     }
@@ -479,6 +568,7 @@ export default function HeroSection() {
       repeat: -1,
       paused: false
     });
+    idleTweenRef.current = idleTween;
 
     const updateTilt = (clientX, clientY) => {
       const rect = hero.getBoundingClientRect();
@@ -529,7 +619,7 @@ export default function HeroSection() {
     let ticking = false;
 
     const handleMouseMove = (e) => {
-      if (isZoomingRef.current) return;
+      if (isZoomingRef.current || isScrollLockedRef.current) return;
 
       isHovered = true;
       idleTween.pause();
@@ -544,7 +634,7 @@ export default function HeroSection() {
     };
 
     const handleTouchMove = (e) => {
-      if (isZoomingRef.current || !e.touches || !e.touches[0]) return;
+      if (isZoomingRef.current || isScrollLockedRef.current || !e.touches || !e.touches[0]) return;
 
       isHovered = true;
       idleTween.pause();
@@ -562,7 +652,7 @@ export default function HeroSection() {
 
     const handleMouseLeave = () => {
       isHovered = false;
-      if (isZoomingRef.current) return;
+      if (isZoomingRef.current || isScrollLockedRef.current) return;
 
       gsap.to(board, {
         rotateY: 0,
@@ -602,6 +692,9 @@ export default function HeroSection() {
 
     return () => {
       idleTween.kill();
+      idleTweenRef.current = null;
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
       hero.removeEventListener('mousemove', handleMouseMove);
       hero.removeEventListener('mouseleave', handleMouseLeave);
       hero.removeEventListener('touchmove', handleTouchMove);
@@ -680,6 +773,7 @@ export default function HeroSection() {
                   panelFrameRef={panelFrameRef}
                   comicImageRef={comicImageRef}
                   frameBadgesRef={frameBadgesRef}
+                  portalGlowRef={portalGlowRef}
                   onDive={handleDiveIntoWindow}
                   isDark={isDark}
                 />
