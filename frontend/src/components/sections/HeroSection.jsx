@@ -318,8 +318,7 @@ export default function HeroSection() {
         0.64
       );
 
-      // Desktop: ScrollTrigger scrubs the 3D camera zoom smoothly as user scrolls
-      // Mobile devices (<1024px): Scroll and zoom animation is removed for fluid native scrolling
+
       let st = null;
       if (!isMobile && !hasCompletedRef.current) {
         st = ScrollTrigger.create({
