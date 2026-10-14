@@ -2,6 +2,7 @@ import React, { Suspense, lazy, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import HeroSection from '../components/sections/HeroSection';
 
+const WhoWeAreSection = lazy(() => import('../components/sections/WhoWeAreSection'));
 const TrajectorySection = lazy(() => import('../components/sections/TrajectorySection'));
 const ArsenalSection = lazy(() => import('../components/sections/ArsenalSection'));
 const CollectorCoversSection = lazy(() => import('../components/sections/CollectorCoversSection'));
@@ -31,6 +32,7 @@ export default function HomePage() {
           [ LOADING ARCHIVE SECTORS... ]
         </div>
       }>
+        <WhoWeAreSection />
         <TrajectorySection />
         <ArsenalSection />
         <CollectorCoversSection />

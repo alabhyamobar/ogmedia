@@ -4,41 +4,41 @@ import UnfoldPanel from '../ui/UnfoldPanel';
 
 const PROJECTS_DATA = [
   {
-  id: '01',
-  num: '01',
-  category: '// BRAND WORK',
-  title: 'Pilgrims',
-  badgeType: 'star',
-  subtitle: 'AI-Powered Content & Digital Experience',
-  desc: 'A modern digital experience for Pilgrims, with an engaging online presence.',
-  tags: [
-    'AI Content Creation',
-    'AI Visuals',
-    'Digital Branding'
-  ],
-  img: '/ogmedia/assets/pilgrims.webp',
-  video: '/ogmedia/videos/ogbrandad.mp4',
-  liveUrl: 'https://discoverpilgrim.com/'
-},
+    id: '01',
+    num: '01',
+    category: '// BRAND WORK',
+    title: 'Pilgrims',
+    badgeType: 'star',
+    subtitle: 'AI-Powered Content & Digital Experience',
+    desc: 'A modern digital experience for Pilgrims, with an engaging online presence.',
+    tags: [
+      'AI Content Creation',
+      'AI Visuals',
+      'Digital Branding'
+    ],
+    img: '/ogmedia/assets/pilgrims.webp',
+    video: '/ogmedia/videos/ogbrandad.mp4',
+    liveUrl: 'https://discoverpilgrim.com/'
+  },
 
   {
-  id: '02',
-  num: '02',
-  category: '// META-ADS AND DIGITAL PRESENCE',
-  title: 'SkySolar',
-  badgeType: 'leaf',
-  subtitle: 'Solar Solutions for a Cleaner Tomorrow',
-  desc: 'A strong digital presence designed to showcase SkySolar and support targeted ads.',
-  tags: [
-    'Meta Ads',
-    'Digital Marketing',
-    'Brand Awareness',
-    'Online Presence'
-  ],
-  img: '/ogmedia/assets/ogsky.webp',
-  video: '/ogmedia/videos/ogsky.mp4',
-  liveUrl: 'https://www.instagram.com/skyrenewableenergies/'
-},
+    id: '02',
+    num: '02',
+    category: '// META-ADS AND DIGITAL PRESENCE',
+    title: 'SkySolar',
+    badgeType: 'leaf',
+    subtitle: 'Solar Solutions for a Cleaner Tomorrow',
+    desc: 'A strong digital presence designed to showcase SkySolar and support targeted ads.',
+    tags: [
+      'Meta Ads',
+      'Digital Marketing',
+      'Brand Awareness',
+      'Online Presence'
+    ],
+    img: '/ogmedia/assets/ogsky.webp',
+    video: '/ogmedia/videos/ogsky.mp4',
+    liveUrl: 'https://www.instagram.com/skyrenewableenergies/'
+  },
   {
     id: '03',
     num: '03',
@@ -85,7 +85,10 @@ export default function CollectorCoversSection() {
   const [activeIndex, setActiveIndex] = useState(2);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [activeVideoModal, setActiveVideoModal] = useState(null);
+  const [isMobileAutoPlay, setIsMobileAutoPlay] = useState(true);
   const containerRef = useRef(null);
+  const touchStartXRef = useRef(null);
+  const touchDeltaXRef = useRef(0);
 
   const prevCard = () => {
     setActiveIndex((prev) => (prev === 0 ? PROJECTS_DATA.length - 1 : prev - 1));
@@ -94,6 +97,14 @@ export default function CollectorCoversSection() {
   const nextCard = () => {
     setActiveIndex((prev) => (prev === PROJECTS_DATA.length - 1 ? 0 : prev + 1));
   };
+
+  useEffect(() => {
+    if (!isMobileAutoPlay || activeVideoModal) return;
+    const timer = setInterval(() => {
+      nextCard();
+    }, 4200);
+    return () => clearInterval(timer);
+  }, [isMobileAutoPlay, activeVideoModal]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -186,6 +197,69 @@ export default function CollectorCoversSection() {
     return {
       transform: `translateY(${currentFan.y}px) rotate(${currentFan.rotate}deg) scale(1)`,
       zIndex: currentFan.z
+    };
+  };
+
+  const getMobileCardStyle = (idx) => {
+    const total = PROJECTS_DATA.length;
+    let offset = idx - activeIndex;
+    while (offset > Math.floor(total / 2)) offset -= total;
+    while (offset < -Math.floor(total / 2)) offset += total;
+
+    if (offset === 0) {
+      // Front active card
+      return {
+        transform: 'translateX(0%) translateZ(0px) rotateY(0deg) rotateZ(0deg) scale(1)',
+        opacity: 1,
+        zIndex: 30,
+        pointerEvents: 'auto',
+        transition: 'all 0.6s cubic-bezier(0.25, 1, 0.5, 1)',
+        filter: 'drop-shadow(0 16px 26px rgba(0,0,0,0.45))'
+      };
+    }
+
+    if (offset === -1) {
+      // Card to the left (translates to the left and recedes into 3D background)
+      return {
+        transform: 'translateX(-54%) translateZ(-120px) rotateY(28deg) rotateZ(-3deg) scale(0.85)',
+        opacity: 0.52,
+        zIndex: 20,
+        pointerEvents: 'auto',
+        transition: 'all 0.6s cubic-bezier(0.25, 1, 0.5, 1)',
+        filter: 'blur(0.4px) drop-shadow(0 8px 14px rgba(0,0,0,0.3))'
+      };
+    }
+
+    if (offset === 1) {
+      // Card to the right (emerging from the 3D background)
+      return {
+        transform: 'translateX(54%) translateZ(-120px) rotateY(-28deg) rotateZ(3deg) scale(0.85)',
+        opacity: 0.52,
+        zIndex: 20,
+        pointerEvents: 'auto',
+        transition: 'all 0.6s cubic-bezier(0.25, 1, 0.5, 1)',
+        filter: 'blur(0.4px) drop-shadow(0 8px 14px rgba(0,0,0,0.3))'
+      };
+    }
+
+    if (offset < -1) {
+      // Far left - fully translated and disappeared in the background
+      return {
+        transform: 'translateX(-115%) translateZ(-260px) rotateY(42deg) rotateZ(-6deg) scale(0.68)',
+        opacity: 0,
+        zIndex: 10,
+        pointerEvents: 'none',
+        transition: 'all 0.6s cubic-bezier(0.25, 1, 0.5, 1)'
+      };
+    }
+
+    // offset > 1: Far right - waiting in background to enter
+    return {
+      transform: 'translateX(115%) translateZ(-260px) rotateY(-42deg) rotateZ(6deg) scale(0.68)',
+      opacity: 0,
+      zIndex: 10,
+      pointerEvents: 'none',
+      transition: 'all 0.6s cubic-bezier(0.25, 1, 0.5, 1)'
     };
   };
 
@@ -310,8 +384,8 @@ export default function CollectorCoversSection() {
                     onMouseLeave={() => setHoveredIndex(null)}
                     onClick={() => setActiveIndex(idx)}
                     className={`w-[270px] lg:w-[285px] xl:w-[305px] bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-xl overflow-hidden cursor-pointer transition-shadow duration-300 relative ${isCenter || activeIndex === idx
-                        ? 'shadow-[8px_8px_0px_#000000] dark:shadow-[8px_8px_0px_#000000,0_0_20px_rgba(190,242,100,0.2)]'
-                        : 'shadow-[5px_5px_0px_#000000] hover:shadow-[8px_8px_0px_#000000]'
+                      ? 'shadow-[8px_8px_0px_#000000] dark:shadow-[8px_8px_0px_#000000,0_0_20px_rgba(190,242,100,0.2)]'
+                      : 'shadow-[5px_5px_0px_#000000] hover:shadow-[8px_8px_0px_#000000]'
                       }`}
                   >
 
@@ -438,138 +512,205 @@ export default function CollectorCoversSection() {
           })}
         </div>
 
-        <div className="flex md:hidden items-center gap-4 overflow-x-auto pb-6 pt-2 px-2 no-scrollbar scroll-smooth snap-x snap-mandatory">
-          {PROJECTS_DATA.map((project, idx) => (
-            <UnfoldPanel
-              key={project.id}
-              direction="right"
-              duration={900}
-              delay={80 + idx * 60}
-              className="flex-shrink-0 w-[275px] rounded-xl overflow-hidden snap-center"
-            >
+        {/* Mobile Status Header with Auto-play indicator */}
+        <div className="flex md:hidden items-center justify-between px-3 mb-1 font-mono-tech text-[10px] text-stone-600 dark:text-stone-400">
+          <div className="flex items-center gap-1.5">
+            <span className="font-bold text-[#ef4444]">
+              {PROJECTS_DATA[activeIndex].num} / 05
+            </span>
+            <span className="text-stone-400">•</span>
+            <span className="font-bold text-black dark:text-white uppercase truncate max-w-[150px]">
+              {PROJECTS_DATA[activeIndex].title}
+            </span>
+          </div>
+          <button
+            onClick={() => setIsMobileAutoPlay((prev) => !prev)}
+            className={`px-2 py-0.5 rounded border border-black font-bold text-[9px] shadow-[1px_1px_0px_#000] cursor-pointer transition-colors ${isMobileAutoPlay ? 'bg-[#39FF14] text-black' : 'bg-stone-200 dark:bg-stone-800 text-stone-600 dark:text-stone-300'
+              }`}
+          >
+            {isMobileAutoPlay ? '⚡ AUTO-3D' : '⏸ PAUSED'}
+          </button>
+        </div>
+
+        {/* Mobile 3D Rotating Stage: active card in front, left card translated & receded, incoming card emerging */}
+        <div
+          className="relative md:hidden w-full h-[475px] sm:h-[495px] flex items-center justify-center overflow-hidden my-2 select-none"
+          style={{
+            perspective: '1200px',
+            perspectiveOrigin: '50% 50%',
+            transformStyle: 'preserve-3d'
+          }}
+          onTouchStart={(e) => {
+            setIsMobileAutoPlay(false);
+            touchStartXRef.current = e.touches[0].clientX;
+          }}
+          onTouchMove={(e) => {
+            if (touchStartXRef.current !== null) {
+              touchDeltaXRef.current = e.touches[0].clientX - touchStartXRef.current;
+            }
+          }}
+          onTouchEnd={() => {
+            if (touchDeltaXRef.current > 40) {
+              prevCard();
+            } else if (touchDeltaXRef.current < -40) {
+              nextCard();
+            }
+            touchStartXRef.current = null;
+            touchDeltaXRef.current = 0;
+          }}
+        >
+          {PROJECTS_DATA.map((project, idx) => {
+            const cardStyle = getMobileCardStyle(idx);
+            const total = PROJECTS_DATA.length;
+            let offset = idx - activeIndex;
+            while (offset > Math.floor(total / 2)) offset -= total;
+            while (offset < -Math.floor(total / 2)) offset += total;
+            const isCenter = offset === 0;
+
+            return (
               <div
-                onClick={() => setActiveIndex(idx)}
-                className="w-full bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-xl overflow-hidden shadow-[5px_5px_0px_#000]"
+                key={project.id}
+                style={{
+                  ...cardStyle,
+                  transformStyle: 'preserve-3d'
+                }}
+                onClick={() => {
+                  if (offset === -1) prevCard();
+                  else if (offset === 1) nextCard();
+                  else setActiveIndex(idx);
+                }}
+                className={`absolute top-2 w-[285px] xs:w-[305px] max-w-[88vw] rounded-xl overflow-hidden cursor-pointer ${isCenter ? 'ring-2 ring-black dark:ring-[#39FF14]' : ''
+                  }`}
               >
-
-                <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black dark:border-stone-700 bg-white dark:bg-[#1e1e24]">
-                  <div className="flex items-center gap-2">
-                    <span className="bg-black text-white font-mono-tech font-bold text-xs px-2 py-0.5 rounded-sm">
-                      {project.num}
-                    </span>
-                    <span className="font-mono-tech text-[10px] font-bold text-stone-800 dark:text-stone-300">
-                      {project.category}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="relative aspect-[16/10] overflow-hidden border-b-2 border-black dark:border-stone-700 bg-stone-900">
-                  <img
-                    src={project.img}
-                    alt={project.title}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-full object-cover"
-                  />
-                  <div
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setActiveVideoModal(project);
-                    }}
-                    className="absolute inset-0 flex items-center justify-center bg-black/20"
-                  >
-                    <button className="w-10 h-10 rounded-full bg-black/80 text-white border-2 border-white flex items-center justify-center shadow-lg">
-                      <svg className="w-4 h-4 fill-current ml-0.5" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-
-                <div className="p-3.5">
-                  <div className="flex items-center justify-between gap-1 mb-1">
-                    <InkText
-                      as="h3"
-                      text={project.title}
-                      strokeWidth="0.5px"
-                      delay={200 + idx * 60}
-                      duration={1600}
-                      className="font-normal text-lg font-heading text-black dark:text-white tracking-wide"
-                    />
-                    {renderBadgeIcon(project.badgeType)}
-                  </div>
-                  <div className="text-[11px] font-mono-tech font-bold text-stone-600 dark:text-stone-400 mb-1.5 leading-tight">
-                    {project.subtitle}
-                  </div>
-                  <p className="text-xs text-stone-700 dark:text-stone-300 line-clamp-2 mb-3">
-                    {project.desc}
-                  </p>
-                  <div className="flex flex-wrap gap-1 mb-3">
-                    {project.tags.map((t) => (
-                      <span
-                        key={t}
-                        className="font-mono-tech text-[9px] font-bold px-1.5 py-0.5 bg-white dark:bg-stone-900 border border-black/30 rounded"
-                      >
-                        {t}
+                <div className="w-full bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-xl overflow-hidden shadow-[6px_6px_0px_#000] transition-colors">
+                  <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black dark:border-stone-700 bg-white dark:bg-[#1e1e24]">
+                    <div className="flex items-center gap-2">
+                      <span className="bg-black text-white font-mono-tech font-bold text-xs px-2 py-0.5 rounded-sm">
+                        {project.num}
                       </span>
-                    ))}
+                      <span className="font-mono-tech text-[10px] font-bold text-stone-800 dark:text-stone-300 tracking-wide truncate max-w-[170px]">
+                        {project.category}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between pt-2 border-t border-stone-200 dark:border-stone-800">
-                    <button
+
+                  <div className="relative aspect-[16/10] overflow-hidden border-b-2 border-black dark:border-stone-700 bg-stone-900 group">
+                    <img
+                      src={project.img}
+                      alt={project.title}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div
                       onClick={(e) => {
                         e.stopPropagation();
                         setActiveVideoModal(project);
                       }}
-                      className="flex items-center gap-1 bg-[#39FF14] text-black font-mono-tech font-bold text-[10px] px-2.5 py-1 border border-black rounded shadow-[2px_2px_0px_#000]"
+                      className="absolute inset-0 flex items-center justify-center bg-black/25 hover:bg-black/10 transition-colors"
                     >
-                      ▶ WATCH DEMO
-                    </button>
-                    {project.liveUrl && (
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-[10px] font-mono-tech font-bold text-stone-800 dark:text-stone-200 hover:text-black dark:hover:text-[#39FF14]"
+                      <button
+                        aria-label={`Play demo for ${project.title}`}
+                        className="w-10 h-10 rounded-full bg-black/80 hover:bg-[#39FF14] text-white hover:text-black border-2 border-white flex items-center justify-center shadow-lg transition-transform active:scale-95"
                       >
-                        LIVE DEMO ↗
-                      </a>
-                    )}
+                        <svg className="w-4 h-4 fill-current ml-0.5" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="p-3.5">
+                    <div className="flex items-center justify-between gap-1 mb-1">
+                      <div className="font-heading text-lg font-bold text-black dark:text-white tracking-wide truncate">
+                        {project.title}
+                      </div>
+                      {renderBadgeIcon(project.badgeType)}
+                    </div>
+                    <div className="text-[11px] font-mono-tech font-bold text-stone-600 dark:text-stone-400 mb-1.5 leading-tight truncate">
+                      {project.subtitle}
+                    </div>
+                    <p className="text-xs text-stone-700 dark:text-stone-300 line-clamp-2 mb-3">
+                      {project.desc}
+                    </p>
+                    <div className="flex flex-wrap gap-1 mb-3">
+                      {project.tags.slice(0, 3).map((t) => (
+                        <span
+                          key={t}
+                          className="font-mono-tech text-[9px] font-bold px-1.5 py-0.5 bg-white dark:bg-stone-900 border border-black/30 dark:border-stone-700 rounded"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex items-center justify-between pt-2 border-t border-stone-200 dark:border-stone-800">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setActiveVideoModal(project);
+                        }}
+                        className="flex items-center gap-1 bg-[#39FF14] text-black font-mono-tech font-bold text-[10px] px-2.5 py-1 border border-black rounded shadow-[2px_2px_0px_#000] active:scale-95 cursor-pointer"
+                      >
+                        ▶ WATCH DEMO
+                      </button>
+                      {project.liveUrl && (
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-[10px] font-mono-tech font-bold text-stone-800 dark:text-stone-200 hover:text-black dark:hover:text-[#39FF14] border border-black/20 dark:border-stone-700 px-2 py-0.5 rounded"
+                        >
+                          LIVE DEMO ↗
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-            </UnfoldPanel>
-          ))}
+            );
+          })}
         </div>
 
-        <div className="flex items-center justify-center gap-3 mt-6 sm:mt-8">
+        {/* Navigation Controls */}
+        <div className="flex items-center justify-center gap-3 mt-4 sm:mt-8">
           <button
-            onClick={prevCard}
+            onClick={() => {
+              setIsMobileAutoPlay(false);
+              prevCard();
+            }}
             aria-label="Previous card"
-            className="w-8 h-8 rounded-full border border-black dark:border-stone-700 bg-white dark:bg-stone-900 flex items-center justify-center text-stone-700 dark:text-stone-300 hover:bg-[#39FF14] hover:text-black transition-colors"
+            className="w-9 h-9 sm:w-8 sm:h-8 rounded-full border border-black dark:border-stone-700 bg-white dark:bg-stone-900 flex items-center justify-center font-bold text-stone-700 dark:text-stone-300 hover:bg-[#39FF14] hover:text-black transition-colors cursor-pointer manga-shadow-sm"
           >
-            &lt;
+            ◀
           </button>
 
           <div className="flex items-center gap-2">
             {PROJECTS_DATA.map((_, idx) => (
               <button
                 key={idx}
-                onClick={() => setActiveIndex(idx)}
+                onClick={() => {
+                  setIsMobileAutoPlay(false);
+                  setActiveIndex(idx);
+                }}
                 aria-label={`Go to slide ${idx + 1}`}
-                className={`transition-all duration-300 rounded-full ${idx === activeIndex
-                    ? 'w-3 h-3 bg-black dark:bg-[#39FF14] scale-110 shadow-sm'
-                    : 'w-2 h-2 bg-stone-300 dark:bg-stone-700 hover:bg-stone-500'
+                className={`transition-all duration-300 rounded-full cursor-pointer ${idx === activeIndex
+                  ? 'w-6 h-2.5 bg-[#39FF14] border border-black scale-105 shadow-sm'
+                  : 'w-2 h-2 bg-stone-300 dark:bg-stone-700 hover:bg-stone-500'
                   }`}
               />
             ))}
           </div>
 
           <button
-            onClick={nextCard}
+            onClick={() => {
+              setIsMobileAutoPlay(false);
+              nextCard();
+            }}
             aria-label="Next card"
-            className="w-8 h-8 rounded-full border border-black dark:border-stone-700 bg-white dark:bg-stone-900 flex items-center justify-center text-stone-700 dark:text-stone-300 hover:bg-[#39FF14] hover:text-black transition-colors"
+            className="w-9 h-9 sm:w-8 sm:h-8 rounded-full border border-black dark:border-stone-700 bg-white dark:bg-stone-900 flex items-center justify-center font-bold text-stone-700 dark:text-stone-300 hover:bg-[#39FF14] hover:text-black transition-colors cursor-pointer manga-shadow-sm"
           >
-            &gt;
+            ▶
           </button>
         </div>
       </div>

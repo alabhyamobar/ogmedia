@@ -25,21 +25,21 @@ export default function HeroTitleCard({ titleCardRef, descRef, isDark }) {
               : '8px 12px 0px #000000, 16px 20px 10px rgba(56,189,248,0.2)'
           }}
         >
-          <div className="flex items-center justify-center gap-3 sm:gap-4">
+          <div className="flex items-center justify-center gap-3.5 sm:gap-5 md:gap-6">
 
-            <div className="relative group/logo">
+            <div className="relative group/logo flex-shrink-0">
               <div
-                className="absolute inset-0 bg-[#39FF14]/40 rounded-xl blur-md opacity-60 group-hover/logo:opacity-100 transition-opacity"
+                className="absolute inset-0 bg-[#39FF14]/40 rounded-xl sm:rounded-2xl blur-md sm:blur-lg opacity-60 group-hover/logo:opacity-100 transition-opacity"
                 aria-hidden="true"
               />
               <img
                 src="/ogmedia/assets/og_logo.webp"
                 alt="OG Media official crowned crest emblem"
-                width="56"
-                height="56"
+                width="96"
+                height="96"
                 loading="eager"
                 fetchPriority="high"
-                className="relative w-9 h-9 sm:w-14 sm:h-14 object-contain rounded-xl border-2 border-black dark:border-stone-700 bg-[#0A0A0A] p-0.5 shadow-[2px_2px_0px_#000000] sm:shadow-[3px_3px_0px_#000000] group-hover/logo:scale-105 transition-transform"
+                className="relative w-12 h-12 sm:w-20 sm:h-20 md:w-24 md:h-24 object-contain rounded-xl sm:rounded-2xl border-2 sm:border-3 border-black dark:border-stone-700 bg-[#0A0A0A] p-1 sm:p-2 shadow-[3px_3px_0px_#000000] sm:shadow-[5px_5px_0px_#000000] group-hover/logo:scale-105 transition-transform"
               />
             </div>
 
@@ -56,7 +56,7 @@ export default function HeroTitleCard({ titleCardRef, descRef, isDark }) {
                 delay={200}
                 duration={2400}
                 className="select-none"
-                text="OG MEDIA"
+                text="MEDIA"
               />
             </h1>
           </div>
@@ -71,7 +71,7 @@ export default function HeroTitleCard({ titleCardRef, descRef, isDark }) {
             }}
           >
             <span className="sr-only">
-              Where Ideas Meet Impact — Viral Marketing &amp; Creative Media Agency:{" "}
+              Where Art Meets Intelligence — Viral Marketing &amp; Creative Media Agency:{" "}
             </span>
             <InkText
               as="span"
@@ -80,7 +80,7 @@ export default function HeroTitleCard({ titleCardRef, descRef, isDark }) {
               strokeWidth="1px"
               delay={500}
               duration={2000}
-              text="Where Ideas Meet Impact"
+              text="Where Art Meets Intelligence"
             />
           </h2>
         </div>

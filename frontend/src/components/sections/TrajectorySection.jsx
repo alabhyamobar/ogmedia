@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import InkText from '../ui/InkText';
-import TypewriterText from '../ui/TypewriterText';
 import UnfoldPanel from '../ui/UnfoldPanel';
+
+export { default as WhoWeAreSection } from './WhoWeAreSection';
 
 const STORY_PILLARS = [
   {
@@ -117,7 +118,8 @@ const STORY_PILLARS = [
     resolution: 'ULTRA-RESPONSIVE // 120HZ',
     accentColor: '#10b981'
   }
-]
+];
+
 export default function TrajectorySection() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
@@ -169,11 +171,17 @@ export default function TrajectorySection() {
   }, [currentIndex]);
 
   return (
-    <section id="story" className="relative px-3 sm:px-6 py-16 sm:py-20 max-w-[1440px] mx-auto select-none overflow-x-hidden sm:overflow-x-visible">
+    <section
+      id="trajectory"
+      className="relative px-3 sm:px-6 py-16 sm:py-20 max-w-[1440px] mx-auto select-none overflow-x-hidden sm:overflow-x-visible"
+    >
+      <div id="what-we-do" className="absolute -top-24 left-0 pointer-events-none" />
+
+      {/* Section Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-12 relative px-2">
         <div>
           <div className="flex items-center gap-2 mb-2 font-mono-tech text-xs sm:text-sm font-bold text-stone-700 dark:text-stone-300">
-            <span className="text-stone-500">/// 00</span>
+            <span className="text-stone-500">/// 01</span>
             <span className="font-jp-impact text-black dark:text-white tracking-wider text-sm sm:text-base">
               物語.
             </span>
@@ -225,13 +233,12 @@ export default function TrajectorySection() {
         </div>
       </div>
 
+      {/* Grid: Panel 01-A (Video Showcase) on Left, Panel 01-C (Details & Stages) on Right */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        
+        {/* Left Column: Panel 01-A Video Showcase */}
         <div className="lg:col-span-7 flex flex-col gap-5">
-          
           <UnfoldPanel direction="right" duration={1100} delay={150} className="rounded-3xl">
             <div className="border-[2.5px] border-black dark:border-[#38383e] bg-[#faf8f5] dark:bg-[#16161a] p-3 sm:p-4 rounded-3xl manga-shadow hover:manga-shadow-lg transition-all">
-              
               <div className="flex items-center justify-between font-mono-tech text-[10px] sm:text-xs pb-2 mb-2 border-b-2 border-black dark:border-stone-700 bg-white dark:bg-[#1e1e24] px-3 py-1.5 rounded-lg text-stone-700 dark:text-stone-300">
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-[#0284c7] dark:text-[#38bdf8]">
@@ -359,10 +366,12 @@ export default function TrajectorySection() {
               </div>
             </div>
           </UnfoldPanel>
+        </div>
 
+        {/* Right Column: Panel 01-C Stage Details & Buttons */}
+        <div className="lg:col-span-5 flex flex-col gap-5">
           <UnfoldPanel direction="right" duration={1000} delay={250} className="rounded-3xl">
             <div className="border-[2.5px] border-black dark:border-[#38383e] bg-[#faf8f5] dark:bg-[#16161a] p-5 sm:p-6 rounded-3xl manga-shadow">
-              
               <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
                 <span className="bg-black text-[#39FF14] font-mono-tech text-[10px] font-bold px-2.5 py-0.5 rounded border border-stone-800 shadow-sm">
                   PANEL 01-C [ {currentPillar.code} ]
@@ -391,7 +400,7 @@ export default function TrajectorySection() {
                 {currentPillar.description}
               </p>
 
-              {/* Mobile-only info card: Displays quote & key stat cleanly below video instead of covering the video */}
+              {/* Mobile-only info card */}
               <div className="sm:hidden mb-4 p-3 bg-white dark:bg-[#18181c] border-2 border-black dark:border-stone-700 rounded-xl space-y-1.5 shadow-sm">
                 <div className="flex items-center justify-between text-[10px] font-mono-tech">
                   <span className="font-bold text-[#0284c7] dark:text-[#38bdf8] uppercase">
@@ -431,84 +440,10 @@ export default function TrajectorySection() {
               </div>
             </div>
           </UnfoldPanel>
-
-        </div>
-
-        <div className="lg:col-span-5 flex flex-col gap-5">
-          
-          <UnfoldPanel direction="right" duration={1100} delay={200} className="rounded-3xl">
-            <div className="border-[2.5px] border-black dark:border-[#38383e] bg-[#faf8f5] dark:bg-[#16161a] p-3 sm:p-4 rounded-3xl manga-shadow hover:manga-shadow-lg transition-all">
-              
-              <div className="flex items-center justify-between font-mono-tech text-[10px] sm:text-xs pb-2 mb-2 border-b-2 border-black dark:border-stone-700 bg-white dark:bg-[#1e1e24] px-3 py-1.5 rounded-lg text-stone-700 dark:text-stone-300">
-                <span className="font-bold text-[#ef4444]">
-                  PANEL 01-B // HARD CUT FOCUS
-                </span>
-                <span className="bg-gradient-to-r from-[#ef4444] to-[#f43f5e] text-white font-bold px-2 py-0.5 rounded border border-black dark:border-stone-800 text-[9px] shadow-sm">
-                  CORE // 02
-                </span>
-              </div>
-
-              <div className="relative border-2 border-black dark:border-stone-800 rounded-2xl overflow-hidden bg-stone-950 aspect-[4/5] shadow-inner">
-                <img
-                  src="/ogmedia/assets/akashhero.webp"
-                  alt="Akash hero illustration"
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"
-                />
-
-                <div className="absolute top-2.5 right-2.5 z-20">
-                  <div className="bg-gradient-to-r from-[#39FF14] to-[#10b981] text-black border border-black font-mono-tech text-[9px] font-black px-2.5 py-1 rounded manga-shadow-sm shadow-[0_0_10px_rgba(190,242,100,0.4)]">
-                    SOLO LEVELING AESTHETIC // LV.99
-                  </div>
-                </div>
-
-                <div className="absolute bottom-3 left-3 right-3 z-20">
-                  <div className="bg-white/95 dark:bg-[#18181c]/95 text-black dark:text-white border-2 border-[#ef4444] dark:border-[#f43f5e] px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-mono-tech manga-shadow shadow-[0_0_12px_rgba(239,68,68,0.25)]">
-                    <div className="text-[#ef4444] text-[10px] font-bold">[ DIALOGUE 01-B // LEAD ARTIST ]</div>
-                    <InkText
-                      as="div"
-                      strokeWidth="0.4px"
-                      delay={300}
-                      duration={2000}
-                      className="font-normal text-black dark:text-white text-sm sm:text-base tracking-wide font-heading mt-0.5"
-                      text='"WE BUILD WORLDS."'
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between font-mono-tech text-[9px] sm:text-[10px] pt-2 mt-2 border-t border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-400">
-                <span>ENERGY: CORE OVERDRIVE</span>
-                <span className="font-bold text-[#ef4444]">STATUS: MAXIMUM FOCUS</span>
-              </div>
-            </div>
-          </UnfoldPanel>
-
-          <UnfoldPanel direction="right" duration={1000} delay={300} className="rounded-3xl">
-            <div className="border-[2.5px] border-black dark:border-[#38383e] bg-[#faf8f5] dark:bg-[#16161a] p-5 sm:p-6 rounded-3xl manga-shadow">
-              <div className="text-stone-500 dark:text-stone-400 font-mono-tech text-[10px] font-bold mb-1">
-                [ SECONDARY REPORT // ARCHIVE - 02 ]
-              </div>
-              <InkText
-                as="h3"
-                strokeWidth="0.5px"
-                delay={200}
-                duration={2000}
-                className="text-lg sm:text-xl font-normal font-heading text-black dark:text-white mb-2 tracking-wide"
-                text='"WE MAKE BRANDS IMPOSSIBLE TO IGNORE."'
-              />
-              <TypewriterText
-                speed={14}
-                delay={400}
-                className="text-stone-700 dark:text-stone-300 text-xs sm:text-sm leading-relaxed min-h-[3em]"
-                text="We blend culture, creativity, and strategy to create campaigns that capture attention and turn it into real growth."
-              />
-            </div>
-          </UnfoldPanel>
         </div>
       </div>
 
+      {/* Bottom Features Banner */}
       <div className="mt-8 border-[2.5px] border-black dark:border-[#38383e] bg-[#faf8f5] dark:bg-[#16161a] rounded-2xl px-4 py-3 flex flex-wrap items-center justify-between gap-3 font-mono-tech text-[10px] sm:text-xs manga-shadow">
         <div className="text-stone-600 dark:text-stone-400">
           5 PROVEN SERVICES TO SCALE YOUR BRAND

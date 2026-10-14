@@ -3,21 +3,29 @@ import React from 'react';
 export default function OgLogo({
   size = 'md',
   withText = true,
+  title = 'MEDIA',
   subtitle = 'CREATIVE INTELLIGENCE STUDIO',
   className = ''
 }) {
   const containerSizeClasses = {
-    sm: 'w-7 h-7 sm:w-8 sm:h-8',
-    md: 'w-9 h-9 sm:w-10 sm:h-10',
-    lg: 'w-12 h-12 sm:w-14 sm:h-14',
-    xl: 'w-16 h-16 sm:w-20 sm:h-20'
+    sm: 'w-9 h-9 sm:w-10 sm:h-10',
+    md: 'w-11 h-11 sm:w-12 sm:h-12',
+    lg: 'w-14 h-14 sm:w-16 sm:h-16',
+    xl: 'w-20 h-20 sm:w-24 sm:h-24'
   };
 
   const imgSizeClasses = {
-    sm: 'w-6 h-6 sm:w-7 sm:h-7',
-    md: 'w-8 h-8 sm:w-9 sm:h-9',
-    lg: 'w-11 h-11 sm:w-13 sm:h-13',
-    xl: 'w-15 h-15 sm:w-19 sm:h-19'
+    sm: 'w-8 h-8 sm:w-9 sm:h-9',
+    md: 'w-10 h-10 sm:w-11 sm:h-11',
+    lg: 'w-13 h-13 sm:w-15 sm:h-15',
+    xl: 'w-19 h-19 sm:w-22 sm:h-22'
+  };
+
+  const titleSizeClasses = {
+    sm: 'text-sm sm:text-base',
+    md: 'text-base sm:text-lg',
+    lg: 'text-lg sm:text-xl',
+    xl: 'text-2xl sm:text-3xl'
   };
 
   return (
@@ -40,8 +48,8 @@ export default function OgLogo({
       {withText && (
         <div className="flex flex-col justify-center leading-none">
           <div className="flex items-center gap-1.5">
-            <span className="font-heading font-black text-sm sm:text-base tracking-tighter text-black dark:text-[#F5F5F5] uppercase">
-              OG MEDIA
+            <span className={`font-heading font-black tracking-tighter text-black dark:text-[#F5F5F5] uppercase ${titleSizeClasses[size] || titleSizeClasses.md}`}>
+              {title}
             </span>
             <span className="bg-[#39FF14] text-black text-[9px] font-mono-tech font-black px-1.5 py-0.5 border border-black leading-tight shadow-[1px_1px_0px_#000000]">
               STUDIO

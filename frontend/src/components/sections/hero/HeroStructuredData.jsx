@@ -20,7 +20,7 @@ export default function HeroStructuredData() {
           'url': 'https://ogmedia.agency/ogmedia/assets/og_logo.webp',
           'caption': 'OG Media Official Logo'
         },
-        'slogan': 'Where Ideas Meet Impact',
+        'slogan': 'Where Art Meets Intelligence',
         'description': 'OG Media is a creative intelligence studio engineering high-impact digital experiences, influencer marketing networks, viral meme distribution, and cinematic brand worldbuilding.',
         'knowsAbout': [
           'Influencer Marketing',

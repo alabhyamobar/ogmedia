@@ -1,10 +1,5 @@
 import React, { forwardRef } from 'react';
 
-/**
- * HeroOgEffectSticker (Impact Sticker)
- * The signature 3D tilted sticker badge ("IMPACT // ORIGINAL / 001").
- * Uses forwardRef to bind directly to GSAP camera zoom & mouse tilt kinematics.
- */
 const HeroOgEffectSticker = forwardRef(function HeroOgEffectSticker(props, ref) {
   return (
     <div
