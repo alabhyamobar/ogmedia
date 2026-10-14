@@ -84,6 +84,31 @@ export default function Navbar() {
     }
   };
 
+  const handleLogoClick = (e) => {
+    e.preventDefault();
+    setMobileMenuOpen(false);
+    setIsVisible(true);
+
+    const isHome =
+      location.pathname === '/' ||
+      location.pathname === '' ||
+      window.location.pathname === '/ogmedia' ||
+      window.location.pathname === '/ogmedia/';
+
+    if (isHome) {
+      if (window.location.hash) {
+        window.history.pushState(null, '', window.location.pathname);
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      navigate('/');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 50);
+    }
+  };
+
   const navLinks = [
     {
       hash: '#story',
@@ -130,9 +155,9 @@ export default function Navbar() {
           <div className="flex items-center gap-2.5">
             <Link
               to="/"
-              title="Return to Main Archive"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 hover:scale-[1.02] transition-transform"
+              title="Return to top of page"
+              onClick={handleLogoClick}
+              className="flex items-center gap-2 hover:scale-[1.02] transition-transform cursor-pointer"
             >
               <OgLogo size="sm" withText={true} subtitle="CREATIVE INTELLIGENCE STUDIO" />
             </Link>

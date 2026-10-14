@@ -971,7 +971,7 @@ export default function LoadingGame({ onComplete }) {
               OG MEDIA STUDIO
             </span>
             <span>•</span>
-            <span>SEOUL • TOKYO • NEW YORK • LONDON</span>
+            <span>DIGITAL FIRST • WORLDWIDE • ALWAYS ON</span>
           </div>
 
           <div className="text-stone-500">

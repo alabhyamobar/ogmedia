@@ -199,6 +199,32 @@ body {
   font-family: 'JetBrains Mono', monospace !important;
 }
 
+@keyframes ticker-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-ticker {
+  display: flex;
+  width: max-content;
+  animation: ticker-scroll 26s linear infinite;
+  will-change: transform;
+}
+
+.animate-ticker:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-ticker {
+    animation-duration: 80s;
+  }
+}
+
 .font-comic-title {
   font-family: 'Bebas Neue', sans-serif !important;
 }

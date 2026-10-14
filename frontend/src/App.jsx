@@ -207,6 +207,18 @@ function AppRoutes({ isLoading }) {
   );
 }
 
+function ScrollToTopOnRouteChange() {
+  const { pathname } = useLocation();
+
+  React.useEffect(() => {
+    if (!window.location.hash) {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname]);
+
+  return null;
+}
+
 export default function App() {
   const [isLoading, setIsLoading] = useState(() => {
     if (typeof window === 'undefined') return false;
@@ -225,6 +237,7 @@ export default function App() {
         <AuthProvider>
           <VideoPreloadProvider>
             <BrowserRouter basename="/ogmedia">
+              <ScrollToTopOnRouteChange />
               {isLoading && (
                 <LoadingGame onComplete={() => setIsLoading(false)} />
               )}

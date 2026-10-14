@@ -33,7 +33,7 @@ export default function NotFoundPage() {
             className="inline-flex items-center gap-2 bg-[#39FF14] hover:bg-[#7CFF5E] text-black font-mono-tech font-bold text-sm px-6 py-3 border-2 border-black manga-shadow transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
           >
             <span>←</span>
-            <span>RETURN TO ARCHIVE HEADQUARTERS</span>
+            <span>RETURN TO MAIN ARCHIVE</span>
           </Link>
         </div>
       </div>

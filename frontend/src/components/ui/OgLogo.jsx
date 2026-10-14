@@ -10,22 +10,22 @@ export default function OgLogo({
   const containerSizeClasses = {
     sm: 'w-9 h-9 sm:w-10 sm:h-10',
     md: 'w-11 h-11 sm:w-12 sm:h-12',
-    lg: 'w-14 h-14 sm:w-16 sm:h-16',
-    xl: 'w-20 h-20 sm:w-24 sm:h-24'
+    lg: 'w-12 h-12 sm:w-16 sm:h-16',
+    xl: 'w-16 h-16 sm:w-24 sm:h-24'
   };
 
   const imgSizeClasses = {
     sm: 'w-8 h-8 sm:w-9 sm:h-9',
     md: 'w-10 h-10 sm:w-11 sm:h-11',
-    lg: 'w-13 h-13 sm:w-15 sm:h-15',
-    xl: 'w-19 h-19 sm:w-22 sm:h-22'
+    lg: 'w-11 h-11 sm:w-15 sm:h-15',
+    xl: 'w-15 h-15 sm:w-22 sm:h-22'
   };
 
   const titleSizeClasses = {
     sm: 'text-sm sm:text-base',
     md: 'text-base sm:text-lg',
-    lg: 'text-lg sm:text-xl',
-    xl: 'text-2xl sm:text-3xl'
+    lg: 'text-base sm:text-xl',
+    xl: 'text-xl sm:text-3xl'
   };
 
   return (

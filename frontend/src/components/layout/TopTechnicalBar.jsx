@@ -25,7 +25,7 @@ export default function TopTechnicalBar({ onOpenGame }) {
           SYSTEM: OPERATIONAL
         </span>
         <span className="hidden lg:inline text-stone-500">|</span>
-        <span className="hidden lg:inline text-amber-400 font-medium">LAT: 37.5665 / LON: 126.9780 [SEOUL]</span>
+        <span className="hidden lg:inline text-amber-400 font-medium">NODE: DISTRIBUTED [GLOBAL]</span>
       </div>
 
       <div className="flex items-center gap-2">

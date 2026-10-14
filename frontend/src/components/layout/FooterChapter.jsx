@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import InkText from '../ui/InkText';
 import TypewriterText from '../ui/TypewriterText';
 import UnfoldPanel from '../ui/UnfoldPanel';
@@ -56,13 +57,47 @@ const SOCIAL_CHAPTERS = [
 ];
 
 export default function FooterChapter() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogoClick = (e) => {
+    e.preventDefault();
+    const isHome =
+      location.pathname === '/' ||
+      location.pathname === '' ||
+      window.location.pathname === '/ogmedia' ||
+      window.location.pathname === '/ogmedia/';
+
+    if (isHome) {
+      if (window.location.hash) {
+        window.history.pushState(null, '', window.location.pathname);
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      navigate('/');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 50);
+    }
+  };
+
   return (
-    <footer id="social-chapters" className="relative px-3 sm:px-6 pt-8 pb-12 max-w-[1300px] mx-auto select-none overflow-x-hidden sm:overflow-x-visible">
-      <div className="text-center my-8 flex flex-col items-center">
-        <div className="mb-6">
+    <footer id="social-chapters" className="relative px-3 sm:px-6 pt-4 sm:pt-8 pb-6 sm:pb-12 max-w-[1300px] mx-auto select-none overflow-x-hidden sm:overflow-x-visible">
+      <div className="text-center my-4 sm:my-8 flex flex-col items-center">
+        <div
+          onClick={handleLogoClick}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') handleLogoClick(e);
+          }}
+          title="Return to top of page"
+          className="mb-3 sm:mb-6 cursor-pointer hover:scale-105 transition-transform inline-block focus:outline-none focus:ring-2 focus:ring-[#39FF14] rounded-xl"
+        >
           <OgLogo size="lg" withText={true} subtitle="CREATIVE INTELLIGENCE STUDIO" />
         </div>
-        <div className="inline-block bg-black dark:bg-[#16161a] text-white px-8 sm:px-14 py-4 sm:py-5 border-3 border-black dark:border-[#38383e] manga-shadow-lg transform -rotate-0.5">
+        <div className="inline-block bg-black dark:bg-[#16161a] text-white px-4 sm:px-14 py-2 sm:py-5 border-2 sm:border-3 border-black dark:border-[#38383e] manga-shadow sm:manga-shadow-lg transform -rotate-0.5">
           <InkText
             as="h2"
             strokeColor="#ffffff"
@@ -70,13 +105,13 @@ export default function FooterChapter() {
             strokeWidth="1.4px"
             delay={200}
             duration={2400}
-            className="text-4xl sm:text-6xl md:text-7xl font-bold font-comic-title tracking-wider"
+            className="text-2xl sm:text-6xl md:text-7xl font-bold font-comic-title tracking-wider"
             text="END OF CHAPTER 01"
           />
         </div>
 
-        <div className="mt-3">
-          <div className="inline-block bg-[#39FF14] text-black border-2 border-black px-4 py-1 font-mono-tech font-bold text-xs sm:text-sm manga-shadow-sm">
+        <div className="mt-2 sm:mt-3">
+          <div className="inline-block bg-[#39FF14] text-black border-2 border-black px-2.5 py-0.5 sm:px-4 sm:py-1 font-mono-tech font-bold text-[10px] sm:text-sm manga-shadow-sm">
             <span>[ TO BE CONTINUED IN VOL. 02 ... // </span>
             <span className="font-heading font-black text-black">CONTINUE ON SOCIALS</span>
             <span> ]</span>
@@ -84,8 +119,8 @@ export default function FooterChapter() {
         </div>
       </div>
 
-      <div className="my-8 flex flex-col items-center">
-        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-5">
+      <div className="my-4 sm:my-8 flex flex-col items-center w-full">
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-center gap-2 sm:gap-5 w-full sm:w-auto max-w-sm sm:max-w-none">
           {SOCIAL_CHAPTERS.map((item) => (
             <a
               key={item.chapter}
@@ -93,22 +128,22 @@ export default function FooterChapter() {
               target="_blank"
               rel="noreferrer"
               title={`${item.chapter}: Follow on ${item.name}`}
-              className="group flex items-center gap-3 bg-white dark:bg-[#18181c] border-2 border-black dark:border-stone-700 hover:border-black px-4 sm:px-5 py-2.5 rounded-xl manga-shadow hover:shadow-[5px_5px_0px_#000] hover:-translate-y-1 active:translate-y-0 transition-all duration-150 cursor-pointer"
+              className="group flex items-center gap-2 sm:gap-3 bg-white dark:bg-[#18181c] border-2 border-black dark:border-stone-700 hover:border-black px-2.5 sm:px-5 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl manga-shadow hover:shadow-[5px_5px_0px_#000] hover:-translate-y-1 active:translate-y-0 transition-all duration-150 cursor-pointer"
             >
               <div
-                className="w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-sm group-hover:scale-110 transition-transform flex-shrink-0"
+                className="w-7 h-7 sm:w-10 sm:h-10 rounded-md sm:rounded-lg flex items-center justify-center text-white shadow-sm group-hover:scale-110 transition-transform flex-shrink-0"
                 style={{ backgroundColor: item.accentColor }}
               >
                 {item.icon}
               </div>
 
-              <div className="text-left font-mono-tech">
-                <div className="text-[10px] font-bold text-stone-500 dark:text-stone-400 group-hover:text-stone-800 dark:group-hover:text-stone-200 uppercase tracking-wider">
+              <div className="text-left font-mono-tech overflow-hidden">
+                <div className="text-[9px] sm:text-[10px] font-bold text-stone-500 dark:text-stone-400 group-hover:text-stone-800 dark:group-hover:text-stone-200 uppercase tracking-wider truncate">
                   {item.chapter}
                 </div>
                 <div className="text-xs sm:text-sm font-bold text-black dark:text-white flex items-center gap-1 leading-tight">
-                  <span>{item.name}</span>
-                  <span className="text-[11px] text-stone-400 group-hover:text-black dark:group-hover:text-white group-hover:translate-x-0.5 transition-all">↗</span>
+                  <span className="truncate">{item.name}</span>
+                  <span className="text-[10px] sm:text-[11px] text-stone-400 group-hover:text-black dark:group-hover:text-white group-hover:translate-x-0.5 transition-all">↗</span>
                 </div>
               </div>
             </a>
@@ -116,49 +151,49 @@ export default function FooterChapter() {
         </div>
       </div>
 
-      <UnfoldPanel direction="right" duration={1000} delay={150} className="border-2 border-black dark:border-[#38383e] bg-white dark:bg-[#131316] p-6 my-8 manga-shadow">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-mono-tech text-xs">
-          <div className="border-l-3 border-[#38bdf8] pl-3.5 bg-[#38bdf8]/5 p-2">
+      <UnfoldPanel direction="right" duration={1000} delay={150} className="border-2 border-black dark:border-[#38383e] bg-white dark:bg-[#131316] p-3 sm:p-6 my-4 sm:my-8 manga-shadow">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 sm:gap-6 font-mono-tech text-[11px] sm:text-xs">
+          <div className="border-l-3 border-[#38bdf8] pl-2.5 sm:pl-3.5 bg-[#38bdf8]/5 p-1.5 sm:p-2">
             <InkText
               as="h3"
               strokeWidth="1px"
               delay={150}
               duration={2000}
-              className="font-bold text-[#0284c7] dark:text-[#38bdf8] uppercase tracking-wider mb-1"
-              text="HEADQUARTERS // STUDIO A"
+              className="font-bold text-[#0284c7] dark:text-[#38bdf8] uppercase tracking-wider mb-0.5 sm:mb-1"
+              text="DIGITAL OPERATIONS // 24/7"
             />
-            <TypewriterText speed={15} delay={250} cursor={false} text="Gangnam Techno-Art Corridor 3," />
-            <div className="text-stone-500 dark:text-stone-400 font-medium">Seoul, Republic of Korea</div>
+            <TypewriterText speed={15} delay={250} cursor={false} text="Decentralized Cloud Architecture," />
+            <div className="text-stone-500 dark:text-stone-400 font-medium">Global Distributed Infrastructure</div>
           </div>
 
-          <div className="border-l-3 border-[#ef4444] pl-3.5 bg-[#ef4444]/5 p-2">
+          <div className="border-l-3 border-[#ef4444] pl-2.5 sm:pl-3.5 bg-[#ef4444]/5 p-1.5 sm:p-2">
             <InkText
               as="h3"
               strokeWidth="1px"
               delay={200}
               duration={2000}
-              className="font-bold text-[#ef4444] uppercase tracking-wider mb-1"
-              text="STUDIO B // PRODUCTION LAB"
+              className="font-bold text-[#ef4444] uppercase tracking-wider mb-0.5 sm:mb-1"
+              text="CREATIVE INTELLIGENCE LAB"
             />
-            <TypewriterText speed={15} delay={300} cursor={false} text="Shibuya Creative Base 04," />
-            <div className="text-stone-500 dark:text-stone-400 font-medium">Tokyo, Japan</div>
+            <TypewriterText speed={15} delay={300} cursor={false} text="Storyboarding, 3D & AI Pipelines," />
+            <div className="text-stone-500 dark:text-stone-400 font-medium">Remote-First Production Network</div>
           </div>
 
-          <div className="border-l-3 border-[#39FF14] pl-3.5 bg-[#39FF14]/5 p-2">
+          <div className="border-l-3 border-[#39FF14] pl-2.5 sm:pl-3.5 bg-[#39FF14]/5 p-1.5 sm:p-2">
             <InkText
               as="h3"
               strokeWidth="1px"
               delay={250}
               duration={2000}
-              className="font-bold text-[#65a30d] dark:text-[#39FF14] uppercase tracking-wider mb-1"
-              text="NEW YORK TRANSMISSION"
+              className="font-bold text-[#65a30d] dark:text-[#39FF14] uppercase tracking-wider mb-0.5 sm:mb-1"
+              text="RAPID RESPONSE DISPATCH"
             />
-            <TypewriterText speed={15} delay={350} cursor={false} text="SoHo Creative Studio," />
-            <div className="text-stone-500 dark:text-stone-400 font-medium">New York, NY</div>
+            <TypewriterText speed={15} delay={350} cursor={false} text="Direct Inquiries & Brief Intake," />
+            <div className="text-stone-500 dark:text-stone-400 font-medium">dispatch@ogmedia.agency</div>
           </div>
         </div>
 
-        <div className="mt-6 pt-4 border-t border-stone-200 dark:border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-2.5 text-center sm:text-left font-mono-tech text-[10px] text-stone-600 dark:text-stone-400">
+        <div className="mt-3 sm:mt-6 pt-2.5 sm:pt-4 border-t border-stone-200 dark:border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left font-mono-tech text-[9px] sm:text-[10px] text-stone-600 dark:text-stone-400">
           <div>
             OG MEDIA GROUP INC. // 2026 // GLOBAL PRODUCTION ARCHIVE #2087 // ALL RIGHTS RESERVED
           </div>
@@ -175,34 +210,6 @@ export default function FooterChapter() {
           </div>
         </div>
       </UnfoldPanel>
-
-      <div className="border-t-2 border-black dark:border-stone-800 pt-4 flex flex-wrap items-center justify-between gap-4 font-mono-tech text-[10px] sm:text-[11px] text-stone-700 dark:text-stone-300">
-        <div>
-          <InkText
-            as="div"
-            strokeWidth="1px"
-            delay={300}
-            duration={2000}
-            className="font-bold text-black dark:text-white"
-            text="END OF VOLUME 01 // TO BE CONTINUED..."
-          />
-          <div className="text-stone-500 dark:text-stone-400 text-[9px] sm:text-[10px]">
-            OG MEDIA CREATIVE PRODUCTIONS // TOKYO // SEOUL // SAN FRANCISCO // ALL RIGHTS RESERVED
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <span className="bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-300 px-2 py-0.5 border border-stone-400 dark:border-stone-700">
-            [ 2026.09 ]
-          </span>
-          <span className="bg-black text-white px-2 py-0.5 border border-black dark:border-stone-700 font-bold">
-            [ TYPE: MASTER ARCHIVE ]
-          </span>
-          <span className="text-black dark:text-white font-bold">
-            PAGE: 06 / END
-          </span>
-        </div>
-      </div>
     </footer>
   );
 }

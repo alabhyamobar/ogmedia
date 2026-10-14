@@ -6,6 +6,7 @@ const WhoWeAreSection = lazy(() => import('../components/sections/WhoWeAreSectio
 const TrajectorySection = lazy(() => import('../components/sections/TrajectorySection'));
 const ArsenalSection = lazy(() => import('../components/sections/ArsenalSection'));
 const CollectorCoversSection = lazy(() => import('../components/sections/CollectorCoversSection'));
+const BrandTickerSection = lazy(() => import('../components/sections/BrandTickerSection'));
 const ContactTransmissionSection = lazy(() => import('../components/sections/ContactTransmissionSection'));
 
 export default function HomePage() {
@@ -35,6 +36,7 @@ export default function HomePage() {
         <WhoWeAreSection />
         <TrajectorySection />
         <ArsenalSection />
+        <BrandTickerSection />
         <CollectorCoversSection />
         <ContactTransmissionSection />
       </Suspense>

@@ -74,7 +74,7 @@ export default function ContactTransmissionSection() {
   };
 
   return (
-    <section id="contact" className="relative px-3 sm:px-6 py-16 sm:py-24 max-w-[1440px] mx-auto select-none overflow-x-hidden sm:overflow-x-visible">
+    <section id="contact" className="relative px-3 sm:px-6 py-10 sm:py-24 max-w-[1440px] mx-auto select-none overflow-x-hidden sm:overflow-x-visible">
       <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-[#e0f2fe]/45 via-[#fce7f3]/25 to-transparent dark:from-[#0c1829]/50 dark:via-[#1e1029]/30 dark:to-transparent" />
         <div className="absolute top-8 left-[18%] w-3 h-3 bg-pink-300/80 rounded-full blur-[0.4px] transform rotate-45" />
@@ -83,7 +83,7 @@ export default function ContactTransmissionSection() {
         <div className="absolute bottom-16 right-[14%] w-3.5 h-2 bg-pink-300/80 rounded-full transform rotate-30" />
       </div>
 
-      <div className="hidden 2xl:flex absolute left-4 top-28 flex-col items-center pointer-events-none z-10">
+      <div className="hidden 2xl:flex absolute -left-10 3xl:-left-12 top-28 flex-col items-center pointer-events-none z-10">
         <div className="w-8 py-4 bg-[#7f1d1d]/90 text-pink-200 border-2 border-black dark:border-stone-700 shadow-[4px_4px_0px_#000] flex flex-col items-center justify-center font-jp-impact text-xs font-black tracking-widest leading-loose">
           <span>連</span>
           <span>絡</span>
@@ -102,7 +102,7 @@ export default function ContactTransmissionSection() {
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-12 relative px-2 sm:px-4">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-6 sm:mb-12 relative px-2 sm:px-4">
         <div>
           <div className="flex items-center gap-2 mb-2 font-mono-tech text-xs sm:text-sm font-bold text-stone-700 dark:text-stone-300">
             <span className="text-stone-500">/// 03</span>
@@ -126,9 +126,9 @@ export default function ContactTransmissionSection() {
             <span className="absolute -left-2 -right-4 bottom-1 sm:bottom-2 h-[45%] bg-[#39FF14] -z-10 -rotate-1 skew-x-[-14deg] rounded-sm shadow-sm pointer-events-none" />
           </div>
 
-          <div className="mt-4 inline-block">
+          <div className="mt-3 sm:mt-4 block">
             <div className="font-mono-tech text-xs sm:text-sm font-medium text-stone-800 dark:text-stone-200 uppercase tracking-wider space-y-0.5">
-              <div>Tokyo • Seoul • San Francisco.</div>
+              <div>Global Operations • Remote First • 24/7 Response.</div>
               <div>Have a project in mind? We'd love to hear from you.</div>
               <div>Let's create something unforgettable together.</div>
             </div>
@@ -157,20 +157,21 @@ export default function ContactTransmissionSection() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-stretch">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-8 items-stretch">
         
-        <div className="lg:col-span-5 flex flex-col">
+        <div className="lg:col-span-5 flex flex-col order-2 lg:order-1">
           <UnfoldPanel direction="right" duration={1000} delay={100} className="w-full h-full rounded-2xl">
             <div className="w-full h-full bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl overflow-hidden shadow-[6px_6px_0px_#000000] hover:shadow-[10px_10px_0px_#000000] transition-all duration-300 flex flex-col justify-between">
               
               <div>
-                <div className="flex items-center justify-between px-3.5 py-2.5 border-b-2 border-black dark:border-stone-700 bg-white dark:bg-[#1e1e24]">
+                <div className="flex items-center justify-between px-2.5 py-1.5 sm:px-3.5 sm:py-2.5 border-b-2 border-black dark:border-stone-700 bg-white dark:bg-[#1e1e24]">
                   <div className="flex items-center gap-2">
                     <span className="bg-black text-white font-mono-tech font-bold text-xs px-2 py-0.5 rounded-sm">
-                      01
+                      <span className="lg:hidden">02</span>
+                      <span className="hidden lg:inline">01</span>
                     </span>
                     <span className="font-mono-tech text-[10px] sm:text-xs font-bold text-stone-800 dark:text-stone-300 tracking-wider">
-                      // DIRECT EMAIL & OFFICES
+                      // DIRECT EMAIL & TRANSMISSION
                     </span>
                   </div>
 
@@ -185,10 +186,10 @@ export default function ContactTransmissionSection() {
                   </div>
                 </div>
 
-                <div className="relative aspect-[16/10] overflow-hidden border-b-2 border-black dark:border-stone-700 bg-stone-900 group">
+                <div className="relative aspect-[21/9] sm:aspect-[16/10] overflow-hidden border-b-2 border-black dark:border-stone-700 bg-stone-900 group">
                   <img
                     src="/ogmedia/assets/cover_protocol.webp"
-                    alt="Direct Contact Office"
+                    alt="Direct Contact & Transmission Portal"
                     loading="lazy"
                     decoding="async"
                     onError={(e) => {
@@ -203,27 +204,27 @@ export default function ContactTransmissionSection() {
 
                   <div className="absolute inset-0 manga-halftone-light opacity-15 pointer-events-none" />
 
-                  <div className="absolute top-2.5 left-2.5">
-                    <div className="bg-black/90 border border-white/30 text-white font-mono-tech text-[9px] sm:text-[10px] font-bold px-2 py-0.5">
-                      GLOBAL STUDIOS // ONLINE
+                  <div className="absolute top-2 left-2 sm:top-2.5 sm:left-2.5">
+                    <div className="bg-black/90 border border-white/30 text-white font-mono-tech text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 sm:px-2">
+                      DIGITAL STUDIO // ONLINE
                     </div>
                   </div>
 
-                  <div className="absolute bottom-2.5 right-2.5">
-                    <span className="bg-[#39FF14] text-black font-mono-tech text-[9px] sm:text-[10px] font-bold px-2 py-0.5 border border-black shadow-sm">
-                      TOKYO • SEOUL • SF
+                  <div className="absolute bottom-2 right-2 sm:bottom-2.5 sm:right-2.5">
+                    <span className="bg-[#39FF14] text-black font-mono-tech text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 sm:px-2 border border-black shadow-sm">
+                      GLOBAL • REMOTE FIRST
                     </span>
                   </div>
                 </div>
 
-                <div className="p-4 sm:p-5 space-y-4">
+                <div className="p-3.5 sm:p-5 space-y-3 sm:space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="font-heading font-black text-xl sm:text-2xl text-black dark:text-white uppercase tracking-tight">
                         Our Contact Info
                       </h3>
                       <div className="font-mono-tech text-[11px] font-bold text-stone-500 dark:text-stone-400">
-                        EMAIL & GLOBAL LOCATIONS
+                        DIRECT TRANSMISSION & INTAKE
                       </div>
                     </div>
 
@@ -264,27 +265,27 @@ export default function ContactTransmissionSection() {
 
                   <div className="grid grid-cols-3 gap-2">
                     <div className="bg-white dark:bg-[#1a1a20] border border-black/30 dark:border-stone-700 p-2 text-center rounded shadow-[1px_1px_0px_#000]">
-                      <div className="font-mono-tech text-[9px] text-stone-500 uppercase">TOKYO</div>
-                      <div className="font-mono-tech text-xs font-black text-black dark:text-white">JST // 09:00</div>
+                      <div className="font-mono-tech text-[9px] text-stone-500 uppercase">PRESENCE</div>
+                      <div className="font-mono-tech text-xs font-black text-black dark:text-white">GLOBAL // 24/7</div>
                     </div>
                     <div className="bg-white dark:bg-[#1a1a20] border border-black/30 dark:border-stone-700 p-2 text-center rounded shadow-[1px_1px_0px_#000]">
-                      <div className="font-mono-tech text-[9px] text-stone-500 uppercase">SEOUL</div>
-                      <div className="font-mono-tech text-xs font-black text-black dark:text-white">KST // 09:00</div>
+                      <div className="font-mono-tech text-[9px] text-stone-500 uppercase">RESPONSE</div>
+                      <div className="font-mono-tech text-xs font-black text-black dark:text-white">&lt; 24 HOURS</div>
                     </div>
                     <div className="bg-white dark:bg-[#1a1a20] border border-black/30 dark:border-stone-700 p-2 text-center rounded shadow-[1px_1px_0px_#000]">
-                      <div className="font-mono-tech text-[9px] text-stone-500 uppercase">SAN FRANCISCO</div>
-                      <div className="font-mono-tech text-xs font-black text-black dark:text-white">PST // 17:00</div>
+                      <div className="font-mono-tech text-[9px] text-stone-500 uppercase">WORKFLOW</div>
+                      <div className="font-mono-tech text-xs font-black text-black dark:text-white">REMOTE FIRST</div>
                     </div>
                   </div>
 
-                  <div className="bg-[#39FF14]/20 border border-[#39FF14] p-2.5 rounded-lg flex items-center gap-2 text-xs font-mono-tech font-bold text-stone-800 dark:text-stone-200">
-                    <span className="text-[#16a34a] text-base">⚡</span>
+                  <div className="bg-[#39FF14]/20 border border-[#39FF14] p-2 sm:p-2.5 rounded-lg flex items-center gap-2 text-[11px] sm:text-xs font-mono-tech font-bold text-stone-800 dark:text-stone-200">
+                    <span className="text-[#16a34a] text-sm sm:text-base">⚡</span>
                     <span>WE TYPICALLY REPLY WITHIN 24 HOURS</span>
                   </div>
                 </div>
               </div>
 
-              <div className="px-4 py-3 bg-white dark:bg-[#1e1e24] border-t-2 border-black dark:border-stone-700 flex flex-wrap items-center justify-between gap-2">
+              <div className="px-3.5 py-2.5 sm:px-4 sm:py-3 bg-white dark:bg-[#1e1e24] border-t-2 border-black dark:border-stone-700 flex flex-wrap items-center justify-between gap-2">
                 <span className="font-mono-tech text-[10px] font-bold text-stone-500 uppercase">
                   OUR CHANNELS:
                 </span>
@@ -328,15 +329,16 @@ export default function ContactTransmissionSection() {
           </UnfoldPanel>
         </div>
 
-        <div className="lg:col-span-7 flex flex-col">
+        <div className="lg:col-span-7 flex flex-col order-1 lg:order-2">
           <UnfoldPanel direction="right" duration={1000} delay={180} className="w-full h-full rounded-2xl">
-            <div className="w-full h-full bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-5 sm:p-7 shadow-[6px_6px_0px_#000000] hover:shadow-[10px_10px_0px_#000000] transition-all duration-300 flex flex-col justify-between">
+            <div className="w-full h-full bg-[#faf8f5] dark:bg-[#16161a] border-[2.5px] border-black dark:border-stone-700 rounded-2xl p-3.5 sm:p-7 shadow-[6px_6px_0px_#000000] hover:shadow-[10px_10px_0px_#000000] transition-all duration-300 flex flex-col justify-between">
               
               <div>
-                <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black dark:border-stone-700 bg-white dark:bg-[#1e1e24] rounded-lg mb-5">
+                <div className="flex items-center justify-between px-2.5 py-1.5 sm:px-3 sm:py-2 border-b-2 border-black dark:border-stone-700 bg-white dark:bg-[#1e1e24] rounded-lg mb-3 sm:mb-5">
                   <div className="flex items-center gap-2">
                     <span className="bg-black text-white font-mono-tech font-bold text-xs px-2 py-0.5 rounded-sm">
-                      02
+                      <span className="lg:hidden">01</span>
+                      <span className="hidden lg:inline">02</span>
                     </span>
                     <span className="font-mono-tech text-[10px] sm:text-xs font-bold text-stone-800 dark:text-stone-300 tracking-wider">
                       // SEND US A MESSAGE
@@ -354,7 +356,7 @@ export default function ContactTransmissionSection() {
                   </div>
                 </div>
 
-                <div className="mb-6">
+                <div className="mb-3.5 sm:mb-6">
                   <div className="flex items-center justify-between gap-2 flex-wrap mb-1">
                     <InkText
                       as="h3"
@@ -362,13 +364,13 @@ export default function ContactTransmissionSection() {
                       strokeWidth="0.5px"
                       delay={200}
                       duration={1800}
-                      className="font-heading font-normal text-2xl sm:text-3xl lg:text-4xl text-black dark:text-white uppercase tracking-wide"
+                      className="font-heading font-normal text-xl sm:text-3xl lg:text-4xl text-black dark:text-white uppercase tracking-wide"
                     />
-                    <div className="bg-[#39FF14] text-black font-mono-tech font-extrabold text-[10px] sm:text-xs px-3 py-1 border border-black rounded shadow-[2px_2px_0px_#000]">
+                    <div className="bg-[#39FF14] text-black font-mono-tech font-extrabold text-[9px] sm:text-xs px-2 py-0.5 sm:px-3 sm:py-1 border border-black rounded shadow-[2px_2px_0px_#000]">
                       AVAILABLE FOR WORK
                     </div>
                   </div>
-                  <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 font-mono-tech">
+                  <p className="text-[11px] sm:text-sm text-stone-600 dark:text-stone-400 font-mono-tech">
                     Tell us what you're looking to build. We'll get back to you shortly.
                   </p>
                 </div>
@@ -406,7 +408,7 @@ export default function ContactTransmissionSection() {
                     </div>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+                  <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-5">
                     
                     <input
                       type="text"
@@ -419,10 +421,10 @@ export default function ContactTransmissionSection() {
                     />
 
                     <div>
-                      <label className="block font-mono-tech text-[10px] sm:text-xs font-bold text-stone-700 dark:text-stone-300 uppercase mb-2">
+                      <label className="block font-mono-tech text-[9px] sm:text-xs font-bold text-stone-700 dark:text-stone-300 uppercase mb-1.5 sm:mb-2">
                         1. What services do you need?
                       </label>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
                         {SERVICE_OPTIONS.map((srv) => {
                           const isSelected = selectedServices.includes(srv);
                           return (
@@ -430,7 +432,7 @@ export default function ContactTransmissionSection() {
                               key={srv}
                               type="button"
                               onClick={() => toggleService(srv)}
-                              className={`font-mono-tech text-[11px] font-bold px-3 py-1.5 border rounded-lg transition-all cursor-pointer ${
+                              className={`font-mono-tech text-[10px] sm:text-[11px] font-bold px-2.5 py-1 sm:px-3 sm:py-1.5 border rounded-md sm:rounded-lg transition-all cursor-pointer ${
                                 isSelected
                                   ? 'bg-black text-[#39FF14] border-black shadow-[2px_2px_0px_#39FF14]'
                                   : 'bg-white dark:bg-[#1a1a20] text-stone-700 dark:text-stone-300 border-black/30 dark:border-stone-700 hover:border-black shadow-[1px_1px_0px_#000]'
@@ -444,9 +446,9 @@ export default function ContactTransmissionSection() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4">
                       <div>
-                        <label className="block font-mono-tech text-[10px] sm:text-xs font-bold text-stone-700 dark:text-stone-300 uppercase mb-1">
+                        <label className="block font-mono-tech text-[9px] sm:text-xs font-bold text-stone-700 dark:text-stone-300 uppercase mb-0.5 sm:mb-1">
                           2. Your Name or Company
                         </label>
                         <input
@@ -455,12 +457,12 @@ export default function ContactTransmissionSection() {
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                           placeholder="e.g. Alex Rivera or Studio Name"
-                          className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 dark:placeholder-stone-500 outline-none focus:ring-2 focus:ring-[#39FF14] transition-all"
+                          className="w-full px-3 py-2 sm:py-2.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-lg sm:rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 dark:placeholder-stone-500 outline-none focus:ring-2 focus:ring-[#39FF14] transition-all"
                         />
                       </div>
 
                       <div>
-                        <label className="block font-mono-tech text-[10px] sm:text-xs font-bold text-stone-700 dark:text-stone-300 uppercase mb-1">
+                        <label className="block font-mono-tech text-[9px] sm:text-xs font-bold text-stone-700 dark:text-stone-300 uppercase mb-0.5 sm:mb-1">
                           3. Your Email Address
                         </label>
                         <input
@@ -469,14 +471,14 @@ export default function ContactTransmissionSection() {
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           placeholder="name@company.com"
-                          className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 dark:placeholder-stone-500 outline-none focus:ring-2 focus:ring-[#39FF14] transition-all"
+                          className="w-full px-3 py-2 sm:py-2.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-lg sm:rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 dark:placeholder-stone-500 outline-none focus:ring-2 focus:ring-[#39FF14] transition-all"
                         />
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4">
                       <div>
-                        <label className="block font-mono-tech text-[10px] sm:text-xs font-bold text-stone-700 dark:text-stone-300 uppercase mb-1">
+                        <label className="block font-mono-tech text-[9px] sm:text-xs font-bold text-stone-700 dark:text-stone-300 uppercase mb-0.5 sm:mb-1">
                           4. Phone Number (Optional)
                         </label>
                         <input
@@ -484,12 +486,12 @@ export default function ContactTransmissionSection() {
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                           placeholder="+1 (555) 000-0000"
-                          className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 dark:placeholder-stone-500 outline-none focus:ring-2 focus:ring-[#39FF14] transition-all"
+                          className="w-full px-3 py-2 sm:py-2.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-lg sm:rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 dark:placeholder-stone-500 outline-none focus:ring-2 focus:ring-[#39FF14] transition-all"
                         />
                       </div>
 
                       <div>
-                        <label className="block font-mono-tech text-[10px] sm:text-xs font-bold text-stone-700 dark:text-stone-300 uppercase mb-1">
+                        <label className="block font-mono-tech text-[9px] sm:text-xs font-bold text-stone-700 dark:text-stone-300 uppercase mb-0.5 sm:mb-1">
                           5. Organization / Brand (Optional)
                         </label>
                         <input
@@ -497,29 +499,29 @@ export default function ContactTransmissionSection() {
                           value={formData.company}
                           onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                           placeholder="e.g. Acme Corp"
-                          className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 dark:placeholder-stone-500 outline-none focus:ring-2 focus:ring-[#39FF14] transition-all"
+                          className="w-full px-3 py-2 sm:py-2.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-lg sm:rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 dark:placeholder-stone-500 outline-none focus:ring-2 focus:ring-[#39FF14] transition-all"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block font-mono-tech text-[10px] sm:text-xs font-bold text-stone-700 dark:text-stone-300 uppercase mb-1">
+                      <label className="block font-mono-tech text-[9px] sm:text-xs font-bold text-stone-700 dark:text-stone-300 uppercase mb-0.5 sm:mb-1">
                         6. Your Message
                       </label>
                       <textarea
-                        rows="4"
+                        rows="3"
                         required
                         value={formData.message}
                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                         placeholder="Tell us about your project, your goals, or any timeline in mind..."
-                        className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 dark:placeholder-stone-500 outline-none focus:ring-2 focus:ring-[#39FF14] resize-y transition-all"
+                        className="w-full px-3 py-2 sm:py-2.5 bg-white dark:bg-[#1a1a20] border-2 border-black dark:border-stone-700 rounded-lg sm:rounded-xl font-mono-tech text-xs text-black dark:text-white placeholder-stone-400 dark:placeholder-stone-500 outline-none focus:ring-2 focus:ring-[#39FF14] resize-y transition-all"
                       />
                     </div>
 
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="w-full bg-[#39FF14] hover:bg-[#7CFF5E] text-black font-mono-tech font-black text-xs sm:text-sm py-4 px-6 border-2 border-black rounded-xl shadow-[4px_4px_0px_#000000] hover:shadow-[6px_6px_0px_#000000] transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center justify-center gap-3 uppercase tracking-wider disabled:opacity-50"
+                      className="w-full bg-[#39FF14] hover:bg-[#7CFF5E] text-black font-mono-tech font-black text-xs sm:text-sm py-3 sm:py-4 px-4 sm:px-6 border-2 border-black rounded-lg sm:rounded-xl shadow-[4px_4px_0px_#000000] hover:shadow-[6px_6px_0px_#000000] transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center justify-center gap-2 sm:gap-3 uppercase tracking-wider disabled:opacity-50"
                     >
                       <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
                         <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
@@ -530,7 +532,7 @@ export default function ContactTransmissionSection() {
                 )}
               </div>
 
-              <div className="flex flex-wrap items-center justify-between gap-2 mt-5 pt-3 border-t border-stone-200 dark:border-stone-800 font-mono-tech text-[10px] text-stone-600 dark:text-stone-400">
+              <div className="flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 mt-3 sm:mt-5 pt-2 sm:pt-3 border-t border-stone-200 dark:border-stone-800 font-mono-tech text-[9px] sm:text-[10px] text-stone-600 dark:text-stone-400">
                 <span className="bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded border border-black/20">
                   🔒 SECURE & CONFIDENTIAL
                 </span>

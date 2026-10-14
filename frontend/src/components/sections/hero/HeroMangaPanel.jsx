@@ -31,7 +31,7 @@ export default function HeroMangaPanel({
       }}
     >
       <figcaption className="sr-only">
-        OG Media Creative Intelligence - Neo-Seoul interactive visual window archive 001_A
+        OG Media Creative Intelligence - Interactive visual window archive 001_A
       </figcaption>
 
       <UnfoldPanel direction="right" duration={1.2} delay={0.15}>
@@ -54,7 +54,7 @@ export default function HeroMangaPanel({
           <img
             ref={comicImageRef}
             src="/ogmedia/assets/hero_city.webp"
-            alt="OG Media Creative Intelligence - Neo-Seoul interactive visual window showcase"
+            alt="OG Media Creative Intelligence - Interactive visual window showcase"
             width="1200"
             height="510"
             loading="eager"
@@ -121,7 +121,7 @@ export default function HeroMangaPanel({
 
             <div className="absolute bottom-2 right-2 sm:bottom-2.5 sm:right-3 z-20">
               <span className="bg-black/85 px-1.5 py-0.5 sm:px-2 sm:py-0.5 text-[#39FF14] font-mono-tech font-bold text-[8px] sm:text-xs tracking-wider border border-black/40">
-                SEOUL GRID: SECTOR 07
+                DIGITAL GRID: SECTOR 07
               </span>
             </div>
           </div>

@@ -279,7 +279,7 @@ export default function CollectorCoversSection() {
         <div className="absolute bottom-20 right-[12%] w-3.5 h-2 bg-pink-300/80 rounded-full transform rotate-30" />
       </div>
 
-      <div className="hidden 2xl:flex absolute left-4 top-28 flex-col items-center pointer-events-none z-10">
+      <div className="hidden 2xl:flex absolute -left-10 3xl:-left-12 top-28 flex-col items-center pointer-events-none z-10">
         <div className="w-8 py-4 bg-[#7f1d1d]/90 text-pink-200 border-2 border-black dark:border-stone-700 shadow-[4px_4px_0px_#000] flex flex-col items-center justify-center font-jp-impact text-xs font-black tracking-widest leading-loose">
           <span>継</span>
           <span>続</span>
@@ -308,6 +308,9 @@ export default function CollectorCoversSection() {
             <span className="font-jp-impact text-black dark:text-white tracking-wider text-sm sm:text-base">
               作品集.
             </span>
+            <span className="bg-[#ef4444] text-white font-mono-tech text-[10px] sm:text-xs font-bold px-2 py-0.5 border border-black dark:border-stone-800 uppercase shadow-sm">
+              CHAPTER 02 // PROOF OF WORK
+            </span>
           </div>
 
           <div className="relative inline-block">
@@ -323,7 +326,7 @@ export default function CollectorCoversSection() {
             <span className="absolute -left-2 -right-4 bottom-1 sm:bottom-2 md:bottom-3 h-[45%] bg-[#39FF14] -z-10 -rotate-1 skew-x-[-14deg] rounded-sm shadow-sm pointer-events-none" />
           </div>
 
-          <div className="mt-4 inline-block">
+          <div className="mt-3 sm:mt-4 block">
             <div className="font-mono-tech text-xs sm:text-sm font-medium text-stone-800 dark:text-stone-200 uppercase tracking-wider space-y-0.5">
               <div>Real projects.</div>
               <div>Real demos.</div>
