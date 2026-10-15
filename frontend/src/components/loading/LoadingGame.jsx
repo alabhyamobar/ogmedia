@@ -798,7 +798,7 @@ export default function LoadingGame({ onComplete }) {
       }}
     >
       <header className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 pt-3 sm:pt-4">
-        <div className="bg-white dark:bg-stone-900 border-2 border-black p-2.5 manga-shadow-sm flex items-center justify-between gap-3">
+        <div className="bg-white dark:bg-stone-900 border-2 border-black p-2 sm:p-2.5 manga-shadow-sm flex items-center justify-between gap-3">
           <div className="flex items-center gap-2 sm:gap-3">
             <OgLogo size="sm" withText={true} subtitle="DIGITAL CREATIVE STUDIO" />
           </div>
@@ -806,21 +806,21 @@ export default function LoadingGame({ onComplete }) {
           <div className="flex items-center gap-2">
             <button
               onClick={toggleSfx}
-              className="bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 border border-black px-2.5 py-1 font-mono-tech text-[11px] font-bold transition-colors cursor-pointer flex items-center gap-1"
+              className="bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 border border-black px-2 sm:px-2.5 py-1 font-mono-tech text-[10px] sm:text-[11px] font-bold transition-colors cursor-pointer flex items-center gap-1"
             >
               <span>{sfxEnabled ? '🔊' : '🔇'}</span>
-              <span>Sound: {sfxEnabled ? 'ON' : 'OFF'}</span>
+              <span className="hidden sm:inline">Sound: {sfxEnabled ? 'ON' : 'OFF'}</span>
             </button>
 
             {hasShield && (
-              <div className="bg-[#c084fc] text-black font-mono-tech font-bold text-[11px] px-2.5 py-1 border border-black animate-pulse flex items-center gap-1">
+              <div className="bg-[#c084fc] text-black font-mono-tech font-bold text-[10px] sm:text-[11px] px-2 sm:px-2.5 py-1 border border-black animate-pulse flex items-center gap-1">
                 <span>🛡 Shield Ready</span>
               </div>
             )}
 
             <button
               onClick={handleQuickSkip}
-              className="bg-white dark:bg-stone-900 hover:bg-[#39FF14] hover:text-black border border-black px-3 py-1 font-mono-tech text-[11px] font-bold transition-colors cursor-pointer flex items-center gap-1 shadow-sm"
+              className="bg-white dark:bg-stone-900 hover:bg-[#39FF14] hover:text-black border border-black px-2.5 sm:px-3 py-1 font-mono-tech text-[10px] sm:text-[11px] font-bold transition-colors cursor-pointer flex items-center gap-1 shadow-sm"
               title="Skip straight to site"
             >
               <span>Skip</span>
@@ -830,10 +830,10 @@ export default function LoadingGame({ onComplete }) {
         </div>
       </header>
 
-      <main className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-6 flex-1 flex flex-col justify-center">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-7 items-center">
+      <main className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 py-2 sm:py-6 flex-1 flex flex-col justify-center items-center">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-7 items-center justify-center">
           
-          <div className="lg:col-span-5 space-y-4">
+          <div className="hidden lg:block lg:col-span-5 space-y-4">
             <div className="bg-white dark:bg-stone-900 border-3 border-black p-5 sm:p-7 manga-shadow-lg space-y-4">
               
               <div className="inline-flex items-center gap-2 bg-[#39FF14] text-black border-2 border-black font-mono-tech font-bold text-xs sm:text-sm px-3 py-1 manga-shadow-sm transform -rotate-1">
@@ -920,9 +920,9 @@ export default function LoadingGame({ onComplete }) {
             </div>
           </div>
 
-          <div className="lg:col-span-7 flex flex-col items-center">
+          <div className="lg:col-span-7 flex flex-col items-center justify-center w-full max-w-[560px] mx-auto">
             <div
-              className="relative w-full max-w-[560px] aspect-[4/3] bg-black border-4 border-black manga-shadow-lg overflow-hidden cursor-pointer group"
+              className="relative w-full aspect-[4/3] bg-black border-3 sm:border-4 border-black manga-shadow-lg overflow-hidden cursor-pointer group"
               onClick={jump}
               onTouchStart={(e) => {
                 e.preventDefault();
@@ -936,10 +936,22 @@ export default function LoadingGame({ onComplete }) {
                 className="w-full h-full block"
               />
 
+              {/* In-game live score badge */}
+              <div className="absolute top-2.5 left-3 z-20 flex items-center gap-2 pointer-events-none">
+                <span className="bg-black/85 text-[#39FF14] border border-[#39FF14]/40 px-2.5 py-0.5 font-mono-tech text-[10px] sm:text-xs font-bold tracking-wider">
+                  SCORE: {score}
+                </span>
+                {bestScore > 0 && (
+                  <span className="bg-black/75 text-stone-300 border border-stone-700 px-2 py-0.5 font-mono-tech text-[9px] sm:text-[10px]">
+                    BEST: {bestScore}
+                  </span>
+                )}
+              </div>
+
               {gameStateStatus === 'READY' && (
-                <div className="absolute top-4 left-0 right-0 text-center pointer-events-none z-20">
-                  <span className="bg-black/90 text-[#39FF14] border border-[#39FF14] px-3.5 py-1 font-mono-tech text-xs font-bold tracking-wider shadow-md">
-                    [ Tap, Click, or Spacebar to Play ]
+                <div className="absolute top-3.5 right-3 z-20 pointer-events-none">
+                  <span className="bg-black/90 text-[#39FF14] border border-[#39FF14] px-2.5 py-0.5 font-mono-tech text-[10px] sm:text-xs font-bold tracking-wider animate-pulse">
+                    TAP TO PLAY
                   </span>
                 </div>
               )}
@@ -954,16 +966,70 @@ export default function LoadingGame({ onComplete }) {
               )}
             </div>
 
-            <div className="w-full max-w-[560px] mt-2.5 flex items-center justify-between text-[11px] font-mono-tech text-stone-600 dark:text-stone-400 px-1">
+            {/* Controls hint text on larger screens */}
+            <div className="w-full mt-2 hidden sm:flex items-center justify-between text-[11px] font-mono-tech text-stone-600 dark:text-stone-400 px-1">
               <span>🎮 Controls: Tap or Spacebar to fly</span>
               <span>⭐ Dodge barriers & collect stars</span>
             </div>
+
+            {/* Mobile View: Centered Below-Game Loading Bar & Text */}
+            <div className="w-full mt-3.5 space-y-2 lg:hidden">
+              <div className="w-full h-3.5 bg-stone-200 dark:bg-black border-2 border-black overflow-hidden manga-shadow-sm">
+                <div
+                  className="h-full bg-[#39FF14] transition-all duration-150 relative overflow-hidden"
+                  style={{
+                    width: `${displayProgress}%`,
+                    backgroundImage: `
+                      repeating-linear-gradient(
+                        -45deg,
+                        rgba(0, 0, 0, 0.15),
+                        rgba(0, 0, 0, 0.15) 6px,
+                        transparent 6px,
+                        transparent 12px
+                      )
+                    `
+                  }}
+                />
+              </div>
+
+              <div className="flex items-center justify-between font-mono-tech text-xs text-black dark:text-white px-0.5 pt-0.5">
+                <div className="flex items-center gap-2">
+                  <span className={`w-2 h-2 rounded-full ${isReady ? 'bg-[#16a34a]' : 'bg-[#39FF14] animate-ping'}`} />
+                  <span className="font-bold tracking-wider uppercase text-[11px] sm:text-xs text-black dark:text-white">
+                    Your OG experience is loading...
+                  </span>
+                </div>
+                <span className="font-mono-tech font-black text-xs text-[#39FF14] bg-black px-2 py-0.5 border border-stone-800">
+                  {displayProgress}%
+                </span>
+              </div>
+
+              {isReady ? (
+                <button
+                  onClick={triggerEnterSite}
+                  className="w-full mt-2 bg-[#39FF14] hover:bg-[#7CFF5E] text-black font-mono-tech font-extrabold text-xs py-2.5 px-4 border-2 border-black rounded shadow-[2px_2px_0px_#000] cursor-pointer flex items-center justify-center gap-2 animate-bounce"
+                >
+                  <span>ENTER WEBSITE NOW &rarr;</span>
+                </button>
+              ) : (
+                <div className="flex items-center justify-between text-[10px] font-mono-tech text-stone-500 dark:text-stone-400 px-1 pt-0.5">
+                  <span>Tap canvas to play flight game</span>
+                  <button
+                    onClick={handleQuickSkip}
+                    className="text-stone-800 dark:text-stone-200 font-bold underline hover:text-[#39FF14] cursor-pointer"
+                  >
+                    Skip &rarr;
+                  </button>
+                </div>
+              )}
+            </div>
+
           </div>
 
         </div>
       </main>
 
-      <footer className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 pb-3 sm:pb-4">
+      <footer className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 pb-3 sm:pb-4 hidden sm:block">
         <div className="bg-white dark:bg-stone-900 border-2 border-black px-3.5 py-2 flex flex-wrap items-center justify-between gap-2 text-[10px] sm:text-xs font-mono-tech text-stone-600 dark:text-stone-400">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="font-bold text-black dark:text-white flex items-center gap-1.5">

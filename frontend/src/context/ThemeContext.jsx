@@ -3,21 +3,20 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const ThemeContext = createContext();
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState(() => {
-    try {
-      const saved = localStorage.getItem('ogmedia_theme_mode');
-      if (saved === 'light' || saved === 'dark') return saved;
-      return 'light';
-    } catch {
-      return 'light';
-    }
-  });
+  // Always activate light theme first whenever a user lands on the site
+  const [theme, setTheme] = useState('light');
 
   useEffect(() => {
+    // Clear legacy localStorage theme flags so returning users always land on light theme first
     try {
-      localStorage.setItem('ogmedia_theme_mode', theme);
+      localStorage.removeItem('ogmedia_theme_mode');
+      localStorage.removeItem('ogmedia_theme');
     } catch {
+      // ignore
     }
+  }, []);
+
+  useEffect(() => {
     const root = document.documentElement;
     if (theme === 'dark') {
       root.classList.add('dark');
