@@ -307,12 +307,12 @@ export default function ContactTransmissionSection() {
                     IG
                   </a>
                   <a
-                    href="https://discord.com"
+                    href="https://linkedin.com"
                     target="_blank"
                     rel="noreferrer"
                     className="font-mono-tech text-[10px] font-bold px-2 py-0.5 bg-stone-100 dark:bg-stone-800 border border-black text-stone-800 dark:text-stone-200 hover:bg-[#39FF14] hover:text-black rounded"
                   >
-                    DISCORD
+                    LINKEDIN
                   </a>
                   <a
                     href="https://youtube.com"

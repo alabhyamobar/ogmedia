@@ -50,7 +50,7 @@ const PROJECTS_DATA = [
     tags: ['E-Commerce', 'WEB APP', 'Branding', 'Digital Marketing'],
     img: '/ogmedia/assets/preashadam.webp',
     video: '/ogmedia/videos/kumbhPreashadam.mp4',
-    liveUrl: 'https://kumbhprasadam.com/'
+    liveUrl: 'https://instagram.com/kumbhprasadam?psln=cHd5bGx1bWpncnZy'
   },
 
   {
