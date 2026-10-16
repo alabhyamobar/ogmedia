@@ -1,2 +1,128 @@
+# ==============================================================================
+# OG MEDIA - Robots Exclusion Protocol (robots.txt)
+# Official Creative Intelligence Studio & Digital Experience Architecture
+# Website: https://ogmedia.agency
+# ==============================================================================
+
+# Search Engine Crawlers (Google, Bing, DuckDuckGo, Applebot, Yahoo, etc.)
 User-agent: *
+# Allow public pages and experiences
 Allow: /
+Allow: /ogmedia/
+Allow: /ogmedia/service/
+Allow: /ogmedia/services/
+Allow: /ogmedia/assets/
+Allow: /ogmedia/videos/
+Allow: /ogmedia/fonts/
+Allow: /assets/
+Allow: /*.js$
+Allow: /*.css$
+Allow: /*.webp$
+Allow: /*.png$
+Allow: /*.svg$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.ico$
+Allow: /*.mp4$
+Allow: /*.woff2$
+
+# Disallow private CRM, internal employee portals, and backend APIs
+Disallow: /crm
+Disallow: /crm/
+Disallow: /crm/*
+Disallow: /ogmedia/crm
+Disallow: /ogmedia/crm/
+Disallow: /ogmedia/crm/*
+Disallow: /login
+Disallow: /ogmedia/login
+Disallow: /api/
+Disallow: /ogmedia/api/
+
+# Google Search Bot - Priority Indexing
+User-agent: Googlebot
+Allow: /
+Allow: /ogmedia/
+Allow: /ogmedia/service/
+Disallow: /crm
+Disallow: /crm/
+Disallow: /crm/*
+Disallow: /ogmedia/crm
+Disallow: /ogmedia/crm/
+Disallow: /ogmedia/crm/*
+Disallow: /login
+Disallow: /ogmedia/login
+Disallow: /api/
+Disallow: /ogmedia/api/
+
+# Googlebot Images - Index high-fidelity visual assets and portfolio covers
+User-agent: Googlebot-Image
+Allow: /ogmedia/assets/
+Allow: /assets/
+Allow: /*.webp$
+Allow: /*.png$
+Allow: /*.svg$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Disallow: /ogmedia/crm/
+Disallow: /crm/
+
+# Googlebot Video - Index high-impact 4K/60fps showreels and service motion previews
+User-agent: Googlebot-Video
+Allow: /ogmedia/videos/
+Allow: /videos/
+Allow: /*.mp4$
+Disallow: /ogmedia/crm/
+Disallow: /crm/
+
+# Bingbot - Microsoft Bing Crawling
+User-agent: Bingbot
+Allow: /
+Allow: /ogmedia/
+Disallow: /crm
+Disallow: /crm/
+Disallow: /crm/*
+Disallow: /ogmedia/crm
+Disallow: /ogmedia/crm/
+Disallow: /ogmedia/crm/*
+Disallow: /login
+Disallow: /ogmedia/login
+Disallow: /api/
+Disallow: /ogmedia/api/
+
+# AI Crawlers - Protect CRM and private APIs
+User-agent: GPTBot
+Disallow: /crm
+Disallow: /crm/*
+Disallow: /ogmedia/crm
+Disallow: /ogmedia/crm/*
+Disallow: /api/
+Disallow: /ogmedia/api/
+Disallow: /login
+Disallow: /ogmedia/login
+
+User-agent: ClaudeBot
+Disallow: /crm
+Disallow: /crm/*
+Disallow: /ogmedia/crm
+Disallow: /ogmedia/crm/*
+Disallow: /api/
+Disallow: /ogmedia/api/
+Disallow: /login
+Disallow: /ogmedia/login
+
+User-agent: CCBot
+Disallow: /crm
+Disallow: /crm/*
+Disallow: /ogmedia/crm
+Disallow: /ogmedia/crm/*
+Disallow: /api/
+Disallow: /ogmedia/api/
+Disallow: /login
+Disallow: /ogmedia/login
+
+# Host Specification
+Host: https://ogmedia.agency
+
+# XML Sitemap Directives
+Sitemap: https://ogmedia.agency/sitemap.xml
+Sitemap: https://ogmedia.agency/ogmedia/sitemap.xml

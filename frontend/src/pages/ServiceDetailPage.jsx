@@ -25,7 +25,59 @@ export default function ServiceDetailPage() {
       videoRef.current.currentTime = 0;
       videoRef.current.play().catch(() => {});
     }
-  }, [slug]);
+
+    // Dynamic SEO Management for Service Page
+    const originalTitle = document.title;
+    document.title = `${service.title} | OG MEDIA // Creative Intelligence`;
+
+    const descMeta = document.querySelector('meta[name="description"]');
+    const originalDesc = descMeta ? descMeta.getAttribute('content') : '';
+    if (descMeta) {
+      descMeta.setAttribute('content', service.fullDesc || service.shortDesc);
+    }
+
+    const canonicalLink = document.querySelector('link[rel="canonical"]');
+    const originalCanonical = canonicalLink ? canonicalLink.getAttribute('href') : '';
+    if (canonicalLink) {
+      canonicalLink.setAttribute('href', `https://ogmedia.agency/ogmedia/service/${service.slug}`);
+    }
+
+    // Inject Service JSON-LD Structured Data
+    const scriptId = 'service-structured-data';
+    let script = document.getElementById(scriptId);
+    if (!script) {
+      script = document.createElement('script');
+      script.id = scriptId;
+      script.type = 'application/ld+json';
+      document.head.appendChild(script);
+    }
+
+    const serviceSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      'name': service.title,
+      'alternateName': service.subtitle,
+      'description': service.fullDesc || service.shortDesc,
+      'serviceType': service.type,
+      'url': `https://ogmedia.agency/ogmedia/service/${service.slug}`,
+      'provider': {
+        '@type': 'Organization',
+        'name': 'OG MEDIA',
+        'url': 'https://ogmedia.agency/ogmedia/',
+        '@id': 'https://ogmedia.agency/#organization'
+      },
+      'areaServed': 'Worldwide'
+    };
+    script.textContent = JSON.stringify(serviceSchema);
+
+    return () => {
+      document.title = originalTitle;
+      if (descMeta && originalDesc) descMeta.setAttribute('content', originalDesc);
+      if (canonicalLink && originalCanonical) canonicalLink.setAttribute('href', originalCanonical);
+      const existingScript = document.getElementById(scriptId);
+      if (existingScript) existingScript.remove();
+    };
+  }, [slug, service]);
 
   const togglePlay = () => {
     if (!videoRef.current) return;
