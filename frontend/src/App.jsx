@@ -54,7 +54,7 @@ function AppRoutes({ isLoading }) {
   return (
     <div
       aria-hidden={isLoading ? 'true' : undefined}
-      className={`min-h-screen bg-[#ebebe5] dark:bg-[#09090b] text-stone-900 dark:text-stone-100 font-sans selection:bg-[#39FF14] selection:text-black transition-opacity duration-300 flex flex-col justify-between overflow-x-hidden w-full max-w-full ${
+      className={`min-h-screen site-draft-board text-stone-900 dark:text-stone-100 font-sans selection:bg-[#39FF14] selection:text-black transition-opacity duration-300 flex flex-col justify-between overflow-x-hidden w-full max-w-full ${
         isLoading ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'
       }`}
     >

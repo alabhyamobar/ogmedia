@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import InkText from '../ui/InkText';
+import TypewriterText from '../ui/TypewriterText';
 import UnfoldPanel from '../ui/UnfoldPanel';
 
 export { default as WhoWeAreSection } from './WhoWeAreSection';
@@ -87,13 +88,13 @@ const STORY_PILLARS = [
     code: 'STAGE 05 // FAST GROWTH',
     subtitle: 'TURN WHAT WORKS INTO SUSTAINABLE GROWTH',
     description:
-      'We take your proven marketing strategies and scale them across platforms, audiences, and campaigns—helping your brand reach more customers without losing momentum.',
+      'Found the winning move? We run it everywhere. More platforms, more audiences, more customers, and the momentum never drops. This is where a brand stops climbing and starts ruling.',
     videoSrc: '/ogmedia/videos/service_scale_stage.mp4',
     poster: '/ogmedia/assets/service_scale_stage.webp',
-    sfxBadge: 'FAST GROWTH',
+    sfxBadge: 'LEVEL MAXED',
     dialogueTag: 'GROWTH STRATEGIST',
     dialogueQuote:
-      '"Once we know what works, we scale it—not guess our way forward."',
+      '"Once we find what works, we don\'t guess. We scale it."',
     statLabel: 'EXPANSION',
     statValue: 'STEADY GROWTH',
     resolution: 'FULL HD // MASTER CUT',
@@ -202,13 +203,14 @@ export default function TrajectorySection() {
             <span className="absolute -left-2 -right-4 bottom-1 sm:bottom-2 h-[45%] bg-[#39FF14] -z-10 -rotate-1 skew-x-[-14deg] rounded-sm shadow-sm pointer-events-none" />
           </div>
 
-          <div className="mt-4 inline-block">
-            <div className="font-mono-tech text-xs sm:text-sm font-medium text-stone-800 dark:text-stone-200 uppercase tracking-wider space-y-0.5">
-              <div>See Our Core Marketing Services In Action.</div>
-              <div>Clear Strategies Built To Scale Your Brand.</div>
-              <div>Select Any Service Below To Watch In Action.</div>
-            </div>
-            <div className="w-20 h-1.5 bg-gradient-to-r from-[#f43f5e] via-[#ec4899] to-transparent rounded-full mt-1.5 transform -rotate-1" />
+          <div className="mt-4 block max-w-2xl">
+            <TypewriterText
+              speed={10}
+              delay={300}
+              className="font-mono-tech text-xs sm:text-sm font-medium text-stone-800 dark:text-stone-200 uppercase tracking-wider leading-relaxed"
+              text="Every brand has a storyline. We take yours from the first post to the front page: content that spreads, creators that convert, ads that hit the target, press that makes noise, and the backend work that keeps it all running. You pick the mission. We run the whole campaign."
+            />
+            <div className="w-20 h-1.5 bg-gradient-to-r from-[#f43f5e] via-[#ec4899] to-transparent rounded-full mt-2.5 transform -rotate-1" />
           </div>
         </div>
 

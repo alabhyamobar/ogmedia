@@ -104,7 +104,7 @@ export default function WhoWeAreSection() {
                   speed={12}
                   delay={350}
                   className="text-stone-700 dark:text-stone-300 text-xs sm:text-sm leading-relaxed font-medium mb-3 sm:mb-4"
-                  text="We blend culture, creativity, and strategy to create campaigns that capture attention and turn it into real growth. At OG Media, we are a creative intelligence studio dedicated to turning bold ideas into unforgettable brand identities, viral cultural moments, and high-converting digital ecosystems."
+                  text="It began as a small squad with big ideas and zero patience for boring. Now we write the whole storyline: the posts that go viral, the press that makes headlines, the ads that hit the target, and the behind-the-scenes grind nobody sees. Brands enter as Level 1. They exit as the main character."
                 />
 
                 {/* Compact Pillars */}
