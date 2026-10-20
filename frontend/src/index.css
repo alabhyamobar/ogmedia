@@ -340,3 +340,10 @@ h6,
 .dark ::-webkit-scrollbar-thumb:hover {
   background: #39FF14;
 }
+
+/* Hero Zoom & 4K Video Animation: smoothly slide navigation bar out of view */
+body.hero-zoom-active #og-main-navbar,
+body.hero-zoom-active nav.fixed {
+  transform: translateY(-100%) !important;
+  pointer-events: none !important;
+}

@@ -11,6 +11,21 @@ export default function Navbar() {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const [isHeroZoomActive, setIsHeroZoomActive] = useState(false);
+
+  // Listen for hero zoom / video animation to slide navbar out/in of view
+  useEffect(() => {
+    const handleZoomChange = (e) => {
+      const active = Boolean(e && e.detail && e.detail.active);
+      setIsHeroZoomActive(active);
+      if (active) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('og:hero-zoom-change', handleZoomChange);
+    return () => window.removeEventListener('og:hero-zoom-change', handleZoomChange);
+  }, []);
 
   // Scroll detection: slide out when scrolling DOWN, slide in when scrolling UP
   useEffect(() => {
@@ -48,6 +63,7 @@ export default function Navbar() {
 
   useEffect(() => {
     setMobileMenuOpen(false);
+    setIsHeroZoomActive(false);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -147,8 +163,9 @@ export default function Navbar() {
   return (
     <>
       <nav
+        id="og-main-navbar"
         className={`fixed top-0 left-0 right-0 w-full bg-[#FFFFFF]/95 dark:bg-[#1A1A1A]/95 backdrop-blur-md border-b-2 border-black dark:border-[#333333] z-[60] px-3 sm:px-6 py-2 transition-transform duration-300 ease-in-out ${
-          isVisible ? 'translate-y-0 shadow-md' : '-translate-y-full pointer-events-none'
+          isVisible && !isHeroZoomActive ? 'translate-y-0 shadow-md' : '-translate-y-full pointer-events-none'
         }`}
       >
         <div className="max-w-[1300px] mx-auto flex items-center justify-between gap-3">

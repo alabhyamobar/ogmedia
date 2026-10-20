@@ -320,7 +320,8 @@ function ArsenalCard({ item, idx, navigate }) {
             <InkText
               as="h3"
               text={item.title}
-              strokeWidth="0.5px"
+              strokeWidth="0.4px"
+              fontWeight={400}
               strokeColor="#ffffff"
               fillColor="#ffffff"
               delay={200 + idx * 70}
@@ -328,7 +329,7 @@ function ArsenalCard({ item, idx, navigate }) {
               className="text-2xl sm:text-3xl lg:text-4xl font-normal font-heading text-white tracking-wide mb-2 group-hover:text-[#39FF14] transition-colors leading-tight"
             />
 
-            <p className="text-stone-300 text-xs sm:text-sm leading-relaxed max-w-xl font-medium">
+            <p className="text-stone-300 text-xs sm:text-sm leading-relaxed max-w-xl font-normal">
               {item.desc}
             </p>
 
@@ -375,7 +376,8 @@ export default function ArsenalSection() {
             <InkText
               as="h2"
               text="The Creative Arsenal"
-              strokeWidth="0.5px"
+              strokeWidth="0.4px"
+              fontWeight={400}
               delay={120}
               duration={2000}
               className="font-brush text-4xl sm:text-5xl md:text-6xl lg:text-7xl italic tracking-wide text-black dark:text-white uppercase leading-none drop-shadow-sm font-normal"

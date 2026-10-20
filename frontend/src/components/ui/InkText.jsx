@@ -8,7 +8,8 @@ export default function InkText({
   className = '',
   strokeColor,
   fillColor,
-  strokeWidth = '0.5px',
+  strokeWidth = '0.4px',
+  fontWeight = 400,
   delay = 200,
   duration = 2000,
   triggerOnce = true
@@ -53,6 +54,7 @@ export default function InkText({
       ref={ref}
       className={`inline-block select-none relative ${className}`}
       style={{
+        fontWeight,
         color: isFilled ? resolvedFill : 'transparent',
         WebkitTextStroke: isFilled ? '0px transparent' : `${strokeWidth} ${resolvedStroke}`,
         paintOrder: 'stroke fill',

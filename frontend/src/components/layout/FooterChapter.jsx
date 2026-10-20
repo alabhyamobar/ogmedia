@@ -102,10 +102,11 @@ export default function FooterChapter() {
             as="h2"
             strokeColor="#ffffff"
             fillColor="#ffffff"
-            strokeWidth="1.4px"
+            strokeWidth="0.5px"
+            fontWeight={400}
             delay={200}
             duration={2400}
-            className="text-2xl sm:text-6xl md:text-7xl font-bold font-comic-title tracking-wider"
+            className="text-2xl sm:text-6xl md:text-7xl font-normal font-comic-title tracking-wider"
             text="END OF CHAPTER 01"
           />
         </div>
@@ -156,10 +157,11 @@ export default function FooterChapter() {
           <div className="border-l-3 border-[#38bdf8] pl-2.5 sm:pl-3.5 bg-[#38bdf8]/5 p-1.5 sm:p-2">
             <InkText
               as="h3"
-              strokeWidth="1px"
+              strokeWidth="0.4px"
+              fontWeight={500}
               delay={150}
               duration={2000}
-              className="font-bold text-[#0284c7] dark:text-[#38bdf8] uppercase tracking-wider mb-0.5 sm:mb-1"
+              className="font-medium text-[#0284c7] dark:text-[#38bdf8] uppercase tracking-wider mb-0.5 sm:mb-1"
               text="DIGITAL OPERATIONS // 24/7"
             />
             <TypewriterText speed={15} delay={250} cursor={false} text="Decentralized Cloud Architecture," />
@@ -169,10 +171,11 @@ export default function FooterChapter() {
           <div className="border-l-3 border-[#ef4444] pl-2.5 sm:pl-3.5 bg-[#ef4444]/5 p-1.5 sm:p-2">
             <InkText
               as="h3"
-              strokeWidth="1px"
+              strokeWidth="0.4px"
+              fontWeight={500}
               delay={200}
               duration={2000}
-              className="font-bold text-[#ef4444] uppercase tracking-wider mb-0.5 sm:mb-1"
+              className="font-medium text-[#ef4444] uppercase tracking-wider mb-0.5 sm:mb-1"
               text="CREATIVE INTELLIGENCE LAB"
             />
             <TypewriterText speed={15} delay={300} cursor={false} text="Storyboarding, 3D & AI Pipelines," />
@@ -182,10 +185,11 @@ export default function FooterChapter() {
           <div className="border-l-3 border-[#39FF14] pl-2.5 sm:pl-3.5 bg-[#39FF14]/5 p-1.5 sm:p-2">
             <InkText
               as="h3"
-              strokeWidth="1px"
+              strokeWidth="0.4px"
+              fontWeight={500}
               delay={250}
               duration={2000}
-              className="font-bold text-[#65a30d] dark:text-[#39FF14] uppercase tracking-wider mb-0.5 sm:mb-1"
+              className="font-medium text-[#65a30d] dark:text-[#39FF14] uppercase tracking-wider mb-0.5 sm:mb-1"
               text="RAPID RESPONSE DISPATCH"
             />
             <TypewriterText speed={15} delay={350} cursor={false} text="Direct Inquiries & Brief Intake," />

@@ -74,11 +74,23 @@ export default function HeroSection() {
   const [_videoEnded, setVideoEnded] = useState(false);
   const [isVideoMounted, setIsVideoMounted] = useState(true);
 
+  const setHeroZoomActive = (active) => {
+    isZoomingRef.current = active;
+    setIsZooming(active);
+    if (typeof document !== 'undefined') {
+      document.body.classList.toggle('hero-zoom-active', active);
+    }
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('og:hero-zoom-change', { detail: { active } }));
+    }
+  };
+
   useEffect(() => {
     // If user arrived with a specific anchor hash (e.g. #arsenal, #trajectory), skip hero pin
     if (window.location.hash && window.location.hash !== '#' && window.location.hash !== '#hero') {
       hasCompletedRef.current = true;
       unlockScrollingSystem();
+      setHeroZoomActive(false);
       return;
     }
 
@@ -91,9 +103,11 @@ export default function HeroSection() {
     window.scrollTo({ top: 0, behavior: 'instant' });
     hasCompletedRef.current = false;
     unlockScrollingSystem();
+    setHeroZoomActive(false);
 
     return () => {
       unlockScrollingSystem();
+      setHeroZoomActive(false);
     };
   }, []);
 
@@ -334,14 +348,20 @@ export default function HeroSection() {
             const p = self.progress;
 
             if (p > 0.02) {
-              isZoomingRef.current = true;
-              setIsZooming(true);
+              if (!isZoomingRef.current) {
+                setHeroZoomActive(true);
+              }
+            } else if (p <= 0.02 && !isVideoActiveRef.current) {
+              if (isZoomingRef.current) {
+                setHeroZoomActive(false);
+              }
             }
 
             if (p >= 0.85) {
               if (!isVideoActiveRef.current) {
                 isVideoActiveRef.current = true;
                 setIsVideoPlaying(true);
+                setHeroZoomActive(true);
                 lockScrollingSystem();
 
                 if (cameraTlRef.current) {
@@ -446,8 +466,7 @@ export default function HeroSection() {
     hasCompletedRef.current = true;
     isVideoActiveRef.current = false;
     setIsVideoPlaying(false);
-    isZoomingRef.current = false;
-    setIsZooming(false);
+    setHeroZoomActive(false);
 
     // 2. Unpin and kill ScrollTrigger completely so pin-spacer is cleanly removed
     if (stRef.current) {
@@ -529,8 +548,7 @@ export default function HeroSection() {
 
     // Immediately lock scrolling system so hero remains pinned and scroll is locked
     lockScrollingSystem();
-    isZoomingRef.current = true;
-    setIsZooming(true);
+    setHeroZoomActive(true);
 
     if (cameraTlRef.current) {
       cameraTlRef.current.tweenTo(cameraTlRef.current.duration(), {
@@ -539,6 +557,7 @@ export default function HeroSection() {
         onComplete: () => {
           isVideoActiveRef.current = true;
           setIsVideoPlaying(true);
+          setHeroZoomActive(true);
           if (videoRef.current && videoRef.current.paused) {
             videoRef.current.play().catch(() => {});
           }

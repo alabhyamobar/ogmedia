@@ -28,7 +28,8 @@ export default function WhoWeAreSection() {
             <InkText
               as="h2"
               text="The Story — Who We Are"
-              strokeWidth="0.5px"
+              strokeWidth="0.4px"
+              fontWeight={400}
               delay={120}
               duration={2000}
               className="font-brush text-3xl sm:text-4xl md:text-5xl lg:text-6xl italic tracking-wide text-black dark:text-white uppercase leading-none drop-shadow-sm font-normal"
@@ -93,7 +94,8 @@ export default function WhoWeAreSection() {
 
                 <InkText
                   as="h3"
-                  strokeWidth="0.5px"
+                  strokeWidth="0.4px"
+                  fontWeight={400}
                   delay={200}
                   duration={2000}
                   className="text-xl sm:text-2xl md:text-3xl font-normal font-heading text-black dark:text-white mb-2.5 tracking-wide uppercase leading-tight"
@@ -103,7 +105,7 @@ export default function WhoWeAreSection() {
                 <TypewriterText
                   speed={12}
                   delay={350}
-                  className="text-stone-700 dark:text-stone-300 text-xs sm:text-sm leading-relaxed font-medium mb-3 sm:mb-4"
+                  className="text-stone-700 dark:text-stone-300 text-xs sm:text-sm leading-relaxed font-normal mb-3 sm:mb-4"
                   text="It began as a small squad with big ideas and zero patience for boring. Now we write the whole storyline: the posts that go viral, the press that makes headlines, the ads that hit the target, and the behind-the-scenes grind nobody sees. Brands enter as Level 1. They exit as the main character."
                 />
 
@@ -183,7 +185,8 @@ export default function WhoWeAreSection() {
                       <div className="text-[#ef4444] text-[9px] font-bold">[ DIALOGUE 01-B // LEAD ARTIST ]</div>
                       <InkText
                         as="div"
-                        strokeWidth="0.4px"
+                        strokeWidth="0.35px"
+                        fontWeight={400}
                         delay={300}
                         duration={2000}
                         className="font-normal text-black dark:text-white text-xs sm:text-sm tracking-wide font-heading mt-0.5"

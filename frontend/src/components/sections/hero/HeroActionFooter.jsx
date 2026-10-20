@@ -31,14 +31,15 @@ export default function HeroActionFooter({
           as="div"
           strokeColor={isDark ? '#ffffff' : '#000000'}
           fillColor={isDark ? '#ffffff' : '#000000'}
-          strokeWidth="0.5px"
+          strokeWidth="0.4px"
+          fontWeight={400}
           delay={400}
           duration={1800}
           className="font-heading text-2xl sm:text-5xl text-black dark:text-white font-normal tracking-wide leading-none drop-shadow-[2px_2px_0px_rgba(0,0,0,0.2)]"
           text="SWOO-OOSH!"
         />
         <div
-          className="bg-[#39FF14] text-black font-mono-tech font-extrabold text-[9px] sm:text-[11px] px-1.5 py-0.5 border border-black -mt-0.5 sm:-mt-1"
+          className="bg-[#39FF14] text-black font-mono-tech font-bold text-[9px] sm:text-[11px] px-1.5 py-0.5 border border-black -mt-0.5 sm:-mt-1"
           style={{
             boxShadow: '2px 2px 0px #000000, 4px 4px 0px rgba(0,0,0,0.15)'
           }}

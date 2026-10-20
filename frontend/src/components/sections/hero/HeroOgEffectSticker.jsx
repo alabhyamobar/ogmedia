@@ -15,7 +15,7 @@ const HeroOgEffectSticker = forwardRef(function HeroOgEffectSticker(props, ref) 
         IMPACT
       </span>
       <div
-        className="bg-black text-white font-mono-tech font-extrabold text-[9px] sm:text-xs px-2.5 py-0.5 border border-black transform rotate-3 -mt-1 sm:-mt-2"
+        className="bg-black text-white font-mono-tech font-bold text-[9px] sm:text-xs px-2.5 py-0.5 border border-black transform rotate-3 -mt-1 sm:-mt-2"
         style={{
           boxShadow: '2px 2px 0px #ef4444'
         }}

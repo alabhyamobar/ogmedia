@@ -317,7 +317,8 @@ export default function CollectorCoversSection() {
             <InkText
               as="h2"
               text="Proof of Work"
-              strokeWidth="0.5px"
+              strokeWidth="0.4px"
+              fontWeight={400}
               delay={120}
               duration={2000}
               className="font-brush text-5xl sm:text-6xl md:text-7xl lg:text-8xl italic tracking-wide text-black dark:text-white uppercase leading-none drop-shadow-sm font-normal"
@@ -447,7 +448,8 @@ export default function CollectorCoversSection() {
                           <InkText
                             as="h3"
                             text={project.title}
-                            strokeWidth="0.5px"
+                            strokeWidth="0.4px"
+                            fontWeight={400}
                             delay={250 + idx * 80}
                             duration={1600}
                             className="font-normal text-lg sm:text-xl font-heading text-black dark:text-white tracking-wide"

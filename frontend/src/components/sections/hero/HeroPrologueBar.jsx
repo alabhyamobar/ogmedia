@@ -35,7 +35,8 @@ export default function HeroPrologueBar({ prologueRef, limeBoxRef, isDark }) {
           as="p"
           strokeColor={isDark ? '#ffffff' : '#000000'}
           fillColor={isDark ? '#ffffff' : '#000000'}
-          strokeWidth="0.4px"
+          strokeWidth="0.35px"
+          fontWeight={400}
           delay={200}
           duration={1800}
           className="font-heading font-normal text-xs sm:text-base md:text-lg tracking-wide text-black dark:text-white m-0"

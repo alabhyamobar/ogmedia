@@ -195,7 +195,8 @@ export default function TrajectorySection() {
             <InkText
               as="h2"
               text="The Story — What We Do ?"
-              strokeWidth="0.5px"
+              strokeWidth="0.4px"
+              fontWeight={400}
               delay={120}
               duration={2000}
               className="font-brush text-4xl sm:text-5xl md:text-6xl lg:text-7xl italic tracking-wide text-black dark:text-white uppercase leading-none drop-shadow-sm font-normal"
@@ -207,7 +208,7 @@ export default function TrajectorySection() {
             <TypewriterText
               speed={10}
               delay={300}
-              className="font-mono-tech text-xs sm:text-sm font-medium text-stone-800 dark:text-stone-200 uppercase tracking-wider leading-relaxed"
+              className="font-mono-tech text-xs sm:text-sm font-normal text-stone-800 dark:text-stone-200 uppercase tracking-wider leading-relaxed"
               text="Every brand has a storyline. We take yours from the first post to the front page: content that spreads, creators that convert, ads that hit the target, press that makes noise, and the backend work that keeps it all running. You pick the mission. We run the whole campaign."
             />
             <div className="w-20 h-1.5 bg-gradient-to-r from-[#f43f5e] via-[#ec4899] to-transparent rounded-full mt-2.5 transform -rotate-1" />
@@ -388,7 +389,8 @@ export default function TrajectorySection() {
                   as="h3"
                   key={`title-${currentIndex}`}
                   text={currentPillar.title}
-                  strokeWidth="0.5px"
+                  strokeWidth="0.4px"
+                  fontWeight={400}
                   delay={100}
                   duration={1600}
                   className="text-2xl sm:text-3xl font-normal font-heading text-black dark:text-white uppercase tracking-wide"
@@ -397,7 +399,7 @@ export default function TrajectorySection() {
 
               <p 
                 key={`desc-${currentIndex}`}
-                className="text-stone-700 dark:text-stone-300 text-xs sm:text-sm leading-relaxed mb-4 min-h-[3.5em] animate-fade-in font-medium"
+                className="text-stone-700 dark:text-stone-300 text-xs sm:text-sm leading-relaxed mb-4 min-h-[3.5em] animate-fade-in font-normal"
               >
                 {currentPillar.description}
               </p>

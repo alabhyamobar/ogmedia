@@ -118,7 +118,8 @@ export default function ContactTransmissionSection() {
             <InkText
               as="h2"
               text="Let's Work Together"
-              strokeWidth="0.5px"
+              strokeWidth="0.4px"
+              fontWeight={400}
               delay={120}
               duration={2000}
               className="font-brush text-4xl sm:text-5xl md:text-6xl lg:text-7xl italic tracking-wide text-black dark:text-white uppercase leading-none drop-shadow-sm font-normal"
@@ -361,12 +362,13 @@ export default function ContactTransmissionSection() {
                     <InkText
                       as="h3"
                       text="Start a Project."
-                      strokeWidth="0.5px"
+                      strokeWidth="0.4px"
+                      fontWeight={400}
                       delay={200}
                       duration={1800}
                       className="font-heading font-normal text-xl sm:text-3xl lg:text-4xl text-black dark:text-white uppercase tracking-wide"
                     />
-                    <div className="bg-[#39FF14] text-black font-mono-tech font-extrabold text-[9px] sm:text-xs px-2 py-0.5 sm:px-3 sm:py-1 border border-black rounded shadow-[2px_2px_0px_#000]">
+                    <div className="bg-[#39FF14] text-black font-mono-tech font-bold text-[9px] sm:text-xs px-2 py-0.5 sm:px-3 sm:py-1 border border-black rounded shadow-[2px_2px_0px_#000]">
                       AVAILABLE FOR WORK
                     </div>
                   </div>

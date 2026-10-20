@@ -44,7 +44,7 @@ export default function HeroTitleCard({ titleCardRef, descRef, isDark }) {
             </div>
 
  
-            <h1 className="text-4xl sm:text-7xl md:text-8xl font-bold font-comic-title tracking-wider leading-none drop-shadow-[2px_2px_0px_rgba(0,0,0,0.15)] text-black dark:text-white m-0 p-0">
+            <h1 className="text-4xl sm:text-7xl md:text-8xl font-normal font-comic-title tracking-wider leading-none drop-shadow-[2px_2px_0px_rgba(0,0,0,0.15)] text-black dark:text-white m-0 p-0">
               <span className="sr-only">
                 OG MEDIA — Creative Intelligence, Viral Marketing &amp; Brand Worldbuilding Studio
               </span>
@@ -52,7 +52,8 @@ export default function HeroTitleCard({ titleCardRef, descRef, isDark }) {
                 as="span"
                 strokeColor={isDark ? '#ffffff' : '#000000'}
                 fillColor={isDark ? '#ffffff' : '#000000'}
-                strokeWidth="0.6px"
+                strokeWidth="0.4px"
+                fontWeight={400}
                 delay={200}
                 duration={2400}
                 className="select-none"
@@ -65,7 +66,7 @@ export default function HeroTitleCard({ titleCardRef, descRef, isDark }) {
 
         <div className="block -mt-1 sm:-mt-2">
           <h2
-            className="inline-block bg-black text-[#39FF14] px-3 sm:px-6 py-1 sm:py-1.5 font-mono-tech font-extrabold text-[10px] sm:text-sm md:text-base tracking-wider sm:tracking-widest uppercase border border-stone-800 dark:border-stone-700 cursor-default m-0"
+            className="inline-block bg-black text-[#39FF14] px-3 sm:px-6 py-1 sm:py-1.5 font-mono-tech font-medium text-[10px] sm:text-sm md:text-base tracking-wider sm:tracking-widest uppercase border border-stone-800 dark:border-stone-700 cursor-default m-0"
             style={{
               boxShadow: '4px 4px 0px #000000, 8px 8px 0px rgba(0,0,0,0.3)'
             }}
@@ -77,7 +78,8 @@ export default function HeroTitleCard({ titleCardRef, descRef, isDark }) {
               as="span"
               strokeColor="#39FF14"
               fillColor="#39FF14"
-              strokeWidth="1px"
+              strokeWidth="0.4px"
+              fontWeight={500}
               delay={500}
               duration={2000}
               text="Where Art Meets Intelligence"
@@ -94,7 +96,7 @@ export default function HeroTitleCard({ titleCardRef, descRef, isDark }) {
             as="p"
             delay={750}
             speed={12}
-            className="max-w-2xl mx-auto text-stone-800 dark:text-stone-300 font-medium text-xs sm:text-sm md:text-base leading-relaxed text-center mt-5 sm:mt-8 mb-3 sm:mb-6 px-2 sm:px-4"
+            className="max-w-2xl mx-auto text-stone-800 dark:text-stone-300 font-normal text-xs sm:text-sm md:text-base leading-relaxed text-center mt-5 sm:mt-8 mb-3 sm:mb-6 px-2 sm:px-4"
             text="We turn bold ideas into unforgettable brands, scroll-stopping content, and digital experiences built to capture attention and drive growth."
           />
         </div>
