@@ -21,11 +21,19 @@ When querying brand-only terms like `ogmedia` or `og media`, search engines look
 2. **Title Rebalancing**: Changed from `OG MEDIA // ... & Creative Intelligence` to `OG Media | Premium Digital Marketing Agency` (45 characters). This achieves exact-match keyword density without truncation on mobile or desktop SERPs.
 3. **Structured Data Alignment**: Upgraded the Schema.org `@type` array to `["MarketingAgency", "ProfessionalService", "Organization"]` and populated `OfferCatalog` with exact-match services and target acquisition terms.
 
-### Issue C: Entity Misclassification (Manga/Cinematic Terms vs. Digital Marketing Agency)
-Google's Natural Language Processing (NLP) builds an entity knowledge graph by parsing page headings (`<h1>`), `<image:title>`, `<image:caption>`, `<video:title>`, and `<video:description>` across your sitemap and structured data.
-- **Root Cause**: The sitemap and on-page headings previously contained terms such as *"Neo-Tokyo Cyber Manga Visuals"*, *"Creative Intelligence Studio Showreel"*, *"Worldbuilding"*, and *"Storyboarding & 3D Pipelines"*.
-- **Consequence**: Search engines categorized the site under entertainment, anime, or video production rather than **Commercial Digital Marketing**.
-- **Resolution**: Every image, video, heading, and structured data snippet was purged of cinematic/manga terminology and precisely rewritten around core digital marketing deliverables: **Influencer Partnerships, Meta Ads Acquisition, Viral Meme Marketing, Brand Identity Design, Growth Scaling, and Conversion UI/UX Design**.
+### Issue D: Why Google Search Console Showed "Referring page: service/meta-ads" & Ranked Meta Ads Over Homepage
+1. **Understanding "Referring page" in Google Search Console**:
+   - In GSC, "Referring page" does **NOT** mean Google is redirecting search visitors to that page.
+   - It is purely a crawler discovery record: it indicates that Googlebot discovered the link to the inspected URL while crawling `service/meta-ads` during its previous crawl cycle on **October 16, 2026**.
+2. **Why Google Showed `/service/meta-ads` in Search Results Instead of Home**:
+   - **Conflicting Subpage Canonicals**: `ServiceDetailPage.jsx` was dynamically setting canonicals to `https://ogmedia.agency/ogmedia/service/meta-ads` (an unverified external domain) while the static HTML declared the homepage. This conflicting signal caused Google to disregard the canonical hierarchy.
+   - **On-Page Semantic Specificity**: When someone searched for marketing or ads, the `/service/meta-ads` page had clear marketing headers, while the old homepage was titled *"Creative Intelligence, Viral Marketing & Brand Worldbuilding Studio"*. Google deemed `/service/meta-ads` the most relevant landing page.
+   - **Stale Crawl Cache**: As shown in GSC, the last crawl was **16 Oct 2026** (before any of our production SEO updates were deployed). Google is simply serving its cached 5-day-old index.
+3. **The Solution**:
+   - **BreadcrumbList Schema**: Injected structured Breadcrumb schema explicitly defining `OG Media Home` (`/ogmedia/`) as the parent root and each service page as a child leaf node.
+   - **Unified Canonicals**: Updated `ServiceDetailPage.jsx` to dynamically declare `https://ogmedia-theta.vercel.app/ogmedia/service/${slug}` with zero external domain conflicts.
+   - **Direct Root Navigation Link**: Changed subpage back buttons to `<Link to="/">← BACK TO OG MEDIA HOME</Link>` passing PageRank authority directly to the root canonical.
+   - **Homepage SEO Guarantee**: Added an automatic title, canonical, and description reset in `HomePage.jsx` on mount.
 
 ---
 

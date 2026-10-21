@@ -13,6 +13,18 @@ export default function HomePage() {
   const location = useLocation();
 
   useEffect(() => {
+    document.title = 'OG Media | Premium Digital Marketing Agency';
+    const canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (canonicalLink) {
+      canonicalLink.setAttribute('href', 'https://ogmedia-theta.vercel.app/ogmedia/');
+    }
+    const descMeta = document.querySelector('meta[name="description"]');
+    if (descMeta) {
+      descMeta.setAttribute('content', 'OG Media (ogmedia) is a premium digital marketing agency providing high-impact creator partnerships, viral meme marketing, Meta ads management, brand identity design, scale-stage business growth, and high-performance website and app development.');
+    }
+  }, []);
+
+  useEffect(() => {
     if (location.hash) {
       const targetId = location.hash.replace('#', '');
       const timer = setTimeout(() => {

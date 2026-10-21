@@ -28,7 +28,7 @@ export default function ServiceDetailPage() {
 
     // Dynamic SEO Management for Service Page
     const originalTitle = document.title;
-    document.title = `${service.title} | OG MEDIA // Creative Intelligence`;
+    document.title = `${service.title} | OG Media — Digital Marketing Agency`;
 
     const descMeta = document.querySelector('meta[name="description"]');
     const originalDesc = descMeta ? descMeta.getAttribute('content') : '';
@@ -39,10 +39,10 @@ export default function ServiceDetailPage() {
     const canonicalLink = document.querySelector('link[rel="canonical"]');
     const originalCanonical = canonicalLink ? canonicalLink.getAttribute('href') : '';
     if (canonicalLink) {
-      canonicalLink.setAttribute('href', `https://ogmedia.agency/ogmedia/service/${service.slug}`);
+      canonicalLink.setAttribute('href', `https://ogmedia-theta.vercel.app/ogmedia/service/${service.slug}`);
     }
 
-    // Inject Service JSON-LD Structured Data
+    // Inject Service JSON-LD Structured Data with BreadcrumbList hierarchy
     const scriptId = 'service-structured-data';
     let script = document.getElementById(scriptId);
     if (!script) {
@@ -54,19 +54,42 @@ export default function ServiceDetailPage() {
 
     const serviceSchema = {
       '@context': 'https://schema.org',
-      '@type': 'Service',
-      'name': service.title,
-      'alternateName': service.subtitle,
-      'description': service.fullDesc || service.shortDesc,
-      'serviceType': service.type,
-      'url': `https://ogmedia.agency/ogmedia/service/${service.slug}`,
-      'provider': {
-        '@type': 'Organization',
-        'name': 'OG MEDIA',
-        'url': 'https://ogmedia.agency/ogmedia/',
-        '@id': 'https://ogmedia.agency/#organization'
-      },
-      'areaServed': 'Worldwide'
+      '@graph': [
+        {
+          '@type': 'Service',
+          '@id': `https://ogmedia-theta.vercel.app/ogmedia/service/${service.slug}#service`,
+          'name': service.title,
+          'alternateName': service.subtitle,
+          'description': service.fullDesc || service.shortDesc,
+          'serviceType': service.type,
+          'url': `https://ogmedia-theta.vercel.app/ogmedia/service/${service.slug}`,
+          'provider': {
+            '@type': 'MarketingAgency',
+            'name': 'OG Media',
+            'url': 'https://ogmedia-theta.vercel.app/ogmedia/',
+            '@id': 'https://ogmedia-theta.vercel.app/ogmedia/#organization'
+          },
+          'areaServed': 'Worldwide'
+        },
+        {
+          '@type': 'BreadcrumbList',
+          '@id': `https://ogmedia-theta.vercel.app/ogmedia/service/${service.slug}#breadcrumb`,
+          'itemListElement': [
+            {
+              '@type': 'ListItem',
+              'position': 1,
+              'name': 'OG Media Home',
+              'item': 'https://ogmedia-theta.vercel.app/ogmedia/'
+            },
+            {
+              '@type': 'ListItem',
+              'position': 2,
+              'name': service.title,
+              'item': `https://ogmedia-theta.vercel.app/ogmedia/service/${service.slug}`
+            }
+          ]
+        }
+      ]
     };
     script.textContent = JSON.stringify(serviceSchema);
 
@@ -101,11 +124,12 @@ export default function ServiceDetailPage() {
       <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b-2 border-black dark:border-[#38383e]">
         <div className="flex items-center gap-3 flex-wrap">
           <Link
-            to="/#arsenal"
+            to="/"
+            title="Return to OG Media Home"
             className="bg-black hover:bg-[#39FF14] text-white hover:text-black font-mono-tech font-bold text-xs px-3 py-1.5 border-2 border-black manga-shadow-sm transition-all hover:-translate-x-0.5 cursor-pointer flex items-center gap-1.5"
           >
             <span>←</span>
-            <span>BACK TO MAIN ARCHIVE</span>
+            <span>BACK TO OG MEDIA HOME</span>
           </Link>
 
           <span className="font-mono-tech text-xs text-stone-500 dark:text-stone-400 hidden sm:inline">
