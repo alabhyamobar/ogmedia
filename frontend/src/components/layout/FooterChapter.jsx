@@ -95,7 +95,7 @@ export default function FooterChapter() {
           title="Return to top of page"
           className="mb-3 sm:mb-6 cursor-pointer hover:scale-105 transition-transform inline-block focus:outline-none focus:ring-2 focus:ring-[#39FF14] rounded-xl"
         >
-          <OgLogo size="lg" withText={true} subtitle="CREATIVE INTELLIGENCE STUDIO" />
+          <OgLogo size="lg" withText={true} subtitle="DIGITAL MARKETING AGENCY" />
         </div>
         <div className="inline-block bg-black dark:bg-[#16161a] text-white px-4 sm:px-14 py-2 sm:py-5 border-2 sm:border-3 border-black dark:border-[#38383e] manga-shadow sm:manga-shadow-lg transform -rotate-0.5">
           <InkText
@@ -176,10 +176,10 @@ export default function FooterChapter() {
               delay={200}
               duration={2000}
               className="font-medium text-[#ef4444] uppercase tracking-wider mb-0.5 sm:mb-1"
-              text="CREATIVE INTELLIGENCE LAB"
+              text="PERFORMANCE MARKETING LAB"
             />
-            <TypewriterText speed={15} delay={300} cursor={false} text="Storyboarding, 3D & AI Pipelines," />
-            <div className="text-stone-500 dark:text-stone-400 font-medium">Remote-First Production Network</div>
+            <TypewriterText speed={15} delay={300} cursor={false} text="Influencer Sourcing, Viral Content," />
+            <div className="text-stone-500 dark:text-stone-400 font-medium">Full-Funnel Growth Architecture</div>
           </div>
 
           <div className="border-l-3 border-[#39FF14] pl-2.5 sm:pl-3.5 bg-[#39FF14]/5 p-1.5 sm:p-2">

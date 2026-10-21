@@ -5,61 +5,61 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
   <!-- ==================================================================== -->
-  <!-- 01. HOMEPAGE & MAIN STUDIO ARCHIVE                                   -->
+  <!-- 01. HOMEPAGE & CORE DIGITAL MARKETING SERVICES                       -->
   <!-- ==================================================================== -->
   <url>
     <loc>https://ogmedia-theta.vercel.app/ogmedia/</loc>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
 
     <!-- Key Visual Assets on Homepage -->
     <image:image>
       <image:loc>https://ogmedia-theta.vercel.app/ogmedia/assets/hero_city.webp</image:loc>
-      <image:title>OG Media - Neo-Tokyo Cyber Manga Visuals</image:title>
-      <image:caption>OG Media cinematic key visual showcasing high-impact digital art and creative intelligence worldbuilding.</image:caption>
+      <image:title>OG Media - Premium Digital Marketing Agency</image:title>
+      <image:caption>OG Media high-performance digital marketing campaigns, creator partnerships, viral content, and brand growth systems.</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://ogmedia-theta.vercel.app/ogmedia/assets/akashhero.webp</image:loc>
-      <image:title>Akash - Creative Director and Founder of OG Media</image:title>
-      <image:caption>Creative Director Akash leading high-conversion storytelling and digital production at OG Media.</image:caption>
+      <image:title>Akash - Founder &amp; Growth Strategist at OG Media</image:title>
+      <image:caption>Growth strategist Akash leading performance marketing campaigns, creator acquisition, and brand scaling at OG Media.</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://ogmedia-theta.vercel.app/ogmedia/assets/og_logo.webp</image:loc>
-      <image:title>OG Media Official Logo</image:title>
-      <image:caption>Official brand mark of OG Media Creative Intelligence Studio.</image:caption>
+      <image:title>OG Media - Digital Marketing Agency Logo</image:title>
+      <image:caption>Official brand logo of OG Media Premium Digital Marketing Agency.</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://ogmedia-theta.vercel.app/ogmedia/assets/cover_protocol.webp</image:loc>
-      <image:title>OG Media Strategic Transmission</image:title>
-      <image:caption>Transmission and campaign protocol visual by OG Media.</image:caption>
+      <image:title>OG Media Digital Campaign Strategy</image:title>
+      <image:caption>Full-funnel digital marketing campaign planning and performance marketing architecture by OG Media.</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://ogmedia-theta.vercel.app/ogmedia/assets/pilgrims.webp</image:loc>
-      <image:title>Pilgrim Beauty Campaign Case Study</image:title>
-      <image:caption>Viral creator distribution and commercial brand campaign executed for Pilgrim Beauty.</image:caption>
+      <image:title>Pilgrim Beauty Influencer Marketing Case Study</image:title>
+      <image:caption>Viral creator distribution and influencer marketing campaign executed for Pilgrim Beauty by OG Media.</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://ogmedia-theta.vercel.app/ogmedia/assets/ogsky.webp</image:loc>
-      <image:title>Sky Renewable Energies Case Study</image:title>
-      <image:caption>High-impact sustainability commercial campaign for Sky Renewable Energies.</image:caption>
+      <image:title>Sky Renewable Energies Paid Ads Case Study</image:title>
+      <image:caption>Performance marketing and customer acquisition campaign executed for Sky Renewable Energies by OG Media.</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://ogmedia-theta.vercel.app/ogmedia/assets/preashadam.webp</image:loc>
-      <image:title>Kumbh Prasadam Cultural Campaign</image:title>
-      <image:caption>Cultural resonance and digital outreach campaign engineered for Kumbh Prasadam.</image:caption>
+      <image:title>Kumbh Prasadam Brand Outreach Case Study</image:title>
+      <image:caption>Digital brand outreach and social media marketing campaign engineered for Kumbh Prasadam by OG Media.</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://ogmedia-theta.vercel.app/ogmedia/assets/card_placify.webp</image:loc>
       <image:title>Placify Digital Platform Showcase</image:title>
-      <image:caption>Interactive recruitment tech platform visual by OG Media.</image:caption>
+      <image:caption>High-performance web design and conversion-focused digital platform engineering by OG Media.</image:caption>
     </image:image>
 
-    <!-- Homepage Featured Cinematic Video Reel -->
+    <!-- Homepage Featured Video Reel -->
     <video:video>
       <video:thumbnail_loc>https://ogmedia-theta.vercel.app/ogmedia/assets/hero_city.webp</video:thumbnail_loc>
-      <video:title>OG Media | Creative Intelligence Studio Showreel</video:title>
-      <video:description>High-energy creative intelligence showreel, 4K digital experiences, and viral storytelling by OG Media.</video:description>
+      <video:title>OG Media | Premium Digital Marketing Agency Showreel</video:title>
+      <video:description>High-impact digital marketing campaigns, influencer partnerships, viral content, and performance ads by OG Media.</video:description>
       <video:content_loc>https://ogmedia-theta.vercel.app/ogmedia/herovid1.mp4</video:content_loc>
       <video:publication_date>2026-01-01T00:00:00+00:00</video:publication_date>
       <video:family_friendly>yes</video:family_friendly>
@@ -71,20 +71,20 @@
   <!-- ==================================================================== -->
   <url>
     <loc>https://ogmedia-theta.vercel.app/ogmedia/service/influencer-marketing</loc>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
 
     <image:image>
       <image:loc>https://ogmedia-theta.vercel.app/ogmedia/assets/service_influencer.webp</image:loc>
-      <image:title>Influencer Marketing and Creator Partnerships - OG Media</image:title>
-      <image:caption>Connecting high-growth consumer brands with vetted creator collectives across TikTok, Instagram Reels, and YouTube Shorts.</image:caption>
+      <image:title>Influencer Marketing &amp; Creator Partnerships - OG Media</image:title>
+      <image:caption>Connecting high-growth consumer brands with trusted creators across TikTok, Instagram Reels, and YouTube Shorts to drive sales.</image:caption>
     </image:image>
 
     <video:video>
       <video:thumbnail_loc>https://ogmedia-theta.vercel.app/ogmedia/assets/service_influencer.webp</video:thumbnail_loc>
-      <video:title>Influencer Marketing Protocol | OG Media</video:title>
-      <video:description>Authentic creator partnerships that drive real audience trust, high engagement rates, and measurable e-commerce conversions.</video:description>
+      <video:title>Influencer Marketing &amp; Creator Campaigns | OG Media</video:title>
+      <video:description>Authentic creator partnerships that drive genuine customer trust, high engagement rates, and measurable e-commerce conversions.</video:description>
       <video:content_loc>https://ogmedia-theta.vercel.app/ogmedia/videos/service_influencer.mp4</video:content_loc>
       <video:publication_date>2026-01-01T00:00:00+00:00</video:publication_date>
       <video:family_friendly>yes</video:family_friendly>
@@ -92,24 +92,24 @@
   </url>
 
   <!-- ==================================================================== -->
-  <!-- 03. MEME MARKETING & VIRAL CULTURE                                   -->
+  <!-- 03. MEME MARKETING & VIRAL CONTENT                                    -->
   <!-- ==================================================================== -->
   <url>
     <loc>https://ogmedia-theta.vercel.app/ogmedia/service/meme-marketing</loc>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
 
     <image:image>
       <image:loc>https://ogmedia-theta.vercel.app/ogmedia/assets/service_meme.webp</image:loc>
-      <image:title>Meme Marketing and Viral Culture Distribution - OG Media</image:title>
-      <image:caption>Fast-moving viral content, cultural trend forecasting, and organic community seeding that earns millions of views.</image:caption>
+      <image:title>Meme Marketing &amp; Viral Social Content - OG Media</image:title>
+      <image:caption>Relatable meme marketing, trending social content, and organic community seeding that earns millions of impressions.</image:caption>
     </image:image>
 
     <video:video>
       <video:thumbnail_loc>https://ogmedia-theta.vercel.app/ogmedia/assets/service_meme.webp</video:thumbnail_loc>
-      <video:title>Meme Marketing Protocol | OG Media</video:title>
-      <video:description>Engineered viral memes and relatable content that internet users share organically, delivering 10M+ organic reach.</video:description>
+      <video:title>Viral Meme Marketing Campaigns | OG Media</video:title>
+      <video:description>Engineered viral memes and relatable social content that audiences share organically, delivering massive organic reach.</video:description>
       <video:content_loc>https://ogmedia-theta.vercel.app/ogmedia/videos/service_meme.mp4</video:content_loc>
       <video:publication_date>2026-01-01T00:00:00+00:00</video:publication_date>
       <video:family_friendly>yes</video:family_friendly>
@@ -121,20 +121,20 @@
   <!-- ==================================================================== -->
   <url>
     <loc>https://ogmedia-theta.vercel.app/ogmedia/service/meta-ads</loc>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
 
     <image:image>
       <image:loc>https://ogmedia-theta.vercel.app/ogmedia/assets/service_meta_ads.webp</image:loc>
-      <image:title>Meta Ads Management and Paid Acquisition - OG Media</image:title>
+      <image:title>Meta Ads Management &amp; Paid Acquisition - OG Media</image:title>
       <image:caption>Full-funnel performance advertising on Instagram and Facebook optimized against true ROAS and lower customer acquisition costs.</image:caption>
     </image:image>
 
     <video:video>
       <video:thumbnail_loc>https://ogmedia-theta.vercel.app/ogmedia/assets/service_meta_ads.webp</video:thumbnail_loc>
-      <video:title>Meta Ads Growth Engine | OG Media</video:title>
-      <video:description>Creative testing pipeline and automated ad optimization that turns advertising spend into predictable e-commerce revenue.</video:description>
+      <video:title>Meta Ads Management &amp; Paid Acquisition | OG Media</video:title>
+      <video:description>Creative testing pipelines and algorithmic ad management that convert advertising budget into predictable revenue.</video:description>
       <video:content_loc>https://ogmedia-theta.vercel.app/ogmedia/videos/service_meta_ads.mp4</video:content_loc>
       <video:publication_date>2026-01-01T00:00:00+00:00</video:publication_date>
       <video:family_friendly>yes</video:family_friendly>
@@ -142,24 +142,24 @@
   </url>
 
   <!-- ==================================================================== -->
-  <!-- 05. PREMIUM BRAND POSITIONING & IDENTITY                             -->
+  <!-- 05. PREMIUM BRAND POSITIONING & IDENTITY DESIGN                      -->
   <!-- ==================================================================== -->
   <url>
     <loc>https://ogmedia-theta.vercel.app/ogmedia/service/premium-brands</loc>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
 
     <image:image>
       <image:loc>https://ogmedia-theta.vercel.app/ogmedia/assets/service_premium_brands.webp</image:loc>
-      <image:title>Premium Brand Positioning and Visual Identity - OG Media</image:title>
-      <image:caption>World-class brand identity, 3D product rendering, packaging, and cinematic video assets for category-defining brands.</image:caption>
+      <image:title>Premium Brand Positioning &amp; Visual Identity - OG Media</image:title>
+      <image:caption>Strategic brand identity design, product packaging, digital design, and visual positioning for premium market leaders.</image:caption>
     </image:image>
 
     <video:video>
       <video:thumbnail_loc>https://ogmedia-theta.vercel.app/ogmedia/assets/service_premium_brands.webp</video:thumbnail_loc>
-      <video:title>Premium Brand Worldbuilding | OG Media</video:title>
-      <video:description>Elevating brand perception and command higher pricing margins with master-crafted visual systems and cinematic brand storytelling.</video:description>
+      <video:title>Brand Identity Design &amp; Strategic Positioning | OG Media</video:title>
+      <video:description>Elevating brand perception and commanding higher margins through premium brand visual identity systems and digital marketing creative.</video:description>
       <video:content_loc>https://ogmedia-theta.vercel.app/ogmedia/videos/service_premium_brands.mp4</video:content_loc>
       <video:publication_date>2026-01-01T00:00:00+00:00</video:publication_date>
       <video:family_friendly>yes</video:family_friendly>
@@ -167,40 +167,40 @@
   </url>
 
   <!-- ==================================================================== -->
-  <!-- 06. SCALE STAGE - END-TO-END GROWTH SYSTEMS                          -->
+  <!-- 06. SCALE STAGE - BUSINESS GROWTH SYSTEMS                            -->
   <!-- ==================================================================== -->
   <url>
     <loc>https://ogmedia-theta.vercel.app/ogmedia/service/scale-stage</loc>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
 
     <image:image>
       <image:loc>https://ogmedia-theta.vercel.app/ogmedia/assets/service_scale_stage.webp</image:loc>
-      <image:title>Scale Stage Growth Systems - OG Media</image:title>
-      <image:caption>Multi-channel acquisition, customer lifecycle retention automation, and market expansion systems built for scalable businesses.</image:caption>
+      <image:title>Scale Stage Business Growth Systems - OG Media</image:title>
+      <image:caption>Multi-channel digital marketing, customer lifecycle retention automation, and market expansion systems built for scalable businesses.</image:caption>
     </image:image>
   </url>
 
   <!-- ==================================================================== -->
-  <!-- 07. WEBSITE & MOBILE APP DESIGN (120 FPS UI/UX)                      -->
+  <!-- 07. WEBSITE & MOBILE APP DESIGN (CONVERSION UI/UX)                   -->
   <!-- ==================================================================== -->
   <url>
     <loc>https://ogmedia-theta.vercel.app/ogmedia/service/website-app-design</loc>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
 
     <image:image>
       <image:loc>https://ogmedia-theta.vercel.app/ogmedia/assets/service_web_app_design.webp</image:loc>
-      <image:title>Website and Mobile App Design - OG Media</image:title>
-      <image:caption>Ultra-responsive 120 FPS digital experiences, 3D web portals, and conversion-optimized architectures built to captivate modern audiences.</image:caption>
+      <image:title>Website &amp; Mobile App Design - OG Media</image:title>
+      <image:caption>High-performance websites and mobile apps engineered for fast loading speeds, responsive UI/UX, and maximum conversion rates.</image:caption>
     </image:image>
 
     <video:video>
       <video:thumbnail_loc>https://ogmedia-theta.vercel.app/ogmedia/assets/service_web_app_design.webp</video:thumbnail_loc>
-      <video:title>Interactive Web and App Architecture | OG Media</video:title>
-      <video:description>Ultra-fast loading times, responsive React engineering, and unforgettable interactive digital product design.</video:description>
+      <video:title>Conversion-Optimized Web &amp; Mobile App Design | OG Media</video:title>
+      <video:description>High-performance web and mobile app development engineered for speed, clean SEO architecture, and customer lead generation.</video:description>
       <video:content_loc>https://ogmedia-theta.vercel.app/ogmedia/videos/service_web_app_design.mp4</video:content_loc>
       <video:publication_date>2026-01-01T00:00:00+00:00</video:publication_date>
       <video:family_friendly>yes</video:family_friendly>

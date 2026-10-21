@@ -176,7 +176,7 @@ export default function Navbar() {
               onClick={handleLogoClick}
               className="flex items-center gap-2 hover:scale-[1.02] transition-transform cursor-pointer"
             >
-              <OgLogo size="sm" withText={true} subtitle="CREATIVE INTELLIGENCE STUDIO" />
+              <OgLogo size="sm" withText={true} subtitle="DIGITAL MARKETING AGENCY" />
             </Link>
 
             <div className="hidden sm:flex bg-gradient-to-r from-[#ef4444] to-[#f43f5e] text-white font-mono-tech text-[10px] sm:text-xs font-bold px-2 py-1 tracking-tight uppercase border-2 border-black dark:border-stone-800 items-center gap-1.5 shadow-sm">

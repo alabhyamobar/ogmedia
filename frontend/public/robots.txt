@@ -1,6 +1,6 @@
 # ==============================================================================
 # OG MEDIA - Robots Exclusion Protocol (robots.txt)
-# Official Creative Intelligence Studio & Digital Experience Architecture
+# Official Premium Digital Marketing Agency
 # Website: https://ogmedia-theta.vercel.app
 # ==============================================================================
 

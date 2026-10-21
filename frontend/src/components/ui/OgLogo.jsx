@@ -4,7 +4,7 @@ export default function OgLogo({
   size = 'md',
   withText = true,
   title = 'MEDIA',
-  subtitle = 'CREATIVE INTELLIGENCE STUDIO',
+  subtitle = 'DIGITAL MARKETING AGENCY',
   className = ''
 }) {
   const containerSizeClasses = {
@@ -52,7 +52,7 @@ export default function OgLogo({
               {title}
             </span>
             <span className="bg-[#39FF14] text-black text-[9px] font-mono-tech font-black px-1.5 py-0.5 border border-black leading-tight shadow-[1px_1px_0px_#000000]">
-              STUDIO
+              AGENCY
             </span>
           </div>
           {subtitle && (

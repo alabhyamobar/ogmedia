@@ -21,6 +21,12 @@ When querying brand-only terms like `ogmedia` or `og media`, search engines look
 2. **Title Rebalancing**: Changed from `OG MEDIA // ... & Creative Intelligence` to `OG Media | Premium Digital Marketing Agency` (45 characters). This achieves exact-match keyword density without truncation on mobile or desktop SERPs.
 3. **Structured Data Alignment**: Upgraded the Schema.org `@type` array to `["MarketingAgency", "ProfessionalService", "Organization"]` and populated `OfferCatalog` with exact-match services and target acquisition terms.
 
+### Issue C: Entity Misclassification (Manga/Cinematic Terms vs. Digital Marketing Agency)
+Google's Natural Language Processing (NLP) builds an entity knowledge graph by parsing page headings (`<h1>`), `<image:title>`, `<image:caption>`, `<video:title>`, and `<video:description>` across your sitemap and structured data.
+- **Root Cause**: The sitemap and on-page headings previously contained terms such as *"Neo-Tokyo Cyber Manga Visuals"*, *"Creative Intelligence Studio Showreel"*, *"Worldbuilding"*, and *"Storyboarding & 3D Pipelines"*.
+- **Consequence**: Search engines categorized the site under entertainment, anime, or video production rather than **Commercial Digital Marketing**.
+- **Resolution**: Every image, video, heading, and structured data snippet was purged of cinematic/manga terminology and precisely rewritten around core digital marketing deliverables: **Influencer Partnerships, Meta Ads Acquisition, Viral Meme Marketing, Brand Identity Design, Growth Scaling, and Conversion UI/UX Design**.
+
 ---
 
 ## 2. Technical Modifications Applied

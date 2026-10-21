@@ -46,7 +46,7 @@ export default function HeroTitleCard({ titleCardRef, descRef, isDark }) {
  
             <h1 className="text-4xl sm:text-7xl md:text-8xl font-normal font-comic-title tracking-wider leading-none drop-shadow-[2px_2px_0px_rgba(0,0,0,0.15)] text-black dark:text-white m-0 p-0">
               <span className="sr-only">
-                OG MEDIA — Creative Intelligence, Viral Marketing &amp; Brand Worldbuilding Studio
+                OG Media — Premium Digital Marketing Agency
               </span>
               <InkText
                 as="span"
@@ -72,7 +72,7 @@ export default function HeroTitleCard({ titleCardRef, descRef, isDark }) {
             }}
           >
             <span className="sr-only">
-              Where Art Meets Intelligence — Viral Marketing &amp; Creative Media Agency:{" "}
+              Premium Digital Marketing Agency — Creator Partnerships, Meta Ads &amp; Brand Growth:{" "}
             </span>
             <InkText
               as="span"
