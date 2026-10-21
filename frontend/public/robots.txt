@@ -1,7 +1,7 @@
 # ==============================================================================
 # OG MEDIA - Robots Exclusion Protocol (robots.txt)
 # Official Creative Intelligence Studio & Digital Experience Architecture
-# Website: https://ogmedia.agency
+# Website: https://ogmedia-theta.vercel.app
 # ==============================================================================
 
 # Search Engine Crawlers (Google, Bing, DuckDuckGo, Applebot, Yahoo, etc.)
@@ -121,8 +121,8 @@ Disallow: /login
 Disallow: /ogmedia/login
 
 # Host Specification
-Host: https://ogmedia.agency
+Host: https://ogmedia-theta.vercel.app
 
 # XML Sitemap Directives
-Sitemap: https://ogmedia.agency/sitemap.xml
-Sitemap: https://ogmedia.agency/ogmedia/sitemap.xml
+Sitemap: https://ogmedia-theta.vercel.app/ogmedia/sitemap.xml
+Sitemap: https://ogmedia-theta.vercel.app/sitemap.xml
